@@ -1,0 +1,125 @@
+\chapter{Fondamentaux d'énergie solaire}
+\label{chap:fondamentaux_energie}
+
+\par{Face à l'urgence climatique et la nécessité de réduire notre dépendance aux énergies fossiles, l'énergie solaire représente une solution prometteuse pour la production d'énergie renouvelable en milieu urbain. Les toitures des bâtiments offrent des surfaces importantes et souvent inexploitées pour l'installation de panneaux solaires, qu'ils soient photovoltaïques pour la production d'électricité ou thermiques pour la production d'eau chaude.}
+
+\par{L'exploitation optimale de ces surfaces requiert une compréhension des principes fondamentaux de l'énergie solaire et des contraintes techniques associées. Ce chapitre vise à présenter les concepts essentiels pour appréhender les enjeux du cadastre solaire et de la détection automatique des surfaces disponibles sur les toits.}
+
+\localtableofcontents
+
+\newpage
+
+% -----------------------------------------------------------------------------
+\section{Rayonnement solaire}
+
+\par{Ce chapitre explore le fonctionnement du soleil et les défis pour profiter au mieux de cette énergie abondante.}
+
+% -----------------------------------------------------------------------------
+\subsection{Principe du rayonnement solaire}
+Le rayonnement solaire \cite{energie_plus_ensoleillement_2010} qui atteint la surface terrestre provient de l'énergie émise par le Soleil, avec une puissance initiale de 1367 W/m² à l'entrée de l'atmosphère (constante solaire). Le rayonnement global qui parvient à la surface terrestre se décompose en trois composantes essentielles :
+\begin{itemize}
+    \item Le rayonnement direct : Il s'agit des rayons solaires qui traversent l'atmosphère sans déviation. Son intensité varie selon l'angle d'incidence des rayons, l'épaisseur d'atmosphère traversée et les conditions atmosphériques
+    
+    \item Le rayonnement diffus : Résultant de la diffusion par l'atmosphère (nuages, aérosols, molécules d'air), il peut représenter jusqu'à 100\% du rayonnement global par temps couvert
+
+    \item Le rayonnement réfléchi : Correspond à la fraction du rayonnement réfléchie par l'environnement. Son intensité dépend de la nature des surfaces (neige : 80-90\%, végétation : 10-25\%) et de leur géométrie. 
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{03-tail//A2_fondamentaux_energie/A2_figures/A2_rayonnement.png}
+    \caption{Rayonnement direct, diffus et réfléchi \cite{energie_plus_ensoleillement_2010}}
+    \label{fig:type_rayonnement}
+\end{figure}
+
+\par{Comme on peut le voir sur la Figure \ref{fig:type_rayonnement}, ces trois types de rayonnement interagissent différemment avec une surface. Ensemble, ils représentent l'énergie totale que peuvent exploiter les applications solaires, avec une puissance pouvant aller jusqu'à 1000 W/m² au sol quand le ciel est bien dégagé. Cette puissance n'est pas fixe - elle change selon le moment de l'année, l'heure de la journée, où l'on se trouve sur Terre et la météo. Comprendre ces variations est clé pour bien dimensionner les installations solaires.}
+
+\par{Le rayonnement solaire ne sera pas identique toute l'année, comme indiqué dans la Figure \ref{fig:hauteur_soleil}}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{03-tail//A2_fondamentaux_energie//A2_figures/A2_hauteur_soleil.png}
+    \caption{Rayonnement direct, diffus et réfléchi \cite{energie_plus_ensoleillement_2010}}
+    \label{fig:hauteur_soleil}
+\end{figure}
+
+\par{Dans l'hémisphère nord, le soleil va de l'est à l'ouest pendant une journée type. La course ne sera pas identique tout au long de l'année, son hauteur est variable selon la saison. En été, le soleil sera plus haut, tandis que pendant l'hiver le soleil sera plus bas. Ce concept est essentiel pour capter au mieux cette énergie gratuite et indispensable à la vie.}
+
+% -----------------------------------------------------------------------------
+\subsection{Facteurs influençant le rayonnement solaire}
+\par{L'efficacité d'une installation solaire dépend de plusieurs facteurs critiques qui déterminent la quantité d'énergie captée. Les principaux sont :}
+\begin{itemize}
+    \item L'orientation
+    \item L'inclinaison
+    \item Obstacles (ombrages)
+\end{itemize}
+
+\subsubsection{Orientation}
+\par{Pour tirer le meilleur parti du soleil dans l'hémisphère nord, il faut orienter les panneaux vers le sud. Comme on peut le voir sur la Figure \ref{fig:hauteur_soleil}, le soleil fait sa course d'est en ouest en passant par le sud. C'est pourquoi les orientations sud-est et sud-ouest, bien que produisant un peu moins d'énergie, restent de bonnes options. En revanche, une orientation nord n'a pas vraiment d'intérêt car les panneaux ne capteraient pas de rayonnement direct du soleil.}
+
+\subsubsection{Inclinaison}
+\par{L'angle d'inclinaison optimal dépend principalement de la latitude du lieu d'installation. Pour une installation à Genève, la hauteur du soleil en été est d'environ 67 degrés \cite{noauthor_jrc_nodate} au midi solaire (azimut 0 degrés). L'angle optimal se situe entre 30 et 35 degrés \cite{noauthor_anwendung_nodate}.}
+\par{L'inclinaison peut être adaptée selon les objectifs de production saisonnière. Pour maximiser la production en été, une faible inclinaison (20-30°) est préférable car elle permet de mieux capter le soleil lorsqu'il est haut dans le ciel. À l'inverse, une inclinaison plus importante (45-60°) est plus efficace en hiver quand le soleil est bas. Comme le montre la Figure \ref{fig:warmeundstrom}, l'angle d'inclinaison influence également la captation des différentes composantes du rayonnement solaire. Un panneau horizontal (0 degrés) va principalement capter le rayonnement direct, alors qu'un panneau vertical (90 degrés) va mieux équilibrer la captation entre rayonnement direct et diffus. C'est pourquoi une inclinaison intermédiaire de 30-35 degrés représente un compromis optimal, permettant de bénéficier efficacement des trois composantes du rayonnement tout au long de l'année.}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{03-tail//A2_fondamentaux_energie//A2_figures/A2_warmeundstrom.jpg}
+    \caption{Influence de l'inclinaison et orientation des panneaux solaires \cite{noauthor_anwendung_nodate}}
+    \label{fig:warmeundstrom}
+\end{figure}
+
+\subsubsection{Ombrage}
+\par{L'ombrage est un des facteurs les plus critiques pour une installation solaire, pouvant réduire significativement ses performances. Pour bien comprendre son impact, on distingue trois types d'ombrages principaux.}
+
+\par{Premièrement, les ombrages proches sont causés par des éléments directement sur le toit : cheminées, antennes ou systèmes de ventilation. Leur impact est particulièrement sévère, avec des pertes de 30 à 50\% sur les modules touchés.}
+
+\par{Deuxièmement, les ombrages lointains proviennent du relief naturel ou des grands bâtiments environnants. Leur gestion nécessite une étude de masque solaire sur l'année, car leur impact varie selon les saisons et la course du soleil.}
+
+\par{Troisièmement, les ombrages saisonniers, comme ceux créés par la végétation ou la neige, évoluent au fil des saisons. Leur gestion passe par un entretien régulier et une conception adaptée de l'installation.}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1.00\linewidth]{03-tail//A2_fondamentaux_energie//A2_figures/A2_ombrage.jpg}
+    \caption{Ombrages \cite{desthieux_solar_2018}}
+    \label{fig:ombrage}
+\end{figure}
+
+\par{Dans la Figure \ref{fig:ombrage} la position 1 du soleil correspond à un situation ou il n'y a pas d'obstacle et donc pas d'ombrage sur la position $P_0$. La position 2 va par contre projeter un ombrage dû à l'arbre, cet ombrage sera variable en fonction du type de végétation et de la saison. Finalement, la position 3 représente un cas typique des environnements urbains ou des bâtiments plus haut vont projeter une ombre sur les bâtiments plus bas, ce cas peut être de l'ombrage proche ou lointain selon la distance et taille du bâtiment.}
+
+% -----------------------------------------------------------------------------
+\section{Cadastre solaire}
+\par{Ce chapitre va explorer ce qu'est un cadastre solaire ainsi que ses applications.}
+
+% -----------------------------------------------------------------------------
+\subsection{Motivation}
+\par{Le cadastre solaire \cite{noauthor_solar_2022} représente la quantité de rayonnement solaire que reçoit un quartier, une région ou un territoire. Son application principale est d'évaluer le potentiel solaire des toitures et des façades pour déterminer la faisabilité d'installations photovoltaïques ou thermiques. Cet outil devient de plus en plus crucial dans la planification énergétique territoriale et la transition vers les énergies renouvelables.}
+
+\par{Grâce aux technologies modernes de cartographie et de modélisation 3D, les cadastres solaires permettent aujourd'hui d'obtenir des données précises sur l'ensoleillement de chaque bâtiment. Ces informations sont particulièrement utiles pour :
+\begin{itemize}
+    \item Les propriétaires souhaitant évaluer le potentiel solaire de leur bien
+    \item Les collectivités cherchant à planifier leur transition énergétique
+    \item Les professionnels du solaire pour identifier rapidement les sites prometteurs
+    \item Les urbanistes dans la conception de nouveaux quartiers durables
+\end{itemize}}
+
+\subsection{Méthodologie}
+\par{La création d'un cadastre solaire repose sur plusieurs éléments clés. Tout d'abord, un modèle numérique de terrain (\acrshort{mnt}) et un modèle numérique de surface (\acrshort{mns}) sont utilisés pour créer une représentation 3D précise du territoire. Ces données sont ensuite combinées avec :
+\begin{itemize}
+    \item Des données climatiques locales sur plusieurs années
+    \item Les ombrages dus au relief et aux bâtiments environnants
+    \item L'orientation et l'inclinaison des surfaces
+    \item La présence d'obstacles sur les toits (cheminées, fenêtres, etc.)
+\end{itemize}}
+
+\subsection{Applications concrètes}
+\par{Le cadastre solaire trouve de nombreuses applications pratiques. Il permet notamment de :
+\begin{itemize}
+    \item Identifier les surfaces les plus adaptées aux installations solaires
+    \item Optimiser le placement des panneaux solaires
+    \item Identifier les zones intéressantes en fonction de l’ensoleillement pour l'agriculture
+\end{itemize}}
+
+\par{Grâce à ces informations, les décideurs peuvent élaborer des stratégies énergétiques plus efficaces et les particuliers peuvent prendre des décisions éclairées concernant l'installation de panneaux solaires.}
+
+\subsection{Limites et perspectives}
+\par{Bien que très utile, le cadastre solaire présente certaines limites. La précision des données dépend de la qualité des relevés topographiques et des modèles 3D utilisés. De plus, les évolutions du bâti (nouvelles constructions, modifications) nécessitent des mises à jour régulières. Cependant, les avancées technologiques, notamment en matière d'imagerie satellite et de modélisation, permettent d'améliorer constamment la précision et la fiabilité de ces outils.}
+

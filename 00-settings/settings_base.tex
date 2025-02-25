@@ -1,0 +1,286 @@
+% 00-settings/settings_base.tex
+
+% ==================
+% Template settings
+% ==================
+
+% General tools
+% -------------
+\usepackage{etoolbox}
+
+% Date format
+% -----------
+\usepackage[en-GB,fr-FR]{datetime2}
+\DTMsetdatestyle{iso}
+
+% Page style
+% ----------
+\usepackage[margin=3cm, left=3.5cm, right=3.5cm, twoside=true]{geometry}
+\usepackage{fancyhdr}
+\setlength{\headheight}{14pt}
+\renewcommand{\sectionmark}[1]{\markright{\thesection\ #1}}
+\pagestyle{fancy}
+
+% Standard pages (inside chapters)
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0pt}
+\fancyhead[OR]{\bfseries \nouppercase{\rightmark}}
+\fancyhead[EL]{\bfseries \nouppercase{\leftmark}}
+\fancyfoot[EL,OR]{\thepage}
+
+% First page of chapters
+\fancypagestyle{plain}{
+	\fancyhf{}
+	\renewcommand{\headrulewidth}{0pt}
+	\renewcommand{\footrulewidth}{0pt}
+	\fancyfoot[EL,OR]{\thepage}
+}
+
+% Imports for external PDFs
+\fancypagestyle{addpagenumbersforpdfimports}{
+	\fancyhead{}
+	\renewcommand{\headrulewidth}{0pt}
+	\fancyfoot{}
+	\fancyfoot[RO,LE]{\thepage}
+}
+
+% Use empty style for page when clearing double pages
+\def\cleartoodd{%
+	\clearpage%
+	\ifodd\value{page}\else\mbox{}\thispagestyle{empty}\newpage\fi%
+}
+
+\def\clearchap{%
+	\ifodd\value{page}\else\mbox{}\thispagestyle{empty}\fi%
+}
+
+% \cleardoublepage replaced by \cleartoodd
+\let\origdoublepage\cleardoublepage
+\renewcommand{\cleardoublepage}{%
+	\cleartoodd%
+}
+
+% Fonts
+% -----
+
+% Helvetica (Arial used in the MSE Word template)
+\usepackage{helvet}
+
+% Math
+% ----
+\usepackage{amsmath}  % better math
+\usepackage{cases}
+% Equation spacing
+\AtBeginDocument{
+    \setlength{\abovedisplayskip}{-12pt}
+    \setlength{\belowdisplayskip}{0pt}
+    \setlength{\abovedisplayshortskip}{-12pt}
+    \setlength{\belowdisplayshortskip}{0pt}
+}
+
+% Floats and figures
+% ------------------
+\usepackage{newfloat}          % floats
+\usepackage[twoside]{caption}  % captions
+\usepackage{subcaption}        % subcaptions
+\usepackage[section]{placeins} % allows to put float barriers
+% Adjust spacing around floats
+\setlength{\floatsep}{6pt}         % Espace entre deux floats consécutifs
+\setlength{\textfloatsep}{6pt}     % Espace entre le texte et un float en haut/bas de page
+\setlength{\intextsep}{6pt}        % Espace entre le texte et un float dans le texte
+
+% Float captions in italics, with label in margin
+\DeclareCaptionLabelFormat{title}{#1 #2}
+\DeclareCaptionLabelFormat{hangout}{\llap{#1 #2\hspace{5mm}}}
+\captionsetup{
+	format=hang,
+	labelformat=hangout,
+	singlelinecheck=false,
+	font={it}
+}
+
+% Caption with source for figure
+% TODO: improve this to use square brackets like the normal "caption"
+\newcommand*{\captionsource}[3]{%
+	\caption[{#1}]{%
+		#2%
+		
+		\textbf{Source:} #3%
+	}%
+}
+
+% Tables
+% ------
+\usepackage{booktabs} % much better tables
+\usepackage{multirow} % allows to fuse rows
+\usepackage{array}    % manipulate array
+\usepackage{tabularx} % better tables
+
+% Define new tabularx column types:
+%  - R: streteched right aligned
+%  - C: stretched centered
+%  - N: left aligned, specified space
+\newcolumntype{R}{>{\raggedleft\arraybackslash}X}%
+\newcolumntype{C}{>{\centering\arraybackslash}X}%
+\newcolumntype{N}[1]{>{\raggedleft\arraybackslash}p{#1}}
+
+% Set row height multiplicator to provide more breathing space
+\renewcommand{\arraystretch}{1.3} 
+
+% Bibliography
+% -------------------
+
+% Use biber, with numeric style and no sorting (citation order)
+\usepackage[
+backend=biber,
+style=numeric,
+sorting=none,
+bibencoding=auto
+]{biblatex}
+\addbibresource{03-tail/bibliography.bib}
+
+
+% Tables of contents, figures, tables and listings
+% ------------------------------------------------
+\usepackage{tocloft}
+\newlistof{listing}{lol}{List of Listings}
+\setcounter{tocdepth}{1} % Depth to 'section'
+\setlength{\cftfigindent}{0pt}  % remove indentation from figures in lof
+\setlength{\cftfignumwidth}{1cm} % width of figure number in lof
+\setlength{\cfttabindent}{0pt}  % remove indentation from tables in lot
+\setlength{\cfttabnumwidth}{1cm} % width of table number in lot
+\setlength{\cftlistingindent}{0pt} % remove indentation from listings in lol
+\setlength{\cftlistingnumwidth}{1cm} % width of listing number in lol
+
+% Local tables of contents in French
+% -----------------------
+\usepackage{etoc}
+\etocsettocstyle{\subsection*{Sommaire}\vspace{0.5cm}}{\vspace{-0.25cm}}
+
+% Style the local toc
+\etocsetstyle{section}
+{\leftskip -0.5em\relax}
+{\leftskip -0.5em\relax}
+{\bfseries\sffamily\large\etocnumber\hspace{1em}\etocname\nobreak\hfill\etocpage\par}
+{\vspace{0.4em}}
+
+\etocsetstyle{subsection}
+{\leftskip 1.5em\relax}
+{\leftskip 1.5em\relax}
+{\etocnumber\hspace{1em}\etocname\nobreak\hfill\etocpage\par}
+
+% Colors & graphics
+% -----------------
+\usepackage[table]{xcolor}    % colors
+\usepackage[pdftex]{graphicx} % graphics importing
+\graphicspath{{02-main/figures/}}
+\definecolor{gray80}{gray}{0.80}
+
+
+% Code and syntax highlighting
+% ----------------------------
+\usepackage[newfloat]{minted}   % code highlighting
+
+% Typography
+% ----------
+\usepackage{csquotes}                    % paragraph indentation and spacing
+\usepackage[defaultlines=3,all]{nowidow} % avoid widows and orphans
+\usepackage{microtype}                   % typographic improvements
+\usepackage{parskip}                     % No indent and auto-space between paragraphs
+\usepackage[super]{nth}
+
+% Listes
+% ----------------------------
+\usepackage{paralist}
+\usepackage{enumitem}
+% \setlist{after=\vspace{\baselineskip}} % Gros espace après items
+\setlist{noitemsep}                      % Supprime l'espace entre les items
+% \setlist{nosep}                        % Supprime l'espace avant et après la liste
+\renewcommand{\labelitemi}{--}           % Mettre des - au lieu de bullet
+
+% Section and chapters headings
+% -----------------------------
+\usepackage[explicit]{titlesec} % titles formatting
+%\usepackage{titletoc} % titles formatting in ToC etc
+%\usepackage{sectsty}  % sectioning commands
+
+% -- Chapters --
+% Remove "Chapter N" and use a sans-serif font
+
+% Set layout lengths
+\setlength{\headheight}{8mm}
+\setlength{\footskip}{1.5cm}
+\addtolength{\textheight}{-.5cm}
+
+\titlespacing{\chapter}{-5mm}{-10mm}{3mm}
+\titlespacing{\section}{-5mm}{3mm}{0mm} % left, before, after
+\titlespacing{\subsection}{-5mm}{2mm}{0mm}
+\titlespacing{\subsubsection}{-5mm}{1mm}{0mm}
+
+
+%\titleformat{\chapter}[block]
+%{\Huge}
+%{\thechapter\hspace{12pt}\textcolor{gray80}{|}\hspace{12pt}}
+%{0pt}
+%{\Huge\bfseries}
+
+\titleformat{\chapter}{\Huge\bfseries}{\llap{\thechapter\hspace{12pt}\textcolor{gray80}{|}}}{0mm}{%
+	\hfill\begin{minipage}[t]{\dimexpr\textwidth}\raggedright#1\end{minipage}%
+}
+\titleformat{\section}{\Large\bfseries}{\llap{\thesection}}{0mm}{%
+	\hfill\begin{minipage}[t]{\dimexpr\textwidth}\raggedright#1\end{minipage}%
+}
+\titleformat{\subsection}{\large \bfseries}{\llap{\thesubsection}}{0mm}{%
+	\hfill\begin{minipage}[t]{\dimexpr\textwidth}\raggedright#1\end{minipage}%
+}
+\titleformat{\subsubsection}{\bfseries}{\llap{\thesubsubsection}}{0mm}{%
+	\hfill\begin{minipage}[t]{\dimexpr\textwidth}\raggedright#1\end{minipage}%
+}
+
+% Misc
+% ------
+\usepackage{lipsum}    % filler text
+\usepackage{blindtext} % random text
+\usepackage{lscape}    % easy landscape pages
+\usepackage{pdflscape} % landscape pages for PDFs
+\usepackage{float}     % Images juste après texte avec option [H]
+
+% Allow email typesetting
+\newcommand{\email}[1]{%
+	\href{mailto:#1}{\textit{#1}}%
+}
+
+% References
+% -----------
+\usepackage{url}
+
+% pdf metadata
+\usepackage[
+	pdfauthor={\Author},
+	pdftitle={\ThesisTitle},
+	pdfsubject={\ThesisSubject},
+	pdfkeywords={\Keywords}
+	pdfduplex=DuplexFlipLongEdge]{hyperref}
+		
+% Hyperlinks
+\hypersetup{
+	colorlinks=true,
+	linkcolor=black,
+	citecolor=black,
+	filecolor=black,
+	urlcolor=black,
+}
+\providecommand*{\listingautorefname}{Listing}
+
+% TODO notes
+\usepackage{morewrites}
+\usepackage[colorinlistoftodos,prependcaption,textwidth=3cm]{todonotes}
+
+% Nomenclature/acronymes
+% --------
+\usepackage[acronym,style=tree]{glossaries}
+\input{03-tail/glossary.tex}
+\makeglossaries
+
+
