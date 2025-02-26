@@ -253,23 +253,21 @@ bibencoding=auto
 
 % References
 % -----------
-\usepackage{url}
+% \usepackage{url}
+\usepackage{xurl}      % Alternative to breakurl
 
-% pdf metadata
-\usepackage[
-	pdfauthor={\Author},
-	pdftitle={\ThesisTitle},
-	pdfsubject={\ThesisSubject},
-	pdfkeywords={\Keywords}
-	pdfduplex=DuplexFlipLongEdge]{hyperref}
-		
-% Hyperlinks
+% hyperlinks and pdf metadata
+\usepackage[pdfduplex=DuplexFlipLongEdge]{hyperref}
 \hypersetup{
-	colorlinks=true,
-	linkcolor=black,
-	citecolor=black,
-	filecolor=black,
-	urlcolor=black,
+    pdfauthor={\Author},
+    pdftitle={\ThesisTitle},
+    pdfsubject={\ThesisSubject},
+    pdfkeywords={\Keywords},
+    colorlinks=true,
+    linkcolor=black,
+    citecolor=black,
+    filecolor=black,
+    urlcolor=black
 }
 \providecommand*{\listingautorefname}{Listing}
 
