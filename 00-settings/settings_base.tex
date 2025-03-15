@@ -237,6 +237,10 @@ bibencoding=auto
 \titleformat{\subsubsection}{\bfseries}{\llap{\thesubsubsection}}{0mm}{%
 	\hfill\begin{minipage}[t]{\dimexpr\textwidth}\raggedright#1\end{minipage}%
 }
+\titleformat{\paragraph}{\normalfont\normalsize\sffamily\itshape}{\llap{\theparagraph}}{0mm}{%
+    \hfill\begin{minipage}[t]{\dimexpr\textwidth}\raggedright#1\end{minipage}%
+}
+\titlespacing{\paragraph}{-5mm}{1mm}{0mm}
 
 % Misc
 % ------
@@ -280,5 +284,3 @@ bibencoding=auto
 \usepackage[acronym,style=tree]{glossaries}
 \input{03-tail/glossary.tex}
 \makeglossaries
-
-
