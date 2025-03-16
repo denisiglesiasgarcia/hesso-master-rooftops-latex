@@ -1,4 +1,266 @@
 
+@misc{gabrielkasmi_gabrielkasmibdappv_2025,
+	title = {gabrielkasmi/bdappv},
+	url = {https://github.com/gabrielkasmi/bdappv},
+	urldate = {2025-03-16},
+	author = {gabrielkasmi},
+	month = feb,
+	year = {2025},
+	note = {original-date: 2022-12-23T10:23:37Z},
+}
+
+@misc{kasmi_crowdsourced_2022,
+	title = {A crowdsourced dataset of aerial images with annotated solar photovoltaic arrays and installation metadata},
+	url = {https://zenodo.org/records/7358126},
+	doi = {10.5281/zenodo.7358126},
+	abstract = {Summary
+
+
+Photovoltaic (PV) energy generation plays a crucial role in the energy transition. Small-scale, residential PV installations are deployed at an unprecedented pace, and their safe integration into the grid necessitates up-to-date, high-quality information. Overhead imagery is increasingly used to improve the knowledge of residential PV installations with machine learning models capable of automatically mapping these installations. However, these models cannot be reliably transferred from one region or imagery source to another without incurring a decrease in accuracy. To address this issue, known as distribution shift, and foster the development of PV array mapping pipelines, we propose a dataset containing aerial images, segmentation masks, and installation metadata. We provide installation metadata for more than 28000 installations. We provide ground truth segmentation masks for 13000 installations, including 7000 with annotations for two different image providers. Finally, we provide installation metadata that matches the annotation for more than 8000 installations. Dataset applications include end-to-end PV registry construction, robust PV installations mapping, and analysis of crowdsourced datasets.
+
+
+This dataset contains the complete records associated with the article "A crowdsourced dataset of aerial images of solar panels, their segmentation masks, and characteristics", published in Scientific data. The article is accessible here : https://www.nature.com/articles/s41597-023-01951-4 These complete records consist of:
+
+
+
+	
+The complete training dataset containing RGB overhead imagery, segmentation masks and metadata of PV installations (folder bdappv),
+	
+The raw crowdsourcing data, and the postprocessed data for replication and validation (folder data).
+
+
+
+Data records
+
+
+Folders are organized as follows:
+
+
+
+	
+bdappv/ Root data folder
+
+	
+
+		
+google / ign:  One folder for each campaign
+
+		
+
+			
+img/: Folder containing all the images presented to the users. This folder contains 28807 images for Google and 17325 images for IGN.
+			
+mask/: Folder containing all segmentations masks generated from the polygon annotations of the users. This folder contains 13303 masks for Google and 7686 masks for IGN.
+		
+		
+		
+metadata.csv The .csv  file with the installations' metadata.
+	
+	
+
+
+
+ 
+
+
+
+	
+data/ Root data folder
+
+	
+
+		
+raw/ Folder containing the raw crowdsourcing data and raw metadata;
+
+		
+
+			
+input-google.json: .json input data data containing all information on images and raw annotators’ contributions for both phases (clicks and polygons) during the first annotation campaign;
+			
+input-ign.json: .json input data containing all information on images and raw annotators’ contributions for both phases (clicks and polygons) during the second annotation campaign;
+			
+raw-metadata.json: .json output containing the PV systems’ metadata extracted from the BDPV database before filtering. It can be used to replicate the association between the installations and the segmentation masks, as done in the notebook metadata.
+		
+		
+		
+replication/ Folder containing the compiled data used to generate the segmentation masks;
+		
+
+			
+campaign-google/campaign-ign: One folder for each campaign
+			
+
+				
+click-analysis.json: .json output on the click analysis, compiling raw input into a few best-guess locations for the PV arrays. This dataset enables the replication of our annotations,
+				
+polygon-analysis.json: .json output of polygon analysis, compiling raw input into a best-guess polygon for the PV arrays.
+			
+			
+		
+		
+		
+validation/ Folder containing the compiled data used for technical validation.
+		
+
+			
+campaign-google/campaign-ign: One folder for each campaign
+			
+
+				
+click-analysis-thres=1.0.json: .json output of the click analysis with a lowered threshold to analyze the effect of the threshold on image classification, as done in the notebook annotation;
+				
+polygon-analysis-thres=1.0.json: .json output of polygon analysis, with a lowered threshold to analyze the effect of the threshold on polygon annotation, as done in the notebook annotations.
+			
+			
+			
+metadata.csv: the .csv file of filtered installations' metadata.
+		
+		
+	
+	
+
+
+
+License
+
+
+We extracted the thumbnails contained in the google/img/ folder using Google Earth Engine API and we generated the thumbnails contained in the ign/img/ folder from high resolution tiles downloaded from the online IGN portal accessible here: https://geoservices.ign.fr/bdortho. Images provided by Google are subjet to Google's terms and conditions. Images provided by the IGN are subject to an open license 2.0.
+
+
+Access the terms and conditions of Google images at this URL: https://www.google.com/intl/en/help/legalnotices\_maps/
+
+
+Access the terms and conditions of IGN images at this URL: https://www.etalab.gouv.fr/wp-content/uploads/2018/11/open-licence.pdf},
+	urldate = {2025-03-16},
+	publisher = {Zenodo},
+	author = {Kasmi, Gabriel and Saint-Drenan, Yves-Marie and Trebosc, David and Jolivet, Raphaël and Leloux, Johnathan and Sarr, Babacar and Dubus, Laurent},
+	month = jul,
+	year = {2022},
+	keywords = {computer vision, crowdsourcing, dataset, photovoltaic installations, photovoltaic installations metadata, training dataset},
+}
+
+@article{kasmi_crowdsourced_2023,
+	title = {A crowdsourced dataset of aerial images with annotated solar photovoltaic arrays and installation metadata},
+	volume = {10},
+	copyright = {2023 The Author(s)},
+	issn = {2052-4463},
+	url = {https://www.nature.com/articles/s41597-023-01951-4},
+	doi = {10.1038/s41597-023-01951-4},
+	abstract = {Photovoltaic (PV) energy generation plays a crucial role in the energy transition. Small-scale, rooftop PV installations are deployed at an unprecedented pace, and their safe integration into the grid requires up-to-date, high-quality information. Overhead imagery is increasingly being used to improve the knowledge of rooftop PV installations with machine learning models capable of automatically mapping these installations. However, these models cannot be reliably transferred from one region or imagery source to another without incurring a decrease in accuracy. To address this issue, known as distribution shift, and foster the development of PV array mapping pipelines, we propose a dataset containing aerial images, segmentation masks, and installation metadata (i.e., technical characteristics). We provide installation metadata for more than 28000 installations. We supply ground truth segmentation masks for 13000 installations, including 7000 with annotations for two different image providers. Finally, we provide installation metadata that matches the annotation for more than 8000 installations. Dataset applications include end-to-end PV registry construction, robust PV installations mapping, and analysis of crowdsourced datasets.},
+	language = {en},
+	number = {1},
+	urldate = {2025-03-16},
+	journal = {Scientific Data},
+	author = {Kasmi, Gabriel and Saint-Drenan, Yves-Marie and Trebosc, David and Jolivet, Raphaël and Leloux, Jonathan and Sarr, Babacar and Dubus, Laurent},
+	month = jan,
+	year = {2023},
+	note = {Publisher: Nature Publishing Group},
+	keywords = {Energy grids and networks, Photovoltaics},
+	pages = {59},
+}
+
+@misc{thebault_frpv_2025,
+	title = {{FRPV} - {Classification} model and training material for the detection of {Rooftop} {Photovoltaic} ({RPV}) systems.},
+	url = {https://entrepot.recherche.data.gouv.fr/dataset.xhtml?persistentId=doi:10.57745/CH6QN4},
+	doi = {10.57745/CH6QN4},
+	abstract = {This dataset contains: A Convolution Neural Network trained to identify rooftop photovoltaic systems The training material, here a set of labelled ...},
+	language = {fr},
+	urldate = {2025-03-16},
+	publisher = {Recherche Data Gouv},
+	author = {THEBAULT, Martin and NEROT, Boris},
+	month = mar,
+	year = {2025},
+	keywords = {Computer and Information Science, Engineering},
+}
+
+@misc{roboflow_roboflow_nodate,
+	title = {Roboflow {Universe}: {Computer} {Vision} {Datasets}},
+	shorttitle = {Roboflow {Universe}},
+	url = {https://universe.roboflow.com/},
+	abstract = {Download free, open source datasets and pre-trained computer vision machine learning models.},
+	language = {en},
+	urldate = {2025-03-16},
+	journal = {Roboflow},
+	author = {Roboflow},
+}
+
+@misc{krapf_tumftmrid_2025,
+	title = {{TUMFTM}/{RID}},
+	copyright = {LGPL-3.0},
+	url = {https://github.com/TUMFTM/RID},
+	abstract = {Roof Information Dataset for CV-Based Photovoltaic Potential Assessment},
+	urldate = {2025-03-16},
+	author = {Krapf, Sebastian and Technology, TUM-Institute of Automotive},
+	month = feb,
+	year = {2025},
+	note = {original-date: 2022-03-02T16:23:20Z},
+	keywords = {aerial-images, annotation, computer-vision, dataset, deep-learning, labeling, photovoltaic-potential, remote-sensing, roof-information, roof-segments, roof-superstructures, semantic-segmentation},
+}
+
+@misc{krapf_rid_2021,
+	title = {{RID} dataset},
+	url = {https://dataserv.ub.tum.de/s/m1655470},
+	abstract = {Universitätsbibliothek der Technischen Universität München},
+	language = {fr},
+	urldate = {2025-03-16},
+	journal = {Universitätsbibliothek der Technischen Universität München},
+	author = {Krapf, Sebastian and Bogenrieder, Lukas and Netzler, Fabian and Balke, Georg},
+	year = {2021},
+}
+
+@article{thebault_comprehensive_2025,
+	title = {A comprehensive building-wise rooftop photovoltaic system detection in heterogeneous urban and rural areas: application to {French} territories},
+	volume = {388},
+	issn = {0306-2619},
+	shorttitle = {A comprehensive building-wise rooftop photovoltaic system detection in heterogeneous urban and rural areas},
+	url = {https://www.sciencedirect.com/science/article/pii/S0306261925003605},
+	doi = {10.1016/j.apenergy.2025.125630},
+	abstract = {With the rapid expansion of Rooftop Photovoltaic (RPV) systems, accurately identifying the location of these installations has become essential for urban planning, grid management, and socio-economic analysis. However, existing European datasets of RPV systems are often limited in both spatial coverage and precision, especially in regions with diverse architectural styles. This study presents a novel methodology for identifying RPV systems by employing a convolutional neural network (CNN) trained on high-resolution aerial imagery and building registry data. Alternatively to traditional tile-based methods, we propose a building-by-building approach, ensuring that each building is individually assessed. The model was trained and validated on five French departments representing a variety of roofing materials and urban typologies. It demonstrates a high correlation between predicted and registered RPV systems, though detection performance varies with roofing materials—achieving better accuracy on tiled roofs than slate roofs. When applied to the entire metropolitan French territory, the model processed images of more than 40 million buildings, identifying approximately 600,000 RPV systems. The results’ accuracy is evaluated, taking into account factors such as data quality and local urban characteristics. All data and the model are publicly available for further research and applications.},
+	urldate = {2025-03-16},
+	journal = {Applied Energy},
+	author = {Thebault, Martin and Nerot, Boris and Govehovitch, Benjamin and Ménézo, Christophe},
+	month = jun,
+	year = {2025},
+	pages = {125630},
+}
+
+@article{krapf_ridroof_2022,
+	title = {{RID}—{Roof} {Information} {Dataset} for {Computer} {Vision}-{Based} {Photovoltaic} {Potential} {Assessment}},
+	volume = {14},
+	copyright = {http://creativecommons.org/licenses/by/3.0/},
+	issn = {2072-4292},
+	url = {https://www.mdpi.com/2072-4292/14/10/2299},
+	doi = {10.3390/rs14102299},
+	abstract = {Computer vision has great potential to accelerate the global scale of photovoltaic potential analysis by extracting detailed roof information from high-resolution aerial images, but the lack of existing deep learning datasets is a major barrier. Therefore, we present the Roof Information Dataset for semantic segmentation of roof segments and roof superstructures. We assessed the label quality of initial roof superstructure annotations by conducting an annotation experiment and identified annotator agreements of 0.15–0.70 mean intersection over union, depending on the class. We discuss associated the implications on the training and evaluation of two convolutional neural networks and found that the quality of the prediction behaved similarly to the annotator agreement for most classes. The class photovoltaic module was predicted to be best with a class-specific mean intersection over union of 0.69. By providing the datasets in initial and reviewed versions, we promote a data-centric approach for the semantic segmentation of roof information. Finally, we conducted a photovoltaic potential analysis case study and demonstrated the high impact of roof superstructures as well as the viability of the computer vision approach to increase accuracy. While this paper’s primary use case was roof information extraction for photovoltaic potential analysis, its implications can be transferred to other computer vision applications in remote sensing and beyond.},
+	language = {en},
+	number = {10},
+	urldate = {2025-03-15},
+	journal = {Remote Sensing},
+	author = {Krapf, Sebastian and Bogenrieder, Lukas and Netzler, Fabian and Balke, Georg and Lienkamp, Markus},
+	month = jan,
+	year = {2022},
+	note = {Number: 10
+Publisher: Multidisciplinary Digital Publishing Institute},
+	keywords = {aerial images, annotation, computer vision, dataset, deep learning, labeling, photovoltaic potential, remote sensing, roof information, roof segments, roof superstructures, semantic segmentation},
+	pages = {2299},
+}
+
+@article{li_deep_2024,
+	title = {Deep learning-based framework for city-scale rooftop solar potential estimation by considering roof superstructures},
+	volume = {374},
+	issn = {0306-2619},
+	url = {https://www.sciencedirect.com/science/article/pii/S0306261924012224},
+	doi = {10.1016/j.apenergy.2024.123839},
+	abstract = {Solar energy is an environmentally friendly energy source. Identifying suitable rooftops for solar panel installation contributes to not only sustainable energy plans but also carbon neutrality goals. Aerial imagery, bolstered by its growing availability, is a cost-effective data source for rooftop solar potential assessment at large scale. Existing studies generally do not take roof superstructures into account when determining how many solar panels can be installed. This procedure will lead to an overestimation of solar potential. Only several works have considered this issue, but none have devised a network that can simultaneously learn roof orientations and roof superstructures. Therefore, we devise SolarNet+, a novel framework to improve the precision of rooftop solar potential estimation. After implementing SolarNet+ on a benchmark dataset, we find that SolarNet+ outperforms other state-of-the-art approaches in both tasks — roof orientations and roof superstructure segmentation. Moreover, the SolarNet+ framework enables rooftop solar estimation at large-scale applications for investigating the correlation between urban rooftop solar potential and various local climate zone (LCZ) types. The results in the city of Brussels reveal that three specific LCZ urban types exhibit the highest rooftop solar potential efficiency: compact highrise (LCZ1), compact midrise (LCZ2), and heavy industry (LCZ10). The annual photovoltaic potential for these LCZ types is reported as 10.56 GWh/year/km2, 11.77 GWh/year/km2, and 10.70 GWh/year/km2, respectively.},
+	urldate = {2025-03-13},
+	journal = {Applied Energy},
+	author = {Li, Qingyu and Krapf, Sebastian and Mou, Lichao and Shi, Yilei and Zhu, Xiao Xiang},
+	month = nov,
+	year = {2024},
+	keywords = {Convolutional neural network, Local climate zone, Remote sensing, Roof superstructure, Solar potential},
+	pages = {123839},
+}
+
 @misc{klauser_energie_nodate,
 	title = {Energie solaire: {Aptitude} des toitures},
 	shorttitle = {Energie solaire},
@@ -530,24 +792,6 @@ Publisher: Multidisciplinary Digital Publishing Institute},
 	year = {2023},
 	note = {Version Number: 1},
 	keywords = {Artificial Intelligence (cs.AI), Computer Vision and Pattern Recognition (cs.CV), FOS: Computer and information sciences, Machine Learning (cs.LG)},
-}
-
-@article{krapf_ridroof_2022,
-	title = {{RID}—{Roof} {Information} {Dataset} for {Computer} {Vision}-{Based} {Photovoltaic} {Potential} {Assessment}},
-	volume = {14},
-	copyright = {https://creativecommons.org/licenses/by/4.0/},
-	issn = {2072-4292},
-	url = {https://www.mdpi.com/2072-4292/14/10/2299},
-	doi = {10.3390/rs14102299},
-	abstract = {Computer vision has great potential to accelerate the global scale of photovoltaic potential analysis by extracting detailed roof information from high-resolution aerial images, but the lack of existing deep learning datasets is a major barrier. Therefore, we present the Roof Information Dataset for semantic segmentation of roof segments and roof superstructures. We assessed the label quality of initial roof superstructure annotations by conducting an annotation experiment and identified annotator agreements of 0.15–0.70 mean intersection over union, depending on the class. We discuss associated the implications on the training and evaluation of two convolutional neural networks and found that the quality of the prediction behaved similarly to the annotator agreement for most classes. The class photovoltaic module was predicted to be best with a class-specific mean intersection over union of 0.69. By providing the datasets in initial and reviewed versions, we promote a data-centric approach for the semantic segmentation of roof information. Finally, we conducted a photovoltaic potential analysis case study and demonstrated the high impact of roof superstructures as well as the viability of the computer vision approach to increase accuracy. While this paper’s primary use case was roof information extraction for photovoltaic potential analysis, its implications can be transferred to other computer vision applications in remote sensing and beyond.},
-	language = {en},
-	number = {10},
-	urldate = {2025-02-20},
-	journal = {Remote Sensing},
-	author = {Krapf, Sebastian and Bogenrieder, Lukas and Netzler, Fabian and Balke, Georg and Lienkamp, Markus},
-	month = may,
-	year = {2022},
-	pages = {2299},
 }
 
 @article{stowell_harmonised_2020,

@@ -343,7 +343,6 @@ Trois horizons d'ombrage sont calculés pour chaque surface :
 \begin{itemize}
     \item Rayonnement solaire moyen et total
     \item Production thermique estimée
-    \item Nombre moyen de douches par jour
     \item Pourcentage des besoins de chauffage couverts
 \end{itemize}
 \paragraph{Classification}
@@ -375,7 +374,164 @@ Trois horizons d'ombrage sont calculés pour chaque surface :
 
 \subsubsection{Discussion et limites}
 
+% -----------------------------------------------------------------------------
+\subsection{SolarNet plus}
+\label{subsec:solar_net_plus}
 
+\subsubsection{Contexte et objectifs}
+\par{\citeauthor{li_deep_2024} présentent SolarNet+ \cite{li_deep_2024}, un framework basé sur l'apprentissage profond qui vise à estimer avec précision le potentiel solaire des toitures urbaines. Cet article est la suite de l'article \cite{li_solarnet_2023} SolarNet par les mêmes auteurs principaux}
+\par{Contrairement aux méthodes existantes, SolarNet+ prend en compte simultanément l'orientation des toits et les superstructures présentes (cheminées, fenêtres, etc.) qui réduisent la surface disponible pour l'installation de panneaux solaires. Cette approche permet d'éviter une surestimation du potentiel solaire et offre une évaluation plus précise pour soutenir la planification énergétique durable et les objectifs de neutralité carbone.}
+
+\subsubsection{Données}
+\par{L'étude utilise principalement le jeu de données RID (Roof Information Dataset). Le dataset est décrit en détail dans la sous-section \ref{subsec:rid_roof_information_dataset}.}
+\par{Le dataset consiste en 1880 images satellite en provenance de google. Les images disposent des annotations suivantes:
+\begin{itemize}
+    \item Les segments de toiture et leur orientation (plat, N, E, S, W)
+    \item Éléments de toiture
+    \begin{itemize}
+        \item Panneau PV
+        \item Lucarne
+        \item Fenêtre
+        \item Échelle
+        \item Cheminée
+        \item Ombrage
+        \item Arbre/végétation
+        \item Fond d'image (background)
+        \item Inconnu
+    \end{itemize}
+\end{itemize}}
+\par{La Figure \ref{fig:rid_dataset_sample} représente une image d'exemple ainsi que ses annotations. Le jeu de données est divisé en dataset d'entraînement (70\%), de validation (10\%) et de test (20\%).}
+\begin{figure}[H]
+    \centering
+        \includegraphics[width=1\linewidth]{02-main//figures/rid_dataset_sample.png}
+    \caption{Exemple d'image du dataset RID \cite{li_deep_2024}}
+    \label{fig:rid_dataset_sample}
+\end{figure}
+
+\subsubsection{Méthodologie}
+\par{SolarNet+ utilise une approche en deux étapes :}
+\begin{enumerate}
+    \item Un réseau de neurones multi fonctions (partie 1 de la Figure \ref{fig:solar_net_plus_methodo}) va réaliser les opérations suivantes sur chaque image:
+    \begin{itemize}
+        \item Segmenter l'image pour avoir le masque de la toiture ainsi que son orientation géographique ("Roof orientation map" de la Figure \ref{fig:solar_net_plus_methodo}).
+        \item Segmenter les éléments de toiture pour identifier tous les obstacles qui s'y trouvent ("Roof superstructure map" de la Figure \ref{fig:solar_net_plus_methodo}).
+        \item Extraire les surfaces exploitables de toiture par superposition des masques. Cette étape consiste à soustraire les zones occupées par les obstacles ("Roof superstructure map") des segments de toiture identifiés ("Roof orientation map"), permettant ainsi d'isoler les surfaces disponibles.
+    \end{itemize}
+    \item Estimer le potentiel solaire pour chaque surface identifiée (partie 2 de la Figure \ref{fig:solar_net_plus_methodo}) qui comprend :
+    \begin{itemize}
+        \item Hypothèses de base pour le calcul :
+        \begin{itemize}
+            \item Panneau PV 1.7 \si{\unit{\square\meter}} avec 400 Wc
+            \item Pente toiture 30° pour toutes les orientations sauf toiture plate 0°
+            \item Pans de toiture de moins de 5 \si{\unit{\square\meter}} ne sont pas considérés comme surface disponible
+        \end{itemize}
+        \item Calcul du nombre maximum de panneaux installables sur chaque segment de toiture disponible, en tenant compte des contraintes géométriques. La Figure \ref{fig:solar_net_plus_placement_pv}) présente deux exemples, avec et sans obstacles sur la toiture. Le placement des panneaux commence du côté gauche en bas et va éviter les obstacles présents.
+        \item Acquisition des données d'irradiation solaire spécifiques à chaque orientation via l'API PVGIS
+        \item Estimation de l'énergie annuelle générée pour chaque pans de toiture en multipliant le nombre de panneaux installables par la production unitaire correspondant à l'orientation
+        \item Additionner les potentiels de tous les pans de toiture pour obtenir le potentiel solaire total du bâtiment
+    \end{itemize}
+\end{enumerate}
+
+\begin{figure}[H]
+    \makebox[\textwidth][c]{\includegraphics[width=1.1\textwidth]{02-main//figures/solar_net_plus_methodo.png}}
+    \caption{Méthodologie SolarNet+ \cite{li_deep_2024}}
+    \label{fig:solar_net_plus_methodo}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{02-main//figures/solar_net_plus_placement_pv.png}
+    \caption{Placement des panneaux solaire \cite{li_deep_2024}}
+    \label{fig:solar_net_plus_placement_pv}
+\end{figure}
+
+\par{La Figure \ref{fig:solar_net_plus_exemple_methodo} permet d'avoir un aperçu des différentes phases du calcul de potentiel solaire. En allant de gauche à droite dans la lecture de la Figure \ref{fig:solar_net_plus_exemple_methodo}, les deux premières images indiquent l'irradiation solaire avec et sans les obstacles. En bas à gauche de ces deux images, on peut observer une toiture avec plusieurs obstacles détectés (trous), sans les obstacles son irradiation solaire est bonne, mais avec les obstacles son irradiation solaire totale est réduite. La troisième image représente le placement des panneaux solaires. Finalement la quatrième image, représente le potentiel solaire total par pan de toiture selon le nombre de panneaux solaire placés dans la troisième image et l'irradiation solaire de la deuxième image.}
+
+\begin{figure}[H]
+    \makebox[\textwidth][c]{\includegraphics[width=1.15\textwidth]{02-main//figures/solar_net_plus_exemple_methodo.png}}
+    \caption{Exemple d'application de la méthodologie \cite{li_deep_2024}}
+    \label{fig:solar_net_plus_exemple_methodo}
+\end{figure}
+
+\subsubsection{Résultats principaux}
+\begin{itemize}
+    \item SolarNet+ surpasse les réseaux concurrents en termes de précision pour la prédiction de l'orientation des toits et des superstructures avec les meilleures performances en mIoU et OA.
+    \item L'étude montre que négliger les superstructures conduit à une surestimation de 42\% du nombre de panneaux solaires installables.
+    \item La précision d'estimation du potentiel solaire atteint un \%RMSE de 19,92\% par rapport la vérité terrain (détail des résultats dans la Table \ref{tab:solar_net_plus_comparaison_quant}).
+\end{itemize}
+
+\begin{table}[H]
+    \centering
+    \small
+    \begin{tabular}{lrrrr}
+        \toprule
+        \textbf{Méthode} & \textbf{Nombre de panneaux} & \textbf{Potentiel solaire} & \textbf{RMSE} & \textbf{\%RMSE} \\
+        & \textbf{installables} & \textbf{(MWh/an)} & \textbf{(MWh/an)} & \\
+        \midrule
+        U-Net & 25 855 & 8484,28 & 12,77 & 21,49 \\
+        FC-DenseNet & 29 316 & 9544,90 & 20,85 & 35,10 \\
+        Efficient-UNet & 23 842 & 7754,68 & 16,85 & 28,37 \\
+        DeepLab V3+  & 28 152 & 9153,37 & 25,14 & 42,32 \\
+        Srivastava et al. & 24 987 & 8125,64 & 12,63 & 21,27 \\
+        Bischke et al. & 25 749 & 8446,82 & 14,34 & 24,13 \\
+        Mou \& Zhu & 24 945 & 8075,86 & 14,22 & 23,93 \\
+        \textbf{SolarNet+} & \textbf{24 541} & \textbf{7967,34} & \textbf{11,83} & \textbf{19,92} \\
+        \midrule
+        Ground truth & 24 279 & 7959,76 & - & - \\
+        \bottomrule
+    \end{tabular}
+    \caption{Résultats quantitatifs du potentiel solaire sur le dataset RID \cite{li_deep_2024}}
+    \label{tab:solar_net_plus_comparaison_quant}
+\end{table}
+
+
+\subsubsection{Discussion et limites}
+\begin{itemize}
+    \item La démarche utilisée par cet article est assez unique, c'est le seul article qui va aussi loin dans la segmentation des toitures et l'identification des obstacles. Le dataset RID est disponible librement et il a été réalisé par les auteurs de cet article.
+    \item Les auteurs ont testé le modèle avec des images satellite de Bruxelles (le dataset RID inclus seulement Wartenberg à Munich), mais les performances diminuent en raison des différences architecturales et des superstructures non rencontrées dans les données d'entraînement (balcons, éléments technique de ventilation/climatisation, etc.).
+    \item Le modèle ne prend pas en compte les ombrages, ce qui peut réduire significativement l'irradiation solaire reçue par un pan de toiture.
+    \item Les auteurs suggèrent d'intégrer des données 3D et cela semble une bonne initiative pour des futures évolutions du framework. Avec des données LiDAR, ils pourraient nettement améliorer la phase de post-processing des pans de toiture en intégrant les ombrages et une meilleure estimation des pentes des toitures.
+\end{itemize}
+
+% -----------------------------------------------------------------------------
+\section{Quantification of the suitable rooftop area for solar panel installation from overhead imagery using Convolutional Neural Networks}
+\label{subsec:castello_quantification_2021}
+
+\subsection{Contexte et objectifs}
+\par{Cet article \cite{castello_quantification_2021} présente une approche innovante pour quantifier les surfaces disponibles sur les toitures pour l'installation de panneaux solaires photovoltaïques. Face au défi de l'évaluation précise du potentiel solaire à grande échelle, \citeauthor{castello_quantification_2021} proposent une méthode combinant le deep learning, la vision par ordinateur et des données de bâtiments 3D.}
+
+\subsection{Méthodologie}
+\par{L'approche utilise un réseau de neurones convolutif (CNN) basé sur l'architecture U-Net, adapté pour la segmentation sémantique d'images aériennes à haute résolution. Le modèle a été entraîné sur 524 images (orthophotos de swisstopo 2015) de taille 250x250 pixels de Genève, avec une résolution spatiale de 0,25 m/pixel. Les données d'entraînement ont été annotées manuellement (classe unique "libre") pour identifier les zones disponibles sur les toits. Ces données ne sont pas disponibles.}
+
+\par{La méthodologie comporte trois étapes principales :}
+\begin{enumerate}
+    \item Traitement des images aériennes par le CNN pour identifier les surfaces disponibles
+    \item Post-traitement géospatial combinant les résultats avec la couche SITG des toitures
+    \item Les toitures de moins de 10 \si{\unit{\square\meter}} ne sont pas considérées comme toiture disponible
+\end{enumerate}
+
+\par{Les auteurs ont également implémenté diverses techniques d'augmentation de données et optimisé les hyperparamètres du modèle pour améliorer ses performances.}
+
+\subsection{Résultats principaux}
+Le CNN développé atteint :
+\begin{itemize}
+    \item Une précision de 93\% dans l'identification des surfaces disponibles
+    \item Un score d'Intersection over Union (IoU) de 64\%
+    \item Une sous-estimation moyenne de 8\% des surfaces disponibles par rapport aux annotations manuelles
+\end{itemize}
+
+\par{Le modèle réussit à détecter automatiquement les obstacles présents sur les toits, y compris les panneaux solaires existants, fenêtres, cheminées, équipements techniques et zones ombragées. L'étude révèle que la fraction médiane de la surface disponible varie selon la taille des toits :}
+\begin{itemize}
+    \item 61\% pour les grands toits (>500 m²)
+    \item 77\% pour les toits moyens (100-500 m²)
+    \item 80\% pour les petits toits (10-100 m²)
+\end{itemize}
+
+\par{La comparaison avec d'autres méthodes d'estimation montre que les approches existantes tendent à surestimer la surface disponible sur les grands toits et à sous-estimer celle des petits toits.}
+
+\subsection{Discussion et limites}
+\par{Cette étude démontre le potentiel du deep learning pour l'évaluation précise des surfaces de toiture disponibles pour l'installation de panneaux solaires. Pour améliorer davantage le modèle, les auteurs suggèrent l'ajout d'un canal infrarouge aux images et l'utilisation d'images aériennes plus récentes et à plus haute résolution.}
+\par{L'approche proposée offre une solution scalable qui pourrait être étendue à l'échelle nationale, fournissant ainsi des données précieuses pour les discussions publiques sur le potentiel solaire réalisable en Suisse.}
 % -----------------------------------------------------------------------------
 \subsection{YOLO12}
 
@@ -410,24 +566,157 @@ Trois horizons d'ombrage sont calculés pour chaque surface :
 \par{Quelques datasets de qualité sont disponibles actuellement. Ce chapitre va parcourir certains d'entre eux.}
 
 % -----------------------------------------------------------------------------
-\subsection{AIRS}
+\subsection{Roof Information Dataset for Computer Vision-Based Photovoltaic Potential Assessment (RID)}
+\label{subsec:rid_roof_information_dataset}
+
+\subsubsection{Contexte et objectifs}
+\par{Malgré l'existence de dataset pour la segmentation des toitures des bâtiments ou la détection de panneaux solaires, aucun d'entre eux ne permet la segmentation sémantique complète des toitures et de leurs éléments. Dans ce contexte, \citeauthor{krapf_ridroof_2022} présentent le Roof Information Dataset (RID) \cite{krapf_ridroof_2022}, premier dataset public de segmentation de toitures et de leurs éléments.}
+
+\subsubsection{Données}
+\par{Le RID se compose d'images aériennes géo-référencées et d'annotations.}
+\par{Les images sont des photos aériennes à haute résolution (environ 10 cm/pixel) centrées sur chaque bâtiment, téléchargées via l'API Google Maps Static pour la zone rurale de Wartenberg en Allemagne. Ces images sont géo-référencées au format GeoTIFF.}
+\par{Les annotations sont des images rasterisées au format PNG}
+
+\par{Les principaux chiffres-clés de ce dataset :}
+\begin{itemize}
+    \item 1880 bâtiments uniques répartis sur une zone de 1,5 km² (4,9 km² avec superposition)
+    \item 4520 polygones de segments de toiture classés selon leur orientation géographique, en tout 5 classes :
+    \begin{itemize}
+        \item Nord, sud, est et ouest
+        \item Toiture plate
+    \end{itemize}
+    \item 12359 polygones de superstructures répartis en 9 classes :
+    \begin{itemize}
+        \item Panneau PV
+        \item Lucarne
+        \item Fenêtre
+        \item Échelle
+        \item Cheminée
+        \item Ombrage
+        \item Arbre/végétation
+        \item Fond d'image (background)
+        \item Inconnu
+    \end{itemize}
+\end{itemize}
+\par{Les annotations sont fournies en deux versions différentes. La version initiale a été réalisées par cinq annotateurs. Ensuite deux annotateurs supplémentaires ont corrigés et compléter les annotations initiales. La Figure \ref{fig:rid_dataset_image_sample} représente avec une image d'exemple les différences entre les annotations.}
+
+\begin{figure}[H]
+    \makebox[\textwidth][c]{\includegraphics[width=1.15\textwidth]{02-main//figures/rid_dataset_image_sample.png}}
+    \caption{Exemple d'image du dataset, ainsi que les différentes annotations des annotateurs \cite{krapf_rid_2021}}
+    \label{fig:rid_dataset_image_sample}
+\end{figure}
+
+\par{La Figure \ref{fig:rid_dataset_distribution_classes} représente la distribution des éléments de toiture par classe.}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{02-main//figures/rid_dataset_distribution_classes.png}
+    \caption{Distribution des classes dans le dataset des éléments de toiture \cite{krapf_ridroof_2022}}
+    \label{fig:rid_dataset_distribution_classes}
+\end{figure}
+\par{Le dataset est disponible en ligne \cite{krapf_rid_2021} ainsi que le code \cite{krapf_tumftmrid_2025}.}
+
+\subsubsection{Méthodologie}
+\par{Le processus de création du dataset s'est déroulé en plusieurs phases :}
+\begin{enumerate}
+    \item Sélection de la zone d'étude :
+    \begin{itemize}
+        \item Zone rurale de Wartenberg (Munich) choisie pour offrir des images de qualité variable (contraste, ombres, distorsions) afin d'améliorer la capacité des modèles à s'adapter à des conditions variables
+    \end{itemize}
+    \item Acquisition des données :
+    \begin{itemize}
+        \item Téléchargement d'images aériennes via l'API Google Maps
+        \item Résolution d'environ 10 cm/pixel, suffisante pour identifier les petites éléments présents sur les toitures comme les cheminées
+    \end{itemize}
+    \item Processus d'annotation initial :
+    \begin{itemize}
+        \item Développement d'un outil d'annotation personnalisé permettant de dessiner des polygones sur l'interface Google Maps Dynamic API
+        \item Annotation par cinq membres universitaires suivant un ensemble de règles prédéfini
+        \item Deux tâches d'annotation distinctes : segments de toiture (classes N, S, W, O, plat) et les éléments présents sur les toitures.
+    \end{itemize}
+    \item Évaluation de la qualité d'annotation :
+    \begin{itemize}
+        \item Expérience d'annotation comparative sur 26 bâtiments sélectionnés pour contenir au moins 15 occurrences de chaque classe de superstructure
+        \item Analyse de l'accord entre annotateurs pour identifier les classes les plus difficiles à annoter
+    \end{itemize}
+    \item Processus de révision :
+    \begin{itemize}
+        \item Utilisation de l'outil CVAT (Computer Vision Annotation Tool) permettant un zoom plus important
+        \item Révision par deux annotateurs n'ayant pas participé à l'annotation initiale pour limiter les biais
+        \item Attention particulière aux classes ayant montré un faible accord inter-annotateurs
+    \end{itemize}
+    \item Répartition manuelle des données en dataset d'entraînement, validation et test :
+    \begin{itemize}
+        \item Division géographique (et non aléatoire) pour éviter le chevauchement entre ensembles d'entraînement et de test
+        \item Création de cinq configurations de partitionnement différentes pour la validation croisée (cross-validation)
+    \end{itemize}
+
+    \item Application à l'estimation du potentiel photovoltaïque :
+    \begin{itemize}
+        \item Entraînement de réseaux de neurones (U-Net et Panoptic FPN) pour la détection des éléments de toiture
+        \item Conversion des masques de segmentation en géométries vectorielles
+        \item Calcul du potentiel photovoltaïque en tenant compte des éléments de toiture
+    \end{itemize}
+\end{enumerate}
+
+\subsubsection{Résultats principaux}
+L'article présente plusieurs catégories de résultats :
+\begin{enumerate}
+    \item Qualité des annotations :
+    \begin{itemize}
+        \item Forte variabilité de l'accord inter-annotateurs (IoU) selon les classes
+        \item Classes avec bon accord : lucarnes (0,70) et panneaux solaires (0,68)
+        \item Classes problématiques : objets inconnus (0,15), échelles (0,22)
+        \item IoU moyen global de 0,48 pour l'annotation initiale et performance plus élevée après révision
+    \end{itemize}
+    \item Performances des réseaux de neurones :
+    \begin{itemize}
+        \item U-Net et Panoptic FPN entraînés et testés sur les deux versions du dataset
+        \item Meilleure performance : U-Net avec IoU moyen de 0,42-0,44 sur le jeu de test initial
+        \item Performance améliorée à 0,45-0,46 sur les annotations révisées
+        \item Réseaux capables de compenser partiellement les incohérences d'annotation
+        \item Détection performante des panneaux solaires (IoU 0,69) et lucarnes (IoU 0,60)
+    \end{itemize}
+    \item Impact sur l'évaluation du potentiel photovoltaïque :
+    \begin{itemize}
+        \item La prise en compte des éléments de toiture réduit significativement le potentiel PV estimé
+        \item Réduction de 20,5\% avec annotations manuelles et 15,0\% avec prédictions du réseau
+        \item Avec une approche de placement réaliste des modules, réduction de 31,1\%
+        \item Impact très variable selon les toitures : de moins de 5\% pour 39\% des toits à plus de 70\% pour 10\% des toits
+        \item L'exclusion des segments déjà équipés de panneaux solaires réduit le potentiel de 29,5\%
+    \end{itemize}
+\end{enumerate}
+\par{Ces résultats démontrent l'importance de considérer les éléments de toiture dans l'évaluation du potentiel solaire des toitures et valident l'approche par apprentissage profond sur images aériennes comme alternative viable aux méthodes basées sur LiDAR, malgré les défis liés à la qualité des annotations.}
+
+\subsubsection{Discussion et limites}
+\par{Le dataset se concentre sur une zone rurale allemande et ne représente pas adéquatement d'autres styles architecturaux. Comme indiqué dans la section \ref{subsec:solar_net_plus} qui fait référence a un article postérieur du même auteur, le dataset n'est pas adapté au milieu urbain de Bruxelles. Les classes sont trop spécifiques au rural allemand, dans le cas de Bruxelles, il manque les classes pour des éléments typiquement urbains tel que les ventilation/climatisation.}
+\par{Il y a une forte disproportion entre les classes d'éléments de toiture, avec certaines classes très peu représentées et d'autres classes étant dans toutes les images (cas classe "background").}
+\par{L'article s'intéresse aussi à la variabilité de la qualité d'annotation. Les annotateurs ne sont pas toujours d'accord sur les annotations (polygone) et les classes. La qualité des annotations a un impact sur la performance des modèles. Les variations dans les annotations sont aussi en partie dues a la résolution des images, celle-ci peux être insuffisante pour clairement identifier et annoter les petits objets.}
+\par{Les résultats des deux modèles sont encourageants, mais doivent être pris comme point de départ pour améliorer la qualité du dataset.}
 
 % -----------------------------------------------------------------------------
-\subsection{PASSION}
+\subsection{Autres dataset}
 
-% -----------------------------------------------------------------------------
-\subsection{Roboflow}
+\par{Le dataset de la section précédente est le seul disponible en ligne qui permet de faire de la segmentation sémantique des éléments de toiture. La plupart des articles ne partagent pas leur dataset, plusieurs hypothèses sont possible:}
+\begin{itemize}
+    \item Contraintes contractuelles avec les fournisseurs d'images qui limitent leur diffusion
+    \item Les datasets annotés représentent un investissement considérable en temps et ressources, constituant un capital intellectuel précieux pour de futures publications ou demandes de financement.    
+    \item Difficultés liées au stockage et à la distribution de volumes importants de données géospatiales, ainsi qu'à la maintenance d'une infrastructure adéquate pour supporter l'accès externe.
+    \item L'effort nécessaire pour documenter, nettoyer et préparer un dataset à usage public dépasse souvent les ressources disponibles ou allouées dans le cadre du projet initial.
+    \item Manque de reconnaissance académique formelle pour le partage de données comparativement aux publications d'articles, et parfois politiques institutionnelles restrictives concernant la propriété intellectuelle.
+\end{itemize}
+\par{La section suivante décrit les datasets disponibles pour les panneaux solaire PV, cela reste tout de même en lien avec l'identification des éléments de toiture.}
+
+\subsubsection{Datasets dédiés aux panneaux solaires PV}
+\par{Plusieurs datasets spécifiques à la détection et segmentation des panneaux solaires photovoltaïques sont disponibles dans la littérature scientifique. La plateforme Roboflow Universe \cite{roboflow_roboflow_nodate}, qui héberge plus de 500'000 datasets, propose une dizaine de datasets dédiés à la segmentation sémantique ou à la classification des panneaux solaires. Cependant, ces datasets présentent généralement des limitations importantes: nombre restreint d'images et annotations de qualité variable.}
+\par{Parmi les datasets plus significatifs, celui publié par \citeauthor{kasmi_crowdsourced_2023} \cite{kasmi_crowdsourced_2023, kasmi_crowdsourced_2022} se distingue par son approche collaborative. Son objectif principal est la détection binaire de panneaux solaires PV dans des images satellite. Ce dataset a la particularité d'avoir été prévu pour être enrichi continuellement grâce à un système de labellisation participatif accessible via GitHub \cite{gabrielkasmi_gabrielkasmibdappv_2025}. À ce jour, il recense environ 28'000 installations photovoltaïques sur plus de 33'000 images satellite. Ses sources de données sont l'IGN (Institut national de l'information géographique et forestière) ainsi que Google.}
+\par{Un autre dataset notable a été publié par \citeauthor{thebault_comprehensive_2025} \cite{thebault_comprehensive_2025}. Baptisé FRPV \cite{thebault_frpv_2025}, ce dataset a été utilisé pour évaluer le potentiel solaire photovoltaïque en France. Il combine des images provenant de l'IGN et de Google Maps, pour un total de 23'709 images contenant des installations photovoltaïques et 45'418 images sans installation PV, offrant ainsi un corpus équilibré pour l'entraînement de modèles de classification.}
 
 % -----------------------------------------------------------------------------
 % -----------------------------------------------------------------------------
 \section{Solutions commerciales existantes}
-
 \par{Quelques entreprises offrent des solutions pour réaliser un cadastre solaire sur la base de leur données. Dans tous les cas leur méthodologie ou les données utilisées ne sont pas disponible.}
-
-\par{Solargis \cite{solargis_regional_nodate} est spécialisée dans le solaire. Cette entreprise offre diverses solutions pour planifier toutes les phases de chantier, depuis la modélisation d'un site jusqu'au suivi et à l'optimisation des performances des panneaux solaires en phase d'exploitation. Ils offrent aussi la prestation de création d'un cadastre solaire pour une région.}
-
+\par{Solargis \cite{solargis_regional_nodate} est un société spécialisée dans le solaire. Cette entreprise offre diverses solutions pour planifier toutes les phases de chantier, depuis la modélisation d'un site jusqu'au suivi et à l'optimisation des performances des panneaux solaires en phase d'exploitation. Ils offrent aussi la prestation de création d'un cadastre solaire pour une région.}
 \par{L'entreprise Picterra \cite{picterra_infrastructure_nodate} offre des solutions pour l'utilisation de machine learning sur des données géomatiques. Entre autres, ils proposent l'estimation du potentiel solaire d'une région. Une autre entreprise suisse, Urbio, \cite{urbio_urbio_nodate} offre aussi des prestations similaires à Picterra mais plus axées sur la planification énergétique.}
-
 \par{Google Projet Sunroof \cite{google_project_nodate} exploite les données de Google pour évaluer le potentiel solaire des différentes régions. Cette plateforme propose également quelques conseils pour l'obtention de subventions. Bien que les données générées soient accessibles au public, Google ne les produit que pour les municipalités et régions qui souscrivent à leurs services. Cette solution est actuellement limitée aux USA.}
 
 % -----------------------------------------------------------------------------
