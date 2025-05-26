@@ -218,3 +218,37 @@
     \item Pas d'actualisations des poids selon les besoins
     \item Une seule couche ne permet pas de réaliser des calculs complexes
 \end{itemize}
+
+\par{En 1958, Frank Rosenblatt \cite{rosenblatt_perceptron_1958} publie un article ou il propose le perceptron, un nouveau type
+de neurone artificiel.}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{03-tail//A1_fondamentaux_ML//A1_figures//A1_04_perceptron.png}
+    \caption{Schéma du perceptron \cite{zahn_cours_2024}, neurone artificielle proposée par Frank Rosenblatt.}
+    \label{fig:enter-label}
+\end{figure}
+
+\par{Celui-ci se distingue du neurone de McCulloch-Pitts car elle permet d'utiliser des nombres réels pour les entrées, poids et biais. L'équation \ref{eq:perceptron} \cite{rosenblatt_perceptron_1958} du perceptron est la suivante:}
+\vspace{20pt}
+\begin{equation}
+    y = H\left(\sum_{k=1}^{n} w_k \cdot x_k + b\right) \quad \text{pour } x_k, w_k, b \in \mathbb{R}
+    \label{eq:perceptron}
+\end{equation}
+\par{Dans l'équation \ref{eq:perceptron}, $H$ représente la fonction d'activation de Heaviside, $w_k$ les poids, $x_k$ les entrées, $b$ le biais, et $n$ le nombre d'entrées.}
+
+\par{L'évolution la plus remarquable par rapport au neurone de McCulloch-Pitts, est que le perceptron peut « apprendre » des données et actualiser les poids et biais.}
+\par{On dispose d'un ensemble de données étiquetées $\{(\mathbf{x}^{(i)}, y^{(i)})| i = 1, ... N\}$, où $\mathbf{x}^{(i)}$ sont des vecteurs $n$-dimensionnels. Pour la mise à jour des poids et du biais il faut suivre les étapes suivantes :}
+\begin{enumerate}
+    \item Initialiser le vecteur des poids $\mathbf{x}^{(i)}$ et le biais b avec des valeurs nulles (ou des valeurs aléatoires proches de 0)
+    \item Itérer en mettant à jour le vecteur de poids $\mathbf{w}$ le biais b selon les règles suivantes :
+    \begin{enumerate}
+        \item Choisir un échantillon arbitraire : $(\mathbf{x}^{(i)}, y^{(i)})$
+        \item Calculer la valeur prédite $\hat{y}^{(i)} = H(\mathbf{w} \cdot \mathbf{x}^{(i)} + b)$
+        \item Utiliser la mise à jour des paramètres (Équation 5 ci-dessous) :
+        \begin{align}
+            \mathbf{w} &\leftarrow \mathbf{w} - \alpha \cdot (\hat{y}^{(i)} - y^{(i)}) \cdot \mathbf{x}^{(i)} \\
+            b &\leftarrow b - \alpha \cdot (\hat{y}^{(i)} - y^{(i)})
+        \end{align}
+    \end{enumerate}
+\end{enumerate}
+
