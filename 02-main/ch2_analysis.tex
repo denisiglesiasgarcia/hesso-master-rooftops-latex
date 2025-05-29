@@ -14,12 +14,11 @@ Ce chapitre dresse un état de l'art des avancées récentes dans la vision par 
 \section{Introduction}
 \par{L'évaluation du potentiel solaire des toitures est un élément clé de la transition énergétique urbaine. Sa précision dépend directement de la qualité et de la disponibilité des données utilisées, qui peuvent provenir de différentes sources avec des niveaux de détail variables.}
 
-\par{Les méthodologies d'évaluation du potentiel solaire s'appuient principalement sur quatre types de données :}
+\par{Les méthodologies d'évaluation du potentiel solaire s'appuient principalement sur trois types de données :}
 \begin{enumerate}
-    \item Données du cadastre
-    \item Modèle tridimensionnel des bâtiments et du territoire
+    \item Données statistiques
     \item Données géomatiques
-    \item Orthophotos
+    \item Images satellite
 \end{enumerate}
 
 \par{La deuxième partie de ce chapitre va traiter les articles scientifiques qui utilisent du machine learning pour réaliser de la segmentation de toitures.}
@@ -72,18 +71,18 @@ limites et ses applications.}
 % -----------------------------------------------------------------------------
 \subsection{Cadastre solaire Genevois}
 
-\par{Il y a une multitude d'article dédiés à l'étude du potentiel solaire, la région de Genève est l'une des régions du monde avec le plus d'articles publiés après Wuhan (Chine) \cite{drozd_evaluating_2025}. \citeauthor{thebault_large-scale_2022} \cite{thebault_large-scale_2022} vont analyser la pertinence de la pose de panneaux solaire \acrshort{pv} au niveau du \gls{grandgeneve}.}
+\par{Il y a une multitude d'article dédiés à l'étude du potentiel solaire, la région de Genève est l'une des régions du monde avec le plus d'articles publiés après Wuhan (Chine) \cite{drozd_evaluating_2025}. \citeauthor{thebault_large-scale_2022} \cite{thebault_large-scale_2022} vont analyser la pertinence de la pose de panneaux solaire \acrshort{pv} au niveau du \acrshort{grandgeneve}.}
 
 \subsubsection{Contexte et objectifs}
-\par{Le premier cadastre solaire de Genève \cite{desthieux_etude_2011} date de 2011. Il est réalisé par hepia, l'EPFL et le Politecnico di Milano, financé par les Services Industriels Genevois et le Service de l'énergie du canton (actuellement l'OCEN). Elle vise à cartographier précisément le potentiel solaire sur les toitures genevoises. Les données utilisées sont :}
+\par{Le premier cadastre solaire de Genève \cite{desthieux_etude_2011} date de 2011. Il est réalisé par \acrshort{hepia}, l'\acrshort{epfl} et le Politecnico di Milano, financé par les Services Industriels Genevois et le Service de l'énergie du canton (actuellement l'\acrshort{ocen}). Elle vise à cartographier précisément le potentiel solaire sur les toitures genevoises. Les données utilisées sont :}
 \begin{itemize}
-    \item Données LiDAR de 2009 (4-6 points/m$^2$)
+    \item Données \gls{lidar} de 2009 (4-6 points/m$^2$)
     \item Empreinte au sol des toitures issues du modèle vecteur 3D du bâti sur le canton de 2005
     \item Données météo horaires issues de Meteonorm.
 \end{itemize}
 La méthodologie utilisée est la suivante :
 \begin{itemize}
-    \item Construction d'un modèle numérique de surface 2.5D à partir de données LiDAR et d'empreintes au sol des bâtiments
+    \item Construction d'un modèle numérique de surface 2.5D à partir de données \gls{lidar} et d'empreintes au sol des bâtiments
     \item Calcul de l'irradiation solaire horaire sur les toits en tenant compte des ombrages (bâti, végétation, relief), à l'aide d'un outil développé sous Matlab
     \item Production d'indicateurs et de statistiques d'irradiation par toiture dans ArcGIS
 \end{itemize}
@@ -105,7 +104,7 @@ La méthodologie utilisée est la suivante :
 
 \par{En 2016, le cadastre a été mis à jour \cite{desthieux_solar_2018}. Les principales nouveautés sont :
 \begin{itemize}
-    \item L'utilisation des données LiDAR de 2013 \cite{sitg_nuages_2013}
+    \item L'utilisation des données \gls{lidar} de 2013 \cite{sitg_nuages_2013}
     \item L'amélioration des algorithmes de calcul du potentiel solaire
     \item Utilisation d'un cluster (24 machines) pour réaliser les calculs (environ 900h)
 \end{itemize}}
@@ -126,7 +125,7 @@ La méthodologie utilisée est la suivante :
     \caption{Schéma pour le calcul d'une tuile \cite{stendardo_gpu-enabled_2020}}
     \label{fig:cadastre_solaire_gpu}
 \end{figure}
-La Figure \ref{fig:cadastre_solaire_gpu} montre comment le traitement a été repensé pour chaque tuile de 3 x 3 km. Les parties du code Java qui pouvaient être massivement parallélisées ont été réécrites en CUDA \cite{nvidia_cuda_nodate}, ce qui permet de tirer parti des \acrshort{gpu} au lieu de s'appuyer uniquement sur les \acrshort{cpu}. Les autres parties critiques du code ont été optimisées en C++ \cite{noauthor_c_2025}. On peut voir sur la Figure \ref{fig:cadastre_solaire_gpu_evolution_temps} que cette approche a permis de réduire considérablement le temps de traitement par tuile.
+\par{La Figure \ref{fig:cadastre_solaire_gpu} montre comment le traitement a été repensé pour chaque tuile de 3 x 3 km. Les parties du code Java qui pouvaient être massivement parallélisées ont été réécrites en CUDA \cite{nvidia_cuda_nodate}, ce qui permet de tirer parti des \acrshort{gpu} au lieu de s'appuyer uniquement sur les \acrshort{cpu}. Les autres parties critiques du code ont été optimisées en C++ \cite{noauthor_c_2025}. On peut voir sur la Figure \ref{fig:cadastre_solaire_gpu_evolution_temps} que cette approche a permis de réduire considérablement le temps de traitement par tuile.}
 
 \begin{figure}[H]
     \centering
@@ -164,10 +163,19 @@ La Figure \ref{fig:cadastre_solaire_gpu} montre comment le traitement a été re
 \end{figure}
 
 \subsubsection{Données}
+\par{Le cadastre genevois et du \gls{grandgeneve} \cite{desthieux_cadastre_nodate} utilisent plusieurs sources de données. Pour la région de Genève, \acrshort{sitg} a mis à disposition les données \gls{lidar} relevées les années:}
+\begin{itemize}
+    \item 2009 \cite{sitg_nuages_2009} avec une densité de 5 points au mètre carré. La précision altimétrique est de +/- 20 cm sur surface dure et la précision planimétrique est estimée à 30 cm environ.
+    \item 2013 \cite{sitg_nuages_2013} avec une densité de 15 points au mètre carré. La précision altimétrique est de +/- 10 cm sur surface dure et la précision planimétrique est estimée à 20 cm environ.
+    \item 2017 \cite{sitg_nuages_2017} avec une densité de 25 points au mètre carré. La précision altimétrique est de +/- 10 cm sur surface dure et la précision planimétrique est estimée à 20 cm environ.
+\end{itemize}
+\par{En ce qui concerne la région de Nyon, les données \gls{lidar} relevées en 2019 \cite{etat_de_vaud_lidar_nodate} et finalement, pour la France, les données \gls{lidar} relevées en 2014 \cite{ign_ign_nodate} par le \acrshort{ign}.
+\par{Les données vectorielles proviennent des mêmes fournisseurs de données et ne sont pas spécifiées dans les articles. Les données météo proviennent de Météonorm.}
+
 
 \subsubsection{Méthodologie}
 
-La méthodologie \cite{desthieux_solar_2018} pour la création du cadastre suit les étapes suivantes :
+\par{La méthodologie \cite{desthieux_solar_2018} pour la création du cadastre suit les étapes suivantes :}
 \begin{itemize}
     \item Collecte des données
     \item Construction du modèle 3D
@@ -176,7 +184,7 @@ La méthodologie \cite{desthieux_solar_2018} pour la création du cadastre suit 
     \item Calcul des indicateurs et visualisation des résultats
 \end{itemize}
 
-La Figure \ref{fig:cadastre_solaire_methodologie} résume ces points.
+\par{La Figure \ref{fig:cadastre_solaire_methodologie} résume ces points.}
 \begin{figure}[H]
     \centering
     \includegraphics[width=1\linewidth]{02-main//figures/cadastre_solaire_methodologie.png}
@@ -185,13 +193,13 @@ La Figure \ref{fig:cadastre_solaire_methodologie} résume ces points.
 \end{figure}
 
 \paragraph{Collecte des données}
-\par{La première étape est d'obtenir les données nécessaires ("Raw data" sur la Figure \ref{fig:cadastre_solaire_methodologie}). À partir des données LiDAR, on construit deux modèles 3D de la ville : un modèle numérique de surface (DSM) qui représente la surface supérieure des bâtiments et de la végétation, et un modèle numérique de terrain (DTM) qui représente le sol nu sans les bâtiments.}
+\par{La première étape est d'obtenir les données nécessaires ("Raw data" sur la Figure \ref{fig:cadastre_solaire_methodologie}). À partir des données \gls{lidar}, on construit deux modèles 3D de la ville : un modèle numérique de surface (\acrshort{mns} ou en anglais \acrshort{dsm}) qui représente la surface supérieure des bâtiments et de la végétation, et un modèle numérique de terrain (\acrshort{mnt} ou en anglais \acrshort{dtm}) qui représente le sol nu sans les bâtiments.}
 \par{Les contours et empreintes des toits et bâtiments  sont aussi récupérés à partir de données cadastrales existantes, en 2D et 3D. Ils serviront à délimiter précisément les toits et façades.}
 
 \paragraph{Construction du modèle 3D détaillé}
 \par{La deuxième étape consiste à construire un modèle 3D détaillé de la ville ("mask inputs" sur la Figure \ref{fig:cadastre_solaire_methodologie}), qui servira de base aux calculs d'ensoleillement. Ce modèle est créé à partir des données récoltées à l'étape précédente.}
-\par{Tout d'abord, le modèle numérique de surface (DSM) et le modèle numérique de terrain (DTM) sont transformés en images 3D appelées "rasters". Imaginez une grande grille recouvrant toute la ville, où chaque case de la grille (appelée "pixel") contient une valeur de hauteur. C'est exactement ce que sont le DSM et le DTM : des grandes grilles 3D où la hauteur de chaque point de la ville est enregistrée.}
-\par{Ensuite, deux modèles 3D distincts sont créés : un pour les toits et un pour les façades. Pour cela, on combine le DSM obtenu à partir des données LiDAR avec les données cadastrales qui contiennent les contours des bâtiments. Cela permet d'avoir un modèle 3D, où chaque toit et chaque façade est représenté.}
+\par{Tout d'abord, le modèle numérique de surface (DSM) et le modèle numérique de terrain (DTM) sont transformés en images 3D appelées "rasters". Imaginez une grande grille recouvrant toute la ville, où chaque case de la grille (appelée "pixel") contient une valeur de hauteur. C'est exactement ce que sont le \acrshort{dsm} et le \acrshort{dtm} : des grandes grilles 3D où la hauteur de chaque point de la ville est enregistrée.}
+\par{Ensuite, deux modèles 3D distincts sont créés : un pour les toits et un pour les façades. Pour cela, on combine le \acrshort{dsm} obtenu à partir des données \gls{lidar} avec les données cadastrales qui contiennent les contours des bâtiments. Cela permet d'avoir un modèle 3D, où chaque toit et chaque façade est représenté.}
 \par{Pour chaque pixel du modèle 3D des toits, deux informations supplémentaires sont calculées : la pente (c'est-à-dire l'inclinaison) et l'orientation (nord, sud, est, ouest...). Ces deux paramètres sont très importants car ils influencent grandement la quantité d'énergie solaire reçue. Par exemple, un toit plat horizontal recevra plus de soleil qu'un toit très pentu orienté vers le nord.}
 \par{Le modèle 3D des façades est un peu plus complexe à créer. En effet, un modèle "raster" comme celui des toits ne permet pas de bien représenter les surfaces verticales. Pour contourner ce problème, des points supplémentaires appelés "hyperpoints" sont ajoutés le long des façades (voir Figure \ref{fig:cadastre_solaire_hyperpoints}). Ils permettent de représenter chaque façade comme une série de points verticaux, sur lesquels on pourra ensuite calculer l'ensoleillement de manière précise.}
 \begin{figure}[H]
@@ -203,7 +211,7 @@ La Figure \ref{fig:cadastre_solaire_methodologie} résume ces points.
 \par{Finalement, on obtient un jumeau numérique très détaillé de la ville, avec un modèle 3D distinct pour les toits et les façades. Ce jumeau numérique contient toutes les informations nécessaires (hauteur, pente, orientation) pour calculer finement l'ensoleillement en tout point. Les étapes suivantes vont s'appuyer sur ce modèle pour simuler les ombres portées et calculer le potentiel solaire.}
 
 \paragraph{Calcul des zones d'ombre}
-\par{La troisième étape consiste à calculer les zones d'ombre sur les toits et les façades des bâtiments (« mask inputs » sur Figure \ref{fig:cadastre_solaire_methodologie}). Cette étape est cruciale car les zones ombragées ont un potentiel solaire significativement inférieur aux zones bien exposées au soleil.}
+\par{La troisième étape consiste à calculer les zones d'ombre sur les toits et les façades des bâtiments (``mask inputs'' sur Figure \ref{fig:cadastre_solaire_methodologie}). Cette étape est cruciale car les zones ombragées ont un potentiel solaire significativement inférieur aux zones bien exposées au soleil.}
 \par{Pour réaliser ce calcul, le jumeau numérique 3D de la ville créé précédemment est utilisé comme base. Ce modèle contient toutes les informations nécessaires sur la forme et la hauteur des bâtiments et du relief environnant. Un algorithme de simulation reproduit la course du soleil heure par heure tout au long de l'année, projetant les ombres correspondantes sur le modèle 3D.}
 \par{L'ombrage représente l'un des facteurs les plus déterminants pour la performance d'une installation solaire. Pour analyser précisément son impact, trois catégories principales d'ombrages sont identifiées:}
 \begin{itemize}
@@ -230,12 +238,12 @@ La Figure \ref{fig:cadastre_solaire_methodologie} résume ces points.
 \par{L'intégration des cartes d'ombrage avec le facteur de vue du ciel fournit une caractérisation complète des conditions d'ensoleillement pour chaque point de la ville. Cette analyse prend en compte à la fois les ombres portées par les obstacles proches et les masques créés par les éléments lointains, constituant ainsi une base solide pour le calcul définitif du potentiel solaire.}
 
 \paragraph{Modélisation du rayonnement solaire}
-\par{La quatrième étape consiste à modéliser la quantité d'énergie solaire reçue en chaque point des toits et des façades (« Radiation modelling » sur Figure \ref{fig:cadastre_solaire_methodologie}), en tenant compte des conditions météorologiques locales et de la position du soleil dans le ciel.}
+\par{La quatrième étape consiste à modéliser la quantité d'énergie solaire reçue en chaque point des toits et des façades (``Radiation modelling'' sur Figure \ref{fig:cadastre_solaire_methodologie}), en tenant compte des conditions météorologiques locales et de la position du soleil dans le ciel.}
 \par{Pour cela, on récupère tout d'abord des données météorologiques précises pour la zone étudiée :
 \begin{itemize}
-\item Le rayonnement solaire global, c'est-à-dire la quantité totale d'énergie solaire reçue sur une surface horizontale.
-\item La part de rayonnement qui arrive en ligne droite du soleil (rayonnement direct).
-\item La part de rayonnement qui arrive de façon indirecte, après avoir été diffusée par les nuages et l'atmosphère (rayonnement diffus).
+    \item Le rayonnement solaire global, c'est-à-dire la quantité totale d'énergie solaire reçue sur une surface horizontale.
+    \item La part de rayonnement qui arrive en ligne droite du soleil (rayonnement direct).
+    \item La part de rayonnement qui arrive de façon indirecte, après avoir été diffusée par les nuages et l'atmosphère (rayonnement diffus).
 \end{itemize}}
 \par{Ensuite, on utilise des modèles qui reproduisent la position exacte du soleil dans le ciel à chaque heure de la journée et à chaque période de l'année. Cela permet de calculer l'angle avec lequel les rayons du soleil frappent chaque point des toits et des façades.}
 \par{En effet, la quantité d'énergie reçue en un point dépend fortement de son orientation (est, sud, ouest...) et de son inclinaison (surface horizontale, verticale ou inclinée). Un point orienté plein sud et incliné à 45° recevra par exemple beaucoup plus d'énergie qu'une façade verticale orientée au nord.}
@@ -245,20 +253,20 @@ La Figure \ref{fig:cadastre_solaire_methodologie} résume ces points.
 \par{Au final, on obtient une estimation très fine de la quantité d'énergie solaire reçue par chaque mètre carré des toits et façades, heure par heure, tout au long de l'année. Cela permet ensuite de sélectionner les zones les plus intéressantes pour installer des panneaux solaires par exemple.}
 
 \paragraph{Résultats de la simulation}
-\par{À la fin de tout ce processus, on obtient des résultats concrets et utilisables sous plusieurs formes. Ces résultats (« Roof outputs » et « façade outputs » sur Figure \ref{fig:cadastre_solaire_methodologie}) sont :
+\par{À la fin de tout ce processus, on obtient des résultats concrets et utilisables sous plusieurs formes. Ces résultats (``Roof outputs'' et ``façade outputs'' sur Figure \ref{fig:cadastre_solaire_methodologie}) sont :
 \begin{itemize}
-\item Des cartes de rayonnement solaire pour les toits et façades
-\item Des valeurs d'énergie regroupées par pan de toit, façade, et bâtiment entier
-\item Des indicateurs pratiques comme la production d'énergie possible et la rentabilité économique
+    \item Des cartes de rayonnement solaire pour les toits et façades
+    \item Des valeurs d'énergie regroupées par pan de toit, façade, et bâtiment entier
+    \item Des indicateurs pratiques comme la production d'énergie possible et la rentabilité économique
 \end{itemize}}
 
 \subsubsection{Résultats principaux}
-\par{Tous les résultats sont disponibles pour les citoyens et les professionnels sur le géoportail cartographique de SITG (Figure \ref{fig:cadastre_solaire_couche_vec_sitg}). Ils peuvent être affichés sous forme de couches cartographiques, au même titre que
+\par{Tous les résultats sont disponibles pour les citoyens et les professionnels sur le géoportail cartographique de \acrshort{sitg} (Figure \ref{fig:cadastre_solaire_couche_vec_sitg}). Ils peuvent être affichés sous forme de couches cartographiques, au même titre que
 d'autres données territoriales.}
 \begin{figure}[H]
     \centering
     \includegraphics[width=1\linewidth]{02-main//figures/cadastre_solaire_couche_vec_sitg.png}
-    \caption{Visualisation des couches vectorielles sur l'interface SITG \cite{desthieux_solar_2018}}
+    \caption{Visualisation des couches vectorielles sur l'interface \acrshort{sitg} \cite{desthieux_solar_2018}}
     \label{fig:cadastre_solaire_couche_vec_sitg}
 \end{figure}
 \par{Un site web dédié au cadastre solaire a également été créé (Figure \ref{fig:cadastre_solaire_sitg_labs}). Il permet à chacun de rechercher une adresse et de visualiser très simplement le potentiel solaire du bâtiment correspondant, ainsi que des estimations de production d'énergie et de rentabilité économique.}
@@ -277,12 +285,12 @@ d'autres données territoriales.}
 % -----------------------------------------------------------------------------
 \subsection{ToitSolaire}
 
-\par{Ce chapitre présente l'application toitsolaire.ch \cite{bfe_wie_nodate} et sa documentation technique \cite{klauser_energie_nodate} qui a été rédigée par l'Office fédéral de l'énergie (OFEN) ainsi que Meteotest \cite{meteotest_wir_2025}.}
+\par{Ce chapitre présente l'application toitsolaire.ch \cite{bfe_wie_nodate} et sa documentation technique \cite{klauser_energie_nodate} qui a été rédigée par l'Office fédéral de l'énergie (\acrshort{ofen}) ainsi que Meteotest \cite{meteotest_wir_2025}.}
 
 \subsubsection{Contexte et objectifs}
-L'application toitsolaire.ch, développée par l'Office fédéral de l'énergie (OFEN), constitue un cadastre solaire pour l'ensemble du territoire suisse et sert d'instrument d'encouragement pour l'utilisation de l'énergie solaire.
+\par{L'application toitsolaire.ch, développée par l'\acrshort{ofen}, constitue un cadastre solaire pour l'ensemble du territoire suisse et sert d'instrument d'encouragement pour l'utilisation de l'énergie solaire.}
 
-Ce projet s'inscrit dans la volonté fédérale de favoriser la transition énergétique en fournissant aux propriétaires et aux professionnels un outil permettant d'évaluer rapidement le potentiel solaire des toitures et des façades des bâtiments suisses. L'objectif principal est d'offrir une plateforme en ligne accessible qui présente de manière claire et précise le potentiel d'exploitation de l'énergie solaire pour chaque bâtiment, tant sur les toitures (toitsolaire.ch) que sur les façades (facade-au-soleil.ch).
+\par{Ce projet s'inscrit dans la volonté fédérale de favoriser la transition énergétique en fournissant aux propriétaires et aux professionnels un outil permettant d'évaluer rapidement le potentiel solaire des toitures et des façades des bâtiments suisses. L'objectif principal est d'offrir une plateforme en ligne accessible qui présente de manière claire et précise le potentiel d'exploitation de l'énergie solaire pour chaque bâtiment, tant sur les toitures (toitsolaire.ch) que sur les façades (facade-au-soleil.ch).}
 
 \subsubsection{Données}
 \par{Le projet s'appuie sur trois types de données principales :}
@@ -296,7 +304,7 @@ Ce projet s'inscrit dans la volonté fédérale de favoriser la transition éner
         \item Géométries des bâtiments en 3D (toits et façades) issues du modèle swissBUILDINGS3D 2.0
         \item Modèles numériques de terrain (swissALTI3D, resolution 2m)
         \item Modèles numériques de surface (swissSURFACE3D, résolution 0,5m)
-        \item Modèle SRTM (résolution ~100m)
+        \item Modèle SRTM (résolution environ 100m)
     \end{itemize}
     \item Données statistiques
         \begin{itemize}
@@ -305,9 +313,11 @@ Ce projet s'inscrit dans la volonté fédérale de favoriser la transition éner
     \end{itemize}
 
 \subsubsection{Méthodologie}
-\par{Le traitement des données comprend plusieurs étapes.}
+\par{Le traitement des données commence par l'analyse des géométries, suivi par le calcul du rayonnement solaire sur les surfaces et se termine par leur classification.}
+
 \paragraph{Traitement des géométries}
 \par{Les données 3D des bâtiments sont converties en polygones 2D pour les toits (vue d'oiseau) et polylignes 2D pour les façades. L'orientation, l'inclinaison et la surface de chaque pan de toit sont calculées.}
+
 \paragraph{Calcul du rayonnement solaire}
 Trois horizons d'ombrage sont calculés pour chaque surface :
 \begin{itemize}
@@ -316,6 +326,7 @@ Trois horizons d'ombrage sont calculés pour chaque surface :
     \item Ombrage proche (local) dans un rayon de 100 m
 \end{itemize}
 \par{Le rayonnement solaire sur les surfaces inclinées est calculé à l'aide du modèle anisotrope de Perez, qui tient compte du rayonnement direct, diffus et réfléchi. Les calculs sont effectués heure par heure sur la période 2011-2020.}
+
 \paragraph{Calcul des rendements photovoltaïque et thermique}
 \par{Le rendement électrique est calculé en multipliant le rayonnement solaire total par un rendement de module de 19\% et un ratio de performance de 80\%. Pour le solaire thermique, la méthode est plus complexe :}
 \begin{itemize}
@@ -324,24 +335,26 @@ Trois horizons d'ombrage sont calculés pour chaque surface :
     \item Calcul du rendement thermique à l'aide d'une formule d'approximation validée
     \item Conversion en métriques pratiques (nombre de douches possibles, pourcentage des besoins de chauffage couverts)
 \end{itemize}
+
 \paragraph{Classification}
 \par{Les surfaces sont classées selon leur potentiel solaire, de "faible" à "excellent", en fonction du rayonnement solaire annuel moyen :}
 \begin{itemize}
     \item Pour les toits : < 800, 800-1000, 1000-1200, 1200-1400, > 1400 kWh/m²/an
     \item Pour les façades : < 600, 600-800, 800-1000, 1000-1200, > 1200 kWh/m²/an
 \end{itemize}
+
 \subsubsection{Résultats principaux}
-\par{Le projet a permis d'analyser environ 10 millions de pans de toit en Suisse, fournissant pour chacun :}
+\par{Le projet a permis d'analyser environ 10 millions de pans de toit en Suisse, fournissant pour chacun des données géométriques et le potentiel solaire (\acrshort{pv} et solaire thermique) comme données principales.}
 \paragraph{Données géométriques} Surface utilisable, orientation et inclinaison.
 \paragraph{Potentiel photovoltaïque}
 \begin{itemize}
-    \item Rayonnement solaire moyen (kWh/m²/an)
-    \item Rayonnement solaire total (kWh/an)
+    \item Rayonnement solaire global moyen (kWh/m²/an)
+    \item Rayonnement solaire global total (kWh/an)
     \item Production électrique estimée (kWh/an)
 \end{itemize}
 \paragraph{Potentiel thermique solaire}
 \begin{itemize}
-    \item Rayonnement solaire moyen et total
+    \item Rayonnement solaire global moyen et total
     \item Production thermique estimée
     \item Pourcentage des besoins de chauffage couverts
 \end{itemize}
@@ -351,7 +364,7 @@ Trois horizons d'ombrage sont calculés pour chaque surface :
 \par{Pour chaque mois, des paramètres permettent de calculer le rayonnement sur surface inclinée à partir du rayonnement horizontal direct et diffus.}
 \subsubsection{Discussion et limites}
 \par{L'objectif de cet outil est très similaire au cadastre solaire genevois mais pour toute la Suisse. Il a les mêmes limites en ce qui concerne les superstructures des toitures, c'est-à-dire que les éléments de toiture qui ne sont pas renseignés dans la superstructure, seront considérés comme surface apte pour la mise en place de panneaux solaire.}
-\par{La modélisation de la météo semble plus sophistiquée que celle du cadastre genevois. L'actualisation des données va dépendre principalement des relevés LiDAR réalisés par swisstopo, mais en principe ceux-ci sont plus fréquents que pour le cadastre solaire genevois}
+\par{La modélisation de la météo semble plus sophistiquée que celle du cadastre genevois. L'actualisation des données va dépendre principalement des relevés \gls{lidar} réalisés par swisstopo, mais en principe ceux-ci sont plus fréquents que pour le cadastre solaire genevois}
 
 % -----------------------------------------------------------------------------
 % -----------------------------------------------------------------------------
@@ -361,8 +374,527 @@ Trois horizons d'ombrage sont calculés pour chaque surface :
 
 % -----------------------------------------------------------------------------
 \subsection{Détection des objets présents sur les toitures et identification des espaces libres}
+\label{subsec:stdl_analyse}
+\vspace{2mm}
+\par{Ce sous-chapitre va traiter en détail le projet \cite{herny_detection_2024} réalisé par l'équipe du Swiss Territorial Data Lab (\acrshort{stdl}) pour identifier les objets présents sur les toitures.}
 
-\par{STDL}
+\subsubsection{Résumé}
+\par{Les toits libres offrent un potentiel important pour l'installation de nouvelles infrastructures, comme les panneaux solaires et les toits végétalisés, afin de s'adapter au changement climatique. Cependant, il est souvent difficile d'évaluer ce potentiel en raison du manque d'inventaire des objets existants sur les toits.}
+
+\par{Dans le cadre d'un projet \cite{herny_detection_2024} du \acrshort{stdl} avec le Canton de Genève, trois méthodes ont été développées pour identifier automatiquement les surfaces occupées et libres sur les toits. Ces méthodes et leurs résultats sont :}
+\begin{itemize}
+    \item La classification des pans de toit
+    \begin{itemize}
+        \item Classification avec un algorithme ``random forrest''
+        \item Données : couche vectorielle ``CAD\_BATIMENTS\_HORSOL\_TOIT'' \cite{sitg_toits_nodate}
+        \item Precision globale 83\%. Precision d'environ 93\% pour la classe ``potentiellement libre'' et 76\% pour la classe ``occupé''
+        \item Demande très peu de ressources informatiques. Plaît aux experts
+    \end{itemize}
+    \item La segmentation des données \gls{lidar}
+    \begin{itemize}
+        \item Algorithmes spécifiques pour segmentation nuage de points \gls{lidar} en polygones
+        \item Données : données \gls{lidar} du canton de Genève 2019 \cite{sitg_nuages_nodate}
+        \item F1-score = 0.76 et mIoU = 0.40
+        \item Polygones de détection ne sont pas lisses et ne plaisent pas aux experts
+    \end{itemize}
+    \item La segmentation d'images
+    \begin{itemize}
+        \item Librairie python ``segment-geospatial'' \cite{wu_samgeo_2023} basé sur segment anything model (SAM) pour détecter et segmenter les objets
+        \item Données : Orthophotos du canton de Genève 2019 \cite{sitg_orthophotos_nodate}
+        \item F1-score = 0.75 et mIoU = 0.37
+        \item Demande beaucoup de ressources informatiques
+    \end{itemize}
+\end{itemize}
+
+\par{Les résultats des trois méthodes ont été jugés satisfaisants par les experts, 70\% à 95\% des résultats étant considérés comme acceptables. Compte tenu de la qualité des résultats et du temps de calcul, seule la méthode de classification a été retenue pour une application au niveau cantonal.}
+
+\subsubsection{Introduction}
+
+\par{Pour répondre aux défis de la crise climatique et de la transition écologique, il est important que les collectivités locales adaptent leurs politiques d'aménagement du territoire. Une mesure efficace consiste à utiliser les toits pour installer de nouvelles infrastructures, telles que des panneaux solaires ou des toits végétalisés, afin de minimiser l'impact sur l'utilisation des sols.}
+\par{Cependant, il est essentiel d'avoir une connaissance précise de la surface disponible et des infrastructures existantes afin de planifier les futurs investissements. Malheureusement, ces informations sont souvent rares et difficiles à tenir à jour, en particulier dans les grandes villes. Cela peut être dû à la complexité des toitures et au nombre croissant d'objets présents. Afin de remédier à cela, l'utilisation d'images aériennes à haute résolution ainsi que des données \gls{lidar} est de plus en plus intéressante. Ces technologies permettent de mieux comprendre le potentiel des toits et de suivre leur évolution.}
+\par{Dans un contexte d'urbanisation croissante, il est essentiel de développer des méthodes numériques avancées pour exploiter au mieux les ressources des toits et créer des villes durables.}
+
+\subsubsection{Parties prenantes}
+
+\par{Les principales parties prenantes dans ce projet sont :}
+\begin{itemize}
+\item Swiss Territorial Data Lab (\acrshort{stdl})
+\item Office cantonal de l'énergie du Canton de Genève (\acrshort{ocen})
+\item Office cantonal de l'agriculture et de la nature du Canton de Genève (\acrshort{ocan})
+\end{itemize}
+
+\par{Le \acrshort{stdl} a pour but de résoudre les problématiques concrètes des administrations publiques en utilisant la science des données appliquée aux géodonnées \cite{stdl_swiss_nodate}.}
+
+Dans le comité de pilotage du \acrshort{stdl} on retrouve :
+\begin{itemize}
+    \item Office fédéral de topographie swisstopo
+    \item Office fédéral de la statistique (OFS)
+    \item Conférence des services cantonaux de la géoinformation et du cadastre (CGC)
+    \item Ville de Zurich
+    \item République et canton de Genève
+    \item République et canton de Neuchâtel
+    \item Canton des Grisons
+\end{itemize}
+
+\par{L'office cantonal de l'énergie du Canton de Genève (\acrshort{ocen}) a pour but de conduire la politique énergétique du canton, notamment en maîtrisant et en réduisant la consommation. Il veille à assurer les conditions d'un approvisionnement durable et fiable en encourageant la production et l'utilisation d'énergies renouvelables et indigènes pour se substituer aux énergies nucléaire et fossile. \cite{etat_de_geneve_office_nodate-1}}
+
+\par{L'Office cantonal de l'agriculture et de la nature (\acrshort{ocan}) promeut la biodiversité et garantit l'intégration de la nature comme de l'agriculture dans l'espace urbain. \cite{etat_de_geneve_office_nodate}}
+
+\subsubsection{Données}
+
+\par{\acrshort{sitg} dispose d'une grande quantité de données géographiques, les données suivantes ont été utilisées dans le cadre de ce projet :}
+\begin{itemize}
+    \item Nuage de points \gls{lidar} de l'année 2019 \cite{sitg_nuages_nodate}
+    \item Orthophotos de l'année 2019 \cite{sitg_orthophotos_nodate}
+    \item Couche \acrshort{sitg} d'emprise des toitures des bâtiments hors sol « CAD\_BATIMENTS\_HORSOL\_TOIT » \cite{sitg_toits_nodate}
+\end{itemize}
+
+\paragraph{\gls{lidar}}
+
+\par{Les données \gls{lidar} 2019 \cite{sitg_nuages_nodate} de l'État de Genève ont une densité de 25 points au mètre carré. La précision altimétrique est de +/- 10 cm sur surface dure et la précision planimétrique est estimée à 20 cm environ. Le vol de l'avion a été réalisé en mars 2019.}
+
+Chaque point a une classe assignée dont les principales sont :
+\begin{itemize}
+    \item 1 - Non classifié
+    \item 2 – Sol
+    \item 3 - Basse végétation (< 50cm)
+    \item 5 - Haute végétation (> 50cm)
+    \item 6 – Bâtiments
+    \item 7 - Points bas ou isolés
+    \item 9 – Eau
+    \item 13 - Ponts, passerelles
+    \item 15 - Sol (points complémentaires)
+    \item 16 – Bruit
+    \item 19 - Points mesurés hors périmètre de l'acquisition
+\end{itemize}
+
+\paragraph{Orthophotos}
+\par{Le canton de Genève a réalisé en mai 2019 des images aériennes de haute résolution \cite{sitg_orthophotos_nodate} de tout le canton qui ont ensuite été converties en true orthophotos (XXXXX)}
+\todo[inline]{Ajouter ici le lien correct à l'annexe des ortophotos}
+\par{Ces orthophotos ont la particularité de ne pas avoir de décalage vis-à-vis d'un modèle numérique du terrain, donc les couches vectorielles devraient s'aligner avec les orthophotos. Chaque pixel représente 5 cm.}
+
+\paragraph{Couche vectorielle d'emprise au sol des toitures}
+\par{\acrshort{sitg} dispose d'une couche vectorielle d'emprise des toitures des bâtiments hors sol « CAD\_BATIMENTS\_HORSOL\_TOIT » \cite{SITG2023}. Cette couche provient de la numérisation 3D des bâtiments. La Figure \ref{fig:stdl_01_couche_vectorielle} représente un exemple de cette couche avec une orthophoto en fond d'image.}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{02-main//figures/stdl_01_couche_vectorielle.png}
+    \caption{Image d’exemple de la couche vectorielle d’emprise au sol des bâtiments « CAD_BATIMENTS_HORSOL_TOIT »}
+    \label{fig:stdl_01_couche_vectorielle}
+\end{figure}
+% Figure 46 à insérer ici
+
+Cette couche est régulièrement mise à jour. \acrshort{stdl} a utilisé les données de mars 2023 pour son projet. Les superstructures sont des éléments qui dépassent de la toiture tel qu'une cheminée, cage d'ascenseur, lucarne, etc. ne sont pas représentés dans cette couche. Tout ce qui est en dessous de 9 m² ne figure pas dans cette couche.
+
+\paragraph{Vérité terrain}
+
+La Figure 47 représente les bâtiments choisis par \acrshort{stdl} pour la vérité terrain.
+
+% Figure 47 à insérer ici
+
+Ces bâtiments se distribuent de la manière suivante :
+\begin{itemize}
+\item 7 bâtiments administratifs (toiture plate)
+\item 18 bâtiments industriels (toiture plate)
+\item 97 bâtiments de logement (toiture en pente/plate)
+\end{itemize}
+
+Les données ont été labellisées selon les classes suivantes :
+
+% Figure 48 à insérer ici
+
+Chaque méthode utilisée dans ce projet nécessite la création de vérité terrain spécifique.
+
+\subsubsection{Classification des pans de toits}
+
+Cette méthode consiste à utiliser les données vectorielles de l'emprise des toitures, les labelliser à l'aide des données \gls{lidar} et ensuite appliquer un algorithme random forest (similaire au un arbre de décision).
+
+\paragraph{Données}
+
+Les données utilisées sont la couche vectorielle de l'emprise des toitures, ainsi que les données \gls{lidar}.
+
+Comme indiqué au chapitre « 3.2.3.6 Données de nuages de points », la rugosité et l'intensité sont deux informations complémentaires fournies par les nuages de points \gls{lidar}. La rugosité mesure la variation locale de l'altitude des points et reflète la texture de la surface. Une rugosité élevée indique la présence d'obstacles. L'intensité mesure la quantité d'énergie réfléchie par la surface et dépend des propriétés de réflectance des matériaux. Elle varie selon le type de surface et peut aider à distinguer différents matériaux.
+
+Pour constituer le dataset (vérité terrain), \acrshort{stdl} a annoté la couche vectorielle de l'emprise des toitures avec l'aide des données \gls{lidar}. Les 3 classes résultantes sont :
+\begin{itemize}
+\item Occupé : pas de surface disponible
+\item Possiblement libre : probablement libre
+\item Non défini : le nuage de point \gls{lidar} n'a pas classifié cette zone comme « bâtiment »
+\end{itemize}
+
+\paragraph{Méthodologie}
+
+La méthodologie se décompose en trois étapes principales : la préparation des données \gls{lidar}, la classification par seuils manuels et la classification par forêt aléatoire (random forest).
+
+La première étape est la préparation des données \gls{lidar} :
+\begin{itemize}
+\item L'intensité du signal \gls{lidar} est interpolée par une méthode de pondération inverse à la distance pour obtenir une valeur continue en chaque point.
+\item Un modèle numérique de terrain (MNT) est généré à partir des points \gls{lidar} pour représenter la surface du sol.
+\item La rugosité de la surface est calculée à partir du MNT à une échelle de 1 m pour caractériser les variations locales de hauteur.
+\item Des statistiques zonales (moyenne, médiane, écart-type, etc.) sont calculées pour l'intensité et la rugosité sur chaque pan de toit.
+\end{itemize}
+
+La deuxième étape est la classification par seuils manuels :
+\begin{itemize}
+\item Les pans de toit de moins de 2 m² sont automatiquement classés comme "occupés" car trop petits pour des installations.
+\item Les pans avec moins de 25\% de points classés comme "bâtiment" (données \gls{lidar}) sont classés en "non défini" par manque d'information.
+\item Pour les autres pans
+\begin{itemize}
+\item Des seuils sont fixés empiriquement sur 4 variables :
+\begin{itemize}
+\item La marge d'erreur et l'écart-type de l'intensité
+\item La rugosité médiane
+\item Le pourcentage de recouvrement avec des pixels non classés comme "bâtiment" (données \gls{lidar})
+\end{itemize}
+\item Si un pan dépasse le seuil pour au moins une variable, il est classé comme "occupé", sinon il est "potentiellement libre".
+\end{itemize}
+\item Cette classification est validée manuellement par des experts sur un échantillon de 650 pans de toit.
+\end{itemize}
+
+La troisième étape est la classification par random forrest (RF)
+\begin{itemize}
+\item Deux forêts aléatoires sont entraînées, une pour chaque office (\acrshort{ocen} et \acrshort{ocan}), en utilisant les seuils validés comme référence.
+\item Les données sont divisées en 80\% pour l'entraînement et 20\% pour le test.
+\item 14 variables sont utilisées pour construire les arbres de décision, dont les statistiques zonales d'intensité et de rugosité.
+\item L'importance relative de chaque variable dans la classification est calculée.
+\item Les forêts sont évaluées sur l'échantillon test pour mesurer leur performance.
+\end{itemize}
+
+\paragraph{Résultats}
+
+Les résultats obtenus sont les suivants :
+
+% Tableau 11 à insérer ici
+
+La classification avec RF est plus performante que les seuils manuels, avec des taux de satisfaction augmentant de 7 et 6 points pour \acrshort{ocan} et \acrshort{ocen} respectivement.
+
+Ci-dessous un aperçu des résultats obtenus :
+
+% Figure 49 à insérer ici
+
+Dans la Figure 49 on observe les différents critères par office, l'\acrshort{ocen} semble classifier plus de surfaces comme « possiblement libre » (blanc) que l'\acrshort{ocan}. Une matrice de confiance aurait permis de mieux évaluer les résultats.
+
+\paragraph{Discussion des résultats (\acrshort{stdl})}
+
+Dans son rapport \acrshort{stdl} fait une analyse des résultats obtenus dans lequel ils traitent les points suivants :
+\begin{itemize}
+\item Comparaison des deux méthodes de classification
+\item Classification des petits pans de toit
+\item Différences entre les deux random forrest
+\item Pertinence de la méthodologie
+\end{itemize}
+
+Le premier point soulevé est une comparaison de la classification par seuils et celle avec la random forrest :
+\begin{itemize}
+\item Les deux méthodes donnent des résultats satisfaisants, mais la forêt aléatoire est plus performante.
+\item La forêt aléatoire utilise 14 variables, contre seulement 4 pour les seuils manuels.
+\item Le choix des variables pour les seuils manuels était pertinent mais incomplet.
+\item Les seuils manuels sont simples à mettre en place mais nécessitent des tests manuels fastidieux.
+\item La forêt aléatoire est automatisée mais a besoin d'une vérité terrain.
+\end{itemize}
+
+Le deuxième point est la classification des petits pans de toit :
+\begin{itemize}
+\item Avec les seuils manuels, les petits pans sont souvent classés comme "occupés" à cause de leur rugosité médiane élevée.
+\item La rugosité des petits pans est plus influencée par leur environnement à cause de l'échelle de calcul (1 m).
+\item La rugosité minimale, importante dans la forêt aléatoire, dépend fortement de la taille du pan.
+\item Bien que potentiellement utilisables, les petits pans dégagés sont difficiles à exploiter et moins prioritaires.
+\item Le fait que l'algorithme les classe souvent comme occupés convient aux experts.
+\end{itemize}
+
+Le troisième point traite des raisons des différences entre les deux random forrest (une par office) :
+\begin{itemize}
+\item Les différences de résultats entre les offices (\acrshort{ocan} et \acrshort{ocen}) s'expliquent par leurs besoins distincts.
+\item Pour \acrshort{ocan} (végétalisation), une rugosité médiane élevée est tolérée.
+\item Pour \acrshort{ocen} (solaire), une grande surface continue et une faible rugosité minimale sont requises.
+\end{itemize}
+
+Le quatrième point est la pertinence de la méthodologie utilisée :
+\begin{itemize}
+\item Les surfaces "potentiellement libres" doivent être examinées plus en détail.
+\item Les surfaces "occupées" sont considérées comme inutilisables.
+\item Les experts sont satisfaits des résultats obtenus.
+\item Il est prévu d'appliquer la méthode à plus grande échelle.
+\item La classification n'évalue que l'occupation, sans considérer la pente ou le matériau.
+\item L'intensité \gls{lidar} peut varier entre les acquisitions, affectant potentiellement les résultats.
+\end{itemize}
+
+\subsubsection{Segmentation \gls{lidar}}
+
+\paragraph{Données}
+
+Les données utilisées sont des nuages de points \gls{lidar} (Light Detection And Ranging) aériens \cite{SITG2021}, qui fournissent une représentation 3D précise des surfaces de toiture. Les toits sont délimités à partir d'une couche vectorielle existante, produite manuellement pour garantir sa qualité. Les points \gls{lidar} sont filtrés pour ne conserver que ceux situés au-dessus de l'altitude minimale de chaque toit.
+
+\paragraph{Méthodologie}
+
+La méthode proposée vise à détecter automatiquement les objets présents sur les toits, en supposant que chaque pan de toit peut être approximé par un plan et que les obstacles en dépassent. Le processus se déroule en plusieurs étapes :
+
+\begin{enumerate}
+\item Segmentation des plans de toit dans le nuage de points 3D à l'aide de l'algorithme RANSAC (RANdom SAmple Consensus), qui permet d'identifier les plans dominants.
+\item Application de l'algorithme DBSCAN (Density-Based Spatial Clustering of Applications with Noise) sur les points de chaque plan potentiel pour éliminer le bruit et ne retenir que le plus grand cluster.
+\item Considération des points restants comme des obstacles, regroupés à nouveau avec DBSCAN.
+\item Transformation des clusters de points en polygones concaves à l'aide de l'algorithme « alpha shape », en appliquant des seuils sur leur surface projetée pour distinguer les plans des obstacles.
+\item Optimisation des hyperparamètres des algorithmes RANSAC et DBSCAN, ainsi que des seuils de surface, sur un jeu de données d'entraînement, en tenant compte du type de bâtiment et de toit.
+\item Post-traitement des polygones détectés par lissage et fusion pour améliorer leur aspect visuel et créer une partition des surfaces occupées et libres sur chaque toit.
+\end{enumerate}
+
+\paragraph{Résultats}
+
+Les experts de l'\acrshort{ocen} et l'\acrshort{ocan} n'ont pas apprécié les images résultantes (Figure 50) car ils s'attendaient à des polygones plus semblables aux couches vectorielles (par exemple Figure 46). \acrshort{stdl} a pourtant bien simplifié les polygones pour améliorer leur rendu visuel.
+
+% Figure 50 à insérer ici
+
+L'algorithme obtient un F1-score de 0.77 et un mIoU (mean Intersection over Union) de 0.38 sur l'ensemble des données de test. Le Tableau 12 ci-dessous résume les principales métriques obtenues.
+
+% Tableau 12 à insérer ici
+
+Les objets (Figure 51) de plus de 1 m² et situés à plus de 1 m du bord du toit sont bien détectés, avec des F1-score entre 0.82 et 0.92.
+
+% Figure 51 à insérer ici
+
+% Figure 52 à insérer ici
+
+Les objets (Figure 52) qui ont leur centroïde a plus d'un mètre du bord du toit sont bien labellisés. Le F1-score est entre 0.80 et 0.85 pour ces objets. Cependant, les objets qui ont leur centroïde proche du bord (moins d'un mètre) ne sont pas bien détectés et ont 65\% de faux positif (FP), ce qui indique que la segmentation n'est pas fiable à cette distance.
+
+% Tableau 13 à insérer ici
+
+La plupart (Tableau 13) des classes d'objets (bouches d'aération, balcons, végétation intensive, panneaux solaires) ont des recalls supérieurs à 0.80. Cependant, les antennes et les objets bas (fenêtres, végétation extensive, pelouses) sont plus difficiles à détecter.
+
+% Tableau 14 à insérer ici
+
+La surface occupée (Tableau 14) totale est sous-estimée de 38\% par rapport à la vérité terrain.
+
+Les experts (Tableau 15) sont au moins partiellement satisfaits par plus de 69\% des toits segmentés.
+
+% Tableau 15 à insérer ici
+
+\paragraph{Discussion des résultats (\acrshort{stdl})}
+
+La méthode prouve sa capacité à détecter les objets sur les toits, en particulier ceux de grande taille et éloignés des bords. Cependant, la délimitation précise des formes reste perfectible, comme en témoigne le faible mIoU. L'estimation de la surface occupée est moyenne, avec une erreur importante liée à la sous-détection des objets bas. Les faux positifs sont souvent de petite taille et situés près des bords, parfois à cause de l'absence de barrières dans la vérité terrain.
+
+Les bâtiments administratifs et les toits en pente posent des difficultés spécifiques, nécessitant des hyperparamètres adaptés.
+
+Malgré des résultats honorables, l'aspect visuel des détections reste à améliorer pour une utilisation opérationnelle par les experts. Des développements futurs pourraient inclure l'automatisation de la production de la couche vectorielle des toits et l'ajustement de formes géométriques simples sur les clusters de points pour obtenir des détections plus précises et esthétiques.
+
+\subsubsection{Segmentation d'image}
+
+\paragraph{Données}
+
+Les données utilisées sont :
+\begin{itemize}
+\item True orthophotos \cite{SITG2024}
+\item Couche vectorielle des toitures modifiée comme pour la segmentation \gls{lidar}
+\end{itemize}
+
+\paragraph{Méthodologie}
+
+La Figure 53 ci-dessous représente les principales étapes utilisées pour réaliser la segmentation d'image.
+
+% Figure 53 à insérer ici
+
+La première étape est la préparation des orthophotos (Figure 53 « a »). Celle-ci commence par le découpage des orthophotos avec les données vectorielles des toitures (délimitation des toitures) pour ne conserver que la toiture à segmenter. La ligne bleue représente la marge de 1 mètre (zone tampon) pour faciliter la tâche de l'algorithme. Ensuite chaque toiture fera l'objet d'une tuile (une toiture par image).
+
+La deuxième étape est la segmentation de l'image (Figure 53 « b »). Le modèle segment anything model (SAM) est utilisé via la librairie Python « segment-geospatial » \cite{QiushengWu2023} car cette libraire permet d'utiliser SAM sur des orthophotos tout en conservant les données géospatiales. SAM va segmenter les objets sur la toiture dans chaque tuile, ce qui va produire un masque par objet segmenté.
+
+La troisième étape est la vectorisation des objets (Figure 53 « c »). Dans cette étape, les masques segmentés sont convertis en données vectorielles. Certains de ces polygones sont supprimés basé sur des critères géométriques :
+\begin{itemize}
+\item Polygone de moins de 0.2 m²
+\item Polygones qui occupent plus de 90\% de la surface de la toiture
+\item Polygones qui ont une surface de plus de 50\% de la toiture et qui n'ont pas d'intersection avec la toiture
+\end{itemize}
+
+La quatrième étape est l'optimisation des hyperparamètres (Figure 53 « d ») de SAM et l'évaluation de ses résultats avec la vérité terrain.
+
+La logique est que tout ce qui n'est pas segmenté à l'intérieur du périmètre de la toiture est une surface libre.
+
+\paragraph{Résultats}
+
+% Figure 54 à insérer ici
+
+La Figure 54 représente un exemple de résultat de la segmentation de plusieurs toitures. On peut observer que la segmentation rencontre des difficultés avec certains éléments de toiture tel que les puits de lumière.
+
+% Tableau 16 à insérer ici
+
+Les métriques obtenues (Tableau 16) sur le dataset de test sont un F1-score de 0.73 et mIoU de 0.37.
+
+% Figure 55 à insérer ici
+
+Les petits objets (Figure 55) avec une surface de moins d'un mètre carré sont moins bien détectés (AP d'environ 0.60). Les objets de plus d'un mètre carré sont mieux détectés (AP d'environ 0.83).
+
+% Figure 56 à insérer ici
+
+Comme pour la segmentation \gls{lidar}, la segmentation d'image fonctionne moins bien au bord de la toiture (Figure 56). La precision est de 0.77 pour les centroïde d'objets a plus d'un mètre du bord de la toiture contre seulement 0.51 pour ceux a moins d'un mètre.
+
+% Tableau 17 à insérer ici
+
+Les experts sont au minimum partiellement satisfait de 86\% des résultats.
+
+\paragraph{Discussion résultats (\acrshort{stdl})}
+
+Points forts de cette approche :
+\begin{itemize}
+\item Bonne capacité générale à détecter et segmenter correctement les objets
+\item Métriques cohérentes
+\item Forme des objets détectés généralement bien reproduite
+\end{itemize}
+
+Limites constatées de la méthodologie utilisée :
+\begin{itemize}
+\item Difficulté à détecter les objets tel que les gaines ou d'autres petits objets
+\item Sensibilité aux changements de couleurs (saleté, ombres, pans de toit) pouvant être interprétés comme des objets
+\item Temps de calcul important (12 minutes pour 25 bâtiments), mise à l'échelle du canton (plus de 80'000 bâtiments) compliquée
+\item Nécessité des true orthophotos, plus rares et coûteuses que les orthophotos standards
+\end{itemize}
+
+Potentielles améliorations :
+\begin{itemize}
+\item Fine-tuning du modèle SAM
+\item Méthodes pour atténuer la présence d'ombres dans les images
+\item Adaptation de la méthodologie pour utiliser des orthophotos standard
+\end{itemize}
+
+\subsubsection{Combinaison}
+
+Ce chapitre va traiter la combinaison des résultats de 2 méthodologies différentes pour améliorer les résultats finaux.
+
+\paragraph{Données}
+
+Les données utilisées sont le résultat des méthodologies de segmentation \gls{lidar} et celui de la segmentation d'images. Ce sont des données vectorielles.
+
+\paragraph{Méthodologie}
+
+Deux méthodes de combinaison des résultats ont été testées.
+
+La première est la concaténation des objets détectés à partir des couches vectorielles produites par les segmentations \gls{lidar} et d'images.
+
+La deuxième est la jointure spatiale des résultats de la segmentation \gls{lidar} et d'images. Dans ce cas, il faut :
+\begin{itemize}
+\item Sélectionner les polygones qui se chevauchent entre les couches vectorielles des segmentations \gls{lidar} et d'images.
+\item Conserver les polygones issus de la segmentation d'images car ils fournissent une meilleure délimitation
+\end{itemize}
+
+\paragraph{Résultats}
+
+Les couches vectorielles obtenues n'ont pas été évaluées par les experts. Le Tableau 18 ci-dessous résume les principales métriques obtenues.
+
+% Tableau 18 à insérer ici
+
+En complément du Tableau 18, le Tableau 19 récapitule l'ensemble des métriques des méthodologies. La méthodologie de classification des pans de toit n'a pas de métrique, elle n'est donc pas incluse dans le tableau.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|c|c|c|c|c|}
+\hline
+Méthodologie & Precision & Recall & F1-score & mIoU & Relative error [\%] \\
+\hline
+Segmentation \gls{lidar} & 0.75 & 0.80 & 0.77 & 0.38 & 26 \\
+Segmentation d'image & 0.75 & 0.71 & 0.73 & 0.37 & 23 \\
+Concaténation & 0.68 & 0.94 & 0.79 & 0.45 & 8 \\
+Jointure spatiale & 0.81 & 0.69 & 0.75 & 0.33 & 48 \\
+\hline
+\end{tabular}
+\caption{Comparatif des résultats des différentes méthodologies}
+\end{table}
+
+Les F1-score sont similaires autour de 0.77 pour les deux méthodes de combinaison.
+
+La concaténation permet d'atteindre un excellent recall de 0.94 mais diminue la précision d'environ 8 points
+
+La jointure spatiale améliore la précision de 6 points mais réduit le recall de 8 points
+
+La concaténation a un impact positif de plus de 10 points sur le mIoU comparé à la jointure spatiale
+
+L'erreur relative sur la surface occupée est significativement réduite à moins de 10\% par la concaténation mais augmente à environ 50\% avec la jointure spatiale
+
+\paragraph{Discussion des résultats (\acrshort{stdl})}
+
+Les points positifs de cette approche sont :
+\begin{itemize}
+\item La combinaison des résultats permet de moduler les résultats en favorisant soit la précision soit le recall selon les besoins
+\item La valeur élevée du recall obtenue par concaténation prouve la complémentarité des deux méthodes pour détecter différents objets
+\end{itemize}
+
+La valeur de recall élevée obtenue avec la concaténation prouve la complémentarité des deux méthodes pour la détection d'objets différents. Une valeur de recall plus élevée tend à favoriser le mIoU, puisque plus d'objets sont détectés (TP), malgré l'ajout de faux positifs (FP). La surface de l'objet détecté est donc améliorée, mais l'ajout de FP contribue également à la réduction de l'erreur relative sur la surface occupée, ce qui doit être analysé avec soin.
+
+L'utilisation des couches vectorielles des toits et superstructures produites par l'État de Genève, bien qu'incomplètes, pourrait améliorer les résultats.
+
+\subsubsection{Conclusion}
+
+\acrshort{stdl} a exploré trois méthodes pour détecter les objets sur les toits à partir de données \gls{lidar}, d'orthophotos et vectorielles. Toutes les méthodes ont fourni des résultats satisfaisants, avec une précision de 85\% pour la classification d'occupation et un F1-score d'environ 0,77 pour les méthodes de segmentation. Les bénéficiaires ont été satisfaits des résultats dans au moins 70\% des cas.
+
+La méthode de classification a été sélectionnée en raison de ses bonnes performances et résultats obtenus.
+
+La combinaison des résultats de segmentation permet d'améliorer soit la précision, soit le recall, et le croisement des sources d'information peut améliorer la précision des résultats.
+
+Il est important de noter que ces résultats sont des indications qui doivent être vérifiées par un expert métier. Des paramètres supplémentaires, tels que le matériau du toit et le potentiel solaire, ne sont pas pris en compte.
+
+\subsubsection{Analyse critique}
+
+\paragraph{Général}
+
+Le projet étant encore dans sa phase initiale explorative, il ne tient pas compte de l'orientation des toitures pour évaluer le potentiel solaire de chacune d'entre elle. L'exposition au soleil est en effet un facteur essentiel pour la pose de panneaux solaire. L'exclusion de toitures sur la base des données du cadastre solaire pourrait éventuellement éviter de traiter les toitures à l'ombre.
+
+La végétalisation de toitures impose des défis considérables d'un point de vue génie civil, en effet les toitures ne sont souvent pas prévues pour porter des charges tel que de la terre végétale. Même dans le cas des panneaux solaires, pas toutes les toitures peuvent supporter la charge. Par exemple une toiture en fibrociment (toiture typique des hangars) n'aura probablement pas la capacité pour accueillir des panneaux solaires, cela pourrait être un critère d'exclusion.
+
+L'échantillon de bâtiments du dataset ne semble pas très équilibré entre les différentes classes SIA de bâtiments (SIA 380/1:2016). En effet, les piscines couvertes, écoles, dépôts, hôpitaux ont pas mal en commun en ce qui concerne les toitures, elles seront probablement plates avec des éléments de ventilation ou froid. Les logements collectifs sont probablement plus complexes à segmenter car en général les toitures sont déjà assez occupées.
+
+\paragraph{Classification des pans de toiture}
+
+Les données de la couche vectorielle d'emprise au sol des bâtiments ne donnent pas un aperçu complet de la toiture, en effet les superstructures se trouvent dans une autre couche vectorielle. Même si ce n'est pas mentionné, les deux couches ont probablement été fusionnées.
+
+Dans le rapport de \acrshort{stdl}, il manque une matrice de confusion. Cela aurait permis d'avoir une meilleure appréciation des performances obtenues par les différentes variantes utilisées.
+
+\paragraph{Segmentation \gls{lidar}}
+
+Le choix d'utiliser les données \gls{lidar} de 2019 avec les orthophotos de 2019 est tout à fait logique. Des données \gls{lidar} plus récentes et avec plus de densité existent mais il n'y a pas de true orthophoto après 2019 qui servirait de vérité terrain. Cela enlèverait aussi la possibilité de comparer les différents modèles de segmentation sur des données similaires.
+
+\paragraph{Segmentation d'images}
+
+La stratégie utilisée pour la segmentation d'images est très futée. La stratégie est principalement :
+\begin{itemize}
+\item Segmentation avec SAM
+\item Enlever certains masques trop petits ou qui sont en dehors de la toiture
+\item Tout ce qui n'a pas de masque devient donc une surface disponible
+\end{itemize}
+
+\acrshort{stdl} l'a déjà indiqué dans son rapport, après avoir expérimenté avec SAM, il est tout de même très sensible aux ombrages. L'approche fonctionne moyennement bien avec un mIoU de 0.37.
+
+En revanche, la stratégie de faire une tuile par toiture semble compliquée et le temps nécessaire est relativement long (12 minutes pour 25 bâtiments).
+
+La segmentation à l'aide d'un algorithme comme YOLO semble plus pertinente, l'inférence d'une image prend moins d'une minute et celle-ci peut contenir plusieurs bâtiments.
+
+\paragraph{Combinaison des résultats}
+
+\acrshort{stdl} n'a pas inclus dans leur rapport un tableau qui récapitule les résultats des différentes méthodologies utilisées. C'est donc difficile d'avoir une idée des résultats globaux.
+
+\paragraph{Résultats}
+
+Le Tableau 19 permet d'avoir une vue d'ensemble des résultats et la concaténation est fort intéressante.
+
+La concaténation des résultats des deux méthodes de segmentation (\gls{lidar} et image) permet d'obtenir un recall élevé, ce qui signifie que la grande majorité des objets présents dans la vérité terrain (GT) sont détectés. Ce recall élevé s'explique par le fait que les deux méthodes ont des forces complémentaires : chacune est capable de détecter des types d'objets différents que l'autre méthode peut manquer.
+
+Par exemple, la segmentation d'image peut mieux détecter les objets fins et bas, tandis que la segmentation \gls{lidar} peut mieux gérer les changements de couleur et détecter les gaines.
+
+Un recall plus élevé a tendance à améliorer la métrique mIoU (mean Intersection over Union), car davantage d'objets GT sont correctement détectés (vrais positifs, TP), même si cela s'accompagne également de l'ajout de faux positifs (FP). Le mIoU mesure la qualité de la segmentation en calculant le chevauchement moyen entre les objets détectés et les objets GT. Avec plus de TP, le numérateur du mIoU augmente, ce qui améliore le score global.
+
+De plus, un recall élevé permet une meilleure estimation de la surface occupée par les objets détectés. Cependant, l'ajout de FP lors de la concaténation peut également contribuer à cette surface occupée, ce qui peut réduire artificiellement l'erreur relative par rapport à la surface occupée réelle (calculée à partir de la GT). Il est donc important d'interpréter ce résultat avec prudence, car une faible erreur relative sur la surface occupée ne signifie pas nécessairement que la segmentation est parfaite, mais peut être influencée par la présence de FP.
+
+% -----------------------------------------------------------------------------
+\par{\acrshort{stdl}}
+
+\subsubsection{Contexte et objectifs}
+
+\subsubsection{Données}
+
+\subsubsection{Méthodologie}
+
+\subsubsection{Résultats principaux}
+
+\subsubsection{Discussion et limites}
+
+% -----------------------------------------------------------------------------
+\subsection{Détection des objets présents sur les toitures et identification des espaces libres}
+
+\par{\acrshort{stdl}}
 
 \subsubsection{Contexte et objectifs}
 
@@ -490,7 +1022,7 @@ Trois horizons d'ombrage sont calculés pour chaque surface :
     \item La démarche utilisée par cet article est assez unique, c'est le seul article qui va aussi loin dans la segmentation des toitures et l'identification des obstacles. Le dataset RID est disponible librement et il a été réalisé par les auteurs de cet article.
     \item Les auteurs ont testé le modèle avec des images satellite de Bruxelles (le dataset RID inclus seulement Wartenberg à Munich), mais les performances diminuent en raison des différences architecturales et des superstructures non rencontrées dans les données d'entraînement (balcons, éléments technique de ventilation/climatisation, etc.).
     \item Le modèle ne prend pas en compte les ombrages, ce qui peut réduire significativement l'irradiation solaire reçue par un pan de toiture.
-    \item Les auteurs suggèrent d'intégrer des données 3D et cela semble une bonne initiative pour des futures évolutions du framework. Avec des données LiDAR, ils pourraient nettement améliorer la phase de post-processing des pans de toiture en intégrant les ombrages et une meilleure estimation des pentes des toitures.
+    \item Les auteurs suggèrent d'intégrer des données 3D et cela semble une bonne initiative pour des futures évolutions du framework. Avec des données \gls{lidar}, ils pourraient nettement améliorer la phase de post-processing des pans de toiture en intégrant les ombrages et une meilleure estimation des pentes des toitures.
 \end{itemize}
 
 % -----------------------------------------------------------------------------
@@ -506,7 +1038,7 @@ Trois horizons d'ombrage sont calculés pour chaque surface :
 \par{La méthodologie comporte trois étapes principales :}
 \begin{enumerate}
     \item Traitement des images aériennes par le CNN pour identifier les surfaces disponibles
-    \item Post-traitement géospatial combinant les résultats avec la couche SITG des toitures
+    \item Post-traitement géospatial combinant les résultats avec la couche \acrshort{sitg} des toitures
     \item Les toitures de moins de 10 \si{\unit{\square\meter}} ne sont pas considérées comme toiture disponible
 \end{enumerate}
 
@@ -685,7 +1217,7 @@ L'article présente plusieurs catégories de résultats :
         \item L'exclusion des segments déjà équipés de panneaux solaires réduit le potentiel de 29,5\%
     \end{itemize}
 \end{enumerate}
-\par{Ces résultats démontrent l'importance de considérer les éléments de toiture dans l'évaluation du potentiel solaire des toitures et valident l'approche par apprentissage profond sur images aériennes comme alternative viable aux méthodes basées sur LiDAR, malgré les défis liés à la qualité des annotations.}
+\par{Ces résultats démontrent l'importance de considérer les éléments de toiture dans l'évaluation du potentiel solaire des toitures et valident l'approche par apprentissage profond sur images aériennes comme alternative viable aux méthodes basées sur \gls{lidar}, malgré les défis liés à la qualité des annotations.}
 
 \subsubsection{Discussion et limites}
 \par{Le dataset se concentre sur une zone rurale allemande et ne représente pas adéquatement d'autres styles architecturaux. Comme indiqué dans la section \ref{subsec:solar_net_plus} qui fait référence a un article postérieur du même auteur, le dataset n'est pas adapté au milieu urbain de Bruxelles. Les classes sont trop spécifiques au rural allemand, dans le cas de Bruxelles, il manque les classes pour des éléments typiquement urbains tel que les ventilation/climatisation.}

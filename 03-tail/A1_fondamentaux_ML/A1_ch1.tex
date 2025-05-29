@@ -27,12 +27,11 @@
 
 \par{La figure~\ref{fig:A1_01_resume_machine_learning_supervise} permet d'avoir un aperçu des phases de création d'un modèle de machine learning à partir d'un algorithme supervisé.}
 
-\begin{figure}[htbp]
+\begin{figure}[H]
     \centering
     \includegraphics[width=1\linewidth]{03-tail/A1_fondamentaux_ML/A1_figures/A1_01_resume_machine_learning_supervise.png}
     \caption{Résumé du machine learning supervisé}
     \label{fig:A1_01_resume_machine_learning_supervise}
-    \todo[inline]{Améliorer qualité image et corriger texte en 4)}
 \end{figure}
 
 
@@ -59,17 +58,17 @@
     \item Ces données doivent être divisée en plusieurs parties :
     \begin{enumerate}
         \item Données d'entraînement : elles serviront à l'entraînement du modèle et représentent environ 60\% du dataset.
-        \item Données de validation : lors de l'entrainement ces données servent à valider que le modèle apprend correctement et qu'il ne mémorise pas les données d'entrainement. Les données de validation représentent environ 20\% du dataset
+        \item Données de validation : lors de l’entraînement ces données servent à valider que le modèle apprend correctement et qu'il ne mémorise pas les données d’entraînement. Les données de validation représentent environ 20\% du dataset
         \item Données de test : ces données ne sont pas utilisées lors de l'entraînement et servent à vérifier les performances finales du modèle sur des données qu'il n'a jamais vues auparavant. Les données de test représentent environ 20\% du dataset.
     \end{enumerate}
     
-    \item Entrainement du modèle : on va appliquer l'algorithme sur les données \\ d'entrainement pour développer le modèle spécifique pour résoudre le problème de la première phase. Dans l'exemple, le modèle va apprendre les différentes caractéristiques d'un chien (museau, poil, etc.) et d'un chat
+    \item Entraînement du modèle : on va appliquer l'algorithme sur les données \\ d’entraînement pour développer le modèle spécifique pour résoudre le problème de la première phase. Dans l'exemple, le modèle va apprendre les différentes caractéristiques d'un chien (museau, poil, etc.) et d'un chat.
     
-    \item Validation des performances du modèle : le modèle est utilisé pour vérifier ses performances sur les données de validation. S'il arrive à bien classifier les chats ou les chiens (cas ``OK''), l'entrainement peut terminer. Dans le cas où il n'arrive pas encore à bien les classifier (cas ``KO''), l'entrainement doit continuer.
+    \item Validation des performances du modèle : le modèle est utilisé pour vérifier ses performances sur les données de validation. S'il arrive à bien classifier les chats ou les chiens, l’entraînement peut se terminer. Dans le cas où il n'arrive pas encore à bien les classifier, l’entraînement doit continuer.
     
-    \item Test des performances du modèle : l'objectif de cette phase est d'évaluer les performances du modèle sur des données qu'il n'a jamais vues lors de l'entraînement. Les données utilisées sont les données de test. Si le modèle parvient à bien classifier les images de chats et de chiens (par exemple dans 85\% des cas), le modèle est considéré comme ``OK'' et peut passer en production. Cependant, si les performances ne sont pas satisfaisantes (cas ``KO''), il faut vérifier que les données sont adéquates, bien annotées et qu'il n'y a pas de problème de répartition entre les différentes classes.
+    \item Test des performances du modèle : l'objectif de cette phase est d'évaluer les performances du modèle sur des données qu'il n'a jamais vues lors de l'entraînement. Les données utilisées sont les données de test. Si le modèle parvient à bien classifier les images de chats et de chiens (par exemple dans 85\% des cas), le modèle est considéré comme ``OK'' et peut passer en production. Cependant, si les performances ne sont pas satisfaisantes (cas ``KO''), il faut vérifier que les données sont adéquates, bien annotées et qu'il n'y a pas de problème de répartition entre les différentes classes. Une deuxième cause de mauvais résultats peut être le choix de variables (hyperparamètres) inadéquates pour l’entraînement.
     
-    \item Mise en production : cette phase implique que le modèle fonctionne correctement et il peut maintenant réaliser la tâche pour laquelle il a été créé sur des données qu'il n'a jamais vues. Par exemple, classifier des images de chats et chiens. La mise en production est complexe et souvent réalisée par des professionnels du DevOps qui ont d'excellentes connaissances des systèmes informatiques (``Ops'') ainsi que du développement informatique (``Dev''). Dans notre exemple, un site web pourrait accueillir l'interface dans laquelle l'utilisateur ou utilisatrice va soumettre une photo et le modèle va classifier l'image en chat ou chien.
+    \item Mise en production : cette phase implique que le modèle fonctionne correctement et il peut maintenant réaliser la tâche pour laquelle il a été créé sur des données qu'il n'a jamais vues. Par exemple, classifier des images de chats et de chiens. La mise en production est complexe et souvent réalisée par des professionnels du DevOps qui ont d'excellentes connaissances des systèmes informatiques (``Ops'') ainsi que du développement informatique (``Dev''). Dans notre exemple, un site web pourrait accueillir l'interface dans laquelle l'utilisateur ou l'utilisatrice va soumettre une photo et le modèle va classifier l'image en chat ou en chien.
 \end{enumerate}
 
 \par{Le développement de modèles de machine learning supervisé est assez complexe et il se peut que cela ne fonctionne pas du premier coup (cas ``KO'' sur Figure~\ref{fig:A1_01_resume_machine_learning_supervise}). Les causes les plus habituelles sont les suivantes :}
@@ -80,7 +79,7 @@
         \item Collecter plus de données
     \end{itemize}
     
-    \item Equilibre des classes entre les données. Est-ce qu'une classe représente la plupart des données ? Est-ce que les chiens représentent par exemple plus de 80\% du dataset ? Si les données ne sont pas équilibrées le modèle ne va pas bien apprendre les spécificités de chaque classe. Possible solutions :
+    \item Équilibre des classes entre les données. Est-ce qu'une classe représente la majorité des données ? Est-ce que les chiens représentent par exemple plus de 80\% du dataset ? Si les données ne sont pas équilibrées, le modèle ne va pas bien apprendre les spécificités de chaque classe. Plusieurs solutions :
     \begin{itemize}
         \item Collecter plus de données de la ou les classe(s) moins représentée(s)
         \item S'il y a suffisamment de données, c'est possible d'enlever une partie des donnes jusqu'à ce que les classes soient équilibrées
@@ -89,14 +88,14 @@
     \item Mauvais choix de modèle : c'est possible qu'un modèle soit trop complexe (réseau de neurones avec des milliards de paramètres) ou trop simple (régression linéaire). Possibles solutions :
     \begin{itemize}
         \item Vérifier que l'algorithme choisi est adapté à la tâche qu'il doit réaliser, il ne doit pas être trop simple ni trop complexe
-        \item Si l'algorithme est complexe, c'est possible de le faire fonctionner avec plus de données mais ce n'est pas intelligent ni efficient d'un point de vue énergétique. Un gros modèle (beaucoup de paramètres) aura un entrainement plus long et va utiliser plus d'énergie lors de son utilisation
+        \item Si l'algorithme est complexe, c'est possible de le faire fonctionner avec plus de données mais ce n'est pas intelligent ni efficient d'un point de vue énergétique. Un gros modèle (beaucoup de paramètres) aura un entraînement plus long et va utiliser plus d'énergie lors de son utilisation
     \end{itemize}
 \end{itemize}
 
 \par{La réponse dans beaucoup de cas semble être d'acquérir plus de données. Cette démarche exige tout de même une certaine réflexion et dans certains cas ce n'est pas la meilleure :}
 
 \begin{itemize}
-    \item Coût de l'acquisition : l'acquisition de données supplémentaires peut être très couteuse. Avoir plus de données va probablement impliquer la labélisation de celles-ci, ce qui peut engendrer des coûts non négligeables
+    \item Coût de l'acquisition : l'acquisition de données supplémentaires peut être très coûteuse. Avoir plus de données va probablement impliquer la labellisation de celles-ci, ce qui peut engendrer des coûts non négligeables
     \item Rareté de la donnée : dans le domaine médical c'est difficile d'avoir plus de données sur des maladies rares par exemple
     \item Contraintes légales : des lois peuvent ne pas permettre l'accès à certaines données privées
     
@@ -118,7 +117,7 @@
         \item Aide au diagnostic de maladies dans le cadre de l'imagerie médicale
     \end{itemize}
     
-    \item Traitement automatique du language (``natural language processing'')
+    \item Traitement automatique du langage (``natural language processing'')
     \begin{itemize}
         \item Reconnaissance de voix automatique et transcription de ce qui est dit
         \item Traduction automatique de texte
@@ -147,7 +146,7 @@
 
 \par{L'idée a été inspirée par le fonctionnement des neurones biologiques. C'est-à-dire que chaque neurone (voir Figure~\ref{fig:A1_02_neurone_humaine}) reçoit des signaux d'entrée de ses dendrites et produit des signaux de sortie le long de son axone. L'axone se ramifie ensuite et se connecte via des synapses aux dendrites d'autres neurones, formant ainsi un réseau neuronal.}
 
-\begin{figure}[H]  % Le [H] force la position exacte
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.85\linewidth]{03-tail//A1_fondamentaux_ML//A1_figures/A1_02_neurone_humaine.png}
     \caption{Neurone humaine \cite{noauthor_neurone_2025}}
@@ -244,11 +243,14 @@ de neurone artificiel.}
     \begin{enumerate}
         \item Choisir un échantillon arbitraire : $(\mathbf{x}^{(i)}, y^{(i)})$
         \item Calculer la valeur prédite $\hat{y}^{(i)} = H(\mathbf{w} \cdot \mathbf{x}^{(i)} + b)$
-        \item Utiliser la mise à jour des paramètres (Équation 5 ci-dessous) :
+        \item Utiliser la mise à jour des paramètres (équation \ref{eq:perceptron_maj1} et \ref{eq:perceptron_maj2} ci-dessous) :
+        \vspace{20pt}
         \begin{align}
-            \mathbf{w} &\leftarrow \mathbf{w} - \alpha \cdot (\hat{y}^{(i)} - y^{(i)}) \cdot \mathbf{x}^{(i)} \\
+            \mathbf{w} &\leftarrow \mathbf{w} - \alpha \cdot (\hat{y}^{(i)} - y^{(i)}) \cdot \mathbf{x}^{(i)}
+            \label{eq:perceptron_maj1}\\
             b &\leftarrow b - \alpha \cdot (\hat{y}^{(i)} - y^{(i)})
+            \label{eq:perceptron_maj2}
         \end{align}
     \end{enumerate}
 \end{enumerate}
-
+\todo[inline]{Compléter}
