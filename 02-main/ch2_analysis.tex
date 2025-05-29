@@ -446,7 +446,7 @@ Dans le comité de pilotage du \acrshort{stdl} on retrouve :
 \begin{itemize}
     \item Nuage de points \gls{lidar} de l'année 2019 \cite{sitg_nuages_nodate}
     \item Orthophotos de l'année 2019 \cite{sitg_orthophotos_nodate}
-    \item Couche \acrshort{sitg} d'emprise des toitures des bâtiments hors sol « CAD\_BATIMENTS\_HORSOL\_TOIT » \cite{sitg_toits_nodate}
+    \item Couche \acrshort{sitg} d'emprise des toitures des bâtiments hors sol ``CAD\_BATIMENTS\_HORSOL\_TOIT'' \cite{sitg_toits_nodate}
 \end{itemize}
 
 \paragraph{\gls{lidar}}
@@ -474,270 +474,388 @@ Chaque point a une classe assignée dont les principales sont :
 \par{Ces orthophotos ont la particularité de ne pas avoir de décalage vis-à-vis d'un modèle numérique du terrain, donc les couches vectorielles devraient s'aligner avec les orthophotos. Chaque pixel représente 5 cm.}
 
 \paragraph{Couche vectorielle d'emprise au sol des toitures}
-\par{\acrshort{sitg} dispose d'une couche vectorielle d'emprise des toitures des bâtiments hors sol « CAD\_BATIMENTS\_HORSOL\_TOIT » \cite{SITG2023}. Cette couche provient de la numérisation 3D des bâtiments. La Figure \ref{fig:stdl_01_couche_vectorielle} représente un exemple de cette couche avec une orthophoto en fond d'image.}
+\par{\acrshort{sitg} dispose d'une couche vectorielle d'emprise des toitures des bâtiments hors sol ``CAD\_BATIMENTS\_HORSOL\_TOIT'' \cite{sitg_toits_nodate}. Cette couche provient de la numérisation 3D des bâtiments. La Figure \ref{fig:stdl_01_couche_vectorielle} représente un exemple de cette couche avec une orthophoto en fond d'image.}
 \begin{figure}[H]
     \centering
     \includegraphics[width=1\linewidth]{02-main//figures/stdl_01_couche_vectorielle.png}
-    \caption{Image d’exemple de la couche vectorielle d’emprise au sol des bâtiments « CAD_BATIMENTS_HORSOL_TOIT »}
+    \caption{Image d’exemple de la couche vectorielle d’emprise au sol des bâtiments ``CAD\_BATIMENTS\_HORSOL\_TOIT'' \cite{sitg_toits_nodate}}
     \label{fig:stdl_01_couche_vectorielle}
 \end{figure}
-% Figure 46 à insérer ici
-
-Cette couche est régulièrement mise à jour. \acrshort{stdl} a utilisé les données de mars 2023 pour son projet. Les superstructures sont des éléments qui dépassent de la toiture tel qu'une cheminée, cage d'ascenseur, lucarne, etc. ne sont pas représentés dans cette couche. Tout ce qui est en dessous de 9 m² ne figure pas dans cette couche.
+\par{Cette couche est régulièrement mise à jour. \acrshort{stdl} a utilisé les données de mars 2023 pour son projet. Les superstructures sont des éléments qui dépassent de la toiture tel qu'une cheminée, cage d'ascenseur, lucarne, etc. ne sont pas représentés dans cette couche. Tout ce qui est en dessous de 9 m² ne figure pas dans cette couche.}
 
 \paragraph{Vérité terrain}
-
-La Figure 47 représente les bâtiments choisis par \acrshort{stdl} pour la vérité terrain.
-
-% Figure 47 à insérer ici
-
-Ces bâtiments se distribuent de la manière suivante :
+\par{La Figure \ref{fig:stdl_02_verite_terrain} représente les bâtiments choisis par \acrshort{stdl} pour la vérité terrain.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{02-main//figures/stdl_02_verite_terrain.png}
+    \caption{Bâtiments choisis par STDL pour la vérité terrain dans le Canton de Genève. Images de \acrshort{sitg}}
+    \label{fig:stdl_02_verite_terrain}
+\end{figure}
+\par{Ces bâtiments se distribuent de la manière suivante :}
 \begin{itemize}
-\item 7 bâtiments administratifs (toiture plate)
-\item 18 bâtiments industriels (toiture plate)
-\item 97 bâtiments de logement (toiture en pente/plate)
+    \item 7 bâtiments administratifs (toiture plate)
+    \item 18 bâtiments industriels (toiture plate)
+    \item 97 bâtiments de logement (toiture en pente/plate)
 \end{itemize}
-
-Les données ont été labellisées selon les classes suivantes :
-
-% Figure 48 à insérer ici
-
-Chaque méthode utilisée dans ce projet nécessite la création de vérité terrain spécifique.
+\par{Les données ont été labellisées selon les classes suivantes :}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{02-main//figures/stdl_03_classes.png}
+    \caption{Classes et répartition des datasets}
+    \label{fig:stdl_03_classes}
+\end{figure}
+\par{Chaque méthode utilisée dans ce projet nécessite la création de vérité terrain spécifique.}
 
 \subsubsection{Classification des pans de toits}
-
-Cette méthode consiste à utiliser les données vectorielles de l'emprise des toitures, les labelliser à l'aide des données \gls{lidar} et ensuite appliquer un algorithme random forest (similaire au un arbre de décision).
+\par{Cette méthode consiste à utiliser les données vectorielles de l'emprise des toitures, les labelliser à l'aide des données \gls{lidar} et ensuite appliquer un algorithme random forest (similaire a un arbre de décision).}
 
 \paragraph{Données}
-
-Les données utilisées sont la couche vectorielle de l'emprise des toitures, ainsi que les données \gls{lidar}.
-
-Comme indiqué au chapitre « 3.2.3.6 Données de nuages de points », la rugosité et l'intensité sont deux informations complémentaires fournies par les nuages de points \gls{lidar}. La rugosité mesure la variation locale de l'altitude des points et reflète la texture de la surface. Une rugosité élevée indique la présence d'obstacles. L'intensité mesure la quantité d'énergie réfléchie par la surface et dépend des propriétés de réflectance des matériaux. Elle varie selon le type de surface et peut aider à distinguer différents matériaux.
-
-Pour constituer le dataset (vérité terrain), \acrshort{stdl} a annoté la couche vectorielle de l'emprise des toitures avec l'aide des données \gls{lidar}. Les 3 classes résultantes sont :
+\par{Les données utilisées sont la couche vectorielle de l'emprise des toitures, ainsi que les données \gls{lidar}.}
+\par{Comme indiqué au chapitre ``XXXXXX'', la rugosité et l'intensité sont deux informations complémentaires fournies par les nuages de points \gls{lidar}. La rugosité mesure la variation locale de l'altitude des points et reflète la texture de la surface. Une rugosité élevée indique la présence d'obstacles. L'intensité mesure la quantité d'énergie réfléchie par la surface et dépend des propriétés de réflectance des matériaux. Elle varie selon le type de surface et peut aider à distinguer différents matériaux.}
+\todo[inline]{Ajouter ici le lien correct aux annexes}
+\par{Pour constituer le dataset (vérité terrain), \acrshort{stdl} a annoté la couche vectorielle de l'emprise des toitures avec l'aide des données \gls{lidar}. Les 3 classes résultantes sont :}
 \begin{itemize}
-\item Occupé : pas de surface disponible
-\item Possiblement libre : probablement libre
-\item Non défini : le nuage de point \gls{lidar} n'a pas classifié cette zone comme « bâtiment »
+    \item Occupé : pas de surface disponible
+    \item Possiblement libre : probablement libre
+    \item Non défini : le nuage de point \gls{lidar} n'a pas classifié cette zone comme ``bâtiment''
 \end{itemize}
 
 \paragraph{Méthodologie}
-
-La méthodologie se décompose en trois étapes principales : la préparation des données \gls{lidar}, la classification par seuils manuels et la classification par forêt aléatoire (random forest).
-
-La première étape est la préparation des données \gls{lidar} :
+\par{La méthodologie se décompose en trois étapes principales : la préparation des données \gls{lidar}, la classification par seuils manuels et la classification par forêt aléatoire (random forest).}
+\par{La première étape est la préparation des données \gls{lidar} :}
 \begin{itemize}
-\item L'intensité du signal \gls{lidar} est interpolée par une méthode de pondération inverse à la distance pour obtenir une valeur continue en chaque point.
-\item Un modèle numérique de terrain (MNT) est généré à partir des points \gls{lidar} pour représenter la surface du sol.
-\item La rugosité de la surface est calculée à partir du MNT à une échelle de 1 m pour caractériser les variations locales de hauteur.
-\item Des statistiques zonales (moyenne, médiane, écart-type, etc.) sont calculées pour l'intensité et la rugosité sur chaque pan de toit.
+    \item L'intensité du signal \gls{lidar} est interpolée par une méthode de pondération inverse à la distance pour obtenir une valeur continue en chaque point.
+    \item Un modèle numérique de terrain (\arcshort{mnt}) est généré à partir des points \gls{lidar} pour représenter la surface du sol.
+    \item La rugosité de la surface est calculée à partir du \arcshort{mnt} à une échelle de 1 m pour caractériser les variations locales de hauteur.
+    \item Des statistiques zonales (moyenne, médiane, écart-type, etc.) sont calculées pour l'intensité et la rugosité sur chaque pan de toit.
 \end{itemize}
-
-La deuxième étape est la classification par seuils manuels :
+\par{La deuxième étape est la classification par seuils manuels :}
 \begin{itemize}
-\item Les pans de toit de moins de 2 m² sont automatiquement classés comme "occupés" car trop petits pour des installations.
-\item Les pans avec moins de 25\% de points classés comme "bâtiment" (données \gls{lidar}) sont classés en "non défini" par manque d'information.
-\item Pour les autres pans
-\begin{itemize}
-\item Des seuils sont fixés empiriquement sur 4 variables :
-\begin{itemize}
-\item La marge d'erreur et l'écart-type de l'intensité
-\item La rugosité médiane
-\item Le pourcentage de recouvrement avec des pixels non classés comme "bâtiment" (données \gls{lidar})
+    \item Les pans de toit de moins de 2 m² sont automatiquement classés comme "occupés" car trop petits pour des installations.
+    \item Les pans avec moins de 25\% de points classés comme "bâtiment" (données \gls{lidar}) sont classés en "non défini" par manque d'information.
+    \item Pour les autres pans
+    \begin{itemize}
+        \item Des seuils sont fixés empiriquement sur 4 variables :
+        \begin{itemize}
+            \item La marge d'erreur et l'écart-type de l'intensité
+            \item La rugosité médiane
+            \item Le pourcentage de recouvrement avec des pixels non classés comme "bâtiment" (données \gls{lidar})
+        \end{itemize}
+        \item Si un pan dépasse le seuil pour au moins une variable, il est classé comme "occupé", sinon il est "potentiellement libre".
+    \end{itemize}
+    \item Cette classification est validée manuellement par des experts sur un échantillon de 650 pans de toit.
 \end{itemize}
-\item Si un pan dépasse le seuil pour au moins une variable, il est classé comme "occupé", sinon il est "potentiellement libre".
-\end{itemize}
-\item Cette classification est validée manuellement par des experts sur un échantillon de 650 pans de toit.
-\end{itemize}
-
-La troisième étape est la classification par random forrest (RF)
+\par{La troisième étape est la classification par random forrest (RF)}
 \begin{itemize}
-\item Deux forêts aléatoires sont entraînées, une pour chaque office (\acrshort{ocen} et \acrshort{ocan}), en utilisant les seuils validés comme référence.
-\item Les données sont divisées en 80\% pour l'entraînement et 20\% pour le test.
-\item 14 variables sont utilisées pour construire les arbres de décision, dont les statistiques zonales d'intensité et de rugosité.
-\item L'importance relative de chaque variable dans la classification est calculée.
-\item Les forêts sont évaluées sur l'échantillon test pour mesurer leur performance.
+    \item Deux forêts aléatoires sont entraînées, une pour chaque office (\acrshort{ocen} et \acrshort{ocan}), en utilisant les seuils validés comme référence.
+    \item Les données sont divisées en 80\% pour l'entraînement et 20\% pour le test.
+    \item 14 variables sont utilisées pour construire les arbres de décision, dont les statistiques zonales d'intensité et de rugosité.
+    \item L'importance relative de chaque variable dans la classification est calculée.
+    \item Les forêts sont évaluées sur l'échantillon test pour mesurer leur performance.
 \end{itemize}
 
 \paragraph{Résultats}
+\par{Les résultats obtenus sont détaillés dans le Tableau \ref{tab:stdl_01_resultats_classification} :}
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|l|c|c|c||c|c|c|}
+    \hline
+    \multirow{2}{*}{} & \multicolumn{3}{c||}{Manual threshold classification} & \multicolumn{3}{c|}{RF classification} \\
+    \cline{2-7}
+    & Global & Occupied & Potentially free & Global & Occupied & Potentially free \\
+    \hline
+    OCAN & 79\% & 70\% & 91\% & 86\% & 78\% & 96\% \\
+    OCEN & 77\% & 72\% & 82\% & 83\% & 74\% & 91\% \\
+    \hline
+    \end{tabular}
+    \caption{Résultats obtenus par les deux algorithmes de classification}
+    \label{tab:stdl_01_resultats_classification}
+\end{table}
+\par{La classification avec RF est plus performante que les seuils manuels, avec des taux de satisfaction augmentant de 7 et 6 points pour \acrshort{ocan} et \acrshort{ocen} respectivement.}
 
-Les résultats obtenus sont les suivants :
-
-% Tableau 11 à insérer ici
-
-La classification avec RF est plus performante que les seuils manuels, avec des taux de satisfaction augmentant de 7 et 6 points pour \acrshort{ocan} et \acrshort{ocen} respectivement.
-
-Ci-dessous un aperçu des résultats obtenus :
-
-% Figure 49 à insérer ici
-
-Dans la Figure 49 on observe les différents critères par office, l'\acrshort{ocen} semble classifier plus de surfaces comme « possiblement libre » (blanc) que l'\acrshort{ocan}. Une matrice de confiance aurait permis de mieux évaluer les résultats.
+\par{La Figure \ref{fig:stdl_04_rf_resultats} présente un aperçu des résultats obtenus :}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{02-main//figures/stdl_04_rf_resultats.png}
+    \caption{Comparatif des différents algorithmes de classification \cite{herny_detection_2024}}
+    \label{fig:stdl_04_rf_resultats}
+\end{figure}
+\par{Dans la Figure \ref{fig:stdl_04_rf_resultats} on observe les différents critères par office, l'\acrshort{ocen} semble classifier plus de surfaces comme ``possiblement libre'' (blanc) que l'\acrshort{ocan}. Une matrice de confiance aurait permis de mieux évaluer les résultats.}
 
 \paragraph{Discussion des résultats (\acrshort{stdl})}
-
-Dans son rapport \acrshort{stdl} fait une analyse des résultats obtenus dans lequel ils traitent les points suivants :
+\par{Dans son rapport \acrshort{stdl} fait une analyse des résultats obtenus dans lequel ils traitent les points suivants :
 \begin{itemize}
-\item Comparaison des deux méthodes de classification
-\item Classification des petits pans de toit
-\item Différences entre les deux random forrest
-\item Pertinence de la méthodologie
+    \item Comparaison des deux méthodes de classification
+    \item Classification des petits pans de toit
+    \item Différences entre les deux random forrest
+    \item Pertinence de la méthodologie
+\end{itemize}
+\par{Le premier point soulevé est une comparaison de la classification par seuils et celle avec la random forrest :}
+\begin{itemize}
+    \item Les deux méthodes donnent des résultats satisfaisants, mais la forêt aléatoire est plus performante.
+    \item La forêt aléatoire utilise 14 variables, contre seulement 4 pour les seuils manuels.
+    \item Le choix des variables pour les seuils manuels était pertinent mais incomplet.
+    \item Les seuils manuels sont simples à mettre en place mais nécessitent des tests manuels fastidieux.
+    \item La forêt aléatoire est automatisée mais a besoin d'une vérité terrain.
+\end{itemize}
+\par{Le deuxième point est la classification des petits pans de toit :}
+\begin{itemize}
+    \item Avec les seuils manuels, les petits pans sont souvent classés comme "occupés" à cause de leur rugosité médiane élevée.
+    \item La rugosité des petits pans est plus influencée par leur environnement à cause de l'échelle de calcul (1 m).
+    \item La rugosité minimale, importante dans la forêt aléatoire, dépend fortement de la taille du pan.
+    \item Bien que potentiellement utilisables, les petits pans dégagés sont difficiles à exploiter et moins prioritaires.
+    \item Le fait que l'algorithme les classe souvent comme occupés convient aux experts.
 \end{itemize}
 
-Le premier point soulevé est une comparaison de la classification par seuils et celle avec la random forrest :
+\par{Le troisième point traite des raisons des différences entre les deux random forrest (une par office) :}
 \begin{itemize}
-\item Les deux méthodes donnent des résultats satisfaisants, mais la forêt aléatoire est plus performante.
-\item La forêt aléatoire utilise 14 variables, contre seulement 4 pour les seuils manuels.
-\item Le choix des variables pour les seuils manuels était pertinent mais incomplet.
-\item Les seuils manuels sont simples à mettre en place mais nécessitent des tests manuels fastidieux.
-\item La forêt aléatoire est automatisée mais a besoin d'une vérité terrain.
+    \item Les différences de résultats entre les offices (\acrshort{ocan} et \acrshort{ocen}) s'expliquent par leurs besoins distincts.
+    \item Pour l'\acrshort{ocan} (végétalisation), une rugosité médiane élevée est tolérée.
+    \item Pour l'\acrshort{ocen} (solaire), une grande surface continue et une faible rugosité minimale sont requises.
 \end{itemize}
 
-Le deuxième point est la classification des petits pans de toit :
+\par{Le quatrième point est la pertinence de la méthodologie utilisée :}
 \begin{itemize}
-\item Avec les seuils manuels, les petits pans sont souvent classés comme "occupés" à cause de leur rugosité médiane élevée.
-\item La rugosité des petits pans est plus influencée par leur environnement à cause de l'échelle de calcul (1 m).
-\item La rugosité minimale, importante dans la forêt aléatoire, dépend fortement de la taille du pan.
-\item Bien que potentiellement utilisables, les petits pans dégagés sont difficiles à exploiter et moins prioritaires.
-\item Le fait que l'algorithme les classe souvent comme occupés convient aux experts.
-\end{itemize}
-
-Le troisième point traite des raisons des différences entre les deux random forrest (une par office) :
-\begin{itemize}
-\item Les différences de résultats entre les offices (\acrshort{ocan} et \acrshort{ocen}) s'expliquent par leurs besoins distincts.
-\item Pour \acrshort{ocan} (végétalisation), une rugosité médiane élevée est tolérée.
-\item Pour \acrshort{ocen} (solaire), une grande surface continue et une faible rugosité minimale sont requises.
-\end{itemize}
-
-Le quatrième point est la pertinence de la méthodologie utilisée :
-\begin{itemize}
-\item Les surfaces "potentiellement libres" doivent être examinées plus en détail.
-\item Les surfaces "occupées" sont considérées comme inutilisables.
-\item Les experts sont satisfaits des résultats obtenus.
-\item Il est prévu d'appliquer la méthode à plus grande échelle.
-\item La classification n'évalue que l'occupation, sans considérer la pente ou le matériau.
-\item L'intensité \gls{lidar} peut varier entre les acquisitions, affectant potentiellement les résultats.
+    \item Les surfaces "potentiellement libres" doivent être examinées plus en détail.
+    \item Les surfaces "occupées" sont considérées comme inutilisables.
+    \item Les experts sont satisfaits des résultats obtenus.
+    \item Il est prévu d'appliquer la méthode à plus grande échelle.
+    \item La classification n'évalue que l'occupation, sans considérer la pente ou le matériau.
+    \item L'intensité \gls{lidar} peut varier entre les acquisitions, affectant potentiellement les résultats.
 \end{itemize}
 
 \subsubsection{Segmentation \gls{lidar}}
 
 \paragraph{Données}
-
-Les données utilisées sont des nuages de points \gls{lidar} (Light Detection And Ranging) aériens \cite{SITG2021}, qui fournissent une représentation 3D précise des surfaces de toiture. Les toits sont délimités à partir d'une couche vectorielle existante, produite manuellement pour garantir sa qualité. Les points \gls{lidar} sont filtrés pour ne conserver que ceux situés au-dessus de l'altitude minimale de chaque toit.
+\par{Les données utilisées sont des nuages de points \gls{lidar}, qui fournissent une représentation 3D précise des surfaces de toiture. Les toits sont délimités à partir d'une couche vectorielle existante, produite manuellement pour garantir sa qualité. Les points \gls{lidar} sont filtrés pour ne conserver que ceux situés au-dessus de l'altitude minimale de chaque toit.}
 
 \paragraph{Méthodologie}
-
-La méthode proposée vise à détecter automatiquement les objets présents sur les toits, en supposant que chaque pan de toit peut être approximé par un plan et que les obstacles en dépassent. Le processus se déroule en plusieurs étapes :
-
+\par{La méthode proposée vise à détecter automatiquement les objets présents sur les toits, en supposant que chaque pan de toit peut être approximé par un plan et que les obstacles en dépassent. Le processus se déroule en plusieurs étapes :}
 \begin{enumerate}
-\item Segmentation des plans de toit dans le nuage de points 3D à l'aide de l'algorithme RANSAC (RANdom SAmple Consensus), qui permet d'identifier les plans dominants.
-\item Application de l'algorithme DBSCAN (Density-Based Spatial Clustering of Applications with Noise) sur les points de chaque plan potentiel pour éliminer le bruit et ne retenir que le plus grand cluster.
-\item Considération des points restants comme des obstacles, regroupés à nouveau avec DBSCAN.
-\item Transformation des clusters de points en polygones concaves à l'aide de l'algorithme « alpha shape », en appliquant des seuils sur leur surface projetée pour distinguer les plans des obstacles.
-\item Optimisation des hyperparamètres des algorithmes RANSAC et DBSCAN, ainsi que des seuils de surface, sur un jeu de données d'entraînement, en tenant compte du type de bâtiment et de toit.
-\item Post-traitement des polygones détectés par lissage et fusion pour améliorer leur aspect visuel et créer une partition des surfaces occupées et libres sur chaque toit.
+    \item Segmentation des plans de toit dans le nuage de points 3D à l'aide de l'algorithme RANSAC (RANdom SAmple Consensus), qui permet d'identifier les plans dominants.
+    \item Application de l'algorithme DBSCAN (Density-Based Spatial Clustering of Applications with Noise) sur les points de chaque plan potentiel pour éliminer le bruit et ne retenir que le plus grand cluster.
+    \item Considération des points restants comme des obstacles, regroupés à nouveau avec DBSCAN.
+    \item Transformation des clusters de points en polygones concaves à l'aide de l'algorithme ``alpha shape'', en appliquant des seuils sur leur surface projetée pour distinguer les plans des obstacles.
+    \item Optimisation des hyperparamètres des algorithmes RANSAC et DBSCAN, ainsi que des seuils de surface, sur un jeu de données d'entraînement, en tenant compte du type de bâtiment et de toit.
+    \item Post-traitement des polygones détectés par lissage et fusion pour améliorer leur aspect visuel et créer une partition des surfaces occupées et libres sur chaque toit.
 \end{enumerate}
 
+\newpage
 \paragraph{Résultats}
+\par{Les experts de l'\acrshort{ocen} et l'\acrshort{ocan} n'ont pas apprécié les images résultantes (Figure \ref{fig:stdl_05_exemple_segmentation_lidar}) car ils s'attendaient à des polygones plus semblables aux couches vectorielles (par exemple Figure \ref{fig:stdl_01_couche_vectorielle}). \acrshort{stdl} a pourtant bien simplifié les polygones pour améliorer leur rendu visuel.}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{02-main//figures/stdl_05_exemple_segmentation_lidar.png}
+    \caption{Image d’exemple de la segmentation \gls{lidar} \cite{herny_detection_2024}}
+    \label{fig:stdl_05_exemple_segmentation_lidar}
+\end{figure}
+\newpage
+\par{L'algorithme obtient un F1-score de 0.77 et un mIoU (mean Intersection over Union) de 0.38 sur l'ensemble des données de test. Le Tableau \ref{tab:stdl_02_resultats_segmentation_lidar} ci-dessous résume les principales métriques obtenues.}
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|l|c|c|c|c|c|}
+    \hline
+    Ground truth & Precision & Recall & f1 score & mIoU & Relative error (\%) \\
+    \hline
+    adapted GT, training set & 0.77 & 0.77 & 0.77 & 0.42 & 11 \\
+    whole GT, training set & 0.78 & 0.77 & 0.78 & 0.35 & 38 \\
+    whole GT, test set & 0.75 & 0.80 & 0.77 & 0.38 & 26 \\
+    \hline
+    \end{tabular}
+    \caption{Métriques obtenus par la segmentation \gls{lidar}}
+    \label{tab:stdl_02_resultats_segmentation_lidar}
+\end{table}
 
-Les experts de l'\acrshort{ocen} et l'\acrshort{ocan} n'ont pas apprécié les images résultantes (Figure 50) car ils s'attendaient à des polygones plus semblables aux couches vectorielles (par exemple Figure 46). \acrshort{stdl} a pourtant bien simplifié les polygones pour améliorer leur rendu visuel.
+\par{Les objets de plus de 1 m² (Figure \ref{fig:stdl_06_segmentation_lidar_surfaces}) et situés à plus de 1 m (Figure \ref{fig:stdl_07_segmentation_lidar_distances}) du bord du toit sont bien détectés, avec des F1-score entre 0.82 et 0.92.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{02-main//figures/stdl_06_segmentation_lidar_surfaces.png}
+    \caption{Influence de la distance des objets au bord du toit selon la surface de l’objet dans la segmentation \gls{lidar} \cite{herny_detection_2024}}
+    \label{fig:stdl_06_segmentation_lidar_surfaces}
+\end{figure}
+\newpage
+\par{Les objets (Figure \ref{fig:stdl_07_segmentation_lidar_distances}) qui ont leur centroïde a plus d'un mètre du bord du toit sont bien labellisés. Le F1-score est entre 0.80 et 0.85 pour ces objets. Cependant, les objets qui ont leur centroïde proche du bord (moins d'un mètre) ne sont pas bien détectés et ont 65\% de faux positif (FP), ce qui indique que la segmentation n'est pas fiable à cette distance.}
 
-% Figure 50 à insérer ici
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{02-main//figures/stdl_07_segmentation_lidar_distances.png}
+    \caption{Influence de la distance du centre des objets au bord du toit dans la segmentation \gls{lidar} \cite{herny_detection_2024}}
+    \label{fig:stdl_07_segmentation_lidar_distances}
+\end{figure}
+\newpage
+\par{La plupart (Tableau \ref{tab:stdl_03_resultats_segmentation_lidar_classes}) des classes d'objets (bouches d'aération, balcons, végétation intensive, panneaux solaires) ont des recalls supérieurs à 0.80. Cependant, les antennes et les objets bas (fenêtres, végétation extensive, pelouses) sont plus difficiles à détecter.}
 
-L'algorithme obtient un F1-score de 0.77 et un mIoU (mean Intersection over Union) de 0.38 sur l'ensemble des données de test. Le Tableau 12 ci-dessous résume les principales métriques obtenues.
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|l|c|}
+    \hline
+    Object class & Recall \\
+    \hline
+    Antenna & 0.24 \\
+    Pipe & 0.59 \\
+    Lawn & 0.70 \\
+    Other obstacle & 0.70 \\
+    Extensive vegetation & 0.72 \\
+    Window & 0.76 \\
+    Chimney & 0.79 \\
+    Aero & 0.83 \\
+    Solar thermal & 0.83 \\
+    Intensive vegetation & 0.88 \\
+    Solar unknown & 0.89 \\
+    Balcony / terrace & 0.90 \\
+    Solar photovoltaic & 0.92 \\
+    \hline
+    \end{tabular}
+    \caption{Recall par classe pour la segmentation LiDAR (STDL, 2024)}
+    \label{tab:stdl_03_resultats_segmentation_lidar_classes}
+\end{table}
 
-% Tableau 12 à insérer ici
+\par{La surface occupée (Tableau \ref{tab:stdl_04_resultats_segmentation_lidar_affectation}) totale est sous-estimée de 38\% par rapport à la vérité terrain.}
 
-Les objets (Figure 51) de plus de 1 m² et situés à plus de 1 m du bord du toit sont bien détectés, avec des F1-score entre 0.82 et 0.92.
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|p{2.7cm}|c|c|c|c|c|c|}
+    \hline
+    & Administrative & Industrial & Residential & Flat & Mixed & Pitched \\
+    \hline
+    Area labeled as occupied & 4,986 & 32,720 & 19,399 & 54,875 & 1,386 & 844 \\
+    Area detected as occupied & 1,195 & 20,953 & 12,986 & 30,980 & 3,052 & 1,102 \\
+    Detection rate (\%) & 24\% & 64\% & 67\% & 56\% & 220\% & 131\% \\
+    Total area & 6,692 & 78,011 & 33,278 & 108,415 & 5,018 & 4,584 \\
+    \hline
+    \end{tabular}
+    \caption{Récapitulatif des surfaces détectées et vérité terrain pour la segmentation \gls{lidar}}
+    \label{tab:stdl_04_resultats_segmentation_lidar_affectation}
+\end{table}
 
-% Figure 51 à insérer ici
 
-% Figure 52 à insérer ici
+\newpage
+\par{Les experts (Tableau \ref{tab:stdl_05_resultats_segmentation_lidar_experts}) sont au moins partiellement satisfaits par plus de 69\% des toits segmentés.}
 
-Les objets (Figure 52) qui ont leur centroïde a plus d'un mètre du bord du toit sont bien labellisés. Le F1-score est entre 0.80 et 0.85 pour ces objets. Cependant, les objets qui ont leur centroïde proche du bord (moins d'un mètre) ne sont pas bien détectés et ont 65\% de faux positif (FP), ce qui indique que la segmentation n'est pas fiable à cette distance.
-
-% Tableau 13 à insérer ici
-
-La plupart (Tableau 13) des classes d'objets (bouches d'aération, balcons, végétation intensive, panneaux solaires) ont des recalls supérieurs à 0.80. Cependant, les antennes et les objets bas (fenêtres, végétation extensive, pelouses) sont plus difficiles à détecter.
-
-% Tableau 14 à insérer ici
-
-La surface occupée (Tableau 14) totale est sous-estimée de 38\% par rapport à la vérité terrain.
-
-Les experts (Tableau 15) sont au moins partiellement satisfaits par plus de 69\% des toits segmentés.
-
-% Tableau 15 à insérer ici
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|l|c|c|}
+    \hline
+    Evaluation & OCAN & OCEN \\
+    \hline
+    Not satisfied & 22\% & 31\% \\
+    Partially satisfied & 54\% & 33\% \\
+    Satisfied & 24\% & 36\% \\
+    \hline
+    \end{tabular}
+    \caption{Evaluation des experts pour la segmentation \gls{lidar}}
+    \label{tab:stdl_05_resultats_segmentation_lidar_experts}
+\end{table}
 
 \paragraph{Discussion des résultats (\acrshort{stdl})}
+\par{La méthode prouve sa capacité à détecter les objets sur les toits, en particulier ceux de grande taille et éloignés des bords. Cependant, la délimitation précise des formes reste perfectible, comme en témoigne le faible mIoU. L'estimation de la surface occupée est moyenne, avec une erreur importante liée à la sous-détection des objets bas. Les faux positifs sont souvent de petite taille et situés près des bords, parfois à cause de l'absence de barrières dans la vérité terrain.}
+\par{Les bâtiments administratifs et les toits en pente posent des difficultés spécifiques, nécessitant des hyperparamètres adaptés.}
+\par{Malgré des résultats honorables, l'aspect visuel des détections reste à améliorer pour une utilisation opérationnelle par les experts. Des développements futurs pourraient inclure l'automatisation de la production de la couche vectorielle des toits et l'ajustement de formes géométriques simples sur les clusters de points pour obtenir des détections plus précises et esthétiques.}
 
-La méthode prouve sa capacité à détecter les objets sur les toits, en particulier ceux de grande taille et éloignés des bords. Cependant, la délimitation précise des formes reste perfectible, comme en témoigne le faible mIoU. L'estimation de la surface occupée est moyenne, avec une erreur importante liée à la sous-détection des objets bas. Les faux positifs sont souvent de petite taille et situés près des bords, parfois à cause de l'absence de barrières dans la vérité terrain.
-
-Les bâtiments administratifs et les toits en pente posent des difficultés spécifiques, nécessitant des hyperparamètres adaptés.
-
-Malgré des résultats honorables, l'aspect visuel des détections reste à améliorer pour une utilisation opérationnelle par les experts. Des développements futurs pourraient inclure l'automatisation de la production de la couche vectorielle des toits et l'ajustement de formes géométriques simples sur les clusters de points pour obtenir des détections plus précises et esthétiques.
-
+\newpage
 \subsubsection{Segmentation d'image}
 
 \paragraph{Données}
 
-Les données utilisées sont :
+\par{Les données utilisées sont :}
 \begin{itemize}
-\item True orthophotos \cite{SITG2024}
-\item Couche vectorielle des toitures modifiée comme pour la segmentation \gls{lidar}
+    \item True orthophotos \cite{sitg_orthophotos_nodate}
+    \item Couche vectorielle des toitures modifiée comme pour la segmentation \gls{lidar}
 \end{itemize}
 
 \paragraph{Méthodologie}
+La Figure \ref{fig:stdl_08_methodo_segmentation_images} ci-dessous représente les principales étapes utilisées pour réaliser la segmentation d'image.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{02-main//figures/stdl_08_methodo_segmentation_images.png}
+    \caption{Méthodologie pour la segmentation d’images \cite{herny_detection_2024}}
+    \label{fig:stdl_08_methodo_segmentation_images}
+\end{figure}
 
-La Figure 53 ci-dessous représente les principales étapes utilisées pour réaliser la segmentation d'image.
+\par{La première étape est la préparation des orthophotos (Figure \ref{fig:stdl_08_methodo_segmentation_images} ``a''). Celle-ci commence par le découpage des orthophotos avec les données vectorielles des toitures (délimitation des toitures) pour ne conserver que la toiture à segmenter. La ligne bleue représente la marge de 1 mètre (zone tampon) pour faciliter la tâche de l'algorithme. Ensuite chaque toiture fera l'objet d'une tuile (une toiture par image).}
 
-% Figure 53 à insérer ici
+\par{La deuxième étape est la segmentation de l'image (Figure \ref{fig:stdl_08_methodo_segmentation_images} ``b''). Le modèle segment anything model (SAM) est utilisé via la librairie Python ``segment-geospatial'' \cite{wu_samgeo_2023} car cette libraire permet d'utiliser SAM sur des orthophotos tout en conservant les données géospatiales. SAM va segmenter les objets sur la toiture dans chaque tuile, ce qui va produire un masque par objet segmenté.}
 
-La première étape est la préparation des orthophotos (Figure 53 « a »). Celle-ci commence par le découpage des orthophotos avec les données vectorielles des toitures (délimitation des toitures) pour ne conserver que la toiture à segmenter. La ligne bleue représente la marge de 1 mètre (zone tampon) pour faciliter la tâche de l'algorithme. Ensuite chaque toiture fera l'objet d'une tuile (une toiture par image).
-
-La deuxième étape est la segmentation de l'image (Figure 53 « b »). Le modèle segment anything model (SAM) est utilisé via la librairie Python « segment-geospatial » \cite{QiushengWu2023} car cette libraire permet d'utiliser SAM sur des orthophotos tout en conservant les données géospatiales. SAM va segmenter les objets sur la toiture dans chaque tuile, ce qui va produire un masque par objet segmenté.
-
-La troisième étape est la vectorisation des objets (Figure 53 « c »). Dans cette étape, les masques segmentés sont convertis en données vectorielles. Certains de ces polygones sont supprimés basé sur des critères géométriques :
+\par{La troisième étape est la vectorisation des objets (Figure \ref{fig:stdl_08_methodo_segmentation_images} ``c''). Dans cette étape, les masques segmentés sont convertis en données vectorielles. Certains de ces polygones sont supprimés basé sur des critères géométriques :}
 \begin{itemize}
-\item Polygone de moins de 0.2 m²
-\item Polygones qui occupent plus de 90\% de la surface de la toiture
-\item Polygones qui ont une surface de plus de 50\% de la toiture et qui n'ont pas d'intersection avec la toiture
+    \item Polygone de moins de 0.2 m²
+    \item Polygones qui occupent plus de 90\% de la surface de la toiture
+    \item Polygones qui ont une surface de plus de 50\% de la toiture et qui n'ont pas d'intersection avec la toiture
 \end{itemize}
 
-La quatrième étape est l'optimisation des hyperparamètres (Figure 53 « d ») de SAM et l'évaluation de ses résultats avec la vérité terrain.
+\par{La quatrième étape est l'optimisation des hyperparamètres (Figure \ref{fig:stdl_08_methodo_segmentation_images} ``d'') de SAM et l'évaluation de ses résultats avec la vérité terrain.}
 
-La logique est que tout ce qui n'est pas segmenté à l'intérieur du périmètre de la toiture est une surface libre.
+\par{La logique est que tout ce qui n'est pas segmenté à l'intérieur du périmètre de la toiture est une surface libre.}
 
+\newpage
 \paragraph{Résultats}
 
-% Figure 54 à insérer ici
+\par{La Figure \ref{fig:stdl_09_segmentation_image_resultats} représente un exemple de résultat de la segmentation de plusieurs toitures. On peut observer que la segmentation rencontre des difficultés avec certains éléments de toiture tel que les puits de lumière.}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{02-main//figures/stdl_09_segmentation_image_resultats.png}
+    \caption{Exemple d’image résultat de la segmentation d’images \cite{herny_detection_2024}}
+    \label{fig:stdl_09_segmentation_image_resultats}
+\end{figure}
+\newpage
+\par{Les métriques obtenues (Tableau \ref{tab:stdl_06_segmentation_image_resultats}) sur le dataset de test sont un F1-score de 0.73 et mIoU de 0.37.}
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|l|c|c|c|c|c|}
+    \hline
+    Dataset & Precision & Recall & f1 score & mIoU & Relative error (\%) \\
+    \hline
+    Training subset & 0.73 & 0.78 & 0.75 & 0.41 & 7 \\
+    Training & 0.75 & 0.82 & 0.78 & 0.37 & 42 \\
+    Test & 0.75 & 0.71 & 0.73 & 0.37 & 23 \\
+    \hline
+    \end{tabular}
+    \caption{Métriques obtenues par la segmentation d'images}
+    \label{tab:stdl_06_segmentation_image_resultats}
+\end{table}
+\par{Les petits objets (Figure \ref{fig:stdl_10_segmentation_image_taille}) avec une surface de moins d'un mètre carré sont moins bien détectés (AP d'environ 0.60). Les objets de plus d'un mètre carré sont mieux détectés (AP d'environ 0.83).}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{02-main//figures/stdl_10_segmentation_image_taille.png}
+    \caption{Objets segmentés selon taille en m² pour la segmentation d’images \cite{herny_detection_2024}}
+    \label{fig:stdl_10_segmentation_image_taille}
+\end{figure}
+\newpage
+\par{Comme pour la segmentation \gls{lidar}, la segmentation d'image fonctionne moins bien au bord de la toiture (Figure \ref{fig:stdl_11_segmentation_image_distance}). La precision est de 0.77 pour les centroïde d'objets a plus d'un mètre du bord de la toiture contre seulement 0.51 pour ceux a moins d'un mètre.}
 
-La Figure 54 représente un exemple de résultat de la segmentation de plusieurs toitures. On peut observer que la segmentation rencontre des difficultés avec certains éléments de toiture tel que les puits de lumière.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{02-main//figures/stdl_11_segmentation_image_distance.png}
+    \caption{Centroïde des objets segmentés selon la distance au borde de la toiture pour la segmentation d’images  \cite{herny_detection_2024}}
+    \label{fig:stdl_11_segmentation_image_distance}
+\end{figure}
 
-% Tableau 16 à insérer ici
-
-Les métriques obtenues (Tableau 16) sur le dataset de test sont un F1-score de 0.73 et mIoU de 0.37.
-
-% Figure 55 à insérer ici
-
-Les petits objets (Figure 55) avec une surface de moins d'un mètre carré sont moins bien détectés (AP d'environ 0.60). Les objets de plus d'un mètre carré sont mieux détectés (AP d'environ 0.83).
-
-% Figure 56 à insérer ici
-
-Comme pour la segmentation \gls{lidar}, la segmentation d'image fonctionne moins bien au bord de la toiture (Figure 56). La precision est de 0.77 pour les centroïde d'objets a plus d'un mètre du bord de la toiture contre seulement 0.51 pour ceux a moins d'un mètre.
-
-% Tableau 17 à insérer ici
-
-Les experts sont au minimum partiellement satisfait de 86\% des résultats.
-
+\par{Les experts sont au minimum partiellement satisfait de 86\% des résultats (Tableau .}
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|l|c|c|}
+    \hline
+    Evaluation & OCAN & OCEN \\
+    \hline
+    Not satisfied & 6\% & 14\% \\
+    Partially satisfied & 40\% & 49\% \\
+    Satisfied & 54\% & 37\% \\
+    \hline
+    \end{tabular}
+    \caption{Evaluation des experts pour la segmentation d'images (STDL, 2024)}
+    \label{tab:stdl_07_segmentation_image_resultats_experts}
+\end{table}
+\newpage
 \paragraph{Discussion résultats (\acrshort{stdl})}
 
-Points forts de cette approche :
+\par{Points forts de cette approche :}
 \begin{itemize}
 \item Bonne capacité générale à détecter et segmenter correctement les objets
 \item Métriques cohérentes
 \item Forme des objets détectés généralement bien reproduite
 \end{itemize}
 
-Limites constatées de la méthodologie utilisée :
+\par{Limites constatées de la méthodologie utilisée :}
 \begin{itemize}
 \item Difficulté à détecter les objets tel que les gaines ou d'autres petits objets
 \item Sensibilité aux changements de couleurs (saleté, ombres, pans de toit) pouvant être interprétés comme des objets
@@ -745,7 +863,7 @@ Limites constatées de la méthodologie utilisée :
 \item Nécessité des true orthophotos, plus rares et coûteuses que les orthophotos standards
 \end{itemize}
 
-Potentielles améliorations :
+\par{Potentielles améliorations :}
 \begin{itemize}
 \item Fine-tuning du modèle SAM
 \item Méthodes pour atténuer la présence d'ombres dans les images
@@ -754,45 +872,58 @@ Potentielles améliorations :
 
 \subsubsection{Combinaison}
 
-Ce chapitre va traiter la combinaison des résultats de 2 méthodologies différentes pour améliorer les résultats finaux.
+\par{Ce chapitre va traiter la combinaison des résultats de 2 méthodologies différentes pour améliorer les résultats finaux.}
 
 \paragraph{Données}
 
-Les données utilisées sont le résultat des méthodologies de segmentation \gls{lidar} et celui de la segmentation d'images. Ce sont des données vectorielles.
+\par{Les données utilisées sont le résultat des méthodologies de segmentation \gls{lidar} et celui de la segmentation d'images. Ce sont des données vectorielles.}
 
 \paragraph{Méthodologie}
 
-Deux méthodes de combinaison des résultats ont été testées.
+\par{Deux méthodes de combinaison des résultats ont été testées.}
 
-La première est la concaténation des objets détectés à partir des couches vectorielles produites par les segmentations \gls{lidar} et d'images.
+\par{La première est la concaténation des objets détectés à partir des couches vectorielles produites par les segmentations \gls{lidar} et d'images.}
 
-La deuxième est la jointure spatiale des résultats de la segmentation \gls{lidar} et d'images. Dans ce cas, il faut :
+\par{La deuxième est la jointure spatiale des résultats de la segmentation \gls{lidar} et d'images. Dans ce cas, il faut :}
 \begin{itemize}
-\item Sélectionner les polygones qui se chevauchent entre les couches vectorielles des segmentations \gls{lidar} et d'images.
-\item Conserver les polygones issus de la segmentation d'images car ils fournissent une meilleure délimitation
+    \item Sélectionner les polygones qui se chevauchent entre les couches vectorielles des segmentations \gls{lidar} et d'images.
+    \item Conserver les polygones issus de la segmentation d'images car ils fournissent une meilleure délimitation
 \end{itemize}
-
+\newpage
 \paragraph{Résultats}
 
-Les couches vectorielles obtenues n'ont pas été évaluées par les experts. Le Tableau 18 ci-dessous résume les principales métriques obtenues.
+\par{Les couches vectorielles obtenues n'ont pas été évaluées par les experts. Le Tableau \ref{tab:stdl_08_ensemble_resultats} ci-dessous résume les principales métriques obtenues.}
 
-% Tableau 18 à insérer ici
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|l|c|c|c|c|c|}
+    \hline
+    Combination method & Precision & Recall & f1 score & mIoU & Relative error (\%) \\
+    \hline
+    Concatenation & 0.68 & 0.94 & 0.79 & 0.45 & 8 \\
+    Spatial join & 0.81 & 0.69 & 0.75 & 0.33 & 48 \\
+    \hline
+    \end{tabular}
+    \caption{Métriques obtenues par les méthodes de combinaison}
+    \label{tab:stdl_08_ensemble_resultats}
+\end{table}
 
-En complément du Tableau 18, le Tableau 19 récapitule l'ensemble des métriques des méthodologies. La méthodologie de classification des pans de toit n'a pas de métrique, elle n'est donc pas incluse dans le tableau.
+En complément du Tableau \ref{tab:stdl_08_ensemble_resultats}, le Tableau \ref{tab:stdl_09_resultats_methodos} récapitule l'ensemble des métriques des méthodologies. La méthodologie de classification des pans de toit n'a pas de métrique, elle n'est donc pas incluse dans le tableau.
 
-\begin{table}[h]
-\centering
-\begin{tabular}{|l|c|c|c|c|c|}
-\hline
-Méthodologie & Precision & Recall & F1-score & mIoU & Relative error [\%] \\
-\hline
-Segmentation \gls{lidar} & 0.75 & 0.80 & 0.77 & 0.38 & 26 \\
-Segmentation d'image & 0.75 & 0.71 & 0.73 & 0.37 & 23 \\
-Concaténation & 0.68 & 0.94 & 0.79 & 0.45 & 8 \\
-Jointure spatiale & 0.81 & 0.69 & 0.75 & 0.33 & 48 \\
-\hline
-\end{tabular}
-\caption{Comparatif des résultats des différentes méthodologies}
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|l|c|c|c|c|c|}
+    \hline
+    Méthodologie & Precision & Recall & F1-score & mIoU & Relative error [\%] \\
+    \hline
+    Segmentation \gls{lidar} & 0.75 & 0.80 & 0.77 & 0.38 & 26 \\
+    Segmentation d'image & 0.75 & 0.71 & 0.73 & 0.37 & 23 \\
+    Concaténation & 0.68 & 0.94 & 0.79 & 0.45 & 8 \\
+    Jointure spatiale & 0.81 & 0.69 & 0.75 & 0.33 & 48 \\
+    \hline
+    \end{tabular}
+    \caption{Comparatif des résultats des différentes méthodologies}
+    \label{tab:stdl_09_resultats_methodos}
 \end{table}
 
 Les F1-score sont similaires autour de 0.77 pour les deux méthodes de combinaison.
