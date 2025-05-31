@@ -908,7 +908,7 @@ La Figure \ref{fig:stdl_08_methodo_segmentation_images} ci-dessous représente l
     \label{tab:stdl_08_ensemble_resultats}
 \end{table}
 
-En complément du Tableau \ref{tab:stdl_08_ensemble_resultats}, le Tableau \ref{tab:stdl_09_resultats_methodos} récapitule l'ensemble des métriques des méthodologies. La méthodologie de classification des pans de toit n'a pas de métrique, elle n'est donc pas incluse dans le tableau.
+\par{En complément du Tableau \ref{tab:stdl_08_ensemble_resultats}, le Tableau \ref{tab:stdl_09_resultats_methodos} récapitule l'ensemble des métriques des méthodologies. La méthodologie de classification des pans de toit n'a pas de métrique, elle n'est donc pas incluse dans le tableau.}
 
 \begin{table}[H]
     \centering
@@ -926,116 +926,86 @@ En complément du Tableau \ref{tab:stdl_08_ensemble_resultats}, le Tableau \ref{
     \label{tab:stdl_09_resultats_methodos}
 \end{table}
 
-Les F1-score sont similaires autour de 0.77 pour les deux méthodes de combinaison.
+\par{Les F1-scores des deux méthodes de combinaison sont proches, autour de 0.77, ce qui suggère des performances globales similaires.}
 
-La concaténation permet d'atteindre un excellent recall de 0.94 mais diminue la précision d'environ 8 points
+\par{La concaténation obtient un recall exceptionnel de 0.94, détectant presque toutes les surfaces occupées. En contrepartie, la précision diminue d'environ 8 points, indiquant plus de faux positifs dans les résultats.}
 
-La jointure spatiale améliore la précision de 6 points mais réduit le recall de 8 points
+\par{La jointure spatiale fait le choix inverse : elle améliore la précision de 6 points en réduisant les détections erronées, mais perd 8 points de recall, manquant davantage de surfaces réellement occupées.}
 
-La concaténation a un impact positif de plus de 10 points sur le mIoU comparé à la jointure spatiale
-
-L'erreur relative sur la surface occupée est significativement réduite à moins de 10\% par la concaténation mais augmente à environ 50\% avec la jointure spatiale
+\par{Le mIoU favorise nettement la concaténation avec un gain de plus de 10 points, reflétant une segmentation de meilleure qualité. Cette tendance se confirme pour l'estimation des surfaces : la concaténation maintient l'erreur relative sous 10\% tandis que la jointure spatiale atteint environ 50\%.}
 
 \paragraph{Discussion des résultats (\acrshort{stdl})}
 
 Les points positifs de cette approche sont :
 \begin{itemize}
-\item La combinaison des résultats permet de moduler les résultats en favorisant soit la précision soit le recall selon les besoins
-\item La valeur élevée du recall obtenue par concaténation prouve la complémentarité des deux méthodes pour détecter différents objets
+    \item La combinaison des résultats permet de moduler les résultats en favorisant soit la précision soit le recall selon les besoins
+    \item La valeur élevée du recall obtenue par concaténation prouve la complémentarité des deux méthodes pour détecter différents objets
 \end{itemize}
 
-La valeur de recall élevée obtenue avec la concaténation prouve la complémentarité des deux méthodes pour la détection d'objets différents. Une valeur de recall plus élevée tend à favoriser le mIoU, puisque plus d'objets sont détectés (TP), malgré l'ajout de faux positifs (FP). La surface de l'objet détecté est donc améliorée, mais l'ajout de FP contribue également à la réduction de l'erreur relative sur la surface occupée, ce qui doit être analysé avec soin.
+\par{La valeur de recall élevée obtenue avec la concaténation prouve la complémentarité des deux méthodes pour la détection d'objets différents. Une valeur de recall plus élevée tend à favoriser le mIoU, puisque plus d'objets sont détectés (TP), malgré l'ajout de faux positifs (FP). La surface de l'objet détecté est donc améliorée, mais l'ajout de FP contribue également à la réduction de l'erreur relative sur la surface occupée, ce qui doit être analysé avec soin.}
 
-L'utilisation des couches vectorielles des toits et superstructures produites par l'État de Genève, bien qu'incomplètes, pourrait améliorer les résultats.
+\par{L'utilisation des couches vectorielles des toits et superstructures produites par l'État de Genève, bien qu'incomplètes, pourrait améliorer les résultats.}
 
 \subsubsection{Conclusion}
 
-\acrshort{stdl} a exploré trois méthodes pour détecter les objets sur les toits à partir de données \gls{lidar}, d'orthophotos et vectorielles. Toutes les méthodes ont fourni des résultats satisfaisants, avec une précision de 85\% pour la classification d'occupation et un F1-score d'environ 0,77 pour les méthodes de segmentation. Les bénéficiaires ont été satisfaits des résultats dans au moins 70\% des cas.
+\par{\acrshort{stdl} a exploré trois méthodes pour détecter les objets sur les toits à partir de données \gls{lidar}, d'orthophotos et vectorielles. Toutes les méthodes ont fourni des résultats satisfaisants, avec une précision de 85\% pour la classification d'occupation et un F1-score d'environ 0,77 pour les méthodes de segmentation. Les bénéficiaires ont été satisfaits des résultats dans au moins 70\% des cas.}
 
-La méthode de classification a été sélectionnée en raison de ses bonnes performances et résultats obtenus.
+\par{La méthode de classification a été sélectionnée en raison de ses bonnes performances et résultats obtenus.}
 
-La combinaison des résultats de segmentation permet d'améliorer soit la précision, soit le recall, et le croisement des sources d'information peut améliorer la précision des résultats.
+\par{La combinaison des résultats de segmentation permet d'améliorer soit la précision, soit le recall, et le croisement des sources d'information peut améliorer la précision des résultats.}
 
-Il est important de noter que ces résultats sont des indications qui doivent être vérifiées par un expert métier. Des paramètres supplémentaires, tels que le matériau du toit et le potentiel solaire, ne sont pas pris en compte.
+\par{Il est important de noter que ces résultats sont des indications qui doivent être vérifiées par un expert métier. Des paramètres supplémentaires, tels que le matériau du toit et le potentiel solaire, ne sont pas pris en compte.}
 
 \subsubsection{Analyse critique}
 
 \paragraph{Général}
 
-Le projet étant encore dans sa phase initiale explorative, il ne tient pas compte de l'orientation des toitures pour évaluer le potentiel solaire de chacune d'entre elle. L'exposition au soleil est en effet un facteur essentiel pour la pose de panneaux solaire. L'exclusion de toitures sur la base des données du cadastre solaire pourrait éventuellement éviter de traiter les toitures à l'ombre.
+\par{Le projet étant encore dans sa phase initiale explorative, il ne tient pas compte de l'orientation des toitures pour évaluer le potentiel solaire de chacune d'entre elle. L'exposition au soleil est en effet un facteur essentiel pour la pose de panneaux solaire. L'exclusion de toitures sur la base des données du cadastre solaire pourrait éventuellement éviter de traiter les toitures à l'ombre.}
 
-La végétalisation de toitures impose des défis considérables d'un point de vue génie civil, en effet les toitures ne sont souvent pas prévues pour porter des charges tel que de la terre végétale. Même dans le cas des panneaux solaires, pas toutes les toitures peuvent supporter la charge. Par exemple une toiture en fibrociment (toiture typique des hangars) n'aura probablement pas la capacité pour accueillir des panneaux solaires, cela pourrait être un critère d'exclusion.
+\par{La végétalisation de toitures impose des défis considérables d'un point de vue génie civil, en effet les toitures ne sont souvent pas prévues pour porter des charges tel que de la terre végétale. Même dans le cas des panneaux solaires, pas toutes les toitures peuvent supporter la charge. Par exemple une toiture en fibrociment (toiture typique des hangars) n'aura probablement pas la capacité pour accueillir des panneaux solaires, cela pourrait être un critère d'exclusion.}
 
-L'échantillon de bâtiments du dataset ne semble pas très équilibré entre les différentes classes SIA de bâtiments (SIA 380/1:2016). En effet, les piscines couvertes, écoles, dépôts, hôpitaux ont pas mal en commun en ce qui concerne les toitures, elles seront probablement plates avec des éléments de ventilation ou froid. Les logements collectifs sont probablement plus complexes à segmenter car en général les toitures sont déjà assez occupées.
+\par{L'échantillon de bâtiments du dataset ne semble pas très équilibré entre les différentes classes \gls{sia} de bâtiments \cite{sia_sia-shop_nodate}. En effet, les piscines couvertes, écoles, dépôts, hôpitaux ont pas mal en commun en ce qui concerne les toitures, elles seront probablement plates avec des éléments de ventilation ou froid. Les logements collectifs sont probablement plus complexes à segmenter car en général les toitures sont déjà assez occupées.}
 
 \paragraph{Classification des pans de toiture}
 
-Les données de la couche vectorielle d'emprise au sol des bâtiments ne donnent pas un aperçu complet de la toiture, en effet les superstructures se trouvent dans une autre couche vectorielle. Même si ce n'est pas mentionné, les deux couches ont probablement été fusionnées.
+\par{Les données de la couche vectorielle d'emprise au sol des bâtiments ne donnent pas un aperçu complet de la toiture, en effet les superstructures se trouvent dans une autre couche vectorielle. Même si ce n'est pas mentionné, les deux couches ont probablement été fusionnées.}
 
-Dans le rapport de \acrshort{stdl}, il manque une matrice de confusion. Cela aurait permis d'avoir une meilleure appréciation des performances obtenues par les différentes variantes utilisées.
+\par{Dans le rapport de \acrshort{stdl}, il manque une matrice de confusion. Cela aurait permis d'avoir une meilleure appréciation des performances obtenues par les différentes variantes utilisées.}
 
 \paragraph{Segmentation \gls{lidar}}
 
-Le choix d'utiliser les données \gls{lidar} de 2019 avec les orthophotos de 2019 est tout à fait logique. Des données \gls{lidar} plus récentes et avec plus de densité existent mais il n'y a pas de true orthophoto après 2019 qui servirait de vérité terrain. Cela enlèverait aussi la possibilité de comparer les différents modèles de segmentation sur des données similaires.
+\par{Le choix d'utiliser les données \gls{lidar} de 2019 avec les orthophotos de 2019 est tout à fait logique. Des données \gls{lidar} plus récentes et avec plus de densité existent mais il n'y a pas de true orthophoto après 2019 qui servirait de vérité terrain. Cela enlèverait aussi la possibilité de comparer les différents modèles de segmentation sur des données similaires.}
 
 \paragraph{Segmentation d'images}
 
-La stratégie utilisée pour la segmentation d'images est très futée. La stratégie est principalement :
+\par{La stratégie utilisée pour la segmentation d'images est très futée. La stratégie est principalement :}
 \begin{itemize}
-\item Segmentation avec SAM
-\item Enlever certains masques trop petits ou qui sont en dehors de la toiture
-\item Tout ce qui n'a pas de masque devient donc une surface disponible
+    \item Segmentation avec SAM
+    \item Enlever certains masques trop petits ou qui sont en dehors de la toiture
+    \item Tout ce qui n'a pas de masque devient donc une surface disponible
 \end{itemize}
 
-\acrshort{stdl} l'a déjà indiqué dans son rapport, après avoir expérimenté avec SAM, il est tout de même très sensible aux ombrages. L'approche fonctionne moyennement bien avec un mIoU de 0.37.
+\par{\acrshort{stdl} l'a déjà indiqué dans son rapport, après avoir expérimenté avec SAM, il est tout de même très sensible aux ombrages. L'approche fonctionne moyennement bien avec un mIoU de 0.37.}
 
-En revanche, la stratégie de faire une tuile par toiture semble compliquée et le temps nécessaire est relativement long (12 minutes pour 25 bâtiments).
+\par{En revanche, la stratégie de faire une tuile par toiture semble compliquée et le temps nécessaire est relativement long (12 minutes pour 25 bâtiments).}
 
-La segmentation à l'aide d'un algorithme comme YOLO semble plus pertinente, l'inférence d'une image prend moins d'une minute et celle-ci peut contenir plusieurs bâtiments.
+\par{La segmentation à l'aide d'un algorithme de machine learning supervisé semble plus pertinente, l'inférence d'une image prend moins d'une minute pour un modèle de type YOLO et celle-ci peut contenir plusieurs bâtiments.}
 
 \paragraph{Combinaison des résultats}
 
-\acrshort{stdl} n'a pas inclus dans leur rapport un tableau qui récapitule les résultats des différentes méthodologies utilisées. C'est donc difficile d'avoir une idée des résultats globaux.
+\par{\acrshort{stdl} n'a pas inclus dans leur rapport un tableau qui récapitule les résultats des différentes méthodologies utilisées. C'est donc difficile d'avoir une idée des résultats globaux.}
 
 \paragraph{Résultats}
 
-Le Tableau 19 permet d'avoir une vue d'ensemble des résultats et la concaténation est fort intéressante.
+\par{Le Tableau \ref{tab:stdl_09_resultats_methodos} permet d'avoir une vue d'ensemble des résultats et la concaténation est fort intéressante.}
 
-La concaténation des résultats des deux méthodes de segmentation (\gls{lidar} et image) permet d'obtenir un recall élevé, ce qui signifie que la grande majorité des objets présents dans la vérité terrain (GT) sont détectés. Ce recall élevé s'explique par le fait que les deux méthodes ont des forces complémentaires : chacune est capable de détecter des types d'objets différents que l'autre méthode peut manquer.
+\par{La concaténation des résultats des deux méthodes de segmentation (\gls{lidar} et image) permet d'obtenir un recall élevé, ce qui signifie que la grande majorité des objets présents dans la vérité terrain (GT) sont détectés. Ce recall élevé s'explique par le fait que les deux méthodes ont des forces complémentaires : chacune est capable de détecter des types d'objets différents que l'autre méthode peut manquer.}
 
-Par exemple, la segmentation d'image peut mieux détecter les objets fins et bas, tandis que la segmentation \gls{lidar} peut mieux gérer les changements de couleur et détecter les gaines.
+\par{Par exemple, la segmentation d'image peut mieux détecter les objets fins et bas, tandis que la segmentation \gls{lidar} peut mieux gérer les changements de couleur et détecter les gaines.}
 
-Un recall plus élevé a tendance à améliorer la métrique mIoU (mean Intersection over Union), car davantage d'objets GT sont correctement détectés (vrais positifs, TP), même si cela s'accompagne également de l'ajout de faux positifs (FP). Le mIoU mesure la qualité de la segmentation en calculant le chevauchement moyen entre les objets détectés et les objets GT. Avec plus de TP, le numérateur du mIoU augmente, ce qui améliore le score global.
+\par{Un recall plus élevé a tendance à améliorer la métrique mIoU (mean Intersection over Union), car davantage d'objets GT sont correctement détectés (vrais positifs, TP), même si cela s'accompagne également de l'ajout de faux positifs (FP). Le mIoU mesure la qualité de la segmentation en calculant le chevauchement moyen entre les objets détectés et les objets GT. Avec plus de TP, le numérateur du mIoU augmente, ce qui améliore le score global.}
 
-De plus, un recall élevé permet une meilleure estimation de la surface occupée par les objets détectés. Cependant, l'ajout de FP lors de la concaténation peut également contribuer à cette surface occupée, ce qui peut réduire artificiellement l'erreur relative par rapport à la surface occupée réelle (calculée à partir de la GT). Il est donc important d'interpréter ce résultat avec prudence, car une faible erreur relative sur la surface occupée ne signifie pas nécessairement que la segmentation est parfaite, mais peut être influencée par la présence de FP.
-
-% -----------------------------------------------------------------------------
-\par{\acrshort{stdl}}
-
-\subsubsection{Contexte et objectifs}
-
-\subsubsection{Données}
-
-\subsubsection{Méthodologie}
-
-\subsubsection{Résultats principaux}
-
-\subsubsection{Discussion et limites}
-
-% -----------------------------------------------------------------------------
-\subsection{Détection des objets présents sur les toitures et identification des espaces libres}
-
-\par{\acrshort{stdl}}
-
-\subsubsection{Contexte et objectifs}
-
-\subsubsection{Données}
-
-\subsubsection{Méthodologie}
-
-\subsubsection{Résultats principaux}
-
-\subsubsection{Discussion et limites}
+\par{De plus, un recall élevé permet une meilleure estimation de la surface occupée par les objets détectés. Cependant, l'ajout de FP lors de la concaténation peut également contribuer à cette surface occupée, ce qui peut réduire artificiellement l'erreur relative par rapport à la surface occupée réelle (calculée à partir de la GT). Il est donc important d'interpréter ce résultat avec prudence, car une faible erreur relative sur la surface occupée ne signifie pas nécessairement que la segmentation est parfaite, mais peut être influencée par la présence de FP.}
 
 % -----------------------------------------------------------------------------
 \subsection{SolarNet plus}
@@ -1182,6 +1152,21 @@ Le CNN développé atteint :
     \item Un score d'Intersection over Union (IoU) de 64\%
     \item Une sous-estimation moyenne de 8\% des surfaces disponibles par rapport aux annotations manuelles
 \end{itemize}
+\par{Le Tableau \ref{tab:castello_quantification_resultats} ci-dessous détaille les résultats obtenus:}
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|l|c|c|c|c|c|}
+    \hline
+     & IoU & Accuracy & Recall & Precision & F1-score \\
+    \hline
+    Training & 0.8823 & 0.9794 & 0.9299 & 0.9437 & 0.9367 \\
+    Validation & 0.7211 & 0.9464 & 0.8360 & 0.8508 & 0.8433 \\
+    Test & 0.6420 & 0.9307 & 0.7522 & 0.7874 & 0.7693 \\
+    \hline
+    \end{tabular}
+    \caption{Performances du modèle U-Net développé}
+\label{tab:castello_quantification_resultats}
+\end{table}
 
 \par{Le modèle réussit à détecter automatiquement les obstacles présents sur les toits, y compris les panneaux solaires existants, fenêtres, cheminées, équipements techniques et zones ombragées. L'étude révèle que la fraction médiane de la surface disponible varie selon la taille des toits :}
 \begin{itemize}
@@ -1190,24 +1175,35 @@ Le CNN développé atteint :
     \item 80\% pour les petits toits (10-100 m²)
 \end{itemize}
 
+\par{La Figure \ref{fig:castello_quantification_image_resultat} permet de voir deux exemples de résultat.}
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.44\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main//figures/castello_quantification_image_resultat1.png}
+        \caption{Grandes toitures plates}
+        \label{fig:castello_quantification_image_resultat1}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.43\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main//figures/castello_quantification_image_resultat2.png}
+        \caption{Toitures en pente}
+        \label{fig:castello_quantification_image_resultat2}
+    \end{subfigure}
+    \caption{Images d'exemple \cite{castello_quantification_2021} du résultat après inférence. Les zones bleus sont les espaces disponibles.}
+    \label{fig:castello_quantification_image_resultat}
+\end{figure}
+
 \par{La comparaison avec d'autres méthodes d'estimation montre que les approches existantes tendent à surestimer la surface disponible sur les grands toits et à sous-estimer celle des petits toits.}
 
 \subsubsection{Discussion et limites}
-\par{Cette étude démontre le potentiel du deep learning pour l'évaluation précise des surfaces de toiture disponibles pour l'installation de panneaux solaires. Pour améliorer davantage le modèle, les auteurs suggèrent l'ajout d'un canal infrarouge aux images et l'utilisation d'images aériennes plus récentes et à plus haute résolution.}
-\par{L'approche proposée offre une solution scalable qui pourrait être étendue à l'échelle nationale, fournissant ainsi des données précieuses pour les discussions publiques sur le potentiel solaire réalisable en Suisse.}
-% -----------------------------------------------------------------------------
-\subsection{YOLO12}
+\par{L'article présente une approche prometteuse pour quantifier les surfaces de toiture disponibles pour l'installation solaire. Le modèle U-Net atteint un IoU de 64\% et une précision de 93\% sur les données de test, avec la capacité notable d'exclure automatiquement les zones ombragées des toits.}
+\par{La comparaison avec les méthodes existantes révèle des différences selon la taille des bâtiments. Pour les grandes toitures, le modèle CNN estime une fraction médiane de surface disponible de 39\% contre 66\% pour l'approche de référence, suggérant une surestimation des méthodes à grande échelle. Pour les petites toitures, la tendance s'inverse avec 47\% contre 32\%.
+\par{Le modèle sous-estime en moyenne de 8\% la surface réellement disponible par rapport à la vérité terrain. Cette sous-estimation est principalement observée sur les petites toitures (< 100 m²). Les limites identifiées incluent la difficulté à détecter les lucarnes, construites dans le même matériau que le toit, et les zones de "toits verts" avec végétation.}
+\par{L'étude se limite au centre de Genève avec 524 images principalement résidentielles. Les auteurs mentionnent 12 heures de labellisation manuelle sans préciser la répartition du travail. Pour une extension nationale, ils proposent l'ajout d'un canal infrarouge et l'utilisation d'images plus récentes à haute résolution.}
 
-\subsubsection{Contexte et objectifs}
-
-\subsubsection{Données}
-
-\subsubsection{Méthodologie}
-
-\subsubsection{Résultats principaux}
-
-\subsubsection{Discussion et limites}
-
+\todo[inline]{Ajouter l'état de l'art pour les CNN choisies}
 % -----------------------------------------------------------------------------
 \subsection{?}
 
@@ -1220,12 +1216,12 @@ Le CNN développé atteint :
 \subsubsection{Résultats principaux}
 
 \subsubsection{Discussion et limites}
-
+\todo[inline]{Effacer ça une fois l'état de l'art terminé}
 
 % -----------------------------------------------------------------------------
 % -----------------------------------------------------------------------------
 \section{Datasets disponibles}
-
+\label{sec:dataset_disponible}
 \par{Quelques datasets de qualité sont disponibles actuellement. Ce chapitre va parcourir certains d'entre eux.}
 
 % -----------------------------------------------------------------------------
@@ -1386,125 +1382,14 @@ L'article présente plusieurs catégories de résultats :
 % -----------------------------------------------------------------------------
 \section{Synthèse}
 
+\par{L'analyse de l'état de l'art révèle trois approches principales pour l'évaluation du potentiel solaire des toitures, chacune présentant des avantages et limitations spécifiques.}
 
+\par{Les méthodes traditionnelles basées sur les données \gls{lidar} et cadastrales, illustrées par les cadastres solaires genevois et suisse (ToitSolaire), offrent une couverture territoriale complète et disposent des validations nécessaires du point de vue académique. Cependant, elles souffrent des mêmes limitations, il n'y pas actuellement de cartographie précise des toitures. Par conséquent, sans la prise en compte de tous les obstacles présents sur les toitures, le potentiel solaire sera surestimé.}
 
+\par{Les approches par machine learning supervisé, exemplifiées par les travaux de \citeauthor{castello_quantification_2021} et \citeauthor{li_deep_2024}, démontrent une capacité prometteuse à identifier automatiquement les surfaces disponibles et les obstacles sur les toitures. Ces méthodes atteignent des performances satisfaisantes (IoU de 64\% pour \citeauthor{castello_quantification_2021}, \%RMSE de 19,92\% pour SolarNet+) mais restent limitées par la disponibilité et la qualité des données d'entraînement annotées.}
 
+\par{L'étude du \acrshort{stdl} illustre la complémentarité des différentes sources de données (\gls{lidar}, orthophotos, données vectorielles) et techniques (classification, segmentation). La combinaison par concaténation des résultats de segmentation \gls{lidar} et d'images atteint un F1-score de 0.79 avec un recall de 0.94, démontrant l'intérêt d'approches hybrides.}
 
+\par{Concernant les données disponibles, le dataset RID constitue actuellement la seule ressource publique permettant la segmentation sémantique complète des éléments de toiture. Cependant, sa limitation à un contexte rural allemand restreint sa généralisation à d'autres environnements urbains.}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-\newpage
-% -----------------------------------------------------------------------------
-
-This chapter shows example of picture and also serves to populate the different lists: list of figures, list of tables, bibliography, and glossary.
-
-\section{Tables}
-
-This section contains an examples of table: \autoref{tab:esempio}
-
-\begin{table}[H]
-	\centering
-	\begin{tabular}{ccc}
-		\toprule
-		name & weight & food \\ 
-		\midrule
-		mouse	& 10 g	& cheese \\
-		cat	& 1 kg	& mice \\
-		dog	& 10 kg	& cats \\
-		t-rex	& 10 Mg	& dogs \\
-		\bottomrule 
-	\end{tabular}
-	\caption[A floating table]{A floating table.}
-	\label{tab:esempio}
-\end{table}
-
-\section{Figures}
-
-This section contains examples of figures: \autoref{fig:galleria}, \autoref{fig:lorem}, \autoref{fig:ipsum}, \autoref{fig:dolor}, \autoref{fig:sit}
-
-\begin{figure}[H] 
-	\centering 
-	\includegraphics[width=0.5\columnwidth]{galleria_stampe} 
-	\captionsource{A floating figure}{A floating figure: the lithograph \emph{Galleria di stampe}, of M.~Escher}{\url{http://www.mcescher.com/}}
-	\label{fig:galleria} 
-\end{figure}
-
-\begin{figure}[H]
-	\centering
-	\begin{subfigure}[b]{0.45\textwidth}
-		\includegraphics[width=\textwidth]{lorem}
-		\caption{A gull}
-		\label{fig:lorem}
-	\end{subfigure}
-	~ %add desired spacing between images, e. g. ~, \quad, \qquad, \hfill etc. 
-	%(or a blank line to force the subfigure onto a new line)
-	\begin{subfigure}[b]{0.45\textwidth}
-		\includegraphics[width=\textwidth]{ipsum}
-		\caption{A tiger}
-		\label{fig:ipsum}
-	\end{subfigure}
-	~ %add desired spacing between images, e. g. ~, \quad, \qquad, \hfill etc. 
-	%(or a blank line to force the subfigure onto a new line)
-	\begin{subfigure}[b]{0.45\textwidth}
-		\includegraphics[width=\textwidth]{dolor}
-		\caption{A mouse}
-		\label{fig:dolor}
-	\end{subfigure}
-	~ %add desired spacing between images, e. g. ~, \quad, \qquad, \hfill etc. 
-	%(or a blank line to force the subfigure onto a new line)
-	\begin{subfigure}[b]{0.45\textwidth}
-		\includegraphics[width=\textwidth]{sit}
-		\caption{A mouse}
-		\label{fig:sit}
-	\end{subfigure}
-	\caption{Example subcaption}\label{fig:animals}
-\end{figure}
-
-
-% -----------------------------------------------------------------------------
-\section{Code}
-
-\autoref{lst:listing_example} shows an example of Java code rendered with minted.
-
-\begin{listing}
-	\javafile{02-main/listings/HelloWorld.java}
-	\caption{Example of listing using the minted package}
-	\label{lst:listing_example}
-\end{listing}
-
-% -----------------------------------------------------------------------------
-\section{Other features}
-
-Term (glossaries): \gls{latex}
-
-Acronym (glossaries): \gls{api}
-
-Citation (biblatex): \cite{castello_deep_2019}
-
-% -----------------------------------------------------------------------------
-\section{Conclusion}
-
-\blindtext
+\par{Les limites identifiées pointent vers la nécessité de combiner les approches traditionnelles éprouvées avec les techniques de machine learning, condition nécessaire au développement de datasets couvrant une plus grande diversité architecturale. L'exploitation conjointe d'images aériennes et d'informations géomatiques plus poussée s'impose comme l'approche la plus prometteuse pour obtenir un cadastre solaire fiable.}
