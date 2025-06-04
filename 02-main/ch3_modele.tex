@@ -1,7 +1,7 @@
-\chapter{Proposition de dataset}
+\chapter{Proposition de modèle de machine learning}
 \label{chap:proposition_modele}
 
-Ce chapitre va explorer la création d'un dataset annoté d'images.
+Ce chapitre va explorer la création d'un modèle de machine learning de A à Z.
 
 \localtableofcontents
 
@@ -10,9 +10,113 @@ Ce chapitre va explorer la création d'un dataset annoté d'images.
 % -----------------------------------------------------------------------------
 % -----------------------------------------------------------------------------
 \section{Introduction}
-L'examen des datasets disponibles (Section \ref{sec:dataset_disponible}) révèle une carence majeure : seul le dataset RID propose des annotations pour les espaces libres sur toitures. Ce dataset présente toutefois des limitations importantes, avec des images concentrées sur un contexte architectural spécifique (rural allemand) et des performances dégradées lors des tests sur d'autres typologies de bâtiments, comme le démontrent les essais sur le milieu urbain bruxellois.
+La création d'un modèle de machine learning implique plusieurs phases. La Figure \ref{fig:ch3_resume_machine_learning_supervise} résume les principales étapes et servira de fil conducteur pour le chapitre.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{03-tail/A1_fondamentaux_ML/A1_figures/A1_01_resume_machine_learning_supervise.png}
+    \caption{Résumé de machine learning supervisé}
+    \label{fig:ch3_resume_machine_learning_supervise}
+\end{figure}
+En premier il faut définir la tâche et choisir le bon algorithme. Ensuite selon les besoins en données, il faut créer un dataset pour entraîner le modèle. Finalement lorsque le modèle est suffisamment performant, il peut être utilisé en production.
 
-La création d'un dataset pour une tâche telle que la segmentation sémantique d'image est une tâche laborieuse et chronophage. La première section de chapitre va explorer certaines pistes envisagées qui n'ont finalement pas été retenues. Cette section permet de justifier la nécessité de créer un tel jeu de données annoté.
+L'Annexe \ref{chap:fondamentaux_ml} permet de se familiariser avec l'ensemble des termes et concepts de machine learning utilisés dans ce chapitre.
+
+% -----------------------------------------------------------------------------
+% -----------------------------------------------------------------------------
+\section{Phase préparatoire}
+Cette phase préparatoire intègre les 2 premières étapes de la Figure \ref{fig:ch3_resume_machine_learning_supervise}, c'est-à-dire la définition de la tâche à accomplir et le choix de l'algorithme.
+
+\subsection{Tâche}
+La tâche que ce modèle doit accomplir est d'identifier les espaces disponibles sur les toitures. Cette tâche est identique à celle de \acrshort{stdl} du chapitre \ref{subsec:stdl_analyse}, par contre l'approche utilisée va être différente.
+
+\subsection{Algorithme}
+Une fois la tâche définie, il faut déterminer une approche. \acrshort{stdl} avait exploré 3 approches différentes:
+\begin{itemize}
+    \item La classification des pans de toit
+    \item La segmentation des données \gls{lidar}
+    \item La segmentation d'images
+\end{itemize}
+
+Leur segmentation d'images est réalisée avec Segment Anything Model (SAM). SAM effectue de la segmentation instance et divise l'image en polygones mais n'assigne pas une classe aux objets. Les résultats doivent être post-traités pour identifier les espaces disponibles. Un autre point délicat est le temps de traitement important (12 minutes pour 25 bâtiments).
+
+La segmentation sémantique est une autre option explorée par \citeauthor{castello_quantification_2021} (Section \ref{subsec:castello_quantification_2021}). Ils l'ont utilisé pour exactement la même tâche avec un dataset limité au centre ville de Genève. Les résultats obtenus avec un IoU supérieur a 0.60 sur leur dataset de test sont très encourageants.
+
+La segmentation sémantique est le type d'algorithme retenu.
+
+\section{Autres pistes explorées}
+Plusieurs autres approches ont été explorées, le but initial étant d'éviter de devoir créer un dataset. La génération d'un dataset pour une tâche tel que la segmentation sémantique exige une grande quantité d'images annotées. La première approche est d'essayer de classifier les données géomatiques, la deuxième approche implique l'utilisation de segment-anything-model.
+
+\subsection{Classification}
+La première approche a été d'essayer un algorithme de classification avec les données géomatiques.
+
+Une autre piste explorée est l'utilisation de segment-anything-model (SAM) pour 
+
+\begin{figure}[H]
+    \centering
+    
+    % Première ligne
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch3_essai_sam_01_image_original.png}
+        \caption{Image d'exemple}
+        \label{fig:ch3_essai_sam_01_image_original}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch3_essai_sam_02_ROI.png}
+        \caption{Zone d’intérêt (ROI)}
+        \label{fig:ch3_essai_sam_02_ROI}
+    \end{subfigure}
+    
+    \vspace{0.35cm} % Espace entre les lignes
+    
+    % Deuxième ligne
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch3_essai_sam_03_200_masks.png}
+        \caption{Polygones segmentés (200)}
+        \label{fig:ch3_essai_sam_03_200_masks}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch3_essai_sam_04_194_filtered_masks.png}
+        \caption{Polygone segmentés filtrés (194)}
+        \label{fig:ch3_essai_sam_04_194_filtered_masks}
+    \end{subfigure}
+
+    \vspace{0.35cm} % Espace entre les lignes
+    
+    % Troisième ligne
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch3_essai_sam_05_filtered_masks_overlay.png}
+        \caption{Mise en évidence des polygones filtrés}
+        \label{fig:ch3_essai_sam_05_filtered_masks_overlay}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch3_essai_sam_06_une_zone_libre.png}
+        \caption{Espace libre}
+        \label{fig:ch3_essai_sam_06_une_zone_libre}
+    \end{subfigure}
+
+    \caption{Essai d'utilisation de SAM}
+    \label{fig:essai_algo_sam}
+\end{figure}
+
+
+
+
+
+
+
+
+L'examen des datasets disponibles (Section \ref{sec:dataset_disponible}) révèle une carence majeure : seul le dataset RID propose des annotations pour l'identification des espaces libres sur toitures. Ce dataset présente toutefois des limitations importantes, avec des images concentrées sur un contexte architectural spécifique (rural allemand) et des performances dégradées lors des tests sur d'autres typologies de bâtiments, comme le démontrent les essais sur le milieu urbain bruxellois.
+
+La création d'un dataset pour une tâche telle que la segmentation sémantique d'images est une tâche laborieuse et chronophage. La première section de chapitre va explorer certaines pistes envisagées qui n'ont finalement pas été retenues. Cette section permet de justifier la nécessité de créer un tel jeu de données annoté.
 
 La deuxième section explore la création du dataset et finalement une troisième section va permettre de faire une synthèse en guise de conclusion de ce chapitre.
 

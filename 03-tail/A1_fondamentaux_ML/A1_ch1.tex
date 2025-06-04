@@ -463,7 +463,7 @@ Le type de données qui sont en lien avec la géomatique et qui seront traités 
 \begin{itemize}
     \item Images
     \item Orthophotos
-    \item Nuage de points LiDAR
+    \item Nuage de points \gls{lidar}
     \item Données vectorielles
 \end{itemize}
 
@@ -669,7 +669,7 @@ Swisstopo dispose d'autres produits tel que :
     \item Orthophotos historiques
 \end{itemize}
 
-Dans le canton de Genève, le système d'information du territoire à Genève (SITG) dispose d'une grande quantité de données\footnote{\url{https://ge.ch/sitg/donnees/chiffres-cles}}. En ce qui concerne les orthophotos du Canton de Genève disponibles librement :
+Dans le Canton de Genève, \acrshort{sitg} \cite{sitg_chiffre-cle_2025} dispose d'une grande quantité de données. En ce qui concerne les orthophotos du Canton de Genève disponibles librement :
 \begin{itemize}
     \item Orthophotos historiques (1932-2021)
     \item Orthophoto avec infrarouge (2021)
@@ -684,35 +684,38 @@ Dans le canton de Genève, le système d'information du territoire à Genève (S
     \end{itemize}
 \end{itemize}
 
-\subsection{Nuage de points LiDAR}
+\newpage
+\subsection{Nuage de points \gls{lidar}}
 
-LiDAR \citep{esri_lidar} est une technique de télédétection optique qui utilise la lumière laser pour échantillonner la surface de la Terre et produire des mesures ``x, y, z'' d'une grande précision.
+Laser Imaging Detection And Ranging (\gls{lidar}) \cite{esri_quoi_2025} est une technique de télédétection optique qui utilise la lumière laser pour échantillonner la surface de la Terre et produire des mesures ``x, y, z'' d'une grande précision.
 
-Les données LiDAR sont principalement utilisées dans des applications de cartographie laser aéroportées et commencent à s'imposer en tant qu'alternative rentable face aux techniques d'arpentage traditionnelles, telles que la photogrammétrie.
+Les données \gls{lidar} sont principalement utilisées dans des applications de cartographie laser aéroportées et commencent à s'imposer en tant qu'alternative rentable face aux techniques d'arpentage traditionnelles, telles que la photogrammétrie.
 
-Les données LiDAR produisent des jeux de données de nuages de points cotés qui peuvent être gérés, visualisés, analysés à l'aide d'outils GIS (Qgis, ArcGIS, etc.).
+Les données \gls{lidar} produisent des jeux de données de nuages de points cotés qui peuvent être gérés, visualisés, analysés à l'aide d'outils GIS (Qgis, ArcGIS, etc.).
 
-\begin{figure}[htbp]
+La Figure \ref{fig:A1_15_lidar_exemple} représente des objets d'exemple et la Figure \ref{fig:A1_16_lidar_exemple2} permet de voir comment ces objets sont vus par le \gls{lidar}
+
+\begin{figure}[H]
     \centering
-    \includegraphics[width=0.6\textwidth]{figures/objets_lidar}
-    \caption{Objets pour le nuage de points LiDAR \citep{cadden_2021}}
-    \label{fig:objets_lidar}
+    \includegraphics[width=1\linewidth]{03-tail//A1_fondamentaux_ML//A1_figures/A1_15_lidar_exemple1.png}
+    \caption{Objets pour le nuage de points LIDAR \cite{cadden_lidar_2021}}
+    \label{fig:A1_15_lidar_exemple}
 \end{figure}
 
-\begin{figure}[htbp]
+\begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{figures/nuage_points_lidar}
-    \caption{Nuage de points LiDAR sur des objets \citep{cadden_2021}}
-    \label{fig:nuage_points_lidar}
+    \includegraphics[width=1\linewidth]{03-tail//A1_fondamentaux_ML//A1_figures/A1_16_lidar_exemple2.png}
+    \caption{Nuage de points LIDAR sur des objets \cite{cadden_lidar_2021}}
+    \label{fig:A1_16_lidar_exemple2}
 \end{figure}
 
-\subsubsection{Composants matériels d'un système LiDAR}
+\subsubsection{Composants matériels d'un système \gls{lidar}}
 
-Les composants matériels principaux d'un système LiDAR incluent un véhicule de collecte (avion, hélicoptère, véhicule et trépied), un système de scanner laser, un système de positionnement par satellite (GPS) et un système de navigation à inertie (INS). Un système INS mesure le roulis, le tangage et la direction du système LiDAR.
+Les composants matériels principaux d'un système \gls{lidar} incluent un véhicule de collecte (avion, hélicoptère, véhicule et trépied), un système de scanner laser, un système de positionnement par satellite (GPS) et un système de navigation à inertie (INS). Un système INS mesure le roulis, le tangage et la direction du système \gls{lidar}.
 
-\subsubsection{Le capteur LiDAR}
+\subsubsection{Le capteur \gls{lidar}}
 
-Le LiDAR est un capteur optique actif qui transmet des faisceaux laser vers une cible tout en parcourant des itinéraires d'étude spécifiques. La réflexion du laser à partir de la cible est détectée et analysée par des récepteurs dans le capteur LiDAR.
+Le \gls{lidar} est un capteur optique actif qui transmet des faisceaux laser vers une cible tout en parcourant des itinéraires d'étude spécifiques. La réflexion du laser à partir de la cible est détectée et analysée par des récepteurs dans le capteur \gls{lidar}.
 
 Ces récepteurs enregistrent la période précise qui s'écoule entre le moment où l'impulsion laser quitte le système et celui où elle est renvoyée pour calculer la distance entre le capteur et la cible.
 
@@ -720,40 +723,40 @@ Alliées aux informations de positionnement (GPS et INS), ces mesures de distanc
 
 \subsubsection{Post-traitement des données ponctuelles}
 
-Les données ponctuelles sont post-traitées après l'étude de la collecte des données LiDAR en coordonnées x, y, z très précises en analysant la plage de temps du laser, l'angle de balayage laser, la position GPS et les informations INS.
+Les données ponctuelles sont post-traitées après l'étude de la collecte des données \gls{lidar} en coordonnées x, y, z très précises en analysant la plage de temps du laser, l'angle de balayage laser, la position GPS et les informations INS.
 
-\subsubsection{Retours LiDAR}
+\subsubsection{Retours \gls{lidar}}
 
-Les impulsions laser émises par un système LiDAR se reflètent sur des objets placés à la fois sur la surface du sol et au-dessus : végétation, bâtiments, ponts et ainsi de suite. Une impulsion laser émise peut revenir au capteur LiDAR sous forme d'un ou plusieurs retours. Les impulsions laser émises qui rencontrent plusieurs surfaces de réflexion lors de leur voyage vers le sol sont fractionnées en autant de retours qu'il existe de surfaces réflectrices.
+Les impulsions laser émises par un système \gls{lidar} se reflètent sur des objets placés à la fois sur la surface du sol et au-dessus : végétation, bâtiments, ponts et ainsi de suite. Une impulsion laser émise peut revenir au capteur \gls{lidar} sous forme d'un ou plusieurs retours. Les impulsions laser émises qui rencontrent plusieurs surfaces de réflexion lors de leur voyage vers le sol sont fractionnées en autant de retours qu'il existe de surfaces réfléchissantes.
 
-\subsubsection{Attributs de point LiDAR}
+\subsubsection{Attributs de point \gls{lidar}}
 
-Des informations complémentaires sont stockées avec chaque valeur de position x, y et z. Les attributs de point LiDAR suivants sont conservés pour chaque impulsion laser enregistrée : intensité, numéro de retour, nombre de retours, valeurs de classification des points, points situés à la limite de la ligne de vol, valeurs RVB (rouge, vert et bleu), heure GPS, angle de balayage et direction du balayage.
+Des informations complémentaires sont stockées avec chaque valeur de position x, y et z. Les attributs de point \gls{lidar} suivants sont conservés pour chaque impulsion laser enregistrée : intensité, numéro de retour, nombre de retours, valeurs de classification des points, points situés à la limite de la ligne de vol, valeurs RVB (rouge, vert et bleu), heure GPS, angle de balayage et direction du balayage.
 
 \subsubsection{Données de nuages de points}
 
-Les données LiDAR spatiales post-traitées sont connues comme des données de nuages de points. Les nuages de points initiaux sont des ensembles volumineux de points d'altitude 3D qui incluent des valeurs x, y et z, ainsi que des attributs supplémentaires, tels que des horodatages GPS. Les entités de surface spécifiques que le laser rencontre sont classées après le post-traitement du nuage de points LiDAR initial. Les altitudes du sol, des bâtiments, du couvert forestier, des ponts au-dessus des autoroutes et de tout ce que le faisceau laser peut rencontrer au cours de l'étude constituent des données de nuages de points.
+Les données \gls{lidar} spatiales post-traitées sont connues comme des données de nuages de points. Les nuages de points initiaux sont des ensembles volumineux de points d'altitude 3D qui incluent des valeurs x, y et z, ainsi que des attributs supplémentaires, tels que des horodatages GPS. Les entités de surface spécifiques que le laser rencontre sont classées après le post-traitement du nuage de points \gls{lidar} initial. Les altitudes du sol, des bâtiments, du couvert forestier, des ponts au-dessus des autoroutes et de tout ce que le faisceau laser peut rencontrer au cours de l'étude constituent des données de nuages de points.
 
-La rugosité et l'intensité sont deux informations différentes mais complémentaires fournies par les nuages de points LiDAR.
+La rugosité et l'intensité sont deux informations différentes mais complémentaires fournies par les nuages de points \gls{lidar}.
 
 La rugosité mesure la variation locale de l'altitude des points dans un voisinage donné. Elle est calculée à partir des coordonnées 3D (X, Y, Z) des points et reflète la texture et l'irrégularité de la surface. Une rugosité élevée indique la présence d'obstacles ou de variations d'altitude. Cette mesure est indépendante des propriétés de réflectance des matériaux et est utilisée pour distinguer les surfaces planes des surfaces encombrées.
 
-L'intensité, quant à elle, mesure la quantité d'énergie réfléchie par la surface et enregistrée par le capteur LiDAR. C'est une valeur scalaire associée à chaque point, en plus des coordonnées 3D. L'intensité dépend des propriétés de réflectance des matériaux à la longueur d'onde du laser. Elle varie selon le type de surface : elle est forte pour les surfaces réfléchissantes et faible pour les surfaces absorbantes. L'intensité peut aider à distinguer différents matériaux ou objets, mais elle est sensible aux conditions d'acquisition, telles que la distance et l'angle d'incidence.
+L'intensité, quant à elle, mesure la quantité d'énergie réfléchie par la surface et enregistrée par le capteur \gls{lidar}. C'est une valeur scalaire associée à chaque point, en plus des coordonnées 3D. L'intensité dépend des propriétés de réflectance des matériaux à la longueur d'onde du laser. Elle varie selon le type de surface : elle est forte pour les surfaces réfléchissantes et faible pour les surfaces absorbantes. L'intensité peut aider à distinguer différents matériaux ou objets, mais elle est sensible aux conditions d'acquisition, telles que la distance et l'angle d'incidence.
 
-\subsubsection{Fournisseur de données LiDAR}
+\subsubsection{Fournisseur de données \gls{lidar}}
 
-Au niveau mondial, il n'y a pas de données LiDAR disponibles qui couvrent le globe entier. C'est probablement dû à des raisons de coût.
+Au niveau mondial, il n'y a pas de données \gls{lidar} disponibles qui couvrent le globe entier. C'est probablement dû à des raisons de coût.
 
-En ce qui concerne la Suisse, Swisstopo \citep{swisstopo_lidar_2024} met à disposition des données qui couvrent l'intégralité du territoire. Dans la Figure~\ref{fig:lidar_suisse}, on peut voir les 6 campagnes d'acquisition de données qui ont été menées. Les données sont disponibles en moyenne environ 12 mois après le survol.
+En ce qui concerne la Suisse, Swisstopo \cite{swisstopo_acquisition_2024} met à disposition des données qui couvrent l'intégralité du territoire. Dans la Figure \ref{fig:A1_17_swisstopo_lidar}, on peut voir les 6 campagnes d'acquisition de données qui ont été menées. Les données sont disponibles en moyenne environ 12 mois après le survol.
 
-\begin{figure}[htbp]
+\begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{figures/lidar_suisse}
-    \caption{Données LiDAR disponibles en Suisse \citep{swisstopo_lidar_2024}}
-    \label{fig:lidar_suisse}
+    \includegraphics[width=1\linewidth]{03-tail//A1_fondamentaux_ML//A1_figures/A1_17_swisstopo_lidar.png}
+    \caption{Données LIDAR disponibles en Suisse \cite{swisstopo_acquisition_2024}}
+    \label{fig:A1_17_swisstopo_lidar}
 \end{figure}
 
-Les caractéristiques des données LiDAR disponibles sont les suivantes :
+Les caractéristiques des données \gls{lidar} disponibles sont les suivantes :
 \begin{itemize}
     \item Densité de points : minimum 5 pts/m², moyenne autour de 15-20 pts/m²
     \item Classification :
@@ -769,28 +772,27 @@ Les caractéristiques des données LiDAR disponibles sont les suivantes :
     \item Précision altimétrique : 10 cm
 \end{itemize}
 
-Swisstopo va continuer à mettre à jour ses données dans les années suivantes (Figure~\ref{fig:lidar_suisse_prevision}). La prévision est que la mise à jour de ces données sera finalisée en 2030.
+Swisstopo va continuer à mettre à jour ses données dans les années suivantes (Figure \ref{fig:A1_18_swisstopo_prevision_lidar}). La prévision est que la mise à jour de ces données sera finalisée en 2030.
 
-\begin{figure}[htbp]
+\begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{figures/lidar_suisse_prevision}
-    \caption{Prévision d'acquisition de données LiDAR en Suisse \citep{swisstopo_lidar_2024}}
-    \label{fig:lidar_suisse_prevision}
+    \includegraphics[width=1\linewidth]{03-tail//A1_fondamentaux_ML//A1_figures/A1_18_swisstopo_prevision_lidar.png}
+    \caption{Prévision d’acquisition de données LIDAR en Suisse \cite{swisstopo_acquisition_2024}}
+    \label{fig:A1_18_swisstopo_prevision_lidar}
 \end{figure}
 
-En ce qui concerne le canton de Genève, les dernières données LiDAR \citep{sitg_lidar_2021, sitg_lidar_2023} disponibles sont :
+\newpage
+En ce qui concerne le canton de Genève, les dernières données \gls{lidar} \cite{sitg_nuages_2021} \cite{sitg_nuages_2023} disponibles sont:
 
-\begin{table}[htbp]
+\begin{table}[H]
     \centering
-    \caption{Données LiDAR disponibles dans le canton de Genève}
-    \label{tab:lidar_geneve}
-    \begin{tabular}{|p{3cm}|p{5cm}|p{5cm}|}
-    \hline
-    & \textbf{2021} & \textbf{2023} \\
+    \begin{tabular}{|p{2.5cm}|p{5.25cm}|p{5.25cm}|}
+    \cline{2-3}
+    \multicolumn{1}{c|}{} & \textbf{2021} & \textbf{2023} \\
     \hline
     Densité de points & 175-220 pts/m² & 100 pts/m² \\
     \hline
-    Classification & \begin{itemize}
+    Classification & \begin{itemize}[leftmargin=*, topsep=0pt, itemsep=0pt, parsep=0pt]
         \item Non classifié
         \item Sol
         \item Basse végétation (<50cm)
@@ -802,7 +804,7 @@ En ce qui concerne le canton de Genève, les dernières données LiDAR \citep{si
         \item Sol (points complémentaires)
         \item Bruit
         \item Points mesurés hors périmètre
-    \end{itemize} & \begin{itemize}
+    \end{itemize} & \begin{itemize}[leftmargin=*, topsep=0pt, itemsep=0pt, parsep=0pt]
         \item Non classifié
         \item Sol
         \item Basse végétation (<50cm)
@@ -830,19 +832,19 @@ En ce qui concerne le canton de Genève, les dernières données LiDAR \citep{si
     Précision altimétrique & 4 cm & 10 cm \\
     \hline
     \end{tabular}
+    \caption{Données \gls{lidar} disponibles dans le canton de Genève}
+    \label{tab:lidar_geneve_compact}
 \end{table}
 
-\begin{figure}[htbp]
+\begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{figures/lidar_geneve_representation}
-    \caption{Représentation à partir des données LiDAR d'une partie du canton de Genève \citep{sitg_lidar_2023}}
-    \label{fig:lidar_geneve_representation}
+    \includegraphics[width=0.75\linewidth]{03-tail//A1_fondamentaux_ML//A1_figures/A1_19_geneve_lidar.png}
+    \caption{Représentation à partir des données LIDAR d’une partie du canton de Genève \cite{sitg_nuages_2023}}
+    \label{fig:A1_19_geneve_lidar}
 \end{figure}
-
-La représentation (Figure~\ref{fig:lidar_geneve_representation}) ci-dessus permet d'avoir une idée à quoi ressemble le nuage de points LiDAR.
+La représentation ci-dessus (Figure~\ref{fig:A1_19_geneve_lidar}) permet d'avoir une idée à quoi ressemble le nuage de points \gls{lidar}.
 
 \subsection{Données vectorielles}
-
 Les données vectorielles sont un moyen de représenter des informations géométriques à l'aide de valeurs numériques. Contrairement aux données matricielles, qui représentent les informations sous la forme d'une grille de valeurs de pixels, les données vectorielles utilisent des points, des lignes et des polygones pour définir les formes et les limites. Chaque point, ligne ou polygone est représenté par un ensemble de coordonnées (x, y et parfois z) qui définissent son emplacement dans l'espace.
 
 Il existe plusieurs types de données vectorielles :
@@ -860,41 +862,42 @@ Les données vectorielles sont largement utilisées en géomatique pour diverses
     \item L'urbanisme : Les données vectorielles sont utilisées pour planifier et concevoir des infrastructures urbaines, telles que des routes, des bâtiments et des parcs.
 \end{itemize}
 
-\begin{figure}[htbp]
+\begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{figures/donnees_vectorielles_exemple}
-    \caption{Exemple de données vectorielles de SITG. Rue de la Prairie 8 à Genève.}
-    \label{fig:donnees_vectorielles_exemple}
+    \includegraphics[width=1\linewidth]{03-tail//A1_fondamentaux_ML//A1_figures/A1_20_donnees_vectorielles_exemple.png}
+    \caption{Exemple de données vectorielles de \acrshort{sitg}. Rue de la Prairie 8 à Genève}
+    \label{fig:A1_20_donnees_vectorielles_exemple}
 \end{figure}
 
-La Figure~\ref{fig:donnees_vectorielles_exemple} ci-dessus montre un exemple de données vectorielles extraites de SITG, le portail de géodonnées du canton de Genève. En plus des points, lignes et polygones il est possible d'associer des données en forme de tableau (Figure~\ref{fig:donnees_vectorielles_tableau}).
+La Figure~\ref{fig:A1_20_donnees_vectorielles_exemple} montre un exemple de données vectorielles extraites de \acrshort{sitg}, le portail de géodonnées du canton de Genève. En plus des points, lignes et polygones il est possible d'associer des données en forme de tableau (Figure~\ref{fig:A1_21_donnees_vectorielles_tableau}).
 
-\begin{figure}[htbp]
+\begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{figures/donnees_vectorielles_tableau}
-    \caption{Exemple de données vectorielles de SITG. Rue de la Prairie 8 à Genève.}
-    \label{fig:donnees_vectorielles_tableau}
+    \includegraphics[width=0.75\linewidth]{03-tail//A1_fondamentaux_ML//A1_figures/A1_21_donnees_vectorielles_tableau.png}
+    \caption{Exemple de données tabulaires associées a un polygone. Rue de la Prairie 8 à Genève. Données de \acrshort{sitg}}
+    \label{fig:A1_21_donnees_vectorielles_tableau}
 \end{figure}
 
 Les données sont organisées en couches vectorielles. Dans ces deux figures d'exemple, la couche des bâtiments hors sol est représentée. Chaque couche regroupe en général une thématique comme les bâtiments, les arbres, etc.
 
 Il existe une très grande quantité de données vectorielles tant au niveau Suisse et genevois.
 
-SITG a plus de 1350 couches\footnote{1549 couches en total mais 183 couches sont de type raster, c'est à dire des images.} vectorielles \citep{sitg_chiffres_2024}, ce qui représente une très grande quantité de données.
+\acrshort{sitg} dispose de plus de 1575 couches de données \cite{sitg_chiffre-cle_2025}, dont environ 200 couches raster et plus de 1375 couches vectorielles, ce qui représente une très grande quantité de données.
 
 Les données de l'administration publique suisse sont regroupées sur un site web\footnote{\url{https://opendata.swiss/fr}} pour simplifier l'accès à ces données publiques. Le site compte plus de 10000 couches (vectorielles, raster, etc.) qui sont produites par les communes, cantons, confédération et autres entités publiques. Les thématiques traitées sont très diverses par exemple, l'environnement, l'économie, la santé, etc.
 
 Swisstopo met à disposition du publique un site\footnote{\url{https://map.geo.admin.ch/}} pour visualiser toutes les données disponibles dans une interface conviviale.
 
-\section{MACHINE LEARNING APPLIQUÉ AUX IMAGES}
+\newpage
+\section{Machine learning appliqué aux images}
 
-L'analyse d'images est un domaine important du machine learning, qui permet aux machines d'analyser, de comprendre et de déduire des informations à partir d'images. La figure ci-dessous illustre les principales applications.
+L'analyse d'images est un domaine important du machine learning, qui permet aux machines d'analyser, de comprendre et de déduire des informations à partir d'images. La Figure \ref{fig:A1_22_schema_ml} ci-dessous illustre les principales applications.
 
-\begin{figure}[htbp]
+\begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{figures/applications_ml_images}
-    \caption{Exemple de classification, détection, segmentation, suivi et analyse de pose \citep{ultralytics_2024}}
-    \label{fig:applications_ml_images}
+    \includegraphics[width=1\linewidth]{03-tail//A1_fondamentaux_ML//A1_figures/A1_22_schema_ml.png}
+    \caption{Exemple de classification, détection, segmentation, suivi et analyse de pose \cite{ultralytics_classer_nodate}}
+    \label{fig:A1_22_schema_ml}
 \end{figure}
 
 Les principales applications sont :
@@ -906,44 +909,45 @@ Les principales applications sont :
 
 Il existe d'autres applications tel que le suivi (compter des objets dans une vidéo) et l'estimation de pose (évaluer la position du corps), mais ils ne seront pas traités dans ce rapport car leur application à la géomatique est très limitée.
 
-La Figure~\ref{fig:orthophoto_exemple_hepia} ci-dessous va permettre d'illustrer les différentes applications.
+\newpage
+La Figure~\ref{fig:A1_23_image_exemple} ci-dessous va permettre d'illustrer les différentes applications.
 
-\begin{figure}[htbp]
+\begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{figures/orthophoto_hepia}
-    \caption{Orthophoto de la haute école du paysage, d'ingénierie et architecture de Genève (hepia), situé à la rue de la Prairie 4 \citep{sitg_orthophoto_2024}}
-    \label{fig:orthophoto_exemple_hepia}
+    \includegraphics[width=1\linewidth]{03-tail//A1_fondamentaux_ML//A1_figures/A1_23_image_exemple.png}
+    \caption{Orthophoto de la haute école du paysage, d’ingénierie et architecture de Genève (hepia), situé à la rue de la Prairie 4}
+    \label{fig:A1_23_image_exemple}
 \end{figure}
 
 \subsection{Classification d'images}
 
 Cette tâche consiste à classer une image dans l'une des catégories prédéfinies. Par exemple, classer une image en fonction de son contenu (par exemple, chat, chien, voiture, etc.). Les modèles utilisés pour la classification d'images sont généralement entraînés sur des données étiquetées où chaque image est associée à une seule catégorie.
 
-Dans la Figure~\ref{fig:orthophoto_exemple_hepia} d'exemple, la classification va identifier dans l'image les deux classes soit ``rooftop'' et ``solar-panel''. L'image en soit n'aura pas d'annotation particulière, car la classification identifie ce qu'il y a sur l'image mais pas la position exacte. Le modèle va retourner les classes et la probabilité qu'estime le modèle que la classe soit présente. La classe sélectionnée sera celle qui a la probabilité la plus élevée.
+Dans la Figure~\ref{fig:A1_23_image_exemple} d'exemple, la classification va identifier dans l'image les deux classes soit ``rooftop'' et ``solar-panel''. L'image en soi n'aura pas d'annotation particulière, car la classification identifie ce qu'il y a sur l'image mais pas la position exacte. Le modèle va retourner les classes et la probabilité qu'estime le modèle que la classe soit présente. La classe sélectionnée sera celle qui a la probabilité la plus élevée.
 
-Un autre exemple \citep{ultralytics_classification_2024} ci-dessous permet d'illustrer la classification d'image.
+La Figure \ref{fig:A1_24_classification} représente un deuxième exemple de classification d'images.
 
-\begin{figure}[htbp]
+\begin{figure}[H]
     \centering
-    \includegraphics[width=0.6\textwidth]{figures/classification_exemple}
-    \caption{Exemple de classification d'image \citep{ultralytics_classification_2024}}
-    \label{fig:classification_exemple}
+    \includegraphics[width=1\linewidth]{03-tail//A1_fondamentaux_ML//A1_figures/A1_24_classification.png}
+    \caption{Exemple de classification d'image \cite{ultralytics_classer_nodate}}
+    \label{fig:A1_24_classification}
 \end{figure}
 
 \subsection{Détection d'objets}
-
 La détection va identifier les différentes classes sur l'image, ainsi que leur position. Les modèles utilisés pour la détection d'objets sont généralement entraînés sur des données étiquetées où chaque objet est associé à une boîte englobante et une étiquette de classe.
 
-\begin{figure}[htbp]
+\begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{figures/detection_exemple}
-    \caption{Orthophoto d'exemple de détection \citep{sitg_orthophoto_2024}}
-    \label{fig:detection_exemple}
+    \includegraphics[width=1\linewidth]{03-tail//A1_fondamentaux_ML//A1_figures/A1_25_detection_hepia.png}
+    \caption{Orthophoto d'exemple de détection}
+    \label{fig:A1_25_detection_hepia}
 \end{figure}
 
-Dans la Figure~\ref{fig:detection_exemple} on observe que la détection permet de savoir quelle classe est présente sur l'image, sa position mais pas le contour exact de l'objet. Le chiffre indiqué après la classe indique la probabilité estimée par le modèle que l'objet détecté appartienne à une certaine classe.
+Dans la Figure \ref{fig:A1_25_detection_hepia} on observe que la détection permet de savoir quelle classe est présente sur l'image, sa position mais pas le contour exact de l'objet. Le chiffre indiqué après la classe indique la probabilité estimée par le modèle que l'objet détecté appartienne à une certaine classe.
 
 \subsection{Segmentation d'image}
+\label{subsec:segmentation_image}
 
 Il y a principalement 3 types de segmentation d'image qui sont couramment utilisés :
 \begin{itemize}
@@ -952,38 +956,58 @@ Il y a principalement 3 types de segmentation d'image qui sont couramment utilis
     \item Segmentation panoptique
 \end{itemize}
 
-\begin{figure}[htbp]
+\begin{figure}[H]
     \centering
-    \begin{minipage}[b]{0.48\textwidth}
+    
+    % Première ligne
+    \begin{subfigure}[b]{0.48\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/segmentation_semantique}
-        \caption{Image d'exemple (gauche) et segmentation sémantique (droite) \citep{jung_2022}}
-        \label{fig:segmentation_semantique}
-    \end{minipage}
+        \includegraphics[width=\textwidth]{03-tail//A1_fondamentaux_ML//A1_figures/A1_26_segmentation_image_exemple.png}
+        \caption{Image d'exemple}
+        \label{fig:A1_26_segmentation_image_exemple}
+    \end{subfigure}
     \hfill
-    \begin{minipage}[b]{0.48\textwidth}
+    \begin{subfigure}[b]{0.48\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figures/segmentation_instance_panoptique}
-        \caption{Segmentation instance (gauche) et segmentation panoptique (droite) \citep{jung_2022}}
-        \label{fig:segmentation_instance_panoptique}
-    \end{minipage}
+        \includegraphics[width=\textwidth]{03-tail//A1_fondamentaux_ML//A1_figures/A1_27_segmentation_semantique.png}
+        \caption{Segmentation sémantique}
+        \label{fig:A1_27_segmentation_semantique}
+    \end{subfigure}
+    
+    \vspace{0.5cm} % Espace entre les lignes
+    
+    % Deuxième ligne
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{03-tail//A1_fondamentaux_ML//A1_figures/A1_28_segmentation_instance.png}
+        \caption{Segmentation instance}
+        \label{fig:A1_28_segmentation_instance}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{03-tail//A1_fondamentaux_ML//A1_figures/A1_29_segmentation_panoptique.png}
+        \caption{Segmentation panoptique}
+        \label{fig:A1_29_segmentation_panoptique}
+    \end{subfigure}
+    
+    \caption{Comparaison des différents types de segmentation d'image \cite{jung_benchmarking_2022}}
+    \label{fig:types_segmentation}
 \end{figure}
 
-La segmentation sémantique (Figure~\ref{fig:segmentation_semantique} droite) va assigner une classe à chaque pixel de l'image. Ce genre de segmentation est utile pour distinguer par exemple les routes des immeubles, mais ce n'est pas assez sophistiqué pour distinguer les routes entre elles.
+La segmentation sémantique (Figure \ref{fig:A1_27_segmentation_semantique}) va assigner une classe à chaque pixel de l'image. Ce genre de segmentation est utile pour distinguer par exemple les routes des immeubles, mais ce n'est pas assez sophistiqué pour distinguer les routes entre elles.
 
-La segmentation instance (Figure~\ref{fig:segmentation_instance_panoptique} gauche) va permettre d'identifier les différents éléments d'une image, mais ne va pas lui assigner pas une classe.
+La segmentation instance (Figure~\ref{fig:A1_28_segmentation_instance}) va permettre d'identifier les différents éléments d'une image, mais ne va pas lui assigner une classe.
 
-La segmentation panoptique (Figure~\ref{fig:segmentation_instance_panoptique} droite) est la combinaison des segmentations sémantique et instance. C'est la plus sophistiquée car elle permet d'assigner une classe à chaque pixel de l'image et en plus fait la différence entre les différents objets appartenant à une même classe.
+La segmentation panoptique (Figure~\ref{fig:A1_29_segmentation_panoptique}) est la combinaison des segmentations sémantique et instance. C'est la plus sophistiquée car elle permet d'assigner une classe à chaque pixel de l'image et en plus, fait la différence entre les différents objets appartenant à une même classe.
 
 Le Tableau~\ref{tab:comparatif_segmentation} ci-dessous résume les différences.
 
-\begin{table}[htbp]
+\begin{table}[H]
     \centering
-    \caption{Comparatif des différents types de segmentation d'image}
-    \label{tab:comparatif_segmentation}
-    \begin{tabular}{|p{3cm}|p{3.5cm}|p{3.5cm}|p{3.5cm}|}
-    \hline
-    & \textbf{Segmentation sémantique} & \textbf{Segmentation instance} & \textbf{Segmentation panoptique} \\
+    \begin{tabular}{|p{2cm}|p{3.75cm}|p{3.75cm}|p{3.75cm}|}
+    \cline{2-4}
+    \multicolumn{1}{c|}{} & \textbf{Segm. sémantique} & \textbf{Segm. instance} & \textbf{Segm. panoptique} \\
     \hline
     Définition & Chaque pixel est assigné à une classe connue & Détecte les contours des objets, lui assigne un identifiant unique (``objet\_1'') à chaque objet. Ne lui attribue pas de classe. & Mélange de segmentation sémantique et instance. Chaque pixel a une classe et il peut différencier entre plusieurs objets de la même classe. \\
     \hline
@@ -992,18 +1016,172 @@ Le Tableau~\ref{tab:comparatif_segmentation} ci-dessous résume les différences
     Sépare les objets de la même classe & Non & Oui, mais ne distingue pas les classes & Oui \\
     \hline
     \end{tabular}
+    \caption{Comparatif des différents types de segmentation d'image}
+    \label{tab:comparatif_segmentation}
 \end{table}
 
-\begin{figure}[htbp]
+\begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{figures/segmentation_exemple_orthophoto}
-    \caption{Orthophoto d'exemple de segmentation \citep{sitg_orthophoto_2024}}
-    \label{fig:segmentation_exemple_orthophoto}
+    \includegraphics[width=1\linewidth]{03-tail//A1_fondamentaux_ML//A1_figures/A1_30_segmentation_semantique_hepia.png}
+    \caption{Orthophoto d'exemple de segmentation}
+    \label{fig:A1_30_segmentation_semantique_hepia}
 \end{figure}
 
-La Figure~\ref{fig:segmentation_exemple_orthophoto} est un exemple de segmentation sémantique, en plus de connaître la classe présente dans l'image, on connaît aussi le contour exact de l'objet. Comme pour la détection, le chiffre indiqué après la classe, indique la probabilité estimée par le modèle que l'objet segmenté appartient a une certaine classe. Les chiffres sont identiques dans la Figure~\ref{fig:detection_exemple} et la Figure~\ref{fig:segmentation_exemple_orthophoto}.
+La Figure~\ref{fig:A1_30_segmentation_semantique_hepia} est un exemple de segmentation sémantique, en plus de connaître la classe présente dans l'image, on connaît aussi le contour exact de l'objet. Comme pour la détection, le chiffre indiqué après la classe indique la probabilité estimée par le modèle que l'objet segmenté appartient à une certaine classe. Les chiffres sont identiques dans la Figure~\ref{fig:A1_25_detection_hepia} et la Figure~\ref{fig:A1_30_segmentation_semantique_hepia}.
 
+\subsection{Évaluation des performances}
 
+L'évaluation des performances dans le domaine de la vision par ordinateur (« computer vision ») a nécessité de développer des métriques spécifiques :
+\begin{itemize}
+    \item Intersection sur l'union (IoU) et moyenne de l'intersection sur l'union (mIoU)
+    \item Average precision (AP)
+    \item Mean average precision (mAP)
+    \item Pixel accuracy (PA)
+\end{itemize}
 
+\subsubsection{Intersection sur l'union (IoU) et moyenne de l'intersection sur l'union (mIoU)}
 
-\todo[inline]{Compléter}
+L'intersection sur l'Union (IoU) mesure le chevauchement entre le masque de segmentation prédit et le masque de vérité terrain. Elle est calculée comme la zone d'intersection divisée par la zone d'union entre les deux masques. La Figure~\ref{fig:A1_31_iou_concept} illustre ce concept. Plus le masque prédit par le modèle est proche de la valeur annotée (vérité terrain), plus le IoU sera élevé. Un IoU élevé indique que le modèle prédit bien.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.50\linewidth]{03-tail//A1_fondamentaux_ML//A1_figures/A1_31_iou_concept.png}
+    \caption{Intersection sur l’union \cite{rosebrock_intersection_2016}}
+    \label{fig:A1_31_iou_concept}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.39\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{03-tail//A1_fondamentaux_ML//A1_figures/A1_32_iou_exemple1.png}
+        \caption{Exemple de bon IoU \cite{mechea_panoptic_2019}}
+        \label{fig:A1_32_iou_exemple1}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{03-tail//A1_fondamentaux_ML//A1_figures/A1_33_iou_exemple2.png}
+        \caption{Exemple de mauvais IoU \cite{mechea_panoptic_2019}}
+        \label{fig:A1_33_iou_exemple2}
+    \end{subfigure}
+    \caption{Exemples de IoU \cite{mechea_panoptic_2019}}
+    \label{fig:iou_exemples}
+\end{figure}
+
+Dans la Figure~\ref{fig:iou_exemples}, on peut voir deux exemples de IoU. La Figure \ref{fig:A1_32_iou_exemple1} représente un IoU de 0.8, ce qui indique que le modèle a détecté un chat (cadre magenta) proche de la vérité terrain (cadre noir), cette détection devient un true positive (TP).
+
+Dans la Figure \ref{fig:A1_33_iou_exemple2}, on observe que le modèle a détecté un chat (cadre magenta) là où il n'y en avait pas, cette détection devient un false positive (FP). Le modèle n'a pas vu le chat (cadre noir), cela comptera comme un false negative (FN).
+
+L'intersection moyenne sur l'union (mIoU) est la moyenne de l'IoU pour toutes les classes.
+
+\subsubsection{Average precision (AP)}
+
+L'average precision (AP) se base sur le graphique precision-recall (Figure~\ref{fig:A1_34_precision_recall}), ce graphique a dans l'axe des abscisses (x) le recall et dans l'axe des ordonnées (y) la precision. C'est un graphique qui va permettre de visualiser le lien entre la precision et le recall.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{03-tail//A1_fondamentaux_ML//A1_figures/A1_34_precision_recall.png}
+    \caption{Exemple de courbe precision-recall. Average precision (AP) et mean average precision (mAP) calculés dans la légende.}
+    \label{fig:A1_34_precision_recall}
+\end{figure}
+
+Le choix du seuil de classification permet d'ajuster le compromis entre la precision et le recall. Un seuil bas maximise le recall au détriment de la precision, tandis qu'un seuil élevé maximise la precision au détriment du recall.
+
+La courbe precision-recall visualise ce compromis. Une courbe proche du coin supérieur droit (precision = 1, recall = 1) indique de meilleures performances globales.
+
+L'aire sous la courbe precision-recall, appelée Average Precision (AP), est une métrique résumée pour comparer les modèles.
+
+Les étapes pour calculer l'average precision (AP) sont les suivantes :
+\begin{enumerate}
+    \item Prendre les seuils de classification générés par le modèle. Ceux-ci indiquent à quel point le modèle est sûr qu'un pixel appartient bien à une certaine classe. Ce sont des chiffres entre 0 et 1. Plus le chiffre est proche de 1, plus le modèle estime que la probabilité que le pixel appartient à une classe est élevée
+    \item Calculer la precision et le recall pour les différents seuils de classification
+    \item Tracer la courbe precision-recall
+    \item L'average precision s'obtient en calculant l'aire sous la courbe (intégration ou approximation numérique via des trapèzes par exemple)
+\end{enumerate}
+
+\subsubsection{Mean average precision (mAP)}
+
+Dans les cas multi-classes, on calcule la moyenne des AP de l'ensemble des classes et on obtient le mean average precision (mAP). Sur la légende de la Figure~\ref{fig:A1_34_precision_recall}, on peut voir un exemple de calcul de mAP, si l'on prend le AP des deux classes « rooftop » et « solar-panel », la moyenne est égale à 0.513.
+
+Le mAP peut aussi être utilisé avec un seuil minimum de IoU, ce qui va indiquer la capacité du modèle à localiser de manière précise un objet. Les plus communs sont :
+\begin{itemize}
+    \item mAP@0.5 (IoU supérieur ou égal à 0.5)
+    \item mAP@0.95 (IoU supérieur ou égal à 0.95)
+    \item mAP@[0.5:0.95] (mAP sur plusieurs seuils de l'IoU entre 0.5 et 0.95)
+\end{itemize}
+
+\subsubsection{Pixel accuracy (PA)}
+
+Le Pixel Accuracy (PA) mesure le pourcentage de pixels correctement classés sur l'ensemble de l'image.
+
+\subsubsection{Panoptic Quality (PQ)}
+
+La panoptic quality (PQ) \cite{kirillov_panoptic_2019} est utilisée dans la segmentation panoptique.
+
+Le PQ permet d'avoir une métrique unique pour la détection du contour des objets (segmentation instance), mais aussi pour assigner une classe aux différents pixels (segmentation sémantique). L'équation se divise en deux parties :
+\begin{itemize}
+    \item Segmentation quality (SQ)
+    \item Recognition quality (RQ)
+\end{itemize}
+
+La segmentation quality (SQ) \cite{kirillov_panoptic_2019} évalue la qualité des masques de segmentation produits par un modèle de segmentation panoptique (Équation \ref{eq:segmentation_quality}). Elle est calculée comme la moyenne de l'intersection sur l'union (mIoU) entre les segments prédits et les segments de la vérité de terrain qui ont été mis en correspondance.
+
+\begin{equation}
+SQ = \frac{\sum_{(p,g) \in TP} IoU(p,g)}{|TP|}
+\label{eq:segmentation_quality}
+\end{equation}
+
+La recognition quality (RQ) \cite{kirillov_panoptic_2019} évalue l'accuracy des classes attribuées aux régions segmentées par un modèle de segmentation panoptique (Équation \ref{eq:recognition_quality}). Elle est basée sur le score F1, qui est une moyenne harmonique de la precision et du recall.
+
+\begin{equation}
+RQ = \frac{|TP|}{|TP| + \frac{1}{2}|FP| + \frac{1}{2}|FN|}
+\label{eq:recognition_quality}
+\end{equation}
+
+Finalement, la panoptic quality (PQ) \cite{kirillov_panoptic_2019} (Équation \ref{eq:panoptic_quality}) est la multiplication de SQ (Équation~\ref{eq:segmentation_quality}) et RQ (Équation~\ref{eq:recognition_quality})
+
+\begin{equation}
+PQ = SQ \cdot RQ = \frac{\sum_{(p,g) \in TP} IoU(p,g)}{|TP|} \cdot \frac{|TP|}{|TP| + \frac{1}{2}|FP| + \frac{1}{2}|FN|}
+\label{eq:panoptic_quality}
+\end{equation}
+
+\subsubsection{Métriques par application}
+
+Le Tableau \ref{tab:metrics_by_application} ci-dessous met en lien les métriques et les différentes applications.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|p{1.8cm}|p{2.1cm}|p{2.4cm}|p{2.5cm}|p{2.2cm}|p{2.2cm}|}
+    \cline{2-6}
+    \multicolumn{1}{c|}{} & \textbf{Classification} & \textbf{Détection} & \textbf{Segmentation sémantique} & \textbf{Segmentation instance} & \textbf{Segmentation panoptique} \\
+    \hline
+    \textbf{Principales métriques} & 
+    \begin{itemize}[leftmargin=*, topsep=0pt, itemsep=0pt, parsep=0pt, before=\vspace{-\baselineskip}, after=\vspace{-\baselineskip}]
+        \item Accuracy
+        \item Precision
+        \item Recall
+        \item F1-Score
+        \item Matrice de confusion
+    \end{itemize} & 
+    \begin{itemize}[leftmargin=*, topsep=0pt, itemsep=0pt, parsep=0pt, before=\vspace{-\baselineskip}, after=\vspace{-\baselineskip}]
+        \item Intersection sur Union (IoU)
+        \item Average Precision (AP)
+        \item Mean average precision (mAP)
+    \end{itemize} & 
+    \begin{itemize}[leftmargin=*, topsep=0pt, itemsep=0pt, parsep=0pt, before=\vspace{-\baselineskip}, after=\vspace{-\baselineskip}]
+        \item Pixel accuracy (PA)
+        \item Moyenne intersection sur Union (mIoU)
+    \end{itemize} & 
+    \begin{itemize}[leftmargin=*, topsep=0pt, itemsep=0pt, parsep=0pt, before=\vspace{-\baselineskip}, after=\vspace{-\baselineskip}]
+        \item Average Precision (AP)
+        \item Mean average precision (mAP)
+    \end{itemize} & 
+    \begin{itemize}[leftmargin=*, topsep=0pt, itemsep=0pt, parsep=0pt, before=\vspace{-\baselineskip}, after=\vspace{-\baselineskip}]
+        \item Panoptic quality (PQ)
+    \end{itemize} \\
+    \hline
+    \end{tabular}
+    \caption{Métriques par application}
+    \label{tab:metrics_by_application}
+\end{table}
