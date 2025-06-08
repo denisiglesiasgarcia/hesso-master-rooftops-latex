@@ -25,13 +25,10 @@ Ensuite, une section est dédiée à toutes les pistes explorées qui n'ont pas 
 
 % -----------------------------------------------------------------------------
 % -----------------------------------------------------------------------------
-\section{Phase préparatoire}
-Cette phase préparatoire intègre les 2 premières étapes de la Figure \ref{fig:ch3_resume_machine_learning_supervise}, c'est-à-dire la définition de la tâche à accomplir et le choix de l'algorithme.
-
-\subsection{Tâche}
+\section{Tâche}
 La tâche que ce modèle doit accomplir est d'identifier les espaces disponibles sur les toitures. Cette tâche est identique à celle de \acrshort{stdl} du chapitre \ref{subsec:stdl_analyse}, par contre l'approche utilisée va être différente.
 
-\subsection{Algorithme}
+\section{Algorithme}
 Une fois la tâche définie, il faut déterminer une approche. \acrshort{stdl} a exploré 3 approches différentes:
 \begin{itemize}
     \item La classification des pans de toit
@@ -41,18 +38,11 @@ Une fois la tâche définie, il faut déterminer une approche. \acrshort{stdl} a
 
 Leur segmentation d'images est réalisée avec Segment Anything Model (SAM). SAM effectue de la segmentation instance et divise l'image en polygones mais n'assigne pas de classe aux objets. Les résultats doivent être post-traités pour identifier les espaces disponibles. Un autre point délicat est le temps de traitement important (12 minutes pour 25 bâtiments).
 
-La segmentation sémantique est une autre option explorée par \citeauthor{castello_quantification_2021} (Section \ref{subsec:castello_quantification_2021}). Ils l'ont utilisé pour exactement la même tâche avec un dataset limité au centre ville de Genève. Les résultats obtenus avec un IoU supérieur a 0.60 sur leur dataset de test sont très encourageants.
+La segmentation sémantique est une autre option explorée par \citeauthor{castello_quantification_2021} (Section \ref{subsec:castello_quantification_2021}). Ils l'ont utilisé pour exactement la même tâche avec un dataset limité au centre-ville de Genève. Les résultats obtenus avec un IoU supérieur à 0.60 sur leur dataset de test sont très encourageants.
 
 La segmentation sémantique est le type d'algorithme retenu. Les autres pistes explorées mais qui n'ont pas été retenues sont détaillées dans la section \ref{sec:pistes_explorees}.
 
-\section{Création du dataset}
-Une fois la phase préparatoire terminée, la phase suivante va se pencher sur les données nécessaires à l'entraînement du modèle.
-
-L'examen des datasets disponibles (Section \ref{sec:dataset_disponible}) révèle une carence majeure : seulement le dataset RID propose des annotations pour l'identification des espaces libres sur toitures. Ce dataset présente des limitations importantes, avec des images concentrées sur un contexte architectural spécifique (rural allemand) et des performances dégradées lors des tests sur d'autres types de bâtiments, comme le démontrent les essais sur le milieu urbain bruxellois.
-
-La création d'un dataset pour la segmentation sémantique représente un défi majeur en termes de temps et de ressources. Cette section détaille d'abord les données sources utilisées, puis le processus d'annotation mis en place, et enfin la structuration des différents datasets créés.
-
-\subsection{Sélection des données}
+\section{Sélection des données}
 La sélection des données va dépendre de l'algorithme utilisé. Dans ce cas, la segmentation sémantique d'image va principalement utiliser des orthophotos et des données vectorielles. Les données utilisées proviennent de \acrshort{sitg}:
 \begin{itemize}
     \item Données vectorielles
@@ -68,53 +58,149 @@ La sélection des données va dépendre de l'algorithme utilisé. Dans ce cas, l
     \end{itemize}
 \end{itemize}
 
-\subsubsection{Orthophotos}
+\subsection{Orthophotos}
 Les orthophotos de 2019 (Figure \ref{fig:ch3_dataset_methodo_01_orthophoto_2019}) ont été sélectionnées car ce sont les seules true-orthophotos disponibles sur \acrshort{sitg} avec une résolution de 7cm par pixel. Selon un document de SITG \cite{etat_de_geneve_inventaire_2025}, ils ont réalisé plusieurs survols du canton en 2024 pour acquérir de nouvelles true-orthophotos avec une résolution de 3.6cm par pixel, ces orthophotos ne sont pas encore disponibles sur \acrshort{sitg}.
 
 La sous-section \ref{subsec:annexe_ortophotos} parcours en détail les types d'orthophotos les plus utilisées dans la géomatique.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1\linewidth]{02-main//figures/ch3_dataset_methodo_01_orthophoto_2019.png}
-    \caption{Orthophotos}
+    \includegraphics[width=1\linewidth]{02-main//figures/ch3/ch3_dataset_methodo_01_orthophoto_2019.png}
+    \caption{Orthophotos 2019}
     \label{fig:ch3_dataset_methodo_01_orthophoto_2019}
 \end{figure}
 
-\subsubsection{Données vectorielles}
-Les données vectorielles choisies sont régulièrement mises à jour. Elles sont au format GPKG \cite{noauthor_ogc_nodate}, ce format est assez commun dans le monde de la géomatique. La sous-section \ref{subsec:annexe_donnees_vectorielles} permet d'avoir un aperçu de ce que sont les données vectorielles.
-\paragraph{Bâtiments hors-sol}
+\subsubsection{Obtention des données}
+Les orthophotos peuvent être commandées gratuitement via leur service pour données volumineuses \cite{sitg_commande_nodate}. Une autre option est de télécharger tuile à tuile sur leur site dédié (Figure \ref{fig:ch3_donnees_sitg_orthophotos_telechargement_web}).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{02-main//figures//ch3/ch3_donnees_sitg_orthophotos_telechargement_web.png}
+    \caption{Site dédié au téléchargement des orthophotos et données \gls{lidar} \cite{sitg_commande_nodate}}
+    \label{fig:ch3_donnees_sitg_orthophotos_telechargement_web}
+\end{figure}
+
+Chacune des 436 tuiles couvre une superficie de \SI{1}{\square\kilo\meter}. L'ensemble de ces données représente environ 700 GB et est stocké au format GeoTIFF. Ce format présente l'avantage de conserver les informations géographiques associées à chaque image, notamment la géolocalisation des quatre coins et le système de coordonnées de référence (\acrshort{crs}) utilisé. Le Tableau \ref{tab:chiffre_cle_orthophoto_2019} présente un résumé de ces caractéristiques techniques.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{@{}lr@{}}
+    \toprule
+    \textbf{Paramètre} & \textbf{Valeur} \\
+    \midrule
+    \multicolumn{2}{@{}l@{}}{\textit{Couverture}} \\
+    Surface totale & \SI{436.00}{\square\kilo\meter} \\
+    Nombre de tuiles & 436 \\
+    Taille tuile & \SI{1000.00}{\meter} $\times$ \SI{1000.00}{\meter} \\
+    \addlinespace
+    \multicolumn{2}{@{}l@{}}{\textit{Stockage}} \\
+    Taille totale & \SI{682.92}{\giga\byte} \\
+    Taille par tuile & \SI{1603.91}{\mega\byte} \\
+    \bottomrule
+    \end{tabular}
+    \caption{Chiffres-clés orthophotos 2019}
+    \label{tab:chiffre_cle_orthophoto_2019}
+\end{table}
+
+\newpage
+\subsection{Données vectorielles}
+Les données vectorielles choisies sont régulièrement mises à jour, il n'y a pas de version par année comme pour les orthophotos. La sous-section \ref{subsec:annexe_donnees_vectorielles} permet d'avoir un aperçu de ce que sont les données vectorielles.
+\subsubsection{Bâtiments hors-sol}
 La couche vectorielle ``CAD\_BATIMENTS\_HORSOL'' \cite{sitg_batiments_nodate} recense tous les bâtiments du Canton de Genève qui sont bien ancrés au sol. Cette couche n'inclus pas les bâtiments qui sont sous-terrains. La Figure \ref{fig:ch3_dataset_methodo_02_batiment_horsol} permet d'observer ces polygones qui représentent les bâtiments en jaune.
 
 Cette couche vectorielle est enrichie de données tabulaires associées à chacun des polygones. Les données utilisées sont l'``\gls{egid}'' et ``NOMEN\_CLASSE''. L'\gls{egid} est un identifiant unique pour tous les bâtiments en Suisse. ``NOMEN\_CLASSE'' identifie l'usage du bâtiment et va permettre de définir une classe \gls{sia}.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1\linewidth]{02-main//figures/ch3_dataset_methodo_02_batiment_horsol.png}
+    \includegraphics[width=1\linewidth]{02-main//figures/ch3/ch3_dataset_methodo_02_batiment_horsol.png}
     \caption{Couche vectorielle bâtiments hors-sol}
     \label{fig:ch3_dataset_methodo_02_batiment_horsol}
 \end{figure}
 
 
 \newpage
-\paragraph{Toits des bâtiments}
-La couche vectorielle ``CAD\_BATIMENTS\_HORSOL'' \cite{sitg_toits_nodate} regroupe toutes les toitures des bâtiments hors-sol du Canton de Genève (Figure \ref{fig:ch3_dataset_methodo_03_batiment_horsol_toiture}). Un \gls{egid} est associé à chacun des polygones des toitures.
+\subsubsection{Toits des bâtiments}
+La couche vectorielle ``CAD\_BATIMENTS\_HORSOL\_TOIT'' \cite{sitg_toits_nodate} regroupe toutes les toitures des bâtiments hors-sol du Canton de Genève (Figure \ref{fig:ch3_dataset_methodo_03_batiment_horsol_toiture}). Un \gls{egid} est associé à chacun des polygones des toitures.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1\linewidth]{02-main//figures/ch3_dataset_methodo_03_batiment_horsol_toiture.png}
+    \includegraphics[width=1\linewidth]{02-main//figures/ch3/ch3_dataset_methodo_03_batiment_horsol_toiture.png}
     \caption{Couche vectorielle toits des bâtiments}
     \label{fig:ch3_dataset_methodo_03_batiment_horsol_toiture}
 \end{figure}
 
 \newpage
-\paragraph{Superstructures des toits des bâtiments}
-La couche vectorielle ``CAD\_BATIMENT\_HORSOL\_TOIT\_SP'' \cite{sitg_toits_nodate} recense partiellement les superstructures de plus de 9 \si{\unit{\square\meter}} présentes sur les les toitures des bâtiments hors-sol du Canton de Genève (Figure \ref{fig:ch3_dataset_methodo_04_batiment_horsol_toiture_sp}). Un \gls{egid} est associé à chacun des polygones des superstructures.
+\subsubsection{Superstructures des toits des bâtiments}
+La couche vectorielle ``CAD\_BATIMENT\_HORSOL\_TOIT\_SP'' \cite{sitg_toits_nodate} inclus les superstructures de plus de 9 \si{\unit{\square\meter}} présentes sur les toitures des bâtiments hors-sol du Canton de Genève (Figure \ref{fig:ch3_dataset_methodo_04_batiment_horsol_toiture_sp}). Un \gls{egid} est associé à chacun des polygones des superstructures.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1\linewidth]{02-main//figures/ch3_dataset_methodo_04_batiment_horsol_toiture_sp.png}
+    \includegraphics[width=1\linewidth]{02-main//figures/ch3/ch3_dataset_methodo_04_batiment_horsol_toiture_sp.png}
     \caption{Couche vectorielle superstructures des toits des bâtiments}
     \label{fig:ch3_dataset_methodo_04_batiment_horsol_toiture_sp}
+\end{figure}
+
+\subsubsection{Obtention des données}
+Les données vectorielles sont disponibles directement sur \acrshort{sitg} dans plusieurs formats (GDB, GML, KML ou SHP). Il est également possible d'y accéder via l'\acrshort{api} REST d'ArcGIS.
+
+Pour faciliter le traitement, toutes les données sont converties au format GPKG \cite{noauthor_ogc_nodate}. Ce format, très utilisé en géomatique, a l'avantage d'être robuste et de regrouper toutes les données dans un seul fichier.
+\newpage
+
+\section{Labellisation}
+Une fois que les données sont sélectionnées, l'étape suivante est la labellisation. Cette étape se divise en plusieurs parties:
+\begin{itemize}
+    \item Préparation des données
+    \item Sélection des données pour le dataset
+    \item Labellisation
+\end{itemize}
+
+\subsection{Préparation des données}
+Les données sélectionnées nécessitent d'être analysées, transformées et validées avant de pouvoir les annoter. La Figure \ref{fig:ch3_preparation_donnees_01_etl} résume les principales étapes pour les données vectorielles.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{02-main/figures/ch3/ch3_preparation_donnees_01_etl.png}
+    \caption{Principales étapes de la préparation des données vectorielles}
+    \label{fig:ch3_preparation_donnees_01_etl}
+\end{figure}
+
+\subsubsection{Nettoyage des données}
+Les deux principales librairies Python utilisées pour la manipulation des données vectorielles sont Pandas \cite{mckinney_pandas_nodate} et GeoPandas \cite{noauthor_geopandas_nodate}. Pandas est la librairie la plus populaire pour la manipulation des données tabulaires. GeoPandas étend ces fonctionnalités aux données géospatiales en intégrant la gestion des géométries et l'ensemble des opérations spatiales telles que les jointures spatiales.
+
+Le but de cette étape est de vérifier la qualité des données de base. Les géométries (polygones) constituent une donnée essentielle en géomatique. Elles doivent être valides (polygones fermés) et utiliser le bon système de coordonnées de référence (\acrshort{crs}).
+
+Le type des différentes colonnes est également important. Le schéma des données définit les types attendus pour chaque colonne de chaque couche (voir Tableau \ref{tab:exemple_types_couche_toitures}).
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{@{}lr@{}}
+    \toprule
+    \textbf{Colonne} & \textbf{Type} \\
+    \midrule
+    objectid & int64 \\
+    egid & float64 \\
+    altitude\_min & float64 \\
+    altitude\_max & float64 \\
+    date\_leve & datetime64[ms] \\
+    SHAPE\_\_Length & float64 \\
+    SHAPE\_\_Area & float64 \\
+    globalid & object \\
+    geometry & geometry \\
+    \bottomrule
+    \end{tabular}
+    \caption{Exemple de types pour la couche des toitures}
+    \label{tab:exemple_types_couche_toitures}
+\end{table}
+
+Cette étape de vérification est essentielle pour les opérations de jointure entre les différentes couches de données. Les colonnes servant de clés de jointure doivent avoir des types compatibles. Par exemple, une colonne de type int64 (nombres entiers) ne peut pas être directement jointe avec une colonne de type float64 (nombres à virgule flottante) sans conversion préalable. Toutes les colonnes doivent être vérifiées et converties si nécessaire au bon type.
+
+La visualisation des données permet de détecter certains problèmes difficilement visibles dans les données tabulaires. Par exemple, la couche des communes téléchargée via l'\acrshort{api} REST d'ArcGIS (Figure \ref{fig:ch3_preparation_donnees_02_bug_celigny}) présentait des géométries invalides, c'est-à-dire que les polygones n'étaient pas fermés et étaient donc systématiquement supprimés. Toutes les données ont de nouveau été téléchargées directement de \acrshort{sitg}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{02-main//figures//ch3/ch3_preparation_donnees_02_bug_celigny.png}
+    \caption{Problème avec la commune de Céligny}
+    \label{fig:ch3_preparation_donnees_02_bug_celigny}
 \end{figure}
 
 
@@ -125,15 +211,20 @@ La couche vectorielle ``CAD\_BATIMENT\_HORSOL\_TOIT\_SP'' \cite{sitg_toits_nodat
 
 
 
+\section{Création du dataset}
+Une fois la phase préparatoire terminée, la phase suivante va se pencher sur les données nécessaires à l'entraînement du modèle.
 
+L'examen des datasets disponibles (Section \ref{sec:dataset_disponible}) révèle une carence majeure : seulement le dataset RID propose des annotations pour l'identification des espaces libres sur toitures. Ce dataset présente des limitations importantes, avec des images concentrées sur un contexte architectural spécifique (rural allemand) et des performances dégradées lors des tests sur d'autres types de bâtiments, comme le démontrent les essais sur le milieu urbain bruxellois.
 
-\todo[inline]{Ajouter ici le lien correct à l'annexe des données vectorielles}
-
-
-
-
-
-
+La création d'un dataset pour la segmentation sémantique représente un défi majeur en termes de temps et de ressources. Cette section détaille d'abord les données sources utilisées, puis le processus d'annotation mis en place, et enfin la structuration des différents datasets créés.
+\todo[inline]{Exemple de todo}
+\section{Développement du modèle}
+\subsection{Architecture du modèle} % unet et compagnie, yolo?
+\subsection{Préparation des données} % dataload
+\subsection{Configuration d'entraînement} % hyperparamètres
+\subsection{Métriques d'évaluation} % discussion iou, precision, recall
+\subsection{Processus d'entraînement} % data augmentation, stratégies de lr, patience,nb epoch
+\subsection{Résultats préliminaires}
 
 % -----------------------------------------------------------------------------
 % -----------------------------------------------------------------------------
@@ -150,7 +241,7 @@ La Figure \ref{fig:ch3_piste_exploree_classification_01_workflow} résume les pr
 
 \begin{figure}[H]
     \centering
-    \makebox[\textwidth]{\includegraphics[width=1.3\linewidth]{02-main//figures/ch3_piste_exploree_classification_01_workflow.png}}
+    \makebox[\textwidth]{\includegraphics[width=1.3\linewidth]{02-main//figures/ch3/ch3_piste_exploree_classification_01_workflow.png}}
     \caption{Schéma classification des toitures}
     \label{fig:ch3_piste_exploree_classification_01_workflow}
 \end{figure}
@@ -182,14 +273,14 @@ Les deux étapes précédentes vont déterminer l'action à réaliser sur l'imag
     % Première ligne
     \begin{subfigure}[b]{0.475\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{02-main/figures/ch3_piste_exploree_classification_02_image_originale.png}
+        \includegraphics[width=\textwidth]{02-main/figures/ch3/ch3_piste_exploree_classification_02_image_originale.png}
         \caption{Image d'exemple}
         \label{fig:ch3_piste_exploree_classification_02_image_originale}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.48\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{02-main/figures/ch3_piste_exploree_classification_03_couche_toiture.png}
+        \includegraphics[width=\textwidth]{02-main/figures/ch3/ch3_piste_exploree_classification_03_couche_toiture.png}
         \caption{Couche toiture superposée}
         \label{fig:ch3_piste_exploree_classification_03_couche_toiture}
     \end{subfigure}
@@ -199,7 +290,7 @@ Les deux étapes précédentes vont déterminer l'action à réaliser sur l'imag
     % Deuxième ligne
     \begin{subfigure}[b]{0.48\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{02-main/figures/ch3_piste_exploree_classification_04_image_resultante.png}
+        \includegraphics[width=\textwidth]{02-main/figures/ch3/ch3_piste_exploree_classification_04_image_resultante.png}
         \caption{Résultat final}
         \label{fig:ch3_piste_exploree_classification_04_image_resultante}
     \end{subfigure}
@@ -216,14 +307,14 @@ La Figure \ref{fig:ch3_piste_exploree_classification_06_classification_finale} m
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1\linewidth]{02-main//figures/ch3_piste_exploree_classification_05_classification_intermediaire.png}
+    \includegraphics[width=1\linewidth]{02-main//figures/ch3/ch3_piste_exploree_classification_05_classification_intermediaire.png}
     \caption{Classification intermédiaire}
     \label{fig:ch3_piste_exploree_classification_05_classification_simplified}
 \end{figure}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1\linewidth]{02-main//figures/ch3_piste_exploree_classification_06_classification_finale.png}
+    \includegraphics[width=1\linewidth]{02-main//figures/ch3/ch3_piste_exploree_classification_06_classification_finale.png}
     \caption{Classification finale}
     \label{fig:ch3_piste_exploree_classification_06_classification_finale}
 \end{figure}
@@ -236,14 +327,14 @@ La Figure \ref{fig:piste_exploree_classification_resultats_explications} représ
     % Première ligne
     \begin{subfigure}[b]{0.475\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{02-main/figures/ch3_piste_exploree_classification_07_resultats_image_exemple.png}
+        \includegraphics[width=\textwidth]{02-main/figures/ch3/ch3_piste_exploree_classification_07_resultats_image_exemple.png}
         \caption{Image d'exemple}
         \label{fig:ch3_piste_exploree_classification_07_resultats_image_exemple}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.48\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{02-main/figures/ch3_piste_exploree_classification_08_resultats_image_toiture.png}
+        \includegraphics[width=\textwidth]{02-main/figures/ch3/ch3_piste_exploree_classification_08_resultats_image_toiture.png}
         \caption{Couche des toitures}
         \label{fig:ch3_piste_exploree_classification_08_resultats_image_toiture}
     \end{subfigure}
@@ -253,14 +344,14 @@ La Figure \ref{fig:piste_exploree_classification_resultats_explications} représ
     % Deuxième ligne
     \begin{subfigure}[b]{0.48\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{02-main/figures/ch3_piste_exploree_classification_10_resultats_image_sp.png}
+        \includegraphics[width=\textwidth]{02-main/figures/ch3/ch3_piste_exploree_classification_10_resultats_image_sp.png}
         \caption{Couche des superstructures}
         \label{fig:ch3_piste_exploree_classification_10_resultats_image_sp}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.475\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{02-main/figures/ch3_piste_exploree_classification_09_resultats_image__toiture_sp.png}
+        \includegraphics[width=\textwidth]{02-main/figures/ch3/ch3_piste_exploree_classification_09_resultats_image__toiture_sp.png}
         \caption{Couche des toitures et superstructures}
         \label{fig:ch3_piste_exploree_classification_09_resultats_image__toiture_sp}
     \end{subfigure}
@@ -324,14 +415,14 @@ La sixième étape (Figure \ref{fig:ch3_essai_sam_06_une_zone_libre}) détermine
     % Première ligne
     \begin{subfigure}[b]{0.48\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{02-main/figures/ch3_essai_sam_01_image_original.png}
+        \includegraphics[width=\textwidth]{02-main/figures/ch3/ch3_essai_sam_01_image_original.png}
         \caption{Image d'exemple}
         \label{fig:ch3_essai_sam_01_image_original}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.48\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{02-main/figures/ch3_essai_sam_02_ROI.png}
+        \includegraphics[width=\textwidth]{02-main/figures/ch3/ch3_essai_sam_02_ROI.png}
         \caption{Zone d’intérêt (ROI)}
         \label{fig:ch3_essai_sam_02_ROI}
     \end{subfigure}
@@ -341,14 +432,14 @@ La sixième étape (Figure \ref{fig:ch3_essai_sam_06_une_zone_libre}) détermine
     % Deuxième ligne
     \begin{subfigure}[b]{0.48\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{02-main/figures/ch3_essai_sam_03_200_masks.png}
+        \includegraphics[width=\textwidth]{02-main/figures/ch3/ch3_essai_sam_03_200_masks.png}
         \caption{Polygones segmentés (200)}
         \label{fig:ch3_essai_sam_03_200_masks}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.48\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{02-main/figures/ch3_essai_sam_04_194_filtered_masks.png}
+        \includegraphics[width=\textwidth]{02-main/figures/ch3/ch3_essai_sam_04_194_filtered_masks.png}
         \caption{Polygone segmentés filtrés (194)}
         \label{fig:ch3_essai_sam_04_194_filtered_masks}
     \end{subfigure}
@@ -358,14 +449,14 @@ La sixième étape (Figure \ref{fig:ch3_essai_sam_06_une_zone_libre}) détermine
     % Troisième ligne
     \begin{subfigure}[b]{0.48\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{02-main/figures/ch3_essai_sam_05_filtered_masks_overlay.png}
+        \includegraphics[width=\textwidth]{02-main/figures/ch3/ch3_essai_sam_05_filtered_masks_overlay.png}
         \caption{Mise en évidence des polygones filtrés}
         \label{fig:ch3_essai_sam_05_filtered_masks_overlay}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.48\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{02-main/figures/ch3_essai_sam_06_une_zone_libre.png}
+        \includegraphics[width=\textwidth]{02-main/figures/ch3/ch3_essai_sam_06_une_zone_libre.png}
         \caption{Espace libre}
         \label{fig:ch3_essai_sam_06_une_zone_libre}
     \end{subfigure}
@@ -379,7 +470,7 @@ La piste d'un fine-tuning de SAM pour mieux l'adapter à la tâche d'identificat
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1\linewidth]{02-main/figures/ch3_piste_exploree_classification_11_fine_tuning_dataset.png}
+    \includegraphics[width=1\linewidth]{02-main/figures/ch3/ch3_piste_exploree_classification_11_fine_tuning_dataset.png}
     \caption{Image du dataset pour le fine-tuning SAM}
     \label{fig:ch3_piste_exploree_classification_11_fine_tuning_dataset}
 \end{figure}
@@ -398,3 +489,6 @@ Les principales limitations sont:
 Le fine-tuning avec 45 images annotées n'améliore pas les performances. Le dataset reste trop petit pour un modèle de cette complexité, et l'annotation manuelle de tous les obstacles de toiture est très chronophage.
 
 Pour conclure, SAM fonctionne bien sur des images de qualité avec un bon éclairage, par contre son utilité reste limitée à cause des ombrages et du temps de calcul nécessaire.
+
+% -----------------------------------------------------------------------------
+\section{Synthèse}
