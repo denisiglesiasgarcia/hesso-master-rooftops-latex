@@ -142,10 +142,13 @@ bibencoding=auto
 \addbibresource{03-tail/bibliography.bib}
 
 
-% Tables of contents, figures, tables and listings
+% Tables of contents, figures, tables, listings, and code blocks
 % ------------------------------------------------
 \usepackage{tocloft}
 \newlistof{listing}{lol}{List of Listings}
+\newlistof{code}{loc}{Liste de blocs de code}
+\renewcommand{\codename}{Code}
+
 \setcounter{tocdepth}{1} % Depth to 'section'
 \setlength{\cftfigindent}{0pt}  % remove indentation from figures in lof
 \setlength{\cftfignumwidth}{1cm} % width of figure number in lof

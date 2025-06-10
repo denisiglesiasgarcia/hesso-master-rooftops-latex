@@ -155,16 +155,19 @@ Une fois que les données sont sélectionnées, l'étape suivante est la labelli
 \end{itemize}
 
 \subsection{Préparation des données}
-Les données sélectionnées nécessitent d'être analysées, transformées et validées avant de pouvoir les annoter. La Figure \ref{fig:ch3_preparation_donnees_01_etl} résume les principales étapes pour les données vectorielles.
+Les données sélectionnées nécessitent d'être analysées, transformées et validées avant de pouvoir les annoter.
+
+\subsubsection{Données vectorielles}
+La Figure \ref{fig:ch3_preparation_donnees_01_etl} résume les principales étapes pour les données vectorielles.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1\linewidth]{02-main/figures/ch3/ch3_preparation_donnees_01_etl.png}
+    \includegraphics[width=0.95\linewidth]{02-main/figures/ch3/ch3_preparation_donnees_01_etl.png}
     \caption{Principales étapes de la préparation des données vectorielles}
     \label{fig:ch3_preparation_donnees_01_etl}
 \end{figure}
 
-\subsubsection{Nettoyage des données}
+\paragraph{Nettoyage des données}
 Les deux principales librairies Python utilisées pour la manipulation des données vectorielles sont Pandas \cite{mckinney_pandas_nodate} et GeoPandas \cite{noauthor_geopandas_nodate}. Pandas est la librairie la plus populaire pour la manipulation des données tabulaires. GeoPandas étend ces fonctionnalités aux données géospatiales en intégrant la gestion des géométries et l'ensemble des opérations spatiales telles que les jointures spatiales.
 
 Le but de cette étape est de vérifier la qualité des données de base. Les géométries (polygones) constituent une donnée essentielle en géomatique. Elles doivent être valides (polygones fermés) et utiliser le bon système de coordonnées de référence (\acrshort{crs}).
@@ -194,7 +197,10 @@ Le type des différentes colonnes est également important. Le schéma des donn�
 
 Cette étape de vérification est essentielle pour les opérations de jointure entre les différentes couches de données. Les colonnes servant de clés de jointure doivent avoir des types compatibles. Par exemple, une colonne de type int64 (nombres entiers) ne peut pas être directement jointe avec une colonne de type float64 (nombres à virgule flottante) sans conversion préalable. Toutes les colonnes doivent être vérifiées et converties si nécessaire au bon type.
 
-La visualisation des données permet de détecter certains problèmes difficilement visibles dans les données tabulaires. Par exemple, la couche des communes téléchargée via l'\acrshort{api} REST d'ArcGIS (Figure \ref{fig:ch3_preparation_donnees_02_bug_celigny}) présentait des géométries invalides, c'est-à-dire que les polygones n'étaient pas fermés et étaient donc systématiquement supprimés. Toutes les données ont de nouveau été téléchargées directement de \acrshort{sitg}.
+\newpage
+La visualisation des données permet de détecter certains problèmes difficilement visibles dans les données tabulaires. Par exemple, la couche des communes téléchargée via l'\acrshort{api} REST d'ArcGIS (Figure \ref{fig:ch3_preparation_donnees_02_bug_celigny}) présentait des géométries invalides (commune de Céligny), c'est-à-dire que les polygones n'étaient pas fermés et étaient donc systématiquement supprimés.
+
+Pour résoudre ce problème et par cohérence, toutes les données ont été téléchargées à nouveau directement depuis \acrshort{sitg}. Ces nouvelles données ne présentaient pas ce problème, ce qui suggère que l'erreur vient du processus de téléchargement via QGIS.
 
 \begin{figure}[H]
     \centering
@@ -203,6 +209,158 @@ La visualisation des données permet de détecter certains problèmes difficilem
     \label{fig:ch3_preparation_donnees_02_bug_celigny}
 \end{figure}
 
+\newpage
+\paragraph{Filtrer polygones hors canton}
+Certains polygones se trouvent en dehors du canton de Genève. Le filtre est assez simple, tout ce qui n'est pas à l'intérieur d'une commune genevoise est considéré comme hors canton.
+
+La Figure \ref{fig:ch3_preparation_donnees_03_hors_canton} illustre les toitures situées hors canton. Au total, 1436 polygones ont été supprimés, principalement des bâtiments du CERN \cite{cern_home_nodate}.
+
+\begin{figure}[H]
+    \makebox[\textwidth][c]{\includegraphics[width=1.15\textwidth]{02-main//figures//ch3/ch3_preparation_donnees_03_hors_canton.png}}
+    \caption{Visualisation des toitures hors canton de Genève}
+    \label{fig:ch3_preparation_donnees_03_hors_canton}
+\end{figure}
+
+\newpage
+La Figure \ref{fig:ch3_preparation_donnees_04_hors_canton_sp} permet d'observer les 582 superstructures qui sont en dehors du canton.
+\begin{figure}[H]
+    \makebox[\textwidth][c]{\includegraphics[width=1.15\textwidth]{02-main//figures//ch3/ch3_preparation_donnees_04_hors_canton_sp.png}}
+    \caption{Visualisation des superstructures hors canton de Genève}
+    \label{fig:ch3_preparation_donnees_04_hors_canton_sp}
+\end{figure}
+
+\newpage
+\paragraph{Filtrer les \gls{egid}}
+Le filtre appliqué précédemment a éliminé une grande partie des \gls{egid} invalides, mais il est important de bien vérifier car l'\gls{egid} est la clé de jointure entre toutes les couches.
+
+L'\gls{egid} minimum de la couche des bâtiments hors-sol est utilisé comme filtre (Code \ref{code:filtre_egid}) pour identifier les \gls{egid} invalides. Cette vérification détecte un total de 24 \gls{egid} invalides dans les couches des toitures et superstructures.
+
+\begin{pythoncode}
+# EGID bizarre
+egid_bizarre = gdf_cad_batiment_horsol["egid"].min()
+
+print("EGID min de gdf_cad_batiment_horsol:", egid_bizarre)
+print("Nombre de toitures avec un EGID en dessous (invalide):")
+
+print(f"\t{gdf_toiture[gdf_toiture['egid'] < egid_bizarre].shape[0]} \
+dans gdf_toiture_1_filtre_canton")
+
+print(f"\t{gdf_toiture_sp[gdf_toiture_sp['egid'] < egid_bizarre].shape[0]} \
+dans gdf_toiture_sp_1_filtre_canton")
+\end{pythoncode}
+
+\begin{textcode}
+EGID min de gdf_cad_batiment_horsol: 295074
+Nombre de toitures avec un EGID en dessous (invalide):
+    22 dans gdf_toiture_1_filtre_canton
+    2 dans gdf_toiture_sp_1_filtre_canton
+    0 dans gdf_cad_batiment_horsol
+\end{textcode}
+\captionof{code}{Filtre \gls{egid}}
+\label{code:filtre_egid}
+
+\paragraph{Classification \gls{sia}}
+En Suisse, chaque bâtiment peut être classé selon son utilisation en 12 catégories définies par la norme SIA 380/1 (Tableau \ref{tab:categories_batiments_sia_380_1}). Cette classification est importante pour l'analyse des caractéristiques des toitures, une toiture de logement collectif ne ressemblera pas à celle d'une usine ou d'une piscine.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{@{}clp{0.65\textwidth}@{}}
+    \toprule
+    \textbf{N°} & \textbf{Catégories de bâtiment} & \textbf{Affectations (exemples)} \\
+    \midrule
+    I & Habitat collectif & Immeubles locatifs et en propriété par appartement, résidences et logements pour personnes âgées, hôtels, immeubles et résidences de vacances, homes pour enfants ou adolescents, centres d'hébergement diurne, homes pour handicapés, centres d'accueil pour toxicomanes, casernes, établissements pénitentiaires \\
+    II & Habitat individuel & Villas individuelles ou jumelées, maisons de vacances, villas en chaînettes \\
+    III & Administration & Bâtiments administratifs privés et publics, locaux avec guichets, cabinets médicaux, bibliothèques, musées, centres culturels, centres informatiques, centres de télécommunication, studios de radio/télévision \\
+    IV & Écoles & Bâtiments scolaires de tous niveaux, jardins d'enfants et crèches, locaux d'enseignement, centres de formation, palais des congrès, laboratoires, instituts de recherche, locaux communautaires, centres de loisirs \\
+    V & Commerce & Locaux commerciaux de tous genres, y compris centres commerciaux, halles pour foires commerciales \\
+    VI & Restauration & Restaurants (y compris cuisines), cafétérias, cantines, dancings, discothèques \\
+    VII & Lieux de rassemblement & Théâtres, salles de concerts, salles de cinéma, églises, salles funéraires, salles des fêtes, halles sportives avec tribunes \\
+    VIII & Hôpitaux & Hôpitaux, cliniques psychiatriques, homes médicalisés, homes pour personnes âgées, centres de réhabilitation, locaux de soins \\
+    IX & Industrie & Fabriques, usines, centres artisanaux, ateliers, centres d'entretien, gares, caserne de pompiers \\
+    X & Dépôts & Entrepôts, centre de distribution \\
+    XI & Installations sportives & Halles de gymnastique et de sport, salles de gymnastique, halles de tennis, bowlings, centres de fitness, vestiaires (pour installations sportives) \\
+    XII & Piscines couvertes & Piscines couvertes, bassins de natation, saunas, bains thermaux \\
+    \bottomrule
+    \end{tabular}
+    \caption{Catégories de bâtiments \gls{sia} selon la norme \gls{sia} 380/1:2016 \cite{sia_sia-shop_nodate}}
+    \label{tab:categories_batiments_sia_380_1}
+\end{table}
+
+\newpage
+Cette information n'est pas incluse directement dans la couche des bâtiments hors-sol, par contre la destination est renseignée pour chaque \gls{egid}. Le Code \ref{code:assigner_categorie_sia} montre un exemple de conversion pour la première catégorie \gls{sia}.
+
+\vspace{0.35cm}
+\begin{pythoncode}
+def assign_sia_category(destination):
+    """
+    Attribue une catégorie SIA 380/1:2016 en fonction de la destination du bâtiment.
+    """
+    # Conversion en minuscules pour la comparaison
+    dest = str(destination).lower()
+
+    # ===== CATÉGORIE I - HABITAT COLLECTIF =====
+    habitat_collectif = [
+        "hab plusieurs logements",
+        "résidence meublée",
+        "foyer",
+        "hôtel",
+        "autre héberg. collectif",
+        "etab. pénitenciaire",
+        "internat",
+        "hab. - rez activités",
+        "habitation - activités",
+    ]
+    if any(term in dest for term in habitat_collectif):
+        return "I habitat collectif"
+
+gdf_cad_batiment_horsol['sia_cat'] = gdf_cad_batiment_horsol['destination'].apply(assign_sia_category)
+\end{pythoncode}
+\captionof{code}{Exemple de conversion entre la destination et la première catégorie \gls{sia}}
+\label{code:assigner_categorie_sia}
+
+La première vérification consiste à s'assurer que tous les \gls{egid} possèdent une catégorie \gls{sia} et à analyser la distribution de ces catégories. Le Code \ref{code:categorie_sia_distribution_verification} inclut une instruction ``assert'' qui interrompt le script si tous les \gls{egid} ne disposent pas d'une catégorie assignée.
+
+\vspace{0.35cm}
+\begin{pythoncode}
+print(gdf_cad_batiment_horsol["sia_cat"].value_counts())
+print(f"Nombre de valeurs manquantes dans sia_cat: {gdf_cad_batiment_horsol["sia_cat"].isna().sum()}")
+assert gdf_cad_batiment_horsol["sia_cat"].isna().sum() == 0
+\end{pythoncode}
+\vspace{0.35cm}
+\begin{textcode}
+sia_cat
+II habitat individuel         29420
+IX industrie                  16947
+X dépôts                      16575
+I habitat collectif           15337
+III administration             1836
+IV écoles                       746
+VII lieux de rassemblement      520
+V commerce                      415
+XI installations sportives      257
+VIII hôpitaux                   233
+VI restauration                 205
+XII piscines couvertes           11
+Name: count, dtype: int64
+Nombre de valeurs manquantes dans sia_cat: 0
+\end{textcode}
+\captionof{code}{Distribution des catégories \gls{sia} et vérification des données.}
+\label{code:categorie_sia_distribution_verification}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{02-main//figures//ch3/ch3_preparation_donnees_categorie_sia_01_barplot.png}
+    \caption{Distribution des catégories \gls{sia} pour la couche des bâtiments hors-sol}
+    \label{fig:ch3_preparation_donnees_categorie_sia_01_barplot}
+\end{figure}
+
+La Figure \ref{fig:ch3_preparation_donnees_categorie_sia_01_barplot} illustre la distribution des bâtiments par catégorie \gls{sia}. Cette distribution est assez déséquilibrée. Le canton de Genève est très urbain et densément peuplé, ce qui explique la prédominance des logements collectifs et individuels.
+
+Certaines catégories comme les piscines couvertes sont peu représentées. Cette rareté peut s'expliquer par une incertitude sur la qualité des données renseignées dans la destination du bâtiment. Par exemple, un complexe sportif avec une piscine couverte pourrait avoir seulement la destination ``complexe sportif''.
+
+Les catégories \gls{sia} (Tableau \ref{tab:categories_batiments_sia_380_1}) indiquent des exemples de bâtiments pour chacune des catégories mais il n'y a pas de liste complète. Certains cas sont entre deux catégories, un centre de massage peut être classé comme commerce ou comme hôpital (locaux de soins).
+
+\paragraph{Données finales}
 
 
 
