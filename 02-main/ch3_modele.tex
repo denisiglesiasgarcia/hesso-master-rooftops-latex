@@ -1,4 +1,4 @@
-\chapter{Proposition de modèle de machine learning}
+\chapter{Méthodologie}
 \label{chap:proposition_modele}
 
 Ce chapitre va explorer la création d'un modèle de machine learning de A à Z.
@@ -9,19 +9,22 @@ Ce chapitre va explorer la création d'un modèle de machine learning de A à Z.
 
 % -----------------------------------------------------------------------------
 % -----------------------------------------------------------------------------
+
 \section{Introduction}
-La création d'un modèle de machine learning implique plusieurs phases. La Figure \ref{fig:ch3_resume_machine_learning_supervise} résume les principales étapes et servira de fil conducteur pour le chapitre.
+La création d'un modèle de machine learning consiste en plusieurs phases distinctes. La Figure \ref{fig:ch3_resume_machine_learning_supervise} résume les principales étapes et servira de fil conducteur pour ce chapitre.
+
 \begin{figure}[H]
     \centering
     \includegraphics[width=1\linewidth]{03-tail/A1_fondamentaux_ML/A1_figures/A1_01_resume_machine_learning_supervise.png}
     \caption{Résumé de machine learning supervisé}
     \label{fig:ch3_resume_machine_learning_supervise}
 \end{figure}
-En premier, il faut définir la tâche et choisir le bon algorithme. En deuxième, selon les besoins en données, il faut créer un dataset pour entraîner le modèle. Finalement, lorsque le modèle est suffisamment performant, il peut être utilisé en production. L'Annexe \ref{chap:fondamentaux_ml} permet de se familiariser avec l'ensemble des termes et concepts de machine learning utilisés dans ce chapitre.
 
-Ensuite, une section est dédiée à toutes les pistes explorées qui n'ont pas été retenues. Cette phase nécessaire dans tout projet de recherche doit être valorisée, elle aide à comprendre le cheminement vers une solution viable. Pour conclure le chapitre, les points-clés de ce chapitre seront résumés dans une synthèse.
+La première étape consiste à définir la tâche et à sélectionner l'algorithme approprié. La deuxième phase porte sur la création d'un dataset d'entraînement adapté aux besoins spécifiques du modèle. Enfin, une fois les performances du modèle validées, celui-ci peut être déployé en production. L'Annexe \ref{chap:fondamentaux_ml} présente l'ensemble des termes et concepts de machine learning utilisés dans ce chapitre.
 
+Une section dédiée expose ensuite les différentes pistes explorées mais non retenues. Cette démarche, essentielle dans tout projet de recherche, mérite d'être valorisée car elle permet de comprendre le cheminement vers une solution viable. Le chapitre se conclut par une synthèse des points-clés développés.
 
+La création d'un dataset dédié à la segmentation sémantique représente un défi considérable en termes de temps et de ressources. L'examen des datasets disponibles (Section \ref{sec:dataset_disponible}) révèle une carence majeure, seul le dataset RID propose des annotations pour l'identification des espaces libres sur toitures. Ce dataset présente toutefois des limitations importantes, avec des images concentrées sur un contexte architectural spécifique (rural allemand) et des performances dégradées lors des tests sur d'autres typologies bâties, comme le démontrent les essais menés en milieu urbain bruxellois.
 
 % -----------------------------------------------------------------------------
 % -----------------------------------------------------------------------------
@@ -140,6 +143,8 @@ La couche vectorielle ``CAD\_BATIMENT\_HORSOL\_TOIT\_SP'' \cite{sitg_toits_nodat
     \label{fig:ch3_dataset_methodo_04_batiment_horsol_toiture_sp}
 \end{figure}
 
+Cette couche est présentée ici car c'est ce qu'il y a de plus proche à un recueil systématique des obstacles sur les toitures. Elle ne sera pas utilisée. Son utilisation a été explorée dans la Section \ref{sec:pistes_explorees}.
+
 \subsubsection{Obtention des données}
 Les données vectorielles sont disponibles directement sur \acrshort{sitg} dans plusieurs formats (GDB, GML, KML ou SHP). Il est également possible d'y accéder via l'\acrshort{api} REST d'ArcGIS.
 
@@ -222,19 +227,12 @@ La Figure \ref{fig:ch3_preparation_donnees_03_hors_canton} illustre les toitures
 \end{figure}
 
 \newpage
-La Figure \ref{fig:ch3_preparation_donnees_04_hors_canton_sp} permet d'observer les 582 superstructures qui sont en dehors du canton.
-\begin{figure}[H]
-    \makebox[\textwidth][c]{\includegraphics[width=1.15\textwidth]{02-main//figures//ch3/ch3_preparation_donnees_04_hors_canton_sp.png}}
-    \caption{Visualisation des superstructures hors canton de Genève}
-    \label{fig:ch3_preparation_donnees_04_hors_canton_sp}
-\end{figure}
-
-\newpage
 \paragraph{Filtrer les \gls{egid}}
 Le filtre appliqué précédemment a éliminé une grande partie des \gls{egid} invalides, mais il est important de bien vérifier car l'\gls{egid} est la clé de jointure entre toutes les couches.
 
-L'\gls{egid} minimum de la couche des bâtiments hors-sol est utilisé comme filtre (Code \ref{code:filtre_egid}) pour identifier les \gls{egid} invalides. Cette vérification détecte un total de 24 \gls{egid} invalides dans les couches des toitures et superstructures.
+L'\gls{egid} minimum de la couche des bâtiments hors-sol est utilisé comme filtre (Code \ref{code:filtre_egid}) pour identifier les \gls{egid} invalides. Cette vérification détecte un total de 24 \gls{egid} invalides dans la couche des toitures.
 
+\vspace{0.35cm}
 \begin{pythoncode}
 # EGID bizarre
 egid_bizarre = gdf_cad_batiment_horsol["egid"].min()
@@ -361,6 +359,424 @@ Certaines catégories comme les piscines couvertes sont peu représentées. Cett
 Les catégories \gls{sia} (Tableau \ref{tab:categories_batiments_sia_380_1}) indiquent des exemples de bâtiments pour chacune des catégories mais il n'y a pas de liste complète. Certains cas sont entre deux catégories, un centre de massage peut être classé comme commerce ou comme hôpital (locaux de soins).
 
 \paragraph{Données finales}
+Les données finales (Tableau \ref{tab:gdf_toiture_ajout_cat_sia_parquet_head}) comprennent plusieurs colonnes essentielles; L'``EGID'' permet d'associer chaque toiture à un bâtiment, la colonne ``geometry'' contient la géométrie du polygone dans le système de coordonnées suisse, et ``sia\_cat'' indique la catégorie \gls{sia} du bâtiment. 
+
+Les colonnes d'identification ``objectid'' et ``globalid'' permettent respectivement d'identifier chaque polygone de manière unique au sein de la couche et à travers l'ensemble des couches de \acrshort{sitg}.
+
+\begin{table}[H]
+\renewcommand{\arraystretch}{2}
+\begin{tabular}{@{}rlp{3cm}p{3cm}l@{}}
+\toprule
+objectid & egid & globalid & geometry & sia\_cat \\
+\midrule
+204857 & 295010023 & \parbox{3cm}{96076844-3ED9-464...} & \parbox{3cm}{MULTIPOLYGON (((2...} & II habitat individuel \\
+204873 & 295010485 & \parbox{3cm}{987C8B52-793B-4BB...} & \parbox{3cm}{MULTIPOLYGON (((2...} & II habitat individuel \\
+7630 & 295510865 & \parbox{3cm}{E3C6375D-ECCC-4A0...} & \parbox{3cm}{MULTIPOLYGON (((2...} & X dépôts \\
+\bottomrule
+\end{tabular}
+\caption{Principales colonnes de gdf\_toiture\_ajout\_cat\_sia.parquet}
+\label{tab:gdf_toiture_ajout_cat_sia_parquet_head}
+\end{table}
+
+Le format choisi pour le stockage du fichier est le geoparquet \cite{noauthor_geoparquet_nodate}. Ce format étend le standard open source parquet \cite{noauthor_parquet_nodate} en y intégrant toutes les spécificités nécessaires à la gestion des données géospatiales. Il combine ainsi les avantages de performance du format parquet (compression efficace, lecture rapide) avec la gestion native des géométries.
+
+\newpage
+\subsubsection{Orthophotos}
+\paragraph{Dimensions des orthophotos et contraintes}
+Les 416 orthophotos sont des fichiers au format GeoTIFF de dimensions 20000×20000 pixels. Cependant, la plupart des réseaux de neurones convolutifs sont entraînés sur des images de tailles comprises entre 224×224 et 1024×1024 pixels, correspondant aux standards des architectures classiques. Le découpage de ces orthophotos est nécessaire pour adapter les données aux contraintes des modèles.
+
+\paragraph{Processus de découpage}
+La Figure \ref{fig:ch3_preparation_donnees_orthophotos_01_etl} décrit les étapes de ce processus de découpage. Chaque tuile générée mesure 1280×1280 pixels (64×64 mètres) avec un recouvrement de 256 pixels (12,80 mètres) avec les tuiles adjacentes. Ce recouvrement garantit qu'aucun bâtiment ne soit coupé aux bordures des tuiles.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{02-main/figures/ch3/ch3_preparation_donnees_orthophotos_01_etl.png}
+    \caption{Découpe des orthophotos en tuiles 1280x1280 pixels avec recouvrement}
+    \label{fig:ch3_preparation_donnees_orthophotos_01_etl}
+\end{figure}
+
+\newpage
+\paragraph{Zone urbaine}
+La Figure \ref{fig:ch3_preparation_donnees_orthophotos_02_exemple_decoupe_orthophoto1} illustre la démarche adoptée. Pour chaque orthophoto, l'algorithme charge d'abord l'image et identifie toutes les toitures situées dans son périmètre. 
+
+Un quadrillage de tuiles de 1280×1280 pixels avec un recouvrement de 256 pixels est ensuite créé. Le processus parcourt le quadrillage de manière itérative, du coin supérieur gauche vers le coin inférieur droit. Seules les tuiles contenant au moins une toiture sont conservées et sauvegardées; les tuiles vides sont rejetées. Dans ce cas, 388 tuiles ont été retenues sur les 400 tuiles possibles par orthophoto.
+
+Dans les zones urbaines caractérisées par une forte densité de bâtiments, chaque orthophoto génère un nombre élevé de tuiles. Cette concentration de données est particulièrement intéressante pour l'entraînement du modèle, car elle offre une grande variété d'exemples architecturaux dans un espace géographique restreint.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{02-main/figures/ch3/ch3_preparation_donnees_orthophotos_02_exemple_decoupe_orthophoto1.png}
+    \caption{Exemple de découpage d'une orthophoto en tuiles pour une zone urbaine}
+    \label{fig:ch3_preparation_donnees_orthophotos_02_exemple_decoupe_orthophoto1}
+\end{figure}
+
+\newpage
+La Figure \ref{fig:ch3_preparation_donnees_orthophotos_03_exemple_decoupe_orthophoto2} présente le calepinage des tuiles conservées. Cette représentation illustre plus clairement le principe de recouvrement que la Figure \ref{fig:ch3_preparation_donnees_orthophotos_02_exemple_decoupe_orthophoto1}, une tuile peut être entièrement entourée par d'autres tuiles qui se chevauchent avec elle.
+
+Il convient de noter que toutes les tuiles générées ne présentent pas des dimensions de 1280×1280 pixels. Les tuiles situées en bordure droite de la Figure \ref{fig:ch3_preparation_donnees_orthophotos_03_exemple_decoupe_orthophoto2} sont plus étroites (tuile 18), de même que celles situées en partie basse (tuile 371).
+
+Ces cas particuliers seront traités après la finalisation de l'annotation. La priorité a été donnée à l'obtention de distributions de tuiles identiques pour l'ensemble des orthophotos, afin d'avoir une cohérence dans le processus de découpage et post-traitement.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{02-main/figures/ch3/ch3_preparation_donnees_orthophotos_03_exemple_decoupe_orthophoto2.png}
+    \caption{Calepinage des tuiles découpées pour la zone urbaine}
+    \label{fig:ch3_preparation_donnees_orthophotos_03_exemple_decoupe_orthophoto2}
+\end{figure}
+
+\newpage
+La tuile 258 (Figure \ref{fig:ch3_preparation_donnees_orthophotos_04a_exemple_decoupe_orthophoto3}), située à proximité de HEPIA, illustre bien cette complexité. Chaque tuile peut avoir jusqu'à 8 zones de recouvrement avec ses voisines (Figure \ref{fig:ch3_preparation_donnees_orthophotos_04_exemple_decoupe_orthophoto3}) au nord (238), nord-est (239), est (259), sud-est (279), sud (278), sud-ouest (277), ouest (257) et nord-ouest (237). Seule la zone centrale de 1024×1024 pixels n'a aucun recouvrement et constitue la partie unique de chaque tuile.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.40\linewidth]{02-main/figures/ch3/ch3_preparation_donnees_orthophotos_04a_exemple_decoupe_orthophoto3.png}
+    \caption{Tuile 258}
+    \label{fig:ch3_preparation_donnees_orthophotos_04a_exemple_decoupe_orthophoto3}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.90\linewidth]{02-main/figures/ch3/ch3_preparation_donnees_orthophotos_04_exemple_decoupe_orthophoto3.png}
+    \caption{Recouvrement pour la tuile 258}
+    \label{fig:ch3_preparation_donnees_orthophotos_04_exemple_decoupe_orthophoto3}
+\end{figure}
+
+
+\newpage
+\paragraph{Zone rurale}
+La Figure \ref{fig:ch3_preparation_donnees_orthophotos_05_exemple_decoupe_orthophoto4} illustre le découpage dans une zone plus rurale. Ces zones présentent des caractéristiques architecturales très différentes des zones urbaines, avec notamment des villas individuelles, des bâtiments agricoles et des constructions plus dispersées sur le territoire. Cette diversité typologique est nécessaire pour constituer un dataset riche et varié.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{02-main/figures/ch3/ch3_preparation_donnees_orthophotos_05_exemple_decoupe_orthophoto4.png}
+    \caption{Exemple de découpage d'une orthophoto en tuiles pour une zone rurale}
+    \label{fig:ch3_preparation_donnees_orthophotos_05_exemple_decoupe_orthophoto4}
+\end{figure}
+
+Comme observé précédemment, cette figure révèle également quelques bugs dans le script de traitement des tuiles, avec des tuiles manquantes par endroits (nord 41-42). Cependant, l'analyse à l'échelle du canton (Figure \ref{fig:ch3_preparation_donnees_orthophotos_07_exemple_decoupe_orthophoto6}) confirme que ces erreurs ponctuelles ne compromettent pas la qualité globale du découpage.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{02-main/figures/ch3/ch3_preparation_donnees_orthophotos_07_exemple_decoupe_orthophoto6.png}
+    \caption{Tuiles découpées pour toutes les orthophotos}
+    \label{fig:ch3_preparation_donnees_orthophotos_07_exemple_decoupe_orthophoto6}
+\end{figure}
+
+\newpage
+\paragraph{Implémentation}
+Le Code \ref{code:pseudo_code_decoupe_orthophotos_tuiles_1280_1280} utilise du pseudo-code pour expliquer les étapes de découpage. Les principales librairies employées sont rasterio \cite{noauthor_rasterio_nodate} et shapely \cite{noauthor_shapely_nodate}. Rasterio permet la manipulation des données raster (orthophotos), tandis que shapely offre une boîte à outils complète pour le traitement des géométries et données géospatiales.
+\vspace{0.35cm}
+\begin{textcode}
+DÉBUT process_geotiff_with_buildings(geotiff, gdf_batiments, output)
+    
+    // Chargement des données
+    CHARGER les géométries des bâtiments depuis le gdf_batiments
+    OUVRIR le fichier GeoTIFF source
+    
+    // Préparation spatiale
+    REPROJETER les bâtiments dans le même système de coordonnées que le GeoTIFF
+    CRÉER un index spatial pour optimiser les requêtes géométriques
+    FILTRER les bâtiments qui intersectent avec le GeoTIFF sélectionné
+    
+    // Découpage en tuiles
+    CALCULER le nombre de tuiles nécessaires (largeur × hauteur / taille_tuile)
+    
+    POUR chaque position de tuile (i, j) FAIRE
+        DÉFINIR la fenêtre de la tuile courante (1024x1024 pixels)
+        CALCULER l'emprise géographique de la tuile
+        CRÉER la zone de recouvrement autour de la tuile (1280x1280 pixels)
+        
+        // Détection des bâtiments
+        RECHERCHER les bâtiments qui intersectent la zone tamponnée
+        
+        SI aucun bâtiment trouvé ALORS
+            PASSER à la tuile suivante
+        SINON
+            EXTRAIRE les données raster de la zone tamponnée
+            SAUVEGARDER la tuile au format GeoTIFF
+            ENREGISTRER les métadonnées (géométries, identifiants, coordonnées)
+        FIN SI
+    FIN POUR
+    
+    SAUVEGARDER toutes les métadonnées dans un fichier Parquet
+    RETOURNER le chemin du fichier de métadonnées
+    
+FIN process_geotiff_with_buildings
+\end{textcode}
+\captionof{code}{Pseudo-code pour la découpe des orthophotos 20000x20000 pixels en tuiles de 1280x1280 pixels}
+\label{code:pseudo_code_decoupe_orthophotos_tuiles_1280_1280}
+
+La gestion de la mémoire peut devenir critique, chaque orthophoto occupant 1,4 Go. Il est possible de paralléliser la tâche, mais cela nécessite une machine disposant de suffisamment de mémoire RAM. 
+
+Lors de l'exécution, le principal goulot d'étranglement est l'accès aux images plutôt que le traitement. Si plusieurs images sont ouvertes simultanément, le système de stockage n'est pas toujours suffisamment rapide et constitue le facteur limitant. Avec une configuration de 4 cœurs et 64 Go de RAM, le processus complet a pris environ 2 heures.
+
+\paragraph{Métadonnées}
+Le fichier parquet résultant (Tableau \ref{tab:ch3_preparation_donnees_orthophotos_parquet_resultat}) va être essentiel pour la sélection des données du dataset, il inclut tous les éléments nécessaires pour clairement identifier les toitures ainsi que les tuiles associées.
+\begin{table}[H]
+    \centering
+    \begin{tabular}{@{}llp{0.55\textwidth}@{}}
+    \toprule
+    \textbf{Nom de la colonne} & \textbf{Type} & \textbf{Description} \\
+    \midrule
+    geotiff\_path & object & Chemin vers le fichier GeoTIFF source \\
+    tile\_path & object & Chemin vers le fichier de tuile généré \\
+    tile\_id & object & Identifiant unique de la tuile \\
+    tile\_row & int64 & Numéro de ligne de la tuile dans la grille \\
+    tile\_col & int64 & Numéro de colonne de la tuile dans la grille \\
+    tile\_bounds & object & Limites géographiques de la tuile \\
+    buffered\_bounds & object & Limites géographiques avec zone tampon \\
+    tile\_size & int64 & Taille de la tuile en pixels \\
+    buffer\_size & int64 & Taille de la zone tampon en pixels \\
+    tile\_pixel\_size & object & Résolution spatiale du pixel de la tuile \\
+    objectid & int64 & Identifiant dans la couche des toitures \\
+    egid & int64 & \gls{egid} \\
+    altitude\_min & float64 & Altitude minimale de la toiture \\
+    altitude\_max & float64 & Altitude maximale de la toiture\\
+    date\_leve & datetime64[ns] & Date de levé de la toiture \\
+    SHAPE\_\_Length & float64 & Périmètre de la géométrie en mètres \\
+    SHAPE\_\_Area & float64 & Surface de la géométrie en mètres carrés \\
+    globalid & object & Identifiant global unique dans \acrshort{sitg} \\
+    geometry & geometry & Géométrie du polygone de toiture géoréférencé \\
+    \bottomrule
+    \end{tabular}
+    \caption{Description des colonnes du fichier parquet résultat}
+    \label{tab:ch3_preparation_donnees_orthophotos_parquet_resultat}
+\end{table}
+
+\paragraph{Résultats}
+Au final, le processus génère 38294 tuiles pour 77993 \gls{egid} uniques à l'échelle du canton. Étant donné qu'un bâtiment peut fréquemment se retrouver sur plusieurs tuiles en raison du recouvrement, cela représente 672253 associations toiture-tuile. Les orthophotos situées près de la zone aéroportuaire, qui incluent une partie du territoire français, ne sont pas incluses dans le périmètre d'étude.
+
+Ces plus de 38000 tuiles constituent une base suffisante pour sélectionner les images nécessaires à la constitution d'un dataset représentatif et équilibré.
+
+\newpage
+
+\subsubsection{Sélection des données pour le dataset}
+La sélection des données nécessite une analyse des tuiles afin d'identifier les caractéristiques des toitures présentes. Les critères retenus pour cette sélection sont la classe \gls{sia} et la surface des toitures.
+
+\paragraph{Classe \gls{sia}}
+Ce critère repose sur l'hypothèse que les classes \gls{sia} regroupent des bâtiments aux caractéristiques architecturales similaires. Par exemple, les toitures industrielles sont généralement plates avec une construction légère, tandis que de nombreuses écoles ont été construites par les mêmes architectes avec des plans similaires.
+
+Pour analyser la distribution des tuiles par classe \gls{sia}, chaque tuile peut contenir plusieurs classes représentées. La classe dite dominante correspond à celle qui est majoritaire dans une tuile donnée.
+
+La Figure \ref{fig:ch3_selection_donnees_01_distribution_sia} illustre la distribution des classes \gls{sia} dominantes par tuile. Cette distribution présente une forte similarité avec celle des classes \gls{sia} pour les bâtiments hors-sol (Figure \ref{fig:ch3_preparation_donnees_categorie_sia_01_barplot}). Cette cohérence est nécessaire pour préserver la représentativité de l'échantillon lors de la sélection du dataset.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{02-main/figures/ch3/ch3_selection_donnees_01_distribution_sia.png}
+    \caption{Distribution des classes \gls{sia} dominantes par tuile}
+    \label{fig:ch3_selection_donnees_01_distribution_sia}
+\end{figure}
+
+\newpage
+\paragraph{Surface des toitures}
+Le deuxième critère retenu est la surface des toitures. Pour chaque tuile, la somme des surfaces de toiture est calculée, permettant ainsi de classifier les tuiles selon leur densité de couverture bâtie. Cette métrique distingue les tuiles avec une forte concentration de toitures, typiques des zones urbaines denses, de celles présentant une couverture plus éparse, caractéristiques des zones rurales ou de périphérie.
+
+La Figure \ref{fig:ch3_selection_donnees_02_taille_bin} représente cette distribution par intervalles de surface. Les intervalles ont été choisis de manière empirique dans le but de refléter les ordres de grandeur caractéristiques des différents types de bâtiments. 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{02-main/figures/ch3/ch3_selection_donnees_02_taille_bin.png}
+    \caption{Distribution des surfaces de toitures par intervalles}
+    \label{fig:ch3_selection_donnees_02_taille_bin}
+\end{figure}
+
+Chaque intervalle correspond à une typologie architecturale spécifique. Le plus petit intervalle (0-200 \si{\unit{\square\meter}}) inclut les petits bâtiments individuels et les villas. Le deuxième (200-500 \si{\unit{\square\meter}}) regroupe les petits bâtiments de logement collectif. Les intervalles suivants (500-1000 \si{\unit{\square\meter}}, 1000-2000 \si{\unit{\square\meter}}, 2000-5000 \si{\unit{\square\meter}}) correspondent respectivement aux logements collectifs de taille moyenne, aux grands ensembles résidentiels et aux bâtiments industriels ou commerciaux. Enfin, l'intervalle supérieur (plus de 5000 \si{\unit{\square\meter}}) regroupe les grandes infrastructures industrielles, commerciales ou publiques.
+
+\newpage
+\paragraph{Échantillonnage stratifié}
+L'échantillonnage des tuiles s'effectue selon une approche stratifiée pour garantir une représentation équilibrée de chaque catégorie. Cette méthode repose sur deux critères de stratification, la classe dominante (\texttt{dominant\_class}) et la catégorie de surface (\texttt{area\_bin}). 
+
+La fonction \texttt{sample\_tiles} (Code \ref{code:echantillonnage_tuiles}) implémente cette logique d'échantillonnage avec un paramètre \texttt{random\_state=42} qui permet la reproductibilité des résultats en fixant la graine du générateur de nombres aléatoires.
+
+\vspace{0.35cm}
+\begin{pythoncode}
+def sample_tiles(group, n_samples):
+    """
+    Échantillonne aléatoirement n_samples éléments d'un groupe.
+    Si le groupe contient moins d'éléments que demandé, retourne tous les éléments.
+    """
+    if len(group) > n_samples:
+        return group.sample(n=n_samples, random_state=42)
+    else:
+        return group
+\end{pythoncode}
+\captionof{code}{Fonction d'échantillonnage stratifié par groupe}
+\label{code:echantillonnage_tuiles}
+
+Cette stratégie utilise la méthode \texttt{groupby} pour créer des sous-groupes homogènes selon chaque combinaison des critères de stratification. La constante \texttt{SAMPLES\_PER\_CAT} (fixée à 8) définit le nombre maximum d'échantillons à extraire par catégorie, permettant ainsi de définir précisément la taille du dataset souhaité.
+
+\vspace{0.35cm}
+\begin{pythoncode}
+# Application de l'échantillonnage stratifié
+sampled_df = tile_groups.groupby(['dominant_class', 'area_bin']).apply(
+    sample_tiles, n_samples=SAMPLES_PER_CAT
+).reset_index(drop=True)
+\end{pythoncode}
+\captionof{code}{Application de l'échantillonnage stratifié}
+\label{code:application_echantillonnage}
+
+L'objectif est d'obtenir un sous-groupe homogène de 8 individus pour chaque combinaison classe \gls{sia} dominante / intervalle de surface. Avec 6 intervalles de surface définis par classe \gls{sia}, cela représente 48 individus par classe. Pour l'ensemble des 12 classes \gls{sia} considérées dans l'étude, le dataset cible comprend au total 576 individus stratifiés.
+
+\paragraph{Résultats}
+L'échantillon obtenu (Figure \ref{fig:ch3_selection_donnees_03_selection_stacked}) contient 539 échantillons au lieu de l'objectif fixé à 576. Cette différence s'explique par la rareté de certaines combinaisons classe \gls{sia} / intervalle de surface, particulièrement pour la restauration et les piscines couvertes.
+
+Pour la restauration, seuls 2 \gls{egid} ont une surface supérieure à 5000 \si{\unit{\square\meter}} à l'échelle du canton. Ces deux individus sont donc automatiquement inclus dans la sélection pour cette combinaison spécifique, sans pouvoir atteindre l'objectif de 8 individus.
+
+Les piscines couvertes constituent également un cas particulier avec seulement 11 \gls{egid} sur l'ensemble du canton (Figure \ref{fig:ch3_preparation_donnees_categorie_sia_01_barplot}). Ces bâtiments, généralement de taille conséquente avec des surfaces supérieures à 2000 \si{\unit{\square\meter}} dans la plupart des cas, ne permettent pas d'atteindre la représentation souhaitée dans tous les intervalles de surface.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{02-main/figures/ch3/ch3_selection_donnees_03_selection_stacked.png}
+    \caption{Sélection de l'échantillon pour le dataset}
+    \label{fig:ch3_selection_donnees_03_selection_stacked}
+\end{figure}
+
+L'échantillonnage stratifié permet de sélectionner de manière aléatoire les individus qui formeront les différents sous-groupes selon chaque combinaison classe \gls{sia} / intervalle de surface. La Figure \ref{fig:ch3_selection_donnees_04_selection_map_sia} confirme que l'échantillon inclut des tuiles réparties sur l'ensemble du canton, garantissant une bonne représentation de toutes les spécificités architecturales.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{02-main/figures/ch3/ch3_selection_donnees_04_selection_map_sia.png}
+    \caption{Échantillon sélectionné de 539 tuiles par catégorie \gls{sia}}
+    \label{fig:ch3_selection_donnees_04_selection_map_sia}
+\end{figure}
+
+\subsubsection{Labellisation}
+La labellisation (ou annotation) des données consiste à délimiter et classifier les zones d'intérêt sur chaque image. Ce processus permet à l'algorithme d'apprentissage supervisé d'identifier les caractéristiques visuelles spécifiques de chaque classe, lui permettant ensuite de reconnaître et segmenter ces mêmes éléments sur de nouvelles images.
+
+Dans le cadre de cette étude, une seule classe sera définie pour identifier les espaces libres sur les toitures.
+
+\paragraph{Outils d'annotation}
+La labellisation exige des outils spécialisés pour optimiser le processus, particulièrement pour la segmentation sémantique. Ce type d'annotation nécessite la création de polygones délimitant précisément les zones d'intérêt, ce qui implique souvent des formes géométriques complexes et irrégulières. L'intégration d'algorithmes de segmentation d'instance tels que SAM constitue une aide précieuse pour automatiser la sélection et la délimitation des zones à annoter.
+
+Le choix d'un outil approprié représente un défi important, gagner du temps dans chaque annotation devient critique quand il y a 539 images à annoter. Plusieurs solutions ont été évaluées :
+\begin{itemize}
+    \item Label Studio \cite{label_studio_open_nodate}
+    \item Roboflow \cite{roboflow_roboflow_nodate}
+    \item Supervisely \cite{supervisely_supervisely_nodate}
+\end{itemize}
+
+Label Studio \cite{label_studio_open_nodate}, disponible depuis 2019, offre la possibilité d'intégrer des algorithmes de machine learning pour assister le processus d'annotation. Il s'agit d'une librairie Python permettant de gérer les annotations dans une base de données locale via une interface web. Cet outil n'a pas été retenu car l'utilisation d'aides à l'annotation tels que SAM \cite{label_studio_label_nodate} est complexe à configurer dans la version gratuite, cette fonctionnalité étant principalement accessible via leur offre commerciale.
+
+Le deuxième outil évalué est Roboflow \cite{roboflow_roboflow_nodate}, une plateforme web qui propose gratuitement l'annotation assistée par SAM. L'un de ses principaux avantages est la possibilité d'entraîner un modèle de machine learning sur les premières images annotées, pour ensuite annoter automatiquement le reste du dataset. La version gratuite inclut l'accès à la plupart des fonctionnalités et offre quelques crédits pour l'annotation automatique.
+
+Cet outil a été utilisé pour créer un dataset de 45 images dans le cadre d'une des pistes explorées (sous-section \ref{subsubsec:fine_tuning_sam}). L'interface utilisateur est assez intuitive et ergonomique.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{02-main//figures//ch3/ch3_labellisation_01_outils_01_robolfow.png}
+    \caption{Interface Roboflow}
+    \label{fig:ch3_labellisation_01_outils_01_robolfow}
+\end{figure}
+
+Malgré que Roboflow a tous les outils nécessaires pour effectuer des annotations rapides, SAM (Figure \ref{fig:ch3_labellisation_01_outils_02_robolfow_sam}) présente certaines limitations et ne permet qu'une sélection simplifiée des zones à annoter. Dans le contexte spécifique des toitures, cette approche nécessite de nombreux clics pour obtenir une annotation correspondant précisément à la zone souhaitée. 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{02-main/figures/ch3/ch3_labellisation_01_outils_02_robolfow_sam.png}
+    \caption{Exemple d'annotation avec SAM dans Roboflow}
+    \label{fig:ch3_labellisation_01_outils_02_robolfow_sam}
+\end{figure}
+
+Si l'objectif porte sur une zone clairement délimitée, SAM est suffisant. En revanche, dans des situations complexes présentant des zones d'ombrage ou des variations de contraste importantes, le processus d'annotation devient considérablement plus laborieux et chronophage.
+
+Le troisième outil évalué, Supervisely, propose d'intégrer, en complément de SAM2, l'algorithme ClickSEG \cite{chen_conditional_2021} \cite{chen_focalclick_2022} (Figure \ref{fig:ch3_labellisation_01_outils_03_supervisely_modeles}). Supervisely offre la possibilité d'encadrer la zone d'intérêt (Figure \ref{fig:ch3_labellisation_01_outils_04_supervisely_segmentation}) pour ensuite la segmenter automatiquement. Cette approche permet de sélectionner une toiture dans son ensemble puis de retirer les parties occupées.
+
+En pratique, les propositions de segmentation générées par ClickSEG se sont révélées significativement plus précises et pertinentes que celles produites par SAM2.
+
+Supervisely a été retenu comme outil de labellisation car il permet d'annoter les images avec plus de précision et rapidité que avec Roboflow. Cependant, après avoir annoté quelques images, certaines limitations sont apparues, chaque annotation génère des requêtes à leurs serveurs, et le nombre de requêtes autorisé dans la version gratuite limite l'annotation à quelques images par heure.
+
+La version payante ne présente pas cette restriction et a été jugée pertinente à cause du gain de temps considérable qu'elle apporte. Le processus complet de labellisation s'est étalé sur environ un mois et demi, représentant environ 30 heures par semaine.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.97\linewidth]{02-main/figures/ch3/ch3_labellisation_01_outils_03_supervisely_modeles.png}
+    \caption{Modèles de segmentation disponibles dans Supervisely}
+    \label{fig:ch3_labellisation_01_outils_03_supervisely_modeles}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.97\linewidth]{02-main/figures/ch3/ch3_labellisation_01_outils_04_supervisely_segmentation.png}
+    \caption{Labellisation avec segmentation dans Supervisely}
+    \label{fig:ch3_labellisation_01_outils_04_supervisely_segmentation}
+\end{figure}
+
+\paragraph{Critères d'annotation}
+L'annotation d'images exige de fixer certains critères pour garantir la qualité. Les éléments suivants sont considérés comme des obstacles sur les toitures:
+\begin{itemize}
+    \item Balcons et terrasses praticables
+    \item Toitures végétalisées
+    \item Fenêtres (Velux), verrières et puits de lumière
+    \item Lucarnes
+    \item Cheminées, turbinettes, monoblocs, gaines
+    \item Antennes (TV, satellite, téléphonie, ...)
+    \item Acrotères
+    \item Panneaux solaires (photovoltaïque et thermique)
+    \item Constructions métalliques (support de publicité)
+\end{itemize}
+
+Le premier exemple est une toiture plate (Figure \ref{fig:labellisation_acrotere_exemple}). Les éléments considérés comme obstacles sont les gaines de ventilation, les acrotères ainsi que la structure métallique. Le reste est labellisé comme toiture libre (couleur violette sur la Figure \ref{fig:ch3_labellisation_02_exemples_01_acrotere2}). Cette zone correspond à l'espace effectivement disponible sur la toiture, une fois tous les obstacles identifiés et délimités.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch3/ch3_labellisation_02_exemples_01_acrotere1.png}
+        \caption{Original}
+        \label{fig:ch3_labellisation_02_exemples_01_acrotere1}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.485\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch3/ch3_labellisation_02_exemples_01_acrotere2.png}
+        \caption{Labellisation}
+        \label{fig:ch3_labellisation_02_exemples_01_acrotere2}
+    \end{subfigure}
+    \caption{Exemple de labellisation 1}
+    \label{fig:labellisation_acrotere_exemple}
+\end{figure}
+
+Le deuxième exemple (Figure \ref{fig:labellisation_lucarne_exemple}) représente une toiture comportant des lucarnes. La zone considérée comme libre est représentée en vert sur la Figure \ref{fig:ch3_labellisation_02_exemples_02_lucarne2}. Cette délimitation exclut les lucarnes, la zone périphérique proche du bord de toiture, les équipements techniques (antennes, éléments de ventilation) ainsi que la partie arrondie visible côté nord de la toiture.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch3/ch3_labellisation_02_exemples_02_lucarne1.png}
+        \caption{Original}
+        \label{fig:ch3_labellisation_02_exemples_02_lucarne1}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch3/ch3_labellisation_02_exemples_02_lucarne2.png}
+        \caption{Labellisation}
+        \label{fig:ch3_labellisation_02_exemples_02_lucarne2}
+    \end{subfigure}
+    \caption{Exemple de labellisation 2}
+    \label{fig:labellisation_lucarne_exemple}
+\end{figure}
+
+L'exemple suivant (Figure \ref{fig:labellisation_solaire_exemple}) représente une toiture avec des panneaux solaires existants. Les panneaux solaires, les espaces entre panneaux et les puits de lumière sont considérés comme des obstacles. Cependant, s'il y a de grands espaces entre les puits de lumière et les panneaux, ceux-ci sont considérés comme libres (couleur violette dans la Figure \ref{fig:ch3_labellisation_02_exemples_03_solaire2}).
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch3/ch3_labellisation_02_exemples_03_solaire1.png}
+        \caption{Original}
+        \label{fig:ch3_labellisation_02_exemples_03_solaire1}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch3/ch3_labellisation_02_exemples_03_solaire2.png}
+        \caption{Labellisation}
+        \label{fig:ch3_labellisation_02_exemples_03_solaire2}
+    \end{subfigure}
+    \caption{Exemple de labellisation 3}
+    \label{fig:labellisation_solaire_exemple}
+\end{figure}
+
+Le dataset inclus aussi des images qui ont une toiture mais qui 
 
 
 
@@ -369,12 +785,22 @@ Les catégories \gls{sia} (Tableau \ref{tab:categories_batiments_sia_380_1}) ind
 
 
 
-\section{Création du dataset}
-Une fois la phase préparatoire terminée, la phase suivante va se pencher sur les données nécessaires à l'entraînement du modèle.
 
-L'examen des datasets disponibles (Section \ref{sec:dataset_disponible}) révèle une carence majeure : seulement le dataset RID propose des annotations pour l'identification des espaces libres sur toitures. Ce dataset présente des limitations importantes, avec des images concentrées sur un contexte architectural spécifique (rural allemand) et des performances dégradées lors des tests sur d'autres types de bâtiments, comme le démontrent les essais sur le milieu urbain bruxellois.
 
-La création d'un dataset pour la segmentation sémantique représente un défi majeur en termes de temps et de ressources. Cette section détaille d'abord les données sources utilisées, puis le processus d'annotation mis en place, et enfin la structuration des différents datasets créés.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 \todo[inline]{Exemple de todo}
 \section{Développement du modèle}
 \subsection{Architecture du modèle} % unet et compagnie, yolo?
@@ -624,6 +1050,7 @@ La sixième étape (Figure \ref{fig:ch3_essai_sam_06_une_zone_libre}) détermine
 \end{figure}
 
 \subsubsection{Fine-tuning de SAM}
+\label{subsubsec:fine_tuning_sam}
 La piste d'un fine-tuning de SAM pour mieux l'adapter à la tâche d'identification des espaces libres a été explorée. Un dataset de 45 images (Figure \ref{fig:ch3_piste_exploree_classification_11_fine_tuning_dataset}) n'a pas permis d'améliorer significativement les performances du modèle. Une des problématiques rencontrées lors de la création de ce dataset est qu'il faut identifier tous les obstacles présents sur la toiture, ce qui prend énormément de temps et nécessite une grande quantité de classes différentes.
 
 \begin{figure}[H]

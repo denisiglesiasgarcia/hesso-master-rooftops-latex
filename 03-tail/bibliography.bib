@@ -1,4 +1,97 @@
 
+@misc{chen_focalclick_2022,
+	title = {{FocalClick}: {Towards} {Practical} {Interactive} {Image} {Segmentation}},
+	shorttitle = {{FocalClick}},
+	url = {http://arxiv.org/abs/2204.02574},
+	doi = {10.48550/arXiv.2204.02574},
+	abstract = {Interactive segmentation allows users to extract target masks by making positive/negative clicks. Although explored by many previous works, there is still a gap between academic approaches and industrial needs: first, existing models are not efficient enough to work on low power devices; second, they perform poorly when used to refine preexisting masks as they could not avoid destroying the correct part. FocalClick solves both issues at once by predicting and updating the mask in localized areas. For higher efficiency, we decompose the slow prediction on the entire image into two fast inferences on small crops: a coarse segmentation on the Target Crop, and a local refinement on the Focus Crop. To make the model work with preexisting masks, we formulate a sub-task termed Interactive Mask Correction, and propose Progressive Merge as the solution. Progressive Merge exploits morphological information to decide where to preserve and where to update, enabling users to refine any preexisting mask effectively. FocalClick achieves competitive results against SOTA methods with significantly smaller FLOPs. It also shows significant superiority when making corrections on preexisting masks. Code and data will be released at github.com/XavierCHEN34/ClickSEG},
+	urldate = {2025-06-12},
+	publisher = {arXiv},
+	author = {Chen, Xi and Zhao, Zhiyan and Zhang, Yilei and Duan, Manni and Qi, Donglian and Zhao, Hengshuang},
+	month = apr,
+	year = {2022},
+	note = {arXiv:2204.02574 [cs]},
+	keywords = {Computer Science - Computer Vision and Pattern Recognition},
+}
+
+@inproceedings{chen_conditional_2021,
+	title = {Conditional {Diffusion} for {Interactive} {Segmentation}},
+	url = {https://ieeexplore.ieee.org/document/9709986},
+	doi = {10.1109/ICCV48922.2021.00725},
+	abstract = {In click-based interactive segmentation, the mask extraction process is dictated by positive/negative user clicks; however, most existing methods do not fully exploit the user cues, requiring excessive numbers of clicks for satisfactory results. We propose Conditional Diffusion Network (CDNet), which propagates labeled representations from clicks to conditioned destinations with two levels of affinities: Feature Diffusion Module (FDM) spreads features from clicks to potential target regions with global similarity; Pixel Diffusion Module (PDM) diffuses the predicted logits of clicks within locally connected regions. Thus, the information inferred by user clicks could be generalized to proper destinations. In addition, we put forward Diversified Training (DT), which reduces the optimization ambiguity caused by click simulation. With FDM,PDM and DT, CDNet could better understand user’s intentions and make better predictions with limited interactions. CDNet achieves state-of-the-art performance on several benchmarks.},
+	urldate = {2025-06-12},
+	booktitle = {2021 {IEEE}/{CVF} {International} {Conference} on {Computer} {Vision} ({ICCV})},
+	author = {Chen, Xi and Zhao, Zhiyan and Yu, Feiwu and Zhang, Yilei and Duan, Manni},
+	month = oct,
+	year = {2021},
+	note = {ISSN: 2380-7504},
+	keywords = {Benchmark testing, Computer vision, Feature extraction, Frequency division multiplexing, Optimization, Segmentation, Training, Transfer/Low-shot/Semi/Unsupervised Learning, Vision applications and systems, grouping and shape},
+	pages = {7325--7334},
+}
+
+@misc{supervisely_supervisely_nodate,
+	title = {Supervisely: {Curate}, {Label} and {Build} {Production} {Models} in {One} {Platform}},
+	url = {https://supervisely.com/},
+	urldate = {2025-06-12},
+	author = {Supervisely},
+}
+
+@misc{roboflow_roboflow_nodate,
+	title = {Roboflow: {Computer} vision tools for developers and enterprises},
+	shorttitle = {Roboflow},
+	url = {https://roboflow.com},
+	abstract = {Everything you need to build and deploy computer vision models, from automated annotation tools to high-performance deployment solutions.},
+	language = {en},
+	urldate = {2025-06-12},
+	author = {Roboflow},
+}
+
+@misc{label_studio_label_nodate,
+	title = {Label {Studio} {Documentation} — {Integrate} {Label} {Studio} into your machine learning pipeline},
+	url = {https://labelstud.io/guide/ml},
+	abstract = {Machine learning frameworks for integrating your model development pipeline seamlessly with your data labeling workflow.},
+	language = {en},
+	urldate = {2025-06-12},
+	author = {Label Studio},
+}
+
+@misc{label_studio_open_nodate,
+	title = {Open {Source} {Data} {Labeling}},
+	url = {https://labelstud.io/},
+	abstract = {A flexible data labeling tool for all data types. Prepare training data for computer vision, natural language processing, speech, voice, and video models.},
+	language = {en},
+	urldate = {2025-06-12},
+	journal = {Label Studio},
+	author = {Label Studio},
+}
+
+@misc{noauthor_shapely_nodate,
+	title = {The {Shapely} {User} {Manual} — {Shapely} 2.1.1 documentation},
+	url = {https://shapely.readthedocs.io/en/stable/manual.html},
+	urldate = {2025-06-10},
+}
+
+@misc{noauthor_rasterio_nodate,
+	title = {Rasterio: access to geospatial raster data — rasterio 1.5.0.dev documentation},
+	url = {https://rasterio.readthedocs.io/en/latest/index.html},
+	urldate = {2025-06-10},
+}
+
+@misc{noauthor_parquet_nodate,
+	title = {Parquet},
+	url = {https://parquet.apache.org/},
+	abstract = {The Apache Parquet Website},
+	language = {en},
+	urldate = {2025-06-10},
+	journal = {Apache Parquet},
+}
+
+@misc{noauthor_geoparquet_nodate,
+	title = {Geoparquet: geospatial data in parquet},
+	url = {https://geoparquet.org/},
+	urldate = {2025-06-10},
+}
+
 @misc{cern_home_nodate,
 	title = {Home {\textbar} {CERN}},
 	url = {https://home.cern/},
@@ -581,7 +674,7 @@ Access the terms and conditions of IGN images at this URL: https://www.etalab.go
 	keywords = {Computer and Information Science, Engineering},
 }
 
-@misc{roboflow_roboflow_nodate,
+@misc{roboflow_roboflow_nodate-1,
 	title = {Roboflow {Universe}: {Computer} {Vision} {Datasets}},
 	shorttitle = {Roboflow {Universe}},
 	url = {https://universe.roboflow.com/},
