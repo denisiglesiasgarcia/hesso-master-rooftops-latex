@@ -156,7 +156,8 @@ Une fois que les données sont sélectionnées, l'étape suivante est la labelli
 \begin{itemize}
     \item Préparation des données
     \item Sélection des données pour le dataset
-    \item Labellisation
+    \item Labellisation (annotations)
+    \item Post-traitement des données annotées
 \end{itemize}
 
 \subsection{Préparation des données}
@@ -776,7 +777,58 @@ L'exemple suivant (Figure \ref{fig:labellisation_solaire_exemple}) représente u
     \label{fig:labellisation_solaire_exemple}
 \end{figure}
 
-Le dataset inclus aussi des images qui ont une toiture mais qui 
+Le dataset inclut aussi des images qui contiennent une toiture selon la couche \acrshort{sitg} des toitures mais où il n'y a pas de surface libre. Dans la Figure \ref{fig:ch3_labellisation_02_exemples_04_image_non_annotee}, il y a bien un bâtiment dans la zone nord-est de l'image, mais celui-ci semble être une serre vitrée.
+
+L'ajout de ce type d'exemples sans toiture exploitable devrait permettre à l'algorithme de mieux comprendre les caractéristiques recherchées dans un espace libre. Cette approche pourrait également éviter que l'algorithme considère automatiquement toutes les surfaces comme libres, ce qui l'aiderait à développer une capacité de discrimination plus fine entre les espaces réellement disponibles et ceux qui ne le sont pas.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{02-main/figures/ch3/ch3_labellisation_02_exemples_04_image_non_annotee.png}
+    \caption{Exemple d'image sans aucune surface libre disponible}
+    \label{fig:ch3_labellisation_02_exemples_04_image_non_annotee}
+\end{figure}
+
+\paragraph{Résultat}
+Le dataset obtenu consiste en 539 images accompagnées de leur masque d'annotation binaire. Le masque correspond à une image de la même taille que l'image originale, où chaque pixel prend une valeur de 1 si la toiture est libre à cet endroit, ou une valeur de 0 si cette zone correspond à un obstacle ou une surface non exploitable. Cette représentation binaire permet à l'algorithme d'apprentissage de distinguer clairement les espaces disponibles des zones occupées.
+
+Pour des raisons de taille d'image, les images utilisées lors de l'annotation dans Supervisely sont des PNG comprimés (environ 2 Mo chacune). Une fois l'annotation finalisée, ces images sont remplacées par les fichiers originaux en format GeoTIFF (environ 5 Mo chacun) afin de préserver toutes les informations géographiques nécessaires ainsi que la qualité originale des images. Le dataset complet occupe ainsi un espace d'environ 4,4 Go en incluant tous les fichiers auxiliaires.
+
+Supervisely propose également d'autres formats d'annotation que les masques binaires. L'outil offre notamment les formats YOLOv8, COCO, PASCAL VOC ainsi que leur propre format propriétaire.
+
+\subsubsection{Post-traitement des données annotées}
+Les données annotées doivent être traitées puis réparties en datasets d'entraînement, de validation et de test. Cette étape constitue une phase cruciale qui détermine la qualité de l'apprentissage du modèle et sa capacité de généralisation. La Figure \ref{fig:ch3_postprocessing_dataset_03_overview} décrit les principales phases.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{02-main/figures/ch3/ch3_postprocessing_dataset_03_overview.png}
+    \caption{Principales étapes du post-traitement}
+    \label{fig:ch3_postprocessing_dataset_03_overview}
+\end{figure}
+
+\paragraph{Rognage des images}
+Les données ont été annotées sur l'intégralité de l'image pour des raisons pratiques (Figure \ref{fig:ch3_postprocessing_dataset_01_exemple_dataset}), mais il semble pertinent de retirer les zones situées en dehors des toitures (Figure \ref{fig:ch3_postprocessing_dataset_02_exemple_postraitement}). Cette approche permettra au modèle de concentrer son apprentissage sur l'identification des zones libres spécifiquement sur les toitures, plutôt que d'apprendre à distinguer des éléments comme des voitures ou d'autres objets présents dans l'environnement urbain.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch3/ch3_postprocessing_dataset_01_exemple_dataset.png}
+        \caption{Tuile d'exemple}
+        \label{fig:ch3_postprocessing_dataset_01_exemple_dataset}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch3/ch3_postprocessing_dataset_02_exemple_postraitement.png}
+        \caption{Tuile d'exemple après post-traitement}
+        \label{fig:ch3_postprocessing_dataset_02_exemple_postraitement}
+    \end{subfigure}
+    \caption{Exemple de post-traitement}
+    \label{fig:exemple_post_traitement_dataset}
+\end{figure}
+
+Les images étant au format GeoTIFF, il suffit de définir à 0 (noir) toutes les zones qui n'intersectent pas avec la couche des toitures. Lors de l'annotation, il n'est pas toujours évident de distinguer une toiture d'un couvert, ce qui peut conduire à identifier des zones libres en dehors de la couche des toitures. L'opération de rognage est donc également appliquée aux annotations correspondantes, évitant ainsi que le modèle considère à tort qu'une zone masquée (pixels à 0) puisse correspondre à une toiture libre.
+
+Ce processus permet de restreindre l'apprentissage aux seules zones d'intérêt et d'éviter toute confusion dans l'interprétation des données.
 
 
 
@@ -791,16 +843,7 @@ Le dataset inclus aussi des images qui ont une toiture mais qui
 
 
 
-
-
-
-
-
-
-
-
-
-
+\newpage
 \todo[inline]{Exemple de todo}
 \section{Développement du modèle}
 \subsection{Architecture du modèle} % unet et compagnie, yolo?
