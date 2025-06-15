@@ -805,7 +805,7 @@ Les données annotées doivent être traitées puis réparties en datasets d'ent
 \end{figure}
 
 \paragraph{Rognage des images}
-Les données ont été annotées sur l'intégralité de l'image pour des raisons pratiques (Figure \ref{fig:ch3_postprocessing_dataset_01_exemple_dataset}), mais il semble pertinent de retirer les zones situées en dehors des toitures (Figure \ref{fig:ch3_postprocessing_dataset_02_exemple_postraitement}). Cette approche permettra au modèle de concentrer son apprentissage sur l'identification des zones libres spécifiquement sur les toitures, plutôt que d'apprendre à distinguer des éléments comme des voitures ou d'autres objets présents dans l'environnement urbain.
+Les données ont été annotées sur l'intégralité de l'image pour des raisons pratiques (Figure \ref{fig:ch3_postprocessing_dataset_01_exemple_dataset}), mais il semble pertinent de retirer les zones situées en dehors des toitures (Figure \ref{fig:ch3_postprocessing_dataset_02_exemple_postraitement}). Cette approche permettra au modèle de se centrer spécifiquement sur les toitures, plutôt que d'apprendre à distinguer des éléments comme des voitures ou d'autres objets présents dans l'environnement urbain.
 
 \begin{figure}[H]
     \centering
@@ -828,10 +828,319 @@ Les données ont été annotées sur l'intégralité de l'image pour des raisons
 
 Les images étant au format GeoTIFF, il suffit de définir à 0 (noir) toutes les zones qui n'intersectent pas avec la couche des toitures. Lors de l'annotation, il n'est pas toujours évident de distinguer une toiture d'un couvert, ce qui peut conduire à identifier des zones libres en dehors de la couche des toitures. L'opération de rognage est donc également appliquée aux annotations correspondantes, évitant ainsi que le modèle considère à tort qu'une zone masquée (pixels à 0) puisse correspondre à une toiture libre.
 
-Ce processus permet de restreindre l'apprentissage aux seules zones d'intérêt et d'éviter toute confusion dans l'interprétation des données.
+\paragraph{Fuite de données entre datasets}
+Les tuiles présentent un recouvrement de 256 pixels qui peut causer des problèmes s'il n'est pas géré correctement. La Figure \ref{fig:ch3_postprocessing_dataset_04_data_leakage} illustre cette problématique avec 3 datasets destinés à l'entraînement d'un modèle. Si les tuiles sont assignées de manière aléatoire aux différents datasets, il existe un risque que le dataset d'entraînement contienne une partie de toiture également présente dans le dataset de test. Cette situation compromet l'évaluation des performances du modèle, puisque celui-ci aura déjà été exposé à certaines zones lors de la phase d'apprentissage, faussant ainsi les résultats obtenus sur des données supposées inconnues.
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{02-main/figures/ch3/ch3_postprocessing_dataset_04_data_leakage.png}
+    \caption{Fuite de données entre datasets}
+    \label{fig:ch3_postprocessing_dataset_04_data_leakage}
+\end{figure}
 
+Cette fuite de données entre datasets peut également se produire entre le dataset d'entraînement et celui de validation, ce qui conduirait le modèle à apprendre par cœur l'emplacement des toitures libres au lieu de comprendre les caractéristiques visuelles nécessaires pour identifier une toiture libre. Le modèle développerait alors une capacité de mémorisation plutôt qu'une réelle capacité de généralisation, compromettant ses performances sur de nouvelles données.
 
+\paragraph{Traitement des chevauchements entre tuiles}
+Une des manières de résoudre le problème des fuites de données consiste en un masquage sélectif d'une des tuiles en cas de recouvrement. La Figure \ref{fig:ch3_postprocessing_dataset_05_traitement_chevauchement} illustre ce processus en trois phases distinctes.
+
+\begin{figure}[H]
+    \centering
+    \makebox[\textwidth][c]{\includegraphics[width=1.15\textwidth]{02-main//figures/ch3/ch3_postprocessing_dataset_05_traitement_chevauchement.png}}
+    \caption{Traitement des chevauchements entre tuiles}
+    \label{fig:ch3_postprocessing_dataset_05_traitement_chevauchement}
+\end{figure}
+
+La première étape consiste à identifier les paires de tuiles qui se chevauchent géographiquement. La deuxième phase calcule leur position relative pour déterminer précisément les zones de recouvrement. Enfin, la troisième étape procède au masquage d'une partie spécifique dans l'une des tuiles concernées, éliminant ainsi la redondance d'information entre les datasets.
+
+La première étape est réalisée par la fonction \texttt{find\_overlapping\_tiles} (Code \ref{code:post_traitement_detection_tuile_chevauchement}) qui permet d'identifier les paires de tuiles se chevauchent.
+
+\vspace{0.35cm}
+\begin{pythoncode}
+def find_overlapping_tiles(gdf, min_overlap_area=1.0):
+    """
+    Simple function to find overlapping tiles using spatial index.
+    Returns a list of overlapping tile pairs.
+    """
+    overlaps = []
+    n = len(gdf)
+    
+    # Create spatial index for fast lookups
+    sindex = gdf.sindex
+    
+    # Check each tile against potential neighbors
+    for i in range(n):
+        geom1 = gdf.iloc[i]['geometry']
+        tile_id1 = gdf.iloc[i]['tile_id']
+        
+        # Find potential overlapping tiles using bounding box
+        bbox = geom1.bounds  # Get bounding box coordinates
+        potential_matches = list(sindex.intersection(bbox))
+        
+        # Remove self-match and only check tiles with higher index
+        potential_matches = [j for j in potential_matches if j > i]
+        
+        # Check each potential match
+        for j in potential_matches:
+            geom2 = gdf.iloc[j]['geometry']
+            tile_id2 = gdf.iloc[j]['tile_id']
+            
+            # Check if geometries actually intersect
+            if geom1.intersects(geom2):
+                
+                # Calculate overlap area
+                intersection = geom1.intersection(geom2)
+                overlap_area = intersection.area
+                
+                # Only keep overlaps above minimum threshold
+                if overlap_area > min_overlap_area:
+                    
+                    # Calculate overlap percentages
+                    overlap_pct1 = (overlap_area / geom1.area) * 100
+                    overlap_pct2 = (overlap_area / geom2.area) * 100
+                    
+                    # Store overlap information
+                    overlaps.append({
+                        'tile_id1': tile_id1,
+                        'tile_id2': tile_id2,
+                        'overlap_area': overlap_area,
+                        'overlap_percentage_1': overlap_pct1,
+                        'overlap_percentage_2': overlap_pct2
+                    })
+    
+    return overlaps
+\end{pythoncode}
+\captionof{code}{Détection des tuiles qui se chevauchent}
+\label{code:post_traitement_detection_tuile_chevauchement}
+
+La fonction commence par créer un index spatial pour optimiser les performances de recherche. Elle divise l'espace géographique en zones hiérarchiques (rectangles englobants) et référence les géométries présentes dans chaque zone. Cette structure permet d'éviter de comparer chaque géométrie avec l'ensemble des autres lors d'opérations spatiales, réduisant considérablement le nombre de calculs nécessaires et améliorant ainsi les performances de l'algorithme.
+
+Pour chaque tuile, la fonction identifie ensuite les candidates potentielles en utilisant les boîtes englobantes, puis vérifie si une intersection géométrique réelle existe entre elles. Lorsqu'un recouvrement est détecté et dépasse le seuil minimal défini, elle calcule la surface d'intersection ainsi que les pourcentages de recouvrement pour chacune des deux tuiles concernées. Ces informations sont finalement stockées dans un dictionnaire Python.
+
+La deuxième étape est réalisée par la fonction \texttt{determine\_relative\_position} (Code \ref{code:post_traitement_position_relative_tuiles}) qui traite les paires de tuiles identifiées lors de l'étape précédente. Cette fonction calcule les centroïdes des deux tuiles concernées et détermine leur position relative l'une par rapport à l'autre. Cette information de positionnement sera ensuite utilisée pour décider quelle zone masquer lors du traitement des recouvrements.
+
+\vspace{0.35cm}
+\begin{pythoncode}
+def determine_relative_position(geom1, geom2):
+    """
+    Determine where geom1 is located relative to geom2.
+    Returns: 'top', 'bottom', 'left', 'right', 'top-left', etc.
+    """
+    
+    # Get the center points of both geometries
+    center_x1, center_y1 = geom1.centroid.x, geom1.centroid.y
+    center_x2, center_y2 = geom2.centroid.x, geom2.centroid.y
+    
+    # Compare vertical positions
+    if center_y1 > center_y2:
+        vertical = "top"
+    elif center_y1 < center_y2:
+        vertical = "bottom"
+    else:
+        vertical = None
+    
+    # Compare horizontal positions
+    if center_x1 > center_x2:
+        horizontal = "right"
+    elif center_x1 < center_x2:
+        horizontal = "left"
+    else:
+        horizontal = None
+    
+    # Combine results
+    if vertical and horizontal:
+        return f"{vertical}-{horizontal}"
+    elif vertical:
+        return vertical
+    elif horizontal:
+        return horizontal
+    else:
+        return "center"
+
+\end{pythoncode}
+\captionof{code}{Position relative des tuiles}
+\label{code:post_traitement_position_relative_tuiles}
+
+Finalement, la fonction \texttt{remove\_overlaps} (Code \ref{code:post_traitement_masquage_selectif}) applique un masquage sélectif aux tuiles qui se chevauchent, en ciblant spécifiquement celles situées à droite ou en haut selon leur position relative déterminée à l'étape précédente. Cette approche systématique garantit l'élimination des redondances tout en conservant l'intégrité des données dans chaque dataset.
+
+\vspace{0.35cm}
+\begin{pythoncode}
+def remove_overlaps(overlap_df, gdf_dataset, remove_positions=['right', 'top']):
+    """
+    Remove overlaps by setting overlapping pixels to 0.
+    
+    Args:
+        overlap_df: DataFrame with overlap information
+        gdf_dataset: GeoDataFrame with file paths and geometries
+        remove_positions: List of positions to remove (e.g., ['right', 'top'])
+                         Default removes right and top tiles
+    """
+    
+    for idx, row in overlap_df.iterrows():
+        
+        # Get the two overlapping files and geometries
+        file1 = gdf_dataset.iloc[row['index1']]['processed_img_path_tif']
+        file2 = gdf_dataset.iloc[row['index2']]['processed_img_path_tif'] 
+        geom1 = gdf_dataset.iloc[row['index1']]['geometry']
+        geom2 = gdf_dataset.iloc[row['index2']]['geometry']
+        
+        # Decide which file to modify based on position and preferences
+        position = row['relative_position']
+        
+        # Check if any component of the position should be removed
+        should_remove_geom1 = any(pos in position for pos in remove_positions)
+        
+        if should_remove_geom1:
+            file_to_modify = file1    # Remove from geom1 (the positioned tile)
+            modify_geom = geom1
+        else:
+            file_to_modify = file2    # Remove from geom2 (the reference tile)
+            modify_geom = geom2
+            
+        intersection = geom1.intersection(geom2)
+        
+        # Open GeoTIFF and set overlapping pixels to 0
+        with rasterio.open(file_to_modify, 'r+') as src:
+            
+            # Convert geographic intersection to pixel coordinates
+            minx, miny, maxx, maxy = intersection.bounds
+            window = from_bounds(minx, miny, maxx, maxy, src.transform)
+            
+            # Get pixel indices
+            col_start = int(window.col_off)
+            row_start = int(window.row_off) 
+            col_end = col_start + int(window.width)
+            row_end = row_start + int(window.height)
+            
+            # Set pixels to 0 for all bands
+            for band in range(1, src.count + 1):
+                data = src.read(band)
+                data[row_start:row_end, col_start:col_end] = 0
+                src.write(data, band)
+\end{pythoncode}
+\captionof{code}{Masquage sélectif}
+\label{code:post_traitement_masquage_selectif}
+
+\paragraph{Distribution stratifiées pour validation croisée}
+La segmentation sémantique nécessite de grandes quantités de données annotées. Pour exploiter au mieux celles qui sont disponibles, il convient d'aller au-delà de la répartition classique entre entraînement, validation et test. L'approche traditionnelle implique que seul le dataset d'entraînement est utilisé pour former le modèle, le dataset de validation servant à évaluer les performances pendant l'entraînement, tandis que le dataset de test n'est jamais exploité durant cette phase et reste réservé à l'évaluation finale une fois l'entraînement terminé.
+
+Une alternative plus complexe à mettre en place consiste à utiliser une validation croisée (Figure \ref{fig:ch3_postprocessing_dataset_06_kfold}). Cette méthode permet de diviser les données annotées en une partie d'entraînement constituée de 5 ensembles de données (``folds'') et un dataset de test distinct. L'avantage de cette approche réside dans le fait que chaque fold sert alternativement de dataset de validation. Ainsi, lors du premier entraînement, les folds 0, 1, 2 et 3 constituent l'ensemble d'entraînement tandis que le fold 4 sert de validation. Lors de l'entraînement suivant, les folds 0, 1, 2 et 4 sont utilisés pour l'entraînement et le fold 3 devient le dataset de validation. Cette rotation se poursuit jusqu'à ce que chaque fold ait servi de validation. Le dataset de test demeure quant à lui exclusivement réservé à l'évaluation finale, une fois l'ensemble du processus d'entraînement terminé.
+
+\begin{figure}[H]
+    \centering
+    \makebox[\textwidth][c]{\includegraphics[width=1.15\textwidth]{02-main//figures/ch3/ch3_postprocessing_dataset_06_kfold.png}}
+    \caption{Répartition datasets}
+    \label{fig:ch3_postprocessing_dataset_06_kfold}
+\end{figure}
+
+Pour répartir les données annotées, il est nécessaire d'effectuer une stratification similaire à celle utilisée lors de la phase de sélection des données à annoter. Cette stratification analyse les combinaisons de classes \gls{sia} et d'intervalles de surface présentes dans le dataset. Les combinaisons les plus rares sont distribuées en priorité dans les différents ensembles, puis les combinaisons plus fréquentes sont réparties selon le même principe. L'objectif est de garantir que tous les datasets conservent une représentation équilibrée et représentative du dataset original annoté.
+
+La fonction \texttt{create\_stratified\_dataset\_splits} (Code \ref{code:post_traitement_stratification}) permet de réaliser cette stratification.
+
+\newpage
+\begin{pythoncode}
+def create_stratified_dataset_splits(df, test_size=0.2, n_folds=5, max_attempts=100):
+    """Generate stratified dataset splits using dominant class and area bin."""
+    from sklearn.preprocessing import LabelEncoder
+    from iterstrat.ml_stratifiers import IterativeStratification
+    
+    best_result, best_score = None, float('inf')
+    
+    for attempt in range(max_attempts):
+        # Encode categorical variables for stratification
+        encoded_classes = LabelEncoder().fit_transform(df['dominant_class'])
+        encoded_areas = LabelEncoder().fit_transform(df['area_bin'])
+        stratification_labels = np.column_stack([encoded_classes, encoded_areas])
+        # Create train/test split
+        test_splitter = IterativeStratification(n_splits=int(1/test_size), order=2)
+        train_indices, test_indices = list(test_splitter.split(df.values, stratification_labels))[0]
+        # Initialize dataset assignments
+        df_result = df.copy()
+        df_result['dataset'] = n_folds  # Test set assignment
+        # Create cross-validation splits from training data
+        cv_splitter = IterativeStratification(n_splits=n_folds, order=2)
+        cv_splits = list(cv_splitter.split(
+            df_result.iloc[train_indices].values, 
+            stratification_labels[train_indices]))
+        # Assign CV fold numbers
+        for fold_id, (_, validation_indices) in enumerate(cv_splits):
+            original_indices = train_indices[validation_indices]
+            df_result.loc[original_indices, 'dataset'] = fold_id
+        # Calculate stratification quality metrics
+        class_cv_scores = []
+        for class_name in df_result['dominant_class'].unique():
+            class_subset = df_result[df_result['dominant_class'] == class_name]
+            fold_counts = class_subset['dataset'].value_counts()
+            fold_percentages = fold_counts / len(class_subset)
+            cv_score = fold_percentages.std() / fold_percentages.mean()
+            class_cv_scores.append(cv_score)
+        area_cv_scores = []
+        for area_name in df_result['area_bin'].unique():
+            area_subset = df_result[df_result['area_bin'] == area_name]
+            fold_counts = area_subset['dataset'].value_counts()
+            fold_percentages = fold_counts / len(area_subset)
+            cv_score = fold_percentages.std() / fold_percentages.mean()
+            area_cv_scores.append(cv_score)
+        # Combined quality score (lower is better)
+        combined_score = np.mean(class_cv_scores) + np.mean(area_cv_scores)
+        # Update best result if current attempt is better
+        if combined_score < best_score:
+            best_score = combined_score
+            best_result = df_result.copy()
+    return best_result
+\end{pythoncode}
+\captionof{code}{Stratification pour la répartition des données annotées}
+\label{code:post_traitement_stratification}
+
+Cette fonction utilise une approche itérative pour optimiser la qualité de la stratification multicritères. L'algorithme \texttt{IterativeStratification} a l'avantage de pouvoir traiter simultanément plusieurs variables de stratification, contrairement aux méthodes classiques limitées à une seule variable catégorielle.
+
+L'algorithme procède par allocation séquentielle des échantillons aux différents folds. À chaque itération, il sélectionne l'échantillon dont l'affectation permettra de minimiser le déséquilibre global entre les folds pour l'ensemble des variables de stratification. Cette approche garantit une distribution homogène des combinaisons de caractéristiques, même lorsque certaines combinaisons sont rares dans le dataset.
+
+La fonction évalue la qualité de chaque tentative de stratification en calculant un score composite basé sur le coefficient de variation (CV) des distributions. Pour chaque classe dominante et chaque intervalle de surface, le coefficient de variation est défini comme :
+
+\vspace{0.35cm}
+\begin{equation}
+    CV = \frac{\sigma(\text{pourcentages par fold})}{\mu(\text{pourcentages par fold})}
+\end{equation}
+\vspace{0.05cm}
+
+où $\sigma$ représente l'écart-type et $\mu$ la moyenne des pourcentages de répartition entre les folds.
+
+Un coefficient proche de zéro indique une distribution parfaitement équilibrée, tandis qu'une valeur élevée révèle des déséquilibres importants. Le score de qualité global combine les coefficients de variation moyens pour les classes dominantes et les intervalles de surface, permettant d'identifier objectivement la répartition optimale parmi les multiples tentatives générées.
+
+Le meilleur résultat (Code \ref{code:post_traitement_stratification_resultats}) est obtenu à l'itération 84, malgré des essais avec plus de 10000 itérations.
+
+\vspace{0.35cm}
+\begin{textcode}
+Target: Class CV ≤ 0.050, Area CV ≤ 0.050
+  Attempt 1: Class CV: 0.106, Area CV: 0.147
+  Attempt 2: Class CV: 0.099, Area CV: 0.140
+  Attempt 4: Class CV: 0.102, Area CV: 0.136
+  Attempt 6: Class CV: 0.113, Area CV: 0.116
+  Attempt 7: Class CV: 0.117, Area CV: 0.106
+  Attempt 10: Class CV: 0.109, Area CV: 0.107
+  Attempt 20: Class CV: 0.124, Area CV: 0.112
+  Attempt 26: Class CV: 0.111, Area CV: 0.098
+  Attempt 40: Class CV: 0.127, Area CV: 0.139
+  Attempt 45: Class CV: 0.122, Area CV: 0.072
+  Attempt 60: Class CV: 0.119, Area CV: 0.121
+  Attempt 65: Class CV: 0.090, Area CV: 0.092
+  Attempt 80: Class CV: 0.121, Area CV: 0.120
+  Attempt 84: Class CV: 0.086, Area CV: 0.088
+  Attempt 100: Class CV: 0.136, Area CV: 0.114
+Best result: Class CV: 0.086, Area CV: 0.088
+Final distribution:
+dataset
+0    88
+1    89
+2    89
+3    88
+4    87
+5    89
+\end{textcode}
+\captionof{code}{Résultats fonction \texttt{create\_stratified\_dataset\_splits}}
+\label{code:post_traitement_stratification_resultats}
+
+\paragraph{Validation de la distribution des datasets}
 
 
 
