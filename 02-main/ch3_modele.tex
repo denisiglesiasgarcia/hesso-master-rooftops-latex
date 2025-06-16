@@ -383,6 +383,8 @@ Le format choisi pour le stockage du fichier est le geoparquet \cite{noauthor_ge
 
 \newpage
 \subsubsection{Orthophotos}
+\label{subsubsec:decoupe_orthophoto_tuile}
+
 \paragraph{Dimensions des orthophotos et contraintes}
 Les 416 orthophotos sont des fichiers au format GeoTIFF de dimensions 20000×20000 pixels. Cependant, la plupart des réseaux de neurones convolutifs sont entraînés sur des images de tailles comprises entre 224×224 et 1024×1024 pixels, correspondant aux standards des architectures classiques. Le découpage de ces orthophotos est nécessaire pour adapter les données aux contraintes des modèles.
 
@@ -960,19 +962,19 @@ def determine_relative_position(geom1, geom2):
 \captionof{code}{Position relative des tuiles}
 \label{code:post_traitement_position_relative_tuiles}
 
-Finalement, la fonction \texttt{remove\_overlaps} (Code \ref{code:post_traitement_masquage_selectif}) applique un masquage sélectif aux tuiles qui se chevauchent, en ciblant spécifiquement celles situées à droite ou en haut selon leur position relative déterminée à l'étape précédente. Cette approche systématique garantit l'élimination des redondances tout en conservant l'intégrité des données dans chaque dataset.
+Finalement, la fonction \texttt{remove\_overlaps} (Code \ref{code:post_traitement_masquage_selectif}) applique un masquage sélectif aux tuiles qui se chevauchent, en ciblant spécifiquement celles situées à droite ou en bas selon leur position relative déterminée à l'étape précédente. Cette approche systématique garantit l'élimination des redondances tout en conservant l'intégrité des données dans chaque dataset.
 
 \vspace{0.35cm}
 \begin{pythoncode}
-def remove_overlaps(overlap_df, gdf_dataset, remove_positions=['right', 'top']):
+def remove_overlaps(overlap_df, gdf_dataset, remove_positions=['right', 'bottom']):
     """
     Remove overlaps by setting overlapping pixels to 0.
     
     Args:
         overlap_df: DataFrame with overlap information
         gdf_dataset: GeoDataFrame with file paths and geometries
-        remove_positions: List of positions to remove (e.g., ['right', 'top'])
-                         Default removes right and top tiles
+        remove_positions: List of positions to remove (e.g., ['right', 'bottom'])
+                         Default removes right and bottom tiles
     """
     
     for idx, row in overlap_df.iterrows():
@@ -1140,13 +1142,136 @@ dataset
 \captionof{code}{Résultats fonction \texttt{create\_stratified\_dataset\_splits}}
 \label{code:post_traitement_stratification_resultats}
 
+\newpage
 \paragraph{Validation de la distribution des datasets}
 
+La validation de la distribution des datasets (Figure \ref{fig:ch3_postprocessing_dataset_07_validation}) comprend trois étapes distinctes. La première consiste à vérifier les chevauchements entre tuiles pour s'assurer de l'absence de fuites de données. La deuxième étape consiste à vérifier que les images respectent le format attendu et sont correctement structurées pour l'entraînement du modèle. Enfin, la troisième vise à déterminer la répartition optimale des datasets selon les critères de stratification définis.
 
+\begin{figure}[H]
+    \centering
+    \makebox[\textwidth][c]{\includegraphics[width=1.05\textwidth]{02-main//figures/ch3/ch3_postprocessing_dataset_07_validation.png}}
+    \caption{Validation de la distribution des datasets}
+    \label{fig:ch3_postprocessing_dataset_07_validation}
+\end{figure}
 
+Le chevauchement des tuiles est vérifié après leur traitement. La Figure \ref{fig:exemple_post_traitement_validation_tuile_droite} représente un cas où il y a un chevauchement à droite (Figure \ref{fig:ch3_postprocessing_dataset_08_validation_chevauchement_droite1}) avec une autre tuile (Figure \ref{fig:ch3_postprocessing_dataset_09_validation_chevauchement_droite2}). La première vérification consiste à compter le nombre de pixels non-nuls dans la zone de chevauchement à droite : ce pourcentage devrait être de 0\%, indiquant que le masquage des images a été correctement appliqué. La deuxième vérification porte sur les annotations qui doivent être masquées exactement de la même manière que les images correspondantes. Les Figures \ref{fig:ch3_postprocessing_dataset_10_validation_chevauchement_droite3} et \ref{fig:ch3_postprocessing_dataset_11_validation_chevauchement_droite4} permettent de vérifier cette cohérence entre le masquage des images et celui des annotations.
 
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch3/ch3_postprocessing_dataset_08_validation_chevauchement_droite1.png}
+        \caption{Tuile avec chevauchement à droite (rouge)}
+        \label{fig:ch3_postprocessing_dataset_08_validation_chevauchement_droite1}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch3/ch3_postprocessing_dataset_09_validation_chevauchement_droite2.png}
+        \caption{Tuile avec chevauchement à gauche (bleu)}
+        \label{fig:ch3_postprocessing_dataset_09_validation_chevauchement_droite2}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch3/ch3_postprocessing_dataset_10_validation_chevauchement_droite3.png}
+        \caption{Tuile avec chevauchement à droite avec annotations (rouge)}
+        \label{fig:ch3_postprocessing_dataset_10_validation_chevauchement_droite3}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch3/ch3_postprocessing_dataset_11_validation_chevauchement_droite4.png}
+        \caption{Tuile avec chevauchement à gauche avec annotations (bleu)}
+        \label{fig:ch3_postprocessing_dataset_11_validation_chevauchement_droite4}
+    \end{subfigure}    
+    
+    \caption{Cas chevauchement tuile à droite}
+    \label{fig:exemple_post_traitement_validation_tuile_droite}
+\end{figure}
 
+La Figure \ref{fig:exemple_post_traitement_validation_tuile_bas} illustre un cas où il y a un chevauchement dans la partie basse (Figure \ref{fig:ch3_postprocessing_dataset_12_validation_chevauchement_bas1}) avec une autre tuile (Figure \ref{fig:ch3_postprocessing_dataset_13_validation_chevauchement_bas2}). Le même processus de validation s'applique, c'est-à-dire vérification que la zone de chevauchement inférieure a été correctement masquée et que les annotations correspondantes ont subi le même traitement de masquage que les images.
 
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch3/ch3_postprocessing_dataset_12_validation_chevauchement_bas1.png}
+        \caption{Tuile avec chevauchement en bas (rouge)}
+        \label{fig:ch3_postprocessing_dataset_12_validation_chevauchement_bas1}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch3/ch3_postprocessing_dataset_13_validation_chevauchement_bas2.png}
+        \caption{Tuile avec chevauchement en haut (bleu)}
+        \label{fig:ch3_postprocessing_dataset_13_validation_chevauchement_bas2}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch3/ch3_postprocessing_dataset_14_validation_chevauchement_bas3.png}
+        \caption{Tuile avec chevauchement en bas avec annotations (rouge)}
+        \label{fig:ch3_postprocessing_dataset_14_validation_chevauchement_bas3}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch3/ch3_postprocessing_dataset_15_validation_chevauchement_bas4.png}
+        \caption{Tuile avec chevauchement en haut avec annotations (bleu)}
+        \label{fig:ch3_postprocessing_dataset_15_validation_chevauchement_bas4}
+    \end{subfigure}
+    
+    \caption{Cas chevauchement tuile en bas}
+    \label{fig:exemple_post_traitement_validation_tuile_bas}
+\end{figure}
+
+Suite aux vérifications de la correction des chevauchements, des vérifications supplémentaires sont nécessaires. Certaines des images qui ont été rognées ont tous leurs pixels à 0, ce qui produit des images complètement noires. Le même phénomène affecte aussi leurs annotations. Dans ce cas, l'image est supprimée du dataset car elle n'apporte aucune information utile pour l'entraînement. Au total, 9 cas sur les 539 images annotées initiales sont concernés, ce qui réduit le nombre d'images annotées à distribuer en datasets à 530.
+
+La vérification suivante concerne la taille des images qui doivent toutes avoir des dimensions de 1280×1280 pixels. Cependant, comme indiqué précédemment dans la section \ref{subsubsec:decoupe_orthophoto_tuile}, certaines tuiles situées aux extrémités droites et inférieures de l'orthophoto ne respectent pas ce prérequis en raison des contraintes géométriques liées au découpage de la zone d'étude. Un découpage uniforme des orthophotos a été privilégié plutôt que d'avoir des tuiles s'étendant sur plusieurs orthophotos adjacentes.
+
+La solution adoptée (Figure \ref{fig:ch3_postprocessing_dataset_verification_taille}) pour gérer ces tuiles consiste à ajouter des bandes noires (pixels à 0) afin d'atteindre les dimensions requises. La ligne pointillée délimite la tuile et les annotations originales au format 672×1280 pixels. L'ajout de bandes noires des deux côtés permet de conserver les coordonnées géographiques correctes dans le fichier GeoTIFF.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch3/ch3_postprocessing_dataset_16_verification_taille1.png}
+        \caption{Tuile (ligne pointillée jaune) avec bandes noires}
+        \label{fig:ch3_postprocessing_dataset_16_verification_taille1}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch3/ch3_postprocessing_dataset_17_verification_taille2.png}
+        \caption{Annotations (ligne pointillée jaune) avec bandes noires}
+        \label{fig:ch3_postprocessing_dataset_17_verification_taille2}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch3/ch3_postprocessing_dataset_18_verification_taille3.png}
+        \caption{Tuile et annotations (ligne pointillée jaune) avec bandes noires}
+        \label{fig:ch3_postprocessing_dataset_18_verification_taille3}
+    \end{subfigure}
+    \caption{Ajout de bandes noires pour convertir les tuiles et annotations (ligne pointillée jaune) au format 1280x1280 pixels}
+    \label{fig:ch3_postprocessing_dataset_verification_taille}
+\end{figure}
+
+Les coordonnées valides et les doublons d'images ont déjà été vérifiés lors de la sélection des images à annoter, il n'y a donc pas eu de corrections à apporter à cette étape.
+
+L'algorithme utilisé pour la distribution des données annotées en datasets vise une répartition optimale malgré la difficulté de réaliser une stratification avec double critère. Le coefficient de variation obtenu se situe en dessous de l'objectif de 10\% (Code \ref{code:post_traitement_stratification_resultats}) pour les deux critères considérés. Les Figures \ref{fig:ch3_postprocessing_dataset_19_distribution_barchart_surface} et \ref{fig:ch3_postprocessing_dataset_20_distribution_barchart_classe} représentent respectivement la distribution des intervalles de surface et des classes \gls{sia} par dataset. La ligne pointillée en bleu indique le seuil théorique équilibré : les datasets situés au-dessus de cette ligne ont reçu plus d'images que l'objectif fixé. L'algorithme de stratification optimise au mieux la distribution, mais des compromis demeurent nécessaires pour maintenir l'équilibre global entre les différents critères de stratification.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{02-main/figures/ch3/ch3_postprocessing_dataset_19_distribution_barchart_surface.png}
+    \caption{Distribution des intervalles de surface par dataset}
+    \label{fig:ch3_postprocessing_dataset_19_distribution_barchart_surface}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \makebox[\textwidth][c]{\includegraphics[width=1.05\textwidth]{02-main//figures/ch3/ch3_postprocessing_dataset_20_distribution_barchart_classe.png}}
+    \caption{Distribution des classes \gls{sia} par dataset}
+    \label{fig:ch3_postprocessing_dataset_20_distribution_barchart_classe}
+\end{figure}
 
 
 
