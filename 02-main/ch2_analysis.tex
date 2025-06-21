@@ -1251,7 +1251,7 @@ Le mécanisme d'attention (Figure \ref{fig:ch2_yolo_mecanismes_attention}) local
         \label{fig:ch2_yolo_03_attention_area_criss_axial}
     \end{subfigure}
 
-    \vspace{0.5em}
+    \vspace{0.35cm}
     \begin{subfigure}[b]{0.30\textwidth}
         \centering
         \includegraphics[width=\textwidth]{02-main/figures/ch2/ch2_yolo_04_attention_area_yolo1.png}
@@ -1296,8 +1296,7 @@ R-ELAN (Figure \ref{fig:ch2_yolo_09_architecture_relan}) est l'architecture de b
         \caption{``ELAN'' (YOLOv7)}
         \label{fig:ch2_yolo_07_architecture_elan}
     \end{subfigure}
-    
-    \vspace{0.5em}
+    \vspace{0.35cm}
     \begin{subfigure}[b]{0.45\textwidth}
         \centering
         \includegraphics[width=\textwidth]{02-main/figures/ch2/ch2_yolo_08_architecture_c3k2.png}
@@ -1322,7 +1321,7 @@ FlashAttention \cite{dao_flashattention_2022} résout le problème fondamental d
 
 La suppression de l'encodage positionnel simplifie drastiquement l'architecture par rapport aux Vision Transformers classiques. Cette décision contre-intuitive s'avère bénéfique, l'information spatiale est préservée grâce à un ``position perceiver'' (convolution séparable 7×7) appliqué aux valeurs d'attention, plus efficace que les encodages positionnels traditionnels.
 
-La réduction du ratio MLP (Multilayer Perceptron) de 4,0 vers 1,2 rééquilibre la charge computationnelle entre les blocs d'attention et les réseaux feed-forward. Dans les Vision Transformers standards, le MLP consomme 75 \% des calculs ; YOLOv12 privilégie l'attention (plus bénéfique pour la détection) en réduisant la taille des MLP.
+La réduction du ratio MLP (Multilayer Perceptron) de 4.0 vers 1.2 rééquilibre la charge computationnelle entre les blocs d'attention et les réseaux feed-forward. Dans les Vision Transformers standards, le MLP consomme 75 \% des calculs ; YOLOv12 privilégie l'attention (plus bénéfique pour la détection) en réduisant la taille des MLP.
 
 
 \subsubsection{Résultats principaux}
@@ -1330,9 +1329,9 @@ YOLOv12 établit un nouveau compromis vitesse-précision optimal qui démontre l
 
 Les performances surpassent systématiquement les modèles existants. YOLOv12-N atteint 40.6\% mAP en 1.64 ms, dépassant YOLOv11-N de 1.2\% mAP à vitesse équivalente. Cette supériorité se maintient sur toutes les échelles de modèles.
 
-L'efficacité computationnelle est remarquable face aux détecteurs end-to-end : YOLOv12-S surpasse RT-DETR-R18 avec 42\% de vitesse supplémentaire tout en utilisant seulement 36\% des calculs et 45\% des paramètres.
+L'efficacité computationnelle est remarquable face aux détecteurs end-to-end, YOLOv12-S (9.3M paramètres) surpasse RT-DETR-R18 \cite{zhao_detrs_2024} (20M paramètres) avec 42\% de vitesse supplémentaire tout en utilisant seulement 36\% des calculs et 47\% des paramètres.
 
-Les cartes d'activation révèlent une amélioration qualitative notable, avec des contours d'objets plus nets et une activation de premier plan plus précise comparé à YOLOv10/v11 (Figure \ref{fig:ch2_yolo_10_perception}), illustrant concrètement les bénéfices des mécanismes d'attention optimisés.
+Les cartes d'activation (Figure \ref{fig:ch2_yolo_10_perception}) révèlent une amélioration qualitative notable, avec des contours d'objets plus nets et une activation de premier plan plus précise comparé à YOLOv10/v11, illustrant concrètement les bénéfices des mécanismes d'attention optimisés.
 
 \begin{figure}
     \centering
@@ -1342,7 +1341,11 @@ Les cartes d'activation révèlent une amélioration qualitative notable, avec d
 \end{figure}
 
 \subsubsection{Discussion et limites}
-YOLOv12 démontre avec succès l'intégration efficace des mécanismes d'attention dans YOLO, remettant en question la dominance des architectures CNN. La limitation principale est la dépendance à FlashAttention, restreignant l'utilisation aux GPU récents (Turing, Ampere, Ada Lovelace, Hopper). Les études d'ablation valident l'efficacité de chaque composant proposé.
+YOLOv12 représente une avancée majeure en démontrant que les mécanismes d'attention peuvent être rendus suffisamment efficaces pour la détection temps réel.
+
+Si l'étude démontre théoriquement qu'il est possible de rendre l'attention suffisamment efficace pour la détection temps réel, l'impact pratique reste mitigé. \citeauthor{khanam_review_2025} \cite{khanam_review_2025} révèlent que YOLOv12 est à peine plus performant que ses prédécesseurs avec une architecture relativement complexe et plus gourmande en énergie.
+
+La contrainte matérielle constitue une limitation majeure souvent sous-estimée. La dépendance exclusive à FlashAttention restreint l'utilisation aux GPU d'architecture Turing ou plus récente (RTX 20/30/40, A100, H100), excluant de facto une large base d'utilisateurs équipés de matériel plus ancien. Cette limitation est particulièrement problématique pour les applications industrielles où les cycles de renouvellement matériel sont longs. Cela affecte également les applications edge, dans lesquelles les ressources sont limitées et l'efficience énergétique du modèle est un paramètre critique.
 
 \todo[inline]{Ajouter l'état de l'art pour les CNN choisies}
 % -----------------------------------------------------------------------------
