@@ -1203,6 +1203,147 @@ Le CNN développé atteint :
 \par{Le modèle sous-estime en moyenne de 8\% la surface réellement disponible par rapport à la vérité terrain. Cette sous-estimation est principalement observée sur les petites toitures (< 100 m²). Les limites identifiées incluent la difficulté à détecter les lucarnes, construites dans le même matériau que le toit, et les zones de "toits verts" avec végétation.}
 \par{L'étude se limite au centre de Genève avec 524 images principalement résidentielles. Les auteurs mentionnent 12 heures de labellisation manuelle sans préciser la répartition du travail. Pour une extension nationale, ils proposent l'ajout d'un canal infrarouge et l'utilisation d'images plus récentes à haute résolution.}
 
+% -----------------------------------------------------------------------------
+
+\subsection{YOLOv12: Attention-Centric Real-Time Object Detectors}
+
+\subsubsection{Contexte et objectifs}
+La détection d'objets en temps réel repose traditionnellement sur les réseaux de neurones convolutionnels (CNN) dans la famille YOLO. Cependant, les mécanismes d'attention, popularisés par les ``Vision Transformers'', offrent de meilleures capacités de modélisation grâce à leur capacité à capturer les dépendances globales dans l'image. Le problème fondamental est que l'attention a un coût computationnel élevé : sa complexité croît quadratiquement avec la taille de l'image ($O(n^2)$), là où les convolutions croissent linéairement ($O(n)$). 
+
+YOLOv12 relève ce défi en proposant le premier framework YOLO centré sur l'attention qui atteint la vitesse des modèles CNN traditionnels tout en conservant les avantages de performance de l'attention. L'objectif est de démontrer qu'il est possible de casser la domination des CNN dans YOLO.
+
+\subsubsection{Données}
+L'évaluation utilise le dataset de référence MS COCO 2017 pour la détection d'objets. Cinq variantes de modèles sont développées (YOLOv12-N/S/M/L/X) correspondant à différentes tailles et complexités. L'entraînement suit le protocole standard : 600 époques avec l'optimiseur SGD, augmentations de données classiques (Mosaic, Mixup, copy-paste). Les performances sont mesurées sur GPU T4 avec TensorRT FP16 pour assurer la reproductibilité.
+
+\subsubsection{Méthodologie}
+YOLOv12 introduit trois innovations clés pour rendre l'attention efficace :
+\begin{itemize}
+    \item Réduction de la complexité (Area Attention)
+    \item Stabilisation de l'entraînement (R-ELAN)
+    \item Améliorations architecturales
+\end{itemize}
+
+\paragraph{Area Attention (A2)}
+Plutôt que de calculer l'attention sur toute l'image (coûteux), la carte de caractéristiques est divisée en zones rectangulaires (par défaut 4 segments). L'attention n'est calculée qu'à l'intérieur de chaque zone, réduisant la complexité de moitié tout en préservant un champ réceptif suffisant. C'est l'équivalent de regarder plusieurs « fenêtres » de l'image simultanément plutôt que l'image entière.
+
+Le mécanisme d'attention (Figure \ref{fig:ch2_yolo_mecanismes_attention}) local est simplifié par rapport aux autres alternatives (Figures \ref{fig:ch2_yolo_01_attention_area_criss_cross}, \ref{fig:ch2_yolo_02_attention_area_window} et \ref{fig:ch2_yolo_03_attention_area_criss_axial}). Celui-ci divise la carte de caractéristiques en $l$ segments (par défaut 4) verticalement (Figure \ref{fig:ch2_yolo_05_attention_area_yolo2}) ou horizontalement (Figure \ref{fig:ch2_yolo_04_attention_area_yolo1}), réduisant la complexité tout en maintenant un large champ réceptif.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.30\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch2/ch2_yolo_01_attention_area_criss_cross.png}
+        \caption{Mécanisme d'attention type ``criss cross''}
+        \label{fig:ch2_yolo_01_attention_area_criss_cross}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.30\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch2/ch2_yolo_02_attention_area_window.png}
+        \caption{Mécanisme d'attention type ``fenêtre''}
+        \label{fig:ch2_yolo_02_attention_area_window}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.30\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch2/ch2_yolo_03_attention_area_criss_axial.png}
+        \caption{Mécanisme d'attention type ``axial''}
+        \label{fig:ch2_yolo_03_attention_area_criss_axial}
+    \end{subfigure}
+
+    \vspace{0.5em}
+    \begin{subfigure}[b]{0.30\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch2/ch2_yolo_04_attention_area_yolo1.png}
+        \caption{Mécanisme d'attention horizontal proposé dans YOLOv12}
+        \label{fig:ch2_yolo_04_attention_area_yolo1}
+    \end{subfigure}
+    \hspace{0.04\textwidth}
+    \begin{subfigure}[b]{0.30\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch2/ch2_yolo_05_attention_area_yolo2.png}
+        \caption{Mécanisme d'attention vertical proposé dans YOLOv12}
+        \label{fig:ch2_yolo_05_attention_area_yolo2}
+    \end{subfigure}    
+    \caption{Mécanismes d'attention \cite{tian_yolov12_2025}}
+    \label{fig:ch2_yolo_mecanismes_attention}
+\end{figure}
+
+\paragraph{R-ELAN}
+Les mécanismes d'attention rendent l'entraînement instable, particulièrement pour les gros modèles. La Figure \ref{fig:ch2_yolo_architecture_simplifiee} illustre l'évolution progressive des architectures de blocs dans la famille YOLO, depuis les premières approches jusqu'à la proposition YOLOv12.
+
+CSPNet (Figure \ref{fig:ch2_yolo_06_architecture_csp}), utilisé dans YOLOv4/YOLOv5, est l'architecture fondatrice qui divise le flux de données en deux branches parallèles, permettant un meilleur gradient flow et réduisant les calculs redondants. Une branche traverse directement, l'autre passe par plusieurs blocs convolutionnels avant concaténation.
+
+ELAN (Figure \ref{fig:ch2_yolo_07_architecture_elan}), utilisé dans YOLOv7, correspond aux Efficient Layer Aggregation Networks qui améliorent l'agrégation de caractéristiques en connectant explicitement différentes couches. Cette architecture permet une meilleure réutilisation des caractéristiques, mais souffre de problèmes de stabilité d'optimisation, particulièrement visibles dans les gros modèles.
+
+$C_3K_2$ (Figure \ref{fig:ch2_yolo_08_architecture_c3k2}), utilisé dans YOLOv11, est l'évolution de GELAN (Generalized ELAN) qui simplifie l'architecture tout en conservant l'efficacité. $C_3K_2$ représente un cas particulier optimisé de GELAN, adopté pour réduire la latence dans YOLOv11.
+
+R-ELAN (Figure \ref{fig:ch2_yolo_09_architecture_relan}) est l'architecture de bloc proposée dans YOLOv12. La contribution majeure des Residual Efficient Layer Aggregation Networks est l'ajout d'une connexion résiduelle avec facteur d'échelle (scaling) depuis l'entrée vers la sortie, inspirée des techniques de Vision Transformers. Cette modification résout les problèmes de convergence observés avec les mécanismes d'attention, particulièrement critiques pour les modèles YOLOv12-L et YOLOv12-X qui ne convergent pas sans cette stabilisation.
+
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.30\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch2/ch2_yolo_06_architecture_csp.png}
+        \caption{``CSPNet'' (YOLOv4/v5}
+        \label{fig:ch2_yolo_06_architecture_csp}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.30\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch2/ch2_yolo_07_architecture_elan.png}
+        \caption{``ELAN'' (YOLOv7)}
+        \label{fig:ch2_yolo_07_architecture_elan}
+    \end{subfigure}
+    
+    \vspace{0.5em}
+    \begin{subfigure}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch2/ch2_yolo_08_architecture_c3k2.png}
+        \caption{``$C_3K_2$'' (YOLOv11)}
+        \label{fig:ch2_yolo_08_architecture_c3k2}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.33\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch2/ch2_yolo_09_architecture_relan.png}
+        \caption{``R-ELAN'' (YOLOv12)}
+        \label{fig:ch2_yolo_09_architecture_relan}
+    \end{subfigure}
+    \caption{Évolution architecturale des blocs utilisés dans YOLO \cite{tian_yolov12_2025}}
+    \label{fig:ch2_yolo_architecture_simplifiee}
+\end{figure}
+
+\paragraph{Améliorations architecturales}
+\citeauthor{tian_yolov12_2025} introduit plusieurs optimisations architecturales cruciales pour adapter efficacement les mécanismes d'attention au contexte temps réel de YOLO.
+
+FlashAttention \cite{dao_flashattention_2022} résout le problème fondamental d'accès mémoire des transformers. Traditionnellement, l'attention stocke des matrices intermédiaires volumineuses en mémoire GPU lente (HBM), créant un goulot d'étranglement. FlashAttention optimise ces accès mémoire, réduisant significativement la latence sans perte de précision.
+
+La suppression de l'encodage positionnel simplifie drastiquement l'architecture par rapport aux Vision Transformers classiques. Cette décision contre-intuitive s'avère bénéfique, l'information spatiale est préservée grâce à un ``position perceiver'' (convolution séparable 7×7) appliqué aux valeurs d'attention, plus efficace que les encodages positionnels traditionnels.
+
+La réduction du ratio MLP (Multilayer Perceptron) de 4,0 vers 1,2 rééquilibre la charge computationnelle entre les blocs d'attention et les réseaux feed-forward. Dans les Vision Transformers standards, le MLP consomme 75 \% des calculs ; YOLOv12 privilégie l'attention (plus bénéfique pour la détection) en réduisant la taille des MLP.
+
+
+\subsubsection{Résultats principaux}
+YOLOv12 établit un nouveau compromis vitesse-précision optimal qui démontre la viabilité des mécanismes d'attention pour la détection temps réel.
+
+Les performances surpassent systématiquement les modèles existants. YOLOv12-N atteint 40.6\% mAP en 1.64 ms, dépassant YOLOv11-N de 1.2\% mAP à vitesse équivalente. Cette supériorité se maintient sur toutes les échelles de modèles.
+
+L'efficacité computationnelle est remarquable face aux détecteurs end-to-end : YOLOv12-S surpasse RT-DETR-R18 avec 42\% de vitesse supplémentaire tout en utilisant seulement 36\% des calculs et 45\% des paramètres.
+
+Les cartes d'activation révèlent une amélioration qualitative notable, avec des contours d'objets plus nets et une activation de premier plan plus précise comparé à YOLOv10/v11 (Figure \ref{fig:ch2_yolo_10_perception}), illustrant concrètement les bénéfices des mécanismes d'attention optimisés.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1\linewidth]{02-main/figures/ch2/ch2_yolo_10_perception.png}
+    \caption{Perception des objets dans YOLOv10, YOLOv11 et YOLOv12 \cite{tian_yolov12_2025}}
+    \label{fig:ch2_yolo_10_perception}
+\end{figure}
+
+\subsubsection{Discussion et limites}
+YOLOv12 démontre avec succès l'intégration efficace des mécanismes d'attention dans YOLO, remettant en question la dominance des architectures CNN. La limitation principale est la dépendance à FlashAttention, restreignant l'utilisation aux GPU récents (Turing, Ampere, Ada Lovelace, Hopper). Les études d'ablation valident l'efficacité de chaque composant proposé.
+
 \todo[inline]{Ajouter l'état de l'art pour les CNN choisies}
 % -----------------------------------------------------------------------------
 \subsection{?}
