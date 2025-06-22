@@ -1286,7 +1286,7 @@ R-ELAN (Figure \ref{fig:ch2_yolo_09_architecture_relan}) est l'architecture de b
     \begin{subfigure}[b]{0.30\textwidth}
         \centering
         \includegraphics[width=\textwidth]{02-main/figures/ch2/ch2_yolo_06_architecture_csp.png}
-        \caption{``CSPNet'' (YOLOv4/v5}
+        \caption{``CSPNet'' (YOLOv4/v5)}
         \label{fig:ch2_yolo_06_architecture_csp}
     \end{subfigure}
     \hfill
@@ -1315,7 +1315,7 @@ R-ELAN (Figure \ref{fig:ch2_yolo_09_architecture_relan}) est l'architecture de b
 \end{figure}
 
 \paragraph{Améliorations architecturales}
-\citeauthor{tian_yolov12_2025} introduit plusieurs optimisations architecturales cruciales pour adapter efficacement les mécanismes d'attention au contexte temps réel de YOLO.
+\citeauthor{tian_yolov12_2025} introduisent plusieurs optimisations architecturales cruciales pour adapter efficacement les mécanismes d'attention au contexte temps réel de YOLO.
 
 FlashAttention \cite{dao_flashattention_2022} résout le problème fondamental d'accès mémoire des transformers. Traditionnellement, l'attention stocke des matrices intermédiaires volumineuses en mémoire GPU lente (HBM), créant un goulot d'étranglement. FlashAttention optimise ces accès mémoire, réduisant significativement la latence sans perte de précision.
 
