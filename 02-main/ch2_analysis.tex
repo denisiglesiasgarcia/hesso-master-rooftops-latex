@@ -1357,7 +1357,7 @@ Avant de présenter le modèle Segment Anything 2 (SAM2), il est important de ra
 
 \paragraph{Segment Anything Model (SAM)}
 \label{par:sam_segment_anything_2023}
-SAM \cite{kirillov_segment_2023} est un modèle de segmentation d’images développé par Meta AI. L'objectif de Segment Anything est de générer des masques de segmentation de haute qualité pour n'importe quel objet d'une image à partir d'invites simples comme des points ou des boîtes. Cela lui permet d'effectuer diverses tâches de segmentation de manière flexible sans avoir besoin d'être entraîné à nouveau pour chacune d'entre elles.
+SAM \cite{kirillov_segment_2023} est un modèle de segmentation d'images développé par Meta AI. L'objectif de Segment Anything est de générer des masques de segmentation de haute qualité pour n'importe quel objet d'une image à partir de prompts simples comme des points ou des boîtes. Cela lui permet d'effectuer diverses tâches de segmentation de manière flexible sans avoir besoin d'être entraîné à nouveau pour chacune d'entre elles.
 
 Le modèle Segment Anything (SAM) comporte trois éléments principaux :
 \begin{itemize}
@@ -1374,7 +1374,7 @@ La Figure \ref{fig:ch2_sam2_01_fonctionnement_sam} permet d’avoir une vue d’
     \label{fig:ch2_sam2_01_fonctionnement_sam}
 \end{figure}
 
-Le premier élément est l’encodeur d’images (``1'' sur la Figure \ref{fig:ch2_sam2_01_fonctionnement_sam}). L’encodeur d’image est un réseau de neurones qui a été pré-entraîné à l'aide d'une technique d'apprentissage auto-supervisé appelée Masked Autoencoder (MAE). L'encodeur prend une image en entrée et la fait passer par une série de couches d'auto-attention (self-attention), ce qui permet au modèle de capturer le contexte global et les relations entre les différentes parties de l'image. La sortie de l’encodeur d’image est l’image embeddings qui est une représentation vectorielles compacte à haute dimensions d'une image d'entrée qui capturent ses caractéristiques essentielles et ses informations spatiales.
+Le premier élément est l'encodeur d'images (``1'' sur la Figure \ref{fig:ch2_sam2_01_fonctionnement_sam}). L'encodeur d'image est un réseau de neurones qui a été pré-entraîné à l'aide d'une technique d'apprentissage auto-supervisé appelée Masked Autoencoder (MAE). L'encodeur prend une image en entrée et la fait passer par une série de couches d'auto-attention (self-attention), ce qui permet au modèle de capturer le contexte global et les relations entre les différentes parties de l'image. La sortie de l'encodeur d'image est l'image embedding, qui est une représentation vectorielle compacte à hautes dimensions d'une image d'entrée qui capture ses caractéristiques essentielles et ses informations spatiales.
 
 Le deuxième élément est le prompt encoder (``2'' sur la Figure \ref{fig:ch2_sam2_01_fonctionnement_sam}). SAM fonctionne avec une interface graphique, la Figure \ref{fig:ch2_sam2_02_prompt_encoder} 
 montre l'interface graphique développée par Meta AI pour tester SAM.
@@ -1443,7 +1443,7 @@ Le dataset couvre environ 70 pays et a été annoté manuellement par des travai
 
 Le dataset contient des annotations précises pour chaque objet dans chaque image, ce qui en fait un outil utile pour les chercheurs et les développeurs travaillant sur des applications de segmentation.
 
-Jusqu'a l'arrivée de SAM2 en \citeyear{ravi_sam_2024}, l’état de l’art en segmentation d’image est SAM, celui-ci est plus performant que le modèle RITM \cite{sofiiuk_reviving_2021}. Dans la Figure \ref{fig:ch2_sam2_08_eval_sam_humain}, Meta AI a demandé a des personnes d’évaluer la qualité de la segmentation sur 7 datasets différents. SAM dépasse RITM dans tous les cas.
+Dans la Figure \ref{fig:ch2_sam2_08_eval_sam_humain}, Meta AI a demandé a des personnes d’évaluer la qualité de la segmentation sur 7 datasets différents. SAM est plus performant que le modèle RITM \cite{sofiiuk_reviving_2021} dans tous les cas.
 
 \begin{figure}[H]
     \centering
@@ -1452,22 +1452,86 @@ Jusqu'a l'arrivée de SAM2 en \citeyear{ravi_sam_2024}, l’état de l’art en 
     \label{fig:ch2_sam2_08_eval_sam_humain}
 \end{figure}
 
-Dans un autre comparatif, ci-dessous, l’objectif est de comparé plusieurs modèles qui font de la segmentation sur 23 datasets. On constate que SAM a un mIoU plus élevé que les autres modèles.
+Dans une autre comparaison (Figure \ref{fig:ch2_sam2_09_eval_sam_miou}), l'objectif est de comparer plusieurs modèles qui effectuent de la segmentation sur 23 datasets. SAM a un mIoU plus élevé que les autres modèles.
 
+\begin{figure}[H]
+    \centering
+    \makebox[\textwidth][c]{\includegraphics[width=0.5\textwidth]{02-main//figures//ch2/ch2_sam2_09_eval_sam_miou.png}}
+    \caption{Comparatif de mIoU sur 23 datasets de SAM \cite{kirillov_segment_2023}}
+    \label{fig:ch2_sam2_09_eval_sam_miou}
+\end{figure}
 
+La Figure \ref{fig:ch2_sam2_09_eval_sam_miou} inclus également un résultat "oracle", dans lequel la plus pertinente des 3 segmentations de SAM est sélectionnée en les comparant à la vérité terrain, plutôt que de sélectionner le masque avec la confidence la plus élevée. Cela révèle l'impact de l'ambiguïté sur l'évaluation automatique.
 
+Pour conclure, jusqu'a l'arrivée de SAM2 en \citeyear{ravi_sam_2024}, l’état de l’art en segmentation d’image était SAM. Il est plus performant que tous les autres modèles existants qui réalisent cette tâche.
 
-L'objectif principal de SAM 2, un modèle fondamental unifié capable de segmentation promptable dans les images et les vidéos. Les auteurs introduisent la tâche de Segmentation Visuelle Promptable (PVS, Promptable Visual Segmentation) qui généralise la segmentation d'images au domaine vidéo. Cette tâche permet de fournir des prompts sur n'importe quelle frame d'une vidéo pour définir un segment d'intérêt, puis de prédire le masklet spatio-temporel correspondant (un masque qui évolue dans le temps).
+\paragraph{Segment Anything Model 2 (SAM2)}
+L'article \cite{ravi_sam_2024} présente Segment Anything Model 2 (SAM2), une extension du modèle de segmentation SAM vers le domaine vidéo. Alors que SAM révolutionna la segmentation d'images en 2023, les vidéos représentent une part croissante du contenu multimédia et nécessitent une localisation temporelle pour des applications critiques en réalité augmentée/virtuelle, robotique et véhicules autonomes.
+
+\citeauthor{ravi_sam_2024} identifient les défis spécifiques à la segmentation vidéo : changements d'apparence dus au mouvement, déformations, occlusions, variations d'éclairage, et qualité souvent inférieure aux images statiques. L'objectif est de développer un système universel capable de "segmenter n'importe quoi dans les vidéos" avec la même facilité que SAM pour les images.
+
+Le travail introduit la tâche PVS (Promptable Visual Segmentation) qui généralise la segmentation interactive d'images aux vidéos, permettant de fournir des prompts (clics, boîtes, masques) sur n'importe quelle frame pour définir et raffiner des segments spatio-temporels appelés "masklets".
+
+La Figure \ref{fig:ch2_sam2_fonctionnement} représente une vue d'ensemble montrant la tâche PVS (Figure \ref{fig:ch2_sam2_pvs}), l'architecture SAM 2 (Figure \ref{fig:ch2_sam2_model}) et le processus de collecte de données (Figure \ref{fig:ch2_sam2_data}).
+
+\begin{figure}[H]
+    \centering
+    \makebox[\textwidth][c]{\includegraphics[width=1.3\textwidth]{02-main//figures//ch2/ch2_sam2_10_dataset_sam2.png}}
+   
+    \begin{subfigure}{0.20\textwidth}
+        \subcaption{Promptable Visual Segmentation (PVS)}
+        \label{fig:ch2_sam2_pvs}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.25\textwidth}
+        \subcaption{Segment Anything Model 2 (SAM2)}
+        \label{fig:ch2_sam2_model}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.20\textwidth}
+        \subcaption{Dataset SA-V}
+        \label{fig:ch2_sam2_data}
+    \end{subfigure}
+    
+    \caption{Fonctionnement SAM2 \cite{ravi_sam_2024}}
+    \label{fig:ch2_sam2_fonctionnement}
+\end{figure}
 
 \subsubsection{Données}
-Les auteurs ont développé un moteur de données (data engine) en trois phases pour créer le dataset SA-V (Segment Anything Video), le plus grand dataset de segmentation vidéo à ce jour. Le dataset final comprend 50.9K vidéos avec 642.6K masklets, soit 53 fois plus de masques que tout dataset de segmentation vidéo existant.
-Le data engine fonctionne selon trois phases progressives : Phase 1 utilise SAM par frame (37.8 secondes par frame), Phase 2 combine SAM et SAM 2 pour la propagation de masques (7.4 secondes par frame), et Phase 3 utilise SAM 2 complet avec mémoire temporelle (4.5 secondes par frame, soit une accélération de 8.4×). Le dataset inclut à la fois des annotations manuelles (190.9K masklets) et automatiques (451.7K masklets) générées par grille de points et vérifiées par des annotateurs.
-SA-V se distingue par sa diversité géographique (47 pays) et démographique, avec des vidéos couvrant des scénarios quotidiens variés. Les données présentent des défis significatifs avec 42.5% des masklets disparaissant puis réapparaissant, et une forte proportion d'objets petits et de parties d'objets.
+Les auteurs développent un moteur de données (data engine) en trois phases pour créer le dataset SA-V, le plus grand dataset de segmentation vidéo à ce jour. Le processus évolue de l'annotation manuelle pure vers l'assistance progressive par SAM 2 :
+\begin{itemize}
+    \item Phase 1 : Annotation manuelle photogramme par photogramme avec SAM (37.8s/photogramme)
+    \item Phase 2 : SAM + propagation temporelle par SAM 2 (7.4s/photogramme)
+    \item Phase 3 : SAM 2 complet avec mémoire temporelle (4.5s/photogramme)
+\end{itemize}
+
+Le dataset final SA-V comprend 50.9K vidéos avec 642.6K masklets (190.9K manuels + 451.7K automatiques), représentant 53× plus de masques que tout dataset VOS existant. La diversité géographique couvre 47 pays, avec annotation de segments entiers et de parties d'objets, sans contraintes catégorielles.
+
+Un processus de vérification qualité garantit la cohérence temporelle des annotations, avec classification "satisfaisant/non-satisfaisant" par des annotateurs dédiés.
+
 \subsubsection{Méthodologie}
-SAM 2 utilise une architecture transformer avec mémoire streaming pour le traitement vidéo en temps réel. L'architecture comprend plusieurs composants clés :
-L'encodeur d'image (Hiera pré-entraîné MAE) traite chaque frame une seule fois pour fournir des embeddings non-conditionnés. Le module d'attention mémoire conditionne les features de la frame courante sur les mémoires des frames précédentes via des blocs transformer avec self-attention et cross-attention. Le décodeur de masques, similaire à SAM, prédit plusieurs masques en cas d'ambiguïté et inclut une tête de prédiction d'occlusion pour détecter quand l'objet n'est pas visible.
-L'encodeur mémoire génère des représentations en combinant le masque prédit avec les embeddings de frame, tandis que la banque mémoire maintient une queue FIFO des N frames récentes et M frames promptées. Le système stocke également des "pointeurs d'objets" comme vecteurs légers pour l'information sémantique de haut niveau.
-L'entraînement joint sur données image et vidéo simule un environnement interactif en échantillonnant des séquences de 8 frames avec jusqu'à 2 frames promptées. Les prompts initiaux peuvent être des masques de vérité terrain (50%), des clics positifs (25%) ou des boîtes englobantes (25%).
+SAM 2 adopte une architecture de streaming traitant les vidéos photogramme par photogramme, équipée d'un système de mémoire pour maintenir le contexte temporel. Les composants clés incluent :
+
+\begin{itemize}
+    \item Encodeur d'image : Hiera pré-entraîné MAE, hiérarchique pour features multi-échelles
+    \item Attention mémoire : L transformers conditionnant les features actuelles sur les mémoires passées
+    \item Banque mémoire : File FIFO stockant N photogrammes récents et M photogrammes avec prompts, plus des "object pointers" pour l'information sémantique
+    \item Décodeur de masque : Similaire à SAM, avec tête additionnelle prédisant la visibilité d'objet
+\end{itemize}
+
+L'encodeur d'image (Hiera pré-entraîné MAE) effectue un traitement unique de chaque image pour générer des représentations vectorielles non conditionnées. Le module d'attention mémoire conditionne ensuite les caractéristiques de l'image courante en fonction des mémoires des images précédentes, utilisant des blocs transformer combinant mécanismes de self-attention et cross-attention. Le décodeur de masques, reprenant l'architecture de SAM, génère plusieurs masques candidats en cas d'ambiguïté et intègre une tête de prédiction d'occlusion permettant de détecter l'absence de l'objet dans l'image.
+
+L'encodeur mémoire produit des représentations en fusionnant le masque prédit avec les représentations vectorielles de l'image, tandis que la banque mémoire gère une file d'attente FIFO stockant les N images récentes et les M images ayant reçu des prompts. Le système maintient également des « pointeurs d'objets » sous forme de vecteurs compacts encodant l'information sémantique de haut niveau.
+
+L'entraînement conjoint sur données d'images et de vidéos reproduit un environnement interactif en échantillonnant des séquences de 8 images avec jusqu'à 2 images recevant des prompts. La stratégie d'initialisation des prompts se répartit entre masques de vérité terrain (50 \%), clics positifs (25 \%) et boîtes englobantes (25 \%).
+
+\begin{figure}[H]
+    \centering
+    \makebox[\textwidth][c]{\includegraphics[width=1.10\textwidth]{02-main//figures//ch2/ch2_sam2_11_architecture_sam2.png}}
+    \caption{Architecture SAM2 \cite{ravi_sam_2024}}
+    \label{fig:ch2_sam2_11_architecture_sam2}
+\end{figure}
+
 \subsubsection{Résultats principaux}
 SAM 2 démontre des performances supérieures sur de multiples benchmarks. En segmentation vidéo interactive, le modèle atteint une meilleure précision avec 3 fois moins d'interactions que les approches précédentes (SAM+XMem++, SAM+Cutie). Sur 17 datasets vidéo zero-shot, SAM 2 surpasse systématiquement les méthodes existantes avec différents types de prompts.
 En segmentation d'images, SAM 2 surpasse SAM sur 37 datasets zero-shot tout en étant 6 fois plus rapide (130.1 FPS vs 21.7 FPS). L'entraînement sur le mélange de données image-vidéo améliore encore les performances, atteignant 61.9% de mIoU moyen contre 58.1% pour SAM.
