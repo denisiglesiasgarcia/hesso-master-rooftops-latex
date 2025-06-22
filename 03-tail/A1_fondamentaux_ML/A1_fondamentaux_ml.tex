@@ -236,17 +236,17 @@ de neurone artificiel.}
 \par{Dans l'équation \ref{eq:perceptron}, $H$ représente la fonction d'activation de Heaviside, $w_k$ les poids, $x_k$ les entrées, $b$ le biais, et $n$ le nombre d'entrées.}
 
 \par{L'évolution la plus remarquable par rapport au neurone de McCulloch-Pitts, est que le perceptron peut ``apprendre'' des données et actualiser les poids et biais.}
-\par{On dispose d'un ensemble de données étiquetées $\{(\mathbf{x}^{(i)}, y^{(i)})| i = 1, ... N\}$, où $\mathbf{x}^{(i)}$ sont des vecteurs $n$-dimensionnels. Pour la mise à jour des poids et du biais il faut suivre les étapes suivantes :}
+\par{On dispose d'un ensemble de données étiquetées $\{(\bm{x}^{(i)}, y^{(i)})| i = 1, ... N\}$, où $\bm{x}^{(i)}$ sont des vecteurs $n$-dimensionnels. Pour la mise à jour des poids et du biais il faut suivre les étapes suivantes :}
 \begin{enumerate}
-    \item Initialiser le vecteur des poids $\mathbf{x}^{(i)}$ et le biais b avec des valeurs nulles (ou des valeurs aléatoires proches de 0)
-    \item Itérer en mettant à jour le vecteur de poids $\mathbf{w}$ le biais b selon les règles suivantes :
+    \item Initialiser le vecteur des poids $\bm{x}^{(i)}$ et le biais b avec des valeurs nulles (ou des valeurs aléatoires proches de 0)
+    \item Itérer en mettant à jour le vecteur de poids $\bm{w}$ le biais b selon les règles suivantes :
     \begin{enumerate}
-        \item Choisir un échantillon arbitraire : $(\mathbf{x}^{(i)}, y^{(i)})$
-        \item Calculer la valeur prédite $\hat{y}^{(i)} = H(\mathbf{w} \cdot \mathbf{x}^{(i)} + b)$
+        \item Choisir un échantillon arbitraire : $(\bm{x}^{(i)}, y^{(i)})$
+        \item Calculer la valeur prédite $\hat{y}^{(i)} = H(\bm{w} \cdot \bm{x}^{(i)} + b)$
         \item Utiliser la mise à jour des paramètres (équation \ref{eq:perceptron_maj1} et \ref{eq:perceptron_maj2} ci-dessous) :
         \vspace{20pt}
         \begin{align}
-            \mathbf{w} &\leftarrow \mathbf{w} - \alpha \cdot (\hat{y}^{(i)} - y^{(i)}) \cdot \mathbf{x}^{(i)}
+            \bm{w} &\leftarrow \bm{w} - \alpha \cdot (\hat{y}^{(i)} - y^{(i)}) \cdot \bm{x}^{(i)}
             \label{eq:perceptron_maj1}\\
             b &\leftarrow b - \alpha \cdot (\hat{y}^{(i)} - y^{(i)})
             \label{eq:perceptron_maj2}
@@ -256,7 +256,7 @@ de neurone artificiel.}
 
 Le taux d'apprentissage $\alpha$ (``learning rate'') est un paramètre de l'algorithme, cette valeur doit être positive. Une valeur de départ tel que $\alpha = 0.1$ semble judicieuse pour démarrer.
 
-L'actualisation du vecteur de poids et le biais a lieu seulement si la valeur prédite et celle connues sont différentes $\hat{y}^{(i)} = H(\mathbf{w} \cdot x^{(i)} + b) \neq y^{(i)}$.
+L'actualisation du vecteur de poids et le biais a lieu seulement si la valeur prédite et celle connues sont différentes $\hat{y}^{(i)} = H(\bm{w} \cdot x^{(i)} + b) \neq y^{(i)}$.
 
 En résumé, les neurones artificielles sont des modèles mathématiques inspirés du cerveau humain. Le neurone de McCulloch-Pitts (1943) est une unité binaire avec un seuil d'activation, mais il présente des limitations. Le perceptron de Rosenblatt (1958) améliore ce modèle en utilisant des nombres réels et en permettant l'apprentissage et la mise à jour des poids et biais.
 
@@ -328,13 +328,13 @@ Le Tableau \ref{tab:metriques_ml} résume les principales métriques. L'exemple 
     \hline
     False Negative (FN) & La classe prédite non souhaitée (négative) est différente à la classe annotée. & Le modèle a détecté qu'il ne s'agit pas d'un pirate. C'est un pirate. & \\
     \hline
-    Accuracy (ACC) & L'accuracy mesure la proportion d'images correctement classées parmi toutes les images de l'ensemble de test. & & $\small\displaystyle\frac{TP + TN}{TP + TN + FP + FN}$ \\
+    Accuracy (ACC) & L'accuracy mesure la proportion d'images correctement classées parmi toutes les images de l'ensemble de test. & & {\small$\displaystyle\frac{TP + TN}{TP + TN + FP + FN}$} \\
     \hline
-    Precision (P) & La précision mesure la proportion de vrais positifs (TP) parmi toutes les prédictions positives faites par l'algorithme. & & $\small\displaystyle\frac{TP}{TP + FP}$ \\
+    Precision (P) & La précision mesure la proportion de vrais positifs (TP) parmi toutes les prédictions positives faites par l'algorithme. & & {\small$\displaystyle\frac{TP}{TP + FP}$} \\
     \hline
-    Recall (R) & Le recall mesure la proportion de vrais positifs parmi toutes les instances positives réelles. & & $\small\displaystyle\frac{TP}{TP + FN}$ \\
+    Recall (R) & Le recall mesure la proportion de vrais positifs parmi toutes les instances positives réelles. & & {\small$\displaystyle\frac{TP}{TP + FN}$} \\
     \hline
-    F1-score & Le F1-score est la moyenne harmonique de la précision (P) et du recall (R). Il fournit une mesure équilibrée de ces deux éléments. & & $\small\displaystyle\frac{2 \cdot P \cdot R}{P + R}$ \\
+    F1-score & Le F1-score est la moyenne harmonique de la précision (P) et du recall (R). Il fournit une mesure équilibrée de ces deux éléments. & & {\small$\displaystyle\frac{2 \cdot P \cdot R}{P + R}$} \\
     \hline
     \end{tabular}
     \caption{Résumé des principales métriques utilisées en machine learning pour évaluer la performance}

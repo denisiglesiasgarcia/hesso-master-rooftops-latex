@@ -66,12 +66,17 @@
 
 % Helvetica (Arial used in the MSE Word template)
 \usepackage{helvet}
+% Fix font issues in math mode
+\usepackage{lmodern}
+\usepackage{fix-cm}
 
 % Math
 % ----
 \usepackage{amsmath}  % better math
 \usepackage{amssymb}  % symboles math
+\usepackage{bm}       % bold math
 \usepackage{cases}
+\DeclareUnicodeCharacter{2264}{$\leq$}  % ≤ symbol
 % Equation spacing
 \AtBeginDocument{
     \setlength{\abovedisplayskip}{-12pt}
@@ -151,7 +156,7 @@ bibencoding=auto
 \usepackage{tocloft}
 \newlistof{listing}{lol}{List of Listings}
 \newlistof{code}{loc}{Liste de blocs de code}
-\renewcommand{\codename}{Code}
+\newcommand{\codename}{Code}
 
 \setcounter{tocdepth}{1} % Depth to 'section'
 \setcounter{secnumdepth}{2} % Number up to subsubsections
@@ -190,6 +195,10 @@ bibencoding=auto
 % Code and syntax highlighting
 % ----------------------------
 \usepackage[newfloat]{minted}   % code highlighting
+\usepackage{float}
+\newfloat{code}{H}{loc}
+\floatname{code}{Code}
+\captionsetup[code]{position=bottom}
 
 % Typography
 % ----------
@@ -257,7 +266,6 @@ bibencoding=auto
 \usepackage{blindtext} % random text
 \usepackage{lscape}    % easy landscape pages
 \usepackage{pdflscape} % landscape pages for PDFs
-\usepackage{float}     % Images juste après texte avec option [H]
 \usepackage{siunitx}   % unités SI
 
 % Allow email typesetting
