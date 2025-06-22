@@ -233,33 +233,34 @@ Le filtre appliqué précédemment a éliminé une grande partie des \gls{egid} 
 
 L'\gls{egid} minimum de la couche des bâtiments hors-sol est utilisé comme filtre (Code \ref{code:filtre_egid}) pour identifier les \gls{egid} invalides. Cette vérification détecte un total de 24 \gls{egid} invalides dans la couche des toitures.
 
-\vspace{0.35cm}
-\begin{pythoncode}
-# EGID bizarre
-egid_bizarre = gdf_cad_batiment_horsol["egid"].min()
-
-print("EGID min de gdf_cad_batiment_horsol:", egid_bizarre)
-print("Nombre de toitures avec un EGID en dessous (invalide):")
-
-print(f"\t{gdf_toiture[gdf_toiture['egid'] < egid_bizarre].shape[0]} \
-dans gdf_toiture_1_filtre_canton")
-
-print(f"\t{gdf_toiture_sp[gdf_toiture_sp['egid'] < egid_bizarre].shape[0]} \
-dans gdf_toiture_sp_1_filtre_canton")
-\end{pythoncode}
-
-\begin{textcode}
-EGID min de gdf_cad_batiment_horsol: 295074
-Nombre de toitures avec un EGID en dessous (invalide):
-    22 dans gdf_toiture_1_filtre_canton
-    2 dans gdf_toiture_sp_1_filtre_canton
-    0 dans gdf_cad_batiment_horsol
-\end{textcode}
-\captionof{code}{Filtre \gls{egid}}
-\label{code:filtre_egid}
+\begin{code}[H]
+    \begin{pythoncode}
+    # EGID bizarre
+    egid_bizarre = gdf_cad_batiment_horsol["egid"].min()
+    
+    print("EGID min de gdf_cad_batiment_horsol:", egid_bizarre)
+    print("Nombre de toitures avec un EGID en dessous (invalide):")
+    
+    print(f"\t{gdf_toiture[gdf_toiture['egid'] < egid_bizarre].shape[0]} \
+    dans gdf_toiture_1_filtre_canton")
+    
+    print(f"\t{gdf_toiture_sp[gdf_toiture_sp['egid'] < egid_bizarre].shape[0]} \
+    dans gdf_toiture_sp_1_filtre_canton")
+    \end{pythoncode}
+    \vspace{0.35cm}
+    \begin{textcode}
+    EGID min de gdf_cad_batiment_horsol: 295074
+    Nombre de toitures avec un EGID en dessous (invalide):
+        22 dans gdf_toiture_1_filtre_canton
+        2 dans gdf_toiture_sp_1_filtre_canton
+        0 dans gdf_cad_batiment_horsol
+    \end{textcode}
+    \caption{Filtre \gls{egid}}
+    \label{code:filtre_egid}
+\end{code}
 
 \paragraph{Classification \gls{sia}}
-En Suisse, chaque bâtiment peut être classé selon son utilisation en 12 catégories définies par la norme SIA 380/1 (Tableau \ref{tab:categories_batiments_sia_380_1}). Cette classification est importante pour l'analyse des caractéristiques des toitures, une toiture de logement collectif ne ressemblera pas à celle d'une usine ou d'une piscine.
+En Suisse, chaque bâtiment peut être classé selon son utilisation en 12 catégories définies par la norme SIA 380/1 \cite{sia_sia-shop_nodate} (Tableau \ref{tab:categories_batiments_sia_380_1}). Cette classification est importante pour l'analyse des caractéristiques des toitures, une toiture de logement collectif ne ressemblera pas à celle d'une usine ou d'une piscine.
 
 \begin{table}[H]
     \centering
@@ -288,63 +289,65 @@ En Suisse, chaque bâtiment peut être classé selon son utilisation en 12 caté
 \newpage
 Cette information n'est pas incluse directement dans la couche des bâtiments hors-sol, par contre la destination est renseignée pour chaque \gls{egid}. Le Code \ref{code:assigner_categorie_sia} montre un exemple de conversion pour la première catégorie \gls{sia}.
 
-\vspace{0.35cm}
-\begin{pythoncode}
-def assign_sia_category(destination):
-    """
-    Attribue une catégorie SIA 380/1:2016 en fonction de la destination du bâtiment.
-    """
-    # Conversion en minuscules pour la comparaison
-    dest = str(destination).lower()
-
-    # ===== CATÉGORIE I - HABITAT COLLECTIF =====
-    habitat_collectif = [
-        "hab plusieurs logements",
-        "résidence meublée",
-        "foyer",
-        "hôtel",
-        "autre héberg. collectif",
-        "etab. pénitenciaire",
-        "internat",
-        "hab. - rez activités",
-        "habitation - activités",
-    ]
-    if any(term in dest for term in habitat_collectif):
-        return "I habitat collectif"
-
-gdf_cad_batiment_horsol['sia_cat'] = gdf_cad_batiment_horsol['destination'].apply(assign_sia_category)
-\end{pythoncode}
-\captionof{code}{Exemple de conversion entre la destination et la première catégorie \gls{sia}}
-\label{code:assigner_categorie_sia}
+\begin{code}[H]
+    \begin{pythoncode}
+    def assign_sia_category(destination):
+        """
+        Attribue une catégorie SIA 380/1:2016 en fonction de la destination du bâtiment.
+        """
+        # Conversion en minuscules pour la comparaison
+        dest = str(destination).lower()
+    
+        # ===== CATÉGORIE I - HABITAT COLLECTIF =====
+        habitat_collectif = [
+            "hab plusieurs logements",
+            "résidence meublée",
+            "foyer",
+            "hôtel",
+            "autre héberg. collectif",
+            "etab. pénitenciaire",
+            "internat",
+            "hab. - rez activités",
+            "habitation - activités",
+        ]
+        if any(term in dest for term in habitat_collectif):
+            return "I habitat collectif"
+    
+    gdf_cad_batiment_horsol['sia_cat'] = gdf_cad_batiment_horsol['destination'].apply(assign_sia_category)
+    \end{pythoncode}
+    \captionof{code}{Exemple de conversion entre la destination et la première catégorie \gls{sia}}
+    \label{code:assigner_categorie_sia}
+\end{code}
 
 La première vérification consiste à s'assurer que tous les \gls{egid} possèdent une catégorie \gls{sia} et à analyser la distribution de ces catégories. Le Code \ref{code:categorie_sia_distribution_verification} inclut une instruction ``assert'' qui interrompt le script si tous les \gls{egid} ne disposent pas d'une catégorie assignée.
 
-\vspace{0.35cm}
-\begin{pythoncode}
-print(gdf_cad_batiment_horsol["sia_cat"].value_counts())
-print(f"Nombre de valeurs manquantes dans sia_cat: {gdf_cad_batiment_horsol["sia_cat"].isna().sum()}")
-assert gdf_cad_batiment_horsol["sia_cat"].isna().sum() == 0
-\end{pythoncode}
-\vspace{0.35cm}
-\begin{textcode}
-sia_cat
-II habitat individuel         29420
-IX industrie                  16947
-X dépôts                      16575
-I habitat collectif           15337
-III administration             1836
-IV écoles                       746
-VII lieux de rassemblement      520
-V commerce                      415
-XI installations sportives      257
-VIII hôpitaux                   233
-VI restauration                 205
-XII piscines couvertes           11
-Name: count, dtype: int64
-Nombre de valeurs manquantes dans sia_cat: 0
-\end{textcode}
-\captionof{code}{Distribution des catégories \gls{sia} et vérification des données.}
-\label{code:categorie_sia_distribution_verification}
+\begin{code}[H]
+    \begin{pythoncode}
+    print(gdf_cad_batiment_horsol["sia_cat"].value_counts())
+    print(f"Nombre de valeurs manquantes dans sia_cat: {gdf_cad_batiment_horsol["sia_cat"].isna().sum()}")
+    assert gdf_cad_batiment_horsol["sia_cat"].isna().sum() == 0
+    \end{pythoncode}
+    \vspace{0.35cm}
+    \begin{textcode}
+    sia_cat
+    II habitat individuel         29420
+    IX industrie                  16947
+    X dépôts                      16575
+    I habitat collectif           15337
+    III administration             1836
+    IV écoles                       746
+    VII lieux de rassemblement      520
+    V commerce                      415
+    XI installations sportives      257
+    VIII hôpitaux                   233
+    VI restauration                 205
+    XII piscines couvertes           11
+    Name: count, dtype: int64
+    Nombre de valeurs manquantes dans sia_cat: 0
+    \end{textcode}
+    \captionof{code}{Distribution des catégories \gls{sia} et vérification des données.}
+    \label{code:categorie_sia_distribution_verification}
+\end{code}
 
 \begin{figure}[H]
     \centering
@@ -466,46 +469,48 @@ Comme observé précédemment, cette figure révèle également quelques bugs da
 \newpage
 \paragraph{Implémentation}
 Le Code \ref{code:pseudo_code_decoupe_orthophotos_tuiles_1280_1280} utilise du pseudo-code pour expliquer les étapes de découpage. Les principales librairies employées sont rasterio \cite{noauthor_rasterio_nodate} et shapely \cite{noauthor_shapely_nodate}. Rasterio permet la manipulation des données raster (orthophotos), tandis que shapely offre une boîte à outils complète pour le traitement des géométries et données géospatiales.
-\vspace{0.35cm}
-\begin{textcode}
-DÉBUT process_geotiff_with_buildings(geotiff, gdf_batiments, output)
-    
-    // Chargement des données
-    CHARGER les géométries des bâtiments depuis le gdf_batiments
-    OUVRIR le fichier GeoTIFF source
-    
-    // Préparation spatiale
-    REPROJETER les bâtiments dans le même système de coordonnées que le GeoTIFF
-    CRÉER un index spatial pour optimiser les requêtes géométriques
-    FILTRER les bâtiments qui intersectent avec le GeoTIFF sélectionné
-    
-    // Découpage en tuiles
-    CALCULER le nombre de tuiles nécessaires (largeur × hauteur / taille_tuile)
-    
-    POUR chaque position de tuile (i, j) FAIRE
-        DÉFINIR la fenêtre de la tuile courante (1024x1024 pixels)
-        CALCULER l'emprise géographique de la tuile
-        CRÉER la zone de recouvrement autour de la tuile (1280x1280 pixels)
+
+\begin{code}[H]
+    \begin{textcode}
+    DÉBUT process_geotiff_with_buildings(geotiff, gdf_batiments, output)
         
-        // Détection des bâtiments
-        RECHERCHER les bâtiments qui intersectent la zone tamponnée
+        // Chargement des données
+        CHARGER les géométries des bâtiments depuis le gdf_batiments
+        OUVRIR le fichier GeoTIFF source
         
-        SI aucun bâtiment trouvé ALORS
-            PASSER à la tuile suivante
-        SINON
-            EXTRAIRE les données raster de la zone tamponnée
-            SAUVEGARDER la tuile au format GeoTIFF
-            ENREGISTRER les métadonnées (géométries, identifiants, coordonnées)
-        FIN SI
-    FIN POUR
-    
-    SAUVEGARDER toutes les métadonnées dans un fichier Parquet
-    RETOURNER le chemin du fichier de métadonnées
-    
-FIN process_geotiff_with_buildings
-\end{textcode}
-\captionof{code}{Pseudo-code pour la découpe des orthophotos 20000x20000 pixels en tuiles de 1280x1280 pixels}
-\label{code:pseudo_code_decoupe_orthophotos_tuiles_1280_1280}
+        // Préparation spatiale
+        REPROJETER les bâtiments dans le même système de coordonnées que le GeoTIFF
+        CRÉER un index spatial pour optimiser les requêtes géométriques
+        FILTRER les bâtiments qui intersectent avec le GeoTIFF sélectionné
+        
+        // Découpage en tuiles
+        CALCULER le nombre de tuiles nécessaires (largeur × hauteur / taille_tuile)
+        
+        POUR chaque position de tuile (i, j) FAIRE
+            DÉFINIR la fenêtre de la tuile courante (1024x1024 pixels)
+            CALCULER l'emprise géographique de la tuile
+            CRÉER la zone de recouvrement autour de la tuile (1280x1280 pixels)
+            
+            // Détection des bâtiments
+            RECHERCHER les bâtiments qui intersectent la zone tamponnée
+            
+            SI aucun bâtiment trouvé ALORS
+                PASSER à la tuile suivante
+            SINON
+                EXTRAIRE les données raster de la zone tamponnée
+                SAUVEGARDER la tuile au format GeoTIFF
+                ENREGISTRER les métadonnées (géométries, identifiants, coordonnées)
+            FIN SI
+        FIN POUR
+        
+        SAUVEGARDER toutes les métadonnées dans un fichier Parquet
+        RETOURNER le chemin du fichier de métadonnées
+        
+    FIN process_geotiff_with_buildings
+    \end{textcode}
+    \captionof{code}{Pseudo-code pour la découpe des orthophotos 20000x20000 pixels en tuiles de 1280x1280 pixels}
+    \label{code:pseudo_code_decoupe_orthophotos_tuiles_1280_1280}
+\end{code}
 
 La gestion de la mémoire peut devenir critique, chaque orthophoto occupant 1,4 Go. Il est possible de paralléliser la tâche, mais cela nécessite une machine disposant de suffisamment de mémoire RAM. 
 
@@ -589,32 +594,34 @@ L'échantillonnage des tuiles s'effectue selon une approche stratifiée pour gar
 
 La fonction \texttt{sample\_tiles} (Code \ref{code:echantillonnage_tuiles}) implémente cette logique d'échantillonnage avec un paramètre \texttt{random\_state=42} qui permet la reproductibilité des résultats en fixant la graine du générateur de nombres aléatoires.
 
-\vspace{0.35cm}
-\begin{pythoncode}
-def sample_tiles(group, n_samples):
-    """
-    Échantillonne aléatoirement n_samples éléments d'un groupe.
-    Si le groupe contient moins d'éléments que demandé, retourne tous les éléments.
-    """
-    if len(group) > n_samples:
-        return group.sample(n=n_samples, random_state=42)
-    else:
-        return group
-\end{pythoncode}
-\captionof{code}{Fonction d'échantillonnage stratifié par groupe}
-\label{code:echantillonnage_tuiles}
+\begin{code}[H]
+    \begin{pythoncode}
+    def sample_tiles(group, n_samples):
+        """
+        Échantillonne aléatoirement n_samples éléments d'un groupe.
+        Si le groupe contient moins d'éléments que demandé, retourne tous les éléments.
+        """
+        if len(group) > n_samples:
+            return group.sample(n=n_samples, random_state=42)
+        else:
+            return group
+    \end{pythoncode}
+    \captionof{code}{Fonction d'échantillonnage stratifié par groupe}
+    \label{code:echantillonnage_tuiles}
+\end{code}
 
 Cette stratégie utilise la méthode \texttt{groupby} pour créer des sous-groupes homogènes selon chaque combinaison des critères de stratification. La constante \texttt{SAMPLES\_PER\_CAT} (fixée à 8) définit le nombre maximum d'échantillons à extraire par catégorie, permettant ainsi de définir précisément la taille du dataset souhaité.
 
-\vspace{0.35cm}
-\begin{pythoncode}
-# Application de l'échantillonnage stratifié
-sampled_df = tile_groups.groupby(['dominant_class', 'area_bin']).apply(
-    sample_tiles, n_samples=SAMPLES_PER_CAT
-).reset_index(drop=True)
-\end{pythoncode}
-\captionof{code}{Application de l'échantillonnage stratifié}
-\label{code:application_echantillonnage}
+\begin{code}[H]
+    \begin{pythoncode}
+    # Application de l'échantillonnage stratifié
+    sampled_df = tile_groups.groupby(['dominant_class', 'area_bin']).apply(
+        sample_tiles, n_samples=SAMPLES_PER_CAT
+    ).reset_index(drop=True)
+    \end{pythoncode}
+    \captionof{code}{Application de l'échantillonnage stratifié}
+    \label{code:application_echantillonnage}
+\end{code}
 
 L'objectif est d'obtenir un sous-groupe homogène de 8 individus pour chaque combinaison classe \gls{sia} dominante / intervalle de surface. Avec 6 intervalles de surface définis par classe \gls{sia}, cela représente 48 individus par classe. Pour l'ensemble des 12 classes \gls{sia} considérées dans l'étude, le dataset cible comprend au total 576 individus stratifiés.
 
@@ -856,63 +863,64 @@ La première étape consiste à identifier les paires de tuiles qui se chevauche
 
 La première étape est réalisée par la fonction \texttt{find\_overlapping\_tiles} (Code \ref{code:post_traitement_detection_tuile_chevauchement}) qui permet d'identifier les paires de tuiles se chevauchent.
 
-\vspace{0.35cm}
-\begin{pythoncode}
-def find_overlapping_tiles(gdf, min_overlap_area=1.0):
-    """
-    Simple function to find overlapping tiles using spatial index.
-    Returns a list of overlapping tile pairs.
-    """
-    overlaps = []
-    n = len(gdf)
-    
-    # Create spatial index for fast lookups
-    sindex = gdf.sindex
-    
-    # Check each tile against potential neighbors
-    for i in range(n):
-        geom1 = gdf.iloc[i]['geometry']
-        tile_id1 = gdf.iloc[i]['tile_id']
+\begin{code}[H]
+    \begin{pythoncode}
+    def find_overlapping_tiles(gdf, min_overlap_area=1.0):
+        """
+        Simple function to find overlapping tiles using spatial index.
+        Returns a list of overlapping tile pairs.
+        """
+        overlaps = []
+        n = len(gdf)
         
-        # Find potential overlapping tiles using bounding box
-        bbox = geom1.bounds  # Get bounding box coordinates
-        potential_matches = list(sindex.intersection(bbox))
+        # Create spatial index for fast lookups
+        sindex = gdf.sindex
         
-        # Remove self-match and only check tiles with higher index
-        potential_matches = [j for j in potential_matches if j > i]
-        
-        # Check each potential match
-        for j in potential_matches:
-            geom2 = gdf.iloc[j]['geometry']
-            tile_id2 = gdf.iloc[j]['tile_id']
+        # Check each tile against potential neighbors
+        for i in range(n):
+            geom1 = gdf.iloc[i]['geometry']
+            tile_id1 = gdf.iloc[i]['tile_id']
             
-            # Check if geometries actually intersect
-            if geom1.intersects(geom2):
+            # Find potential overlapping tiles using bounding box
+            bbox = geom1.bounds  # Get bounding box coordinates
+            potential_matches = list(sindex.intersection(bbox))
+            
+            # Remove self-match and only check tiles with higher index
+            potential_matches = [j for j in potential_matches if j > i]
+            
+            # Check each potential match
+            for j in potential_matches:
+                geom2 = gdf.iloc[j]['geometry']
+                tile_id2 = gdf.iloc[j]['tile_id']
                 
-                # Calculate overlap area
-                intersection = geom1.intersection(geom2)
-                overlap_area = intersection.area
-                
-                # Only keep overlaps above minimum threshold
-                if overlap_area > min_overlap_area:
+                # Check if geometries actually intersect
+                if geom1.intersects(geom2):
                     
-                    # Calculate overlap percentages
-                    overlap_pct1 = (overlap_area / geom1.area) * 100
-                    overlap_pct2 = (overlap_area / geom2.area) * 100
+                    # Calculate overlap area
+                    intersection = geom1.intersection(geom2)
+                    overlap_area = intersection.area
                     
-                    # Store overlap information
-                    overlaps.append({
-                        'tile_id1': tile_id1,
-                        'tile_id2': tile_id2,
-                        'overlap_area': overlap_area,
-                        'overlap_percentage_1': overlap_pct1,
-                        'overlap_percentage_2': overlap_pct2
-                    })
-    
-    return overlaps
-\end{pythoncode}
-\captionof{code}{Détection des tuiles qui se chevauchent}
-\label{code:post_traitement_detection_tuile_chevauchement}
+                    # Only keep overlaps above minimum threshold
+                    if overlap_area > min_overlap_area:
+                        
+                        # Calculate overlap percentages
+                        overlap_pct1 = (overlap_area / geom1.area) * 100
+                        overlap_pct2 = (overlap_area / geom2.area) * 100
+                        
+                        # Store overlap information
+                        overlaps.append({
+                            'tile_id1': tile_id1,
+                            'tile_id2': tile_id2,
+                            'overlap_area': overlap_area,
+                            'overlap_percentage_1': overlap_pct1,
+                            'overlap_percentage_2': overlap_pct2
+                        })
+        
+        return overlaps
+    \end{pythoncode}
+    \captionof{code}{Détection des tuiles qui se chevauchent}
+    \label{code:post_traitement_detection_tuile_chevauchement}
+\end{code}
 
 La fonction commence par créer un index spatial pour optimiser les performances de recherche. Elle divise l'espace géographique en zones hiérarchiques (rectangles englobants) et référence les géométries présentes dans chaque zone. Cette structure permet d'éviter de comparer chaque géométrie avec l'ensemble des autres lors d'opérations spatiales, réduisant considérablement le nombre de calculs nécessaires et améliorant ainsi les performances de l'algorithme.
 
@@ -920,107 +928,109 @@ Pour chaque tuile, la fonction identifie ensuite les candidates potentielles en 
 
 La deuxième étape est réalisée par la fonction \texttt{determine\_relative\_position} (Code \ref{code:post_traitement_position_relative_tuiles}) qui traite les paires de tuiles identifiées lors de l'étape précédente. Cette fonction calcule les centroïdes des deux tuiles concernées et détermine leur position relative l'une par rapport à l'autre. Cette information de positionnement sera ensuite utilisée pour décider quelle zone masquer lors du traitement des recouvrements.
 
-\vspace{0.35cm}
-\begin{pythoncode}
-def determine_relative_position(geom1, geom2):
-    """
-    Determine where geom1 is located relative to geom2.
-    Returns: 'top', 'bottom', 'left', 'right', 'top-left', etc.
-    """
+\begin{code}[H]
+    \begin{pythoncode}
+    def determine_relative_position(geom1, geom2):
+        """
+        Determine where geom1 is located relative to geom2.
+        Returns: 'top', 'bottom', 'left', 'right', 'top-left', etc.
+        """
+        
+        # Get the center points of both geometries
+        center_x1, center_y1 = geom1.centroid.x, geom1.centroid.y
+        center_x2, center_y2 = geom2.centroid.x, geom2.centroid.y
+        
+        # Compare vertical positions
+        if center_y1 > center_y2:
+            vertical = "top"
+        elif center_y1 < center_y2:
+            vertical = "bottom"
+        else:
+            vertical = None
+        
+        # Compare horizontal positions
+        if center_x1 > center_x2:
+            horizontal = "right"
+        elif center_x1 < center_x2:
+            horizontal = "left"
+        else:
+            horizontal = None
+        
+        # Combine results
+        if vertical and horizontal:
+            return f"{vertical}-{horizontal}"
+        elif vertical:
+            return vertical
+        elif horizontal:
+            return horizontal
+        else:
+            return "center"
     
-    # Get the center points of both geometries
-    center_x1, center_y1 = geom1.centroid.x, geom1.centroid.y
-    center_x2, center_y2 = geom2.centroid.x, geom2.centroid.y
-    
-    # Compare vertical positions
-    if center_y1 > center_y2:
-        vertical = "top"
-    elif center_y1 < center_y2:
-        vertical = "bottom"
-    else:
-        vertical = None
-    
-    # Compare horizontal positions
-    if center_x1 > center_x2:
-        horizontal = "right"
-    elif center_x1 < center_x2:
-        horizontal = "left"
-    else:
-        horizontal = None
-    
-    # Combine results
-    if vertical and horizontal:
-        return f"{vertical}-{horizontal}"
-    elif vertical:
-        return vertical
-    elif horizontal:
-        return horizontal
-    else:
-        return "center"
-
-\end{pythoncode}
-\captionof{code}{Position relative des tuiles}
-\label{code:post_traitement_position_relative_tuiles}
+    \end{pythoncode}
+    \captionof{code}{Position relative des tuiles}
+    \label{code:post_traitement_position_relative_tuiles}
+\end{code}
 
 Finalement, la fonction \texttt{remove\_overlaps} (Code \ref{code:post_traitement_masquage_selectif}) applique un masquage sélectif aux tuiles qui se chevauchent, en ciblant spécifiquement celles situées à droite ou en bas selon leur position relative déterminée à l'étape précédente. Cette approche systématique garantit l'élimination des redondances tout en conservant l'intégrité des données dans chaque dataset.
 
-\vspace{0.35cm}
-\begin{pythoncode}
-def remove_overlaps(overlap_df, gdf_dataset, remove_positions=['right', 'bottom']):
-    """
-    Remove overlaps by setting overlapping pixels to 0.
-    
-    Args:
-        overlap_df: DataFrame with overlap information
-        gdf_dataset: GeoDataFrame with file paths and geometries
-        remove_positions: List of positions to remove (e.g., ['right', 'bottom'])
-                         Default removes right and bottom tiles
-    """
-    
-    for idx, row in overlap_df.iterrows():
+\begin{code}[H]
+    \begin{pythoncode}
+    def remove_overlaps(overlap_df, gdf_dataset, remove_positions=['right', 'bottom']):
+        """
+        Remove overlaps by setting overlapping pixels to 0.
         
-        # Get the two overlapping files and geometries
-        file1 = gdf_dataset.iloc[row['index1']]['processed_img_path_tif']
-        file2 = gdf_dataset.iloc[row['index2']]['processed_img_path_tif'] 
-        geom1 = gdf_dataset.iloc[row['index1']]['geometry']
-        geom2 = gdf_dataset.iloc[row['index2']]['geometry']
+        Args:
+            overlap_df: DataFrame with overlap information
+            gdf_dataset: GeoDataFrame with file paths and geometries
+            remove_positions: List of positions to remove (e.g., ['right', 'bottom'])
+                             Default removes right and bottom tiles
+        """
         
-        # Decide which file to modify based on position and preferences
-        position = row['relative_position']
-        
-        # Check if any component of the position should be removed
-        should_remove_geom1 = any(pos in position for pos in remove_positions)
-        
-        if should_remove_geom1:
-            file_to_modify = file1    # Remove from geom1 (the positioned tile)
-            modify_geom = geom1
-        else:
-            file_to_modify = file2    # Remove from geom2 (the reference tile)
-            modify_geom = geom2
+        for idx, row in overlap_df.iterrows():
             
-        intersection = geom1.intersection(geom2)
-        
-        # Open GeoTIFF and set overlapping pixels to 0
-        with rasterio.open(file_to_modify, 'r+') as src:
+            # Get the two overlapping files and geometries
+            file1 = gdf_dataset.iloc[row['index1']]['processed_img_path_tif']
+            file2 = gdf_dataset.iloc[row['index2']]['processed_img_path_tif'] 
+            geom1 = gdf_dataset.iloc[row['index1']]['geometry']
+            geom2 = gdf_dataset.iloc[row['index2']]['geometry']
             
-            # Convert geographic intersection to pixel coordinates
-            minx, miny, maxx, maxy = intersection.bounds
-            window = from_bounds(minx, miny, maxx, maxy, src.transform)
+            # Decide which file to modify based on position and preferences
+            position = row['relative_position']
             
-            # Get pixel indices
-            col_start = int(window.col_off)
-            row_start = int(window.row_off) 
-            col_end = col_start + int(window.width)
-            row_end = row_start + int(window.height)
+            # Check if any component of the position should be removed
+            should_remove_geom1 = any(pos in position for pos in remove_positions)
             
-            # Set pixels to 0 for all bands
-            for band in range(1, src.count + 1):
-                data = src.read(band)
-                data[row_start:row_end, col_start:col_end] = 0
-                src.write(data, band)
-\end{pythoncode}
-\captionof{code}{Masquage sélectif}
-\label{code:post_traitement_masquage_selectif}
+            if should_remove_geom1:
+                file_to_modify = file1    # Remove from geom1 (the positioned tile)
+                modify_geom = geom1
+            else:
+                file_to_modify = file2    # Remove from geom2 (the reference tile)
+                modify_geom = geom2
+                
+            intersection = geom1.intersection(geom2)
+            
+            # Open GeoTIFF and set overlapping pixels to 0
+            with rasterio.open(file_to_modify, 'r+') as src:
+                
+                # Convert geographic intersection to pixel coordinates
+                minx, miny, maxx, maxy = intersection.bounds
+                window = from_bounds(minx, miny, maxx, maxy, src.transform)
+                
+                # Get pixel indices
+                col_start = int(window.col_off)
+                row_start = int(window.row_off) 
+                col_end = col_start + int(window.width)
+                row_end = row_start + int(window.height)
+                
+                # Set pixels to 0 for all bands
+                for band in range(1, src.count + 1):
+                    data = src.read(band)
+                    data[row_start:row_end, col_start:col_end] = 0
+                    src.write(data, band)
+    \end{pythoncode}
+    \captionof{code}{Masquage sélectif}
+    \label{code:post_traitement_masquage_selectif}
+\end{code}
 
 \paragraph{Distribution stratifiées pour validation croisée}
 La segmentation sémantique nécessite de grandes quantités de données annotées. Pour exploiter au mieux celles qui sont disponibles, il convient d'aller au-delà de la répartition classique entre entraînement, validation et test. L'approche traditionnelle implique que seul le dataset d'entraînement est utilisé pour former le modèle, le dataset de validation servant à évaluer les performances pendant l'entraînement, tandis que le dataset de test n'est jamais exploité durant cette phase et reste réservé à l'évaluation finale une fois l'entraînement terminé.
@@ -1039,59 +1049,61 @@ Pour répartir les données annotées, il est nécessaire d'effectuer une strati
 La fonction \texttt{create\_stratified\_dataset\_splits} (Code \ref{code:post_traitement_stratification}) permet de réaliser cette stratification.
 
 \newpage
-\begin{pythoncode}
-def create_stratified_dataset_splits(df, test_size=0.2, n_folds=5, max_attempts=100):
-    """Generate stratified dataset splits using dominant class and area bin."""
-    from sklearn.preprocessing import LabelEncoder
-    from iterstrat.ml_stratifiers import IterativeStratification
-    
-    best_result, best_score = None, float('inf')
-    
-    for attempt in range(max_attempts):
-        # Encode categorical variables for stratification
-        encoded_classes = LabelEncoder().fit_transform(df['dominant_class'])
-        encoded_areas = LabelEncoder().fit_transform(df['area_bin'])
-        stratification_labels = np.column_stack([encoded_classes, encoded_areas])
-        # Create train/test split
-        test_splitter = IterativeStratification(n_splits=int(1/test_size), order=2)
-        train_indices, test_indices = list(test_splitter.split(df.values, stratification_labels))[0]
-        # Initialize dataset assignments
-        df_result = df.copy()
-        df_result['dataset'] = n_folds  # Test set assignment
-        # Create cross-validation splits from training data
-        cv_splitter = IterativeStratification(n_splits=n_folds, order=2)
-        cv_splits = list(cv_splitter.split(
-            df_result.iloc[train_indices].values, 
-            stratification_labels[train_indices]))
-        # Assign CV fold numbers
-        for fold_id, (_, validation_indices) in enumerate(cv_splits):
-            original_indices = train_indices[validation_indices]
-            df_result.loc[original_indices, 'dataset'] = fold_id
-        # Calculate stratification quality metrics
-        class_cv_scores = []
-        for class_name in df_result['dominant_class'].unique():
-            class_subset = df_result[df_result['dominant_class'] == class_name]
-            fold_counts = class_subset['dataset'].value_counts()
-            fold_percentages = fold_counts / len(class_subset)
-            cv_score = fold_percentages.std() / fold_percentages.mean()
-            class_cv_scores.append(cv_score)
-        area_cv_scores = []
-        for area_name in df_result['area_bin'].unique():
-            area_subset = df_result[df_result['area_bin'] == area_name]
-            fold_counts = area_subset['dataset'].value_counts()
-            fold_percentages = fold_counts / len(area_subset)
-            cv_score = fold_percentages.std() / fold_percentages.mean()
-            area_cv_scores.append(cv_score)
-        # Combined quality score (lower is better)
-        combined_score = np.mean(class_cv_scores) + np.mean(area_cv_scores)
-        # Update best result if current attempt is better
-        if combined_score < best_score:
-            best_score = combined_score
-            best_result = df_result.copy()
-    return best_result
-\end{pythoncode}
-\captionof{code}{Stratification pour la répartition des données annotées}
-\label{code:post_traitement_stratification}
+\begin{code}[H]
+    \begin{pythoncode}
+    def create_stratified_dataset_splits(df, test_size=0.2, n_folds=5, max_attempts=100):
+        """Generate stratified dataset splits using dominant class and area bin."""
+        from sklearn.preprocessing import LabelEncoder
+        from iterstrat.ml_stratifiers import IterativeStratification
+        
+        best_result, best_score = None, float('inf')
+        
+        for attempt in range(max_attempts):
+            # Encode categorical variables for stratification
+            encoded_classes = LabelEncoder().fit_transform(df['dominant_class'])
+            encoded_areas = LabelEncoder().fit_transform(df['area_bin'])
+            stratification_labels = np.column_stack([encoded_classes, encoded_areas])
+            # Create train/test split
+            test_splitter = IterativeStratification(n_splits=int(1/test_size), order=2)
+            train_indices, test_indices = list(test_splitter.split(df.values, stratification_labels))[0]
+            # Initialize dataset assignments
+            df_result = df.copy()
+            df_result['dataset'] = n_folds  # Test set assignment
+            # Create cross-validation splits from training data
+            cv_splitter = IterativeStratification(n_splits=n_folds, order=2)
+            cv_splits = list(cv_splitter.split(
+                df_result.iloc[train_indices].values, 
+                stratification_labels[train_indices]))
+            # Assign CV fold numbers
+            for fold_id, (_, validation_indices) in enumerate(cv_splits):
+                original_indices = train_indices[validation_indices]
+                df_result.loc[original_indices, 'dataset'] = fold_id
+            # Calculate stratification quality metrics
+            class_cv_scores = []
+            for class_name in df_result['dominant_class'].unique():
+                class_subset = df_result[df_result['dominant_class'] == class_name]
+                fold_counts = class_subset['dataset'].value_counts()
+                fold_percentages = fold_counts / len(class_subset)
+                cv_score = fold_percentages.std() / fold_percentages.mean()
+                class_cv_scores.append(cv_score)
+            area_cv_scores = []
+            for area_name in df_result['area_bin'].unique():
+                area_subset = df_result[df_result['area_bin'] == area_name]
+                fold_counts = area_subset['dataset'].value_counts()
+                fold_percentages = fold_counts / len(area_subset)
+                cv_score = fold_percentages.std() / fold_percentages.mean()
+                area_cv_scores.append(cv_score)
+            # Combined quality score (lower is better)
+            combined_score = np.mean(class_cv_scores) + np.mean(area_cv_scores)
+            # Update best result if current attempt is better
+            if combined_score < best_score:
+                best_score = combined_score
+                best_result = df_result.copy()
+        return best_result
+    \end{pythoncode}
+    \captionof{code}{Stratification pour la répartition des données annotées}
+    \label{code:post_traitement_stratification}
+\end{code}
 
 Cette fonction utilise une approche itérative pour optimiser la qualité de la stratification multicritères. L'algorithme \texttt{IterativeStratification} a l'avantage de pouvoir traiter simultanément plusieurs variables de stratification, contrairement aux méthodes classiques limitées à une seule variable catégorielle.
 
@@ -1111,37 +1123,38 @@ Un coefficient proche de zéro indique une distribution parfaitement équilibré
 
 Le meilleur résultat (Code \ref{code:post_traitement_stratification_resultats}) est obtenu à l'itération 84, malgré des essais avec plus de 10000 itérations.
 
-\vspace{0.35cm}
-\begin{textcode}
-Target: Class CV ≤ 0.050, Area CV ≤ 0.050
-  Attempt 1: Class CV: 0.106, Area CV: 0.147
-  Attempt 2: Class CV: 0.099, Area CV: 0.140
-  Attempt 4: Class CV: 0.102, Area CV: 0.136
-  Attempt 6: Class CV: 0.113, Area CV: 0.116
-  Attempt 7: Class CV: 0.117, Area CV: 0.106
-  Attempt 10: Class CV: 0.109, Area CV: 0.107
-  Attempt 20: Class CV: 0.124, Area CV: 0.112
-  Attempt 26: Class CV: 0.111, Area CV: 0.098
-  Attempt 40: Class CV: 0.127, Area CV: 0.139
-  Attempt 45: Class CV: 0.122, Area CV: 0.072
-  Attempt 60: Class CV: 0.119, Area CV: 0.121
-  Attempt 65: Class CV: 0.090, Area CV: 0.092
-  Attempt 80: Class CV: 0.121, Area CV: 0.120
-  Attempt 84: Class CV: 0.086, Area CV: 0.088
-  Attempt 100: Class CV: 0.136, Area CV: 0.114
-Best result: Class CV: 0.086, Area CV: 0.088
-Final distribution:
-dataset
-0    88
-1    89
-2    89
-3    88
-4    87
-5    89
-\end{textcode}
-\captionof{code}{Résultats fonction \texttt{create\_stratified\_dataset\_splits}}
-\label{code:post_traitement_stratification_resultats}
-
+\begin{code}[H]
+    \begin{textcode}
+    Target: Class CV ≤ 0.050, Area CV ≤ 0.050
+      Attempt 1: Class CV: 0.106, Area CV: 0.147
+      Attempt 2: Class CV: 0.099, Area CV: 0.140
+      Attempt 4: Class CV: 0.102, Area CV: 0.136
+      Attempt 6: Class CV: 0.113, Area CV: 0.116
+      Attempt 7: Class CV: 0.117, Area CV: 0.106
+      Attempt 10: Class CV: 0.109, Area CV: 0.107
+      Attempt 20: Class CV: 0.124, Area CV: 0.112
+      Attempt 26: Class CV: 0.111, Area CV: 0.098
+      Attempt 40: Class CV: 0.127, Area CV: 0.139
+      Attempt 45: Class CV: 0.122, Area CV: 0.072
+      Attempt 60: Class CV: 0.119, Area CV: 0.121
+      Attempt 65: Class CV: 0.090, Area CV: 0.092
+      Attempt 80: Class CV: 0.121, Area CV: 0.120
+      Attempt 84: Class CV: 0.086, Area CV: 0.088
+      Attempt 100: Class CV: 0.136, Area CV: 0.114
+    Best result: Class CV: 0.086, Area CV: 0.088
+    Final distribution:
+    dataset
+    0    88
+    1    89
+    2    89
+    3    88
+    4    87
+    5    89
+    \end{textcode}
+    \captionof{code}{Résultats fonction \texttt{create\_stratified\_dataset\_splits}}
+    \label{code:post_traitement_stratification_resultats}
+\end{code}
+    
 \newpage
 \paragraph{Validation de la distribution des datasets}
 
@@ -1304,19 +1317,20 @@ Les connexions de saut (skip connections) permettent d'établir des ponts entre 
 \paragraph{Architectures testées}
 SMP propose plusieurs architectures qui sont déjà prêtes à l'utilisation. Le Code \ref{code:smp_quick_start_model} permet de créer un modèle U-Net de manière simplifiée.
 
-\vspace{0.35cm}
-\begin{pythoncode}
-import segmentation_models_pytorch as smp
-
-model = smp.Unet(
-    encoder_name="resnet34",        # choose encoder, e.g. mobilenet_v2 or efficientnet-b7
-    encoder_weights="imagenet",     # use `imagenet` pre-trained weights for encoder initialization
-    in_channels=1,                  # model input channels (1 for gray-scale images, 3 for RGB, etc.)
-    classes=3,                      # model output channels (number of classes in your dataset)
-)
-\end{pythoncode}
-\captionof{code}{Utilisation d'un modèle SMP \cite{noauthor__nodate}}
-\label{code:smp_quick_start_model}
+\begin{code}[H]
+    \begin{pythoncode}
+    import segmentation_models_pytorch as smp
+    
+    model = smp.Unet(
+        encoder_name="resnet34",        # choose encoder, e.g. mobilenet_v2 or efficientnet-b7
+        encoder_weights="imagenet",     # use `imagenet` pre-trained weights for encoder initialization
+        in_channels=1,                  # model input channels (1 for gray-scale images, 3 for RGB, etc.)
+        classes=3,                      # model output channels (number of classes in your dataset)
+    )
+    \end{pythoncode}
+    \captionof{code}{Utilisation d'un modèle SMP \cite{noauthor_quick_nodate}}
+    \label{code:smp_quick_start_model}
+\end{code}
 
 En synthèse, le Tableau \ref{tab:ch36_architecture_smp_avantage_inconvenient} présente les avantages et inconvénients de chacune des architectures. L'architecture DeepLabV3 est disponible dans SMP mais n'est pas incluse car DeepLabV3+ est sa nouvelle version.
 
@@ -1509,43 +1523,46 @@ L'augmentation des données permet de créer plusieurs versions d'une même imag
 
 \paragraph{Stratégie d'augmentation de données}
 La librairie Albumentations \cite{albumentations_albumentations_nodate} permet de faire de l'augmentation de données directement sur les images avant qu'elles soient utilisées pour l'entraînement du modèle. Le Code \ref{code:pipeline_augmentation_donnees} présente la combinaison de transformations utilisées pour réaliser l'augmentation de données.
-\vspace{0.35cm}
-\begin{pythoncode}
-import albumentations as A
-def get_transforms(is_training=True):
-    """
-    Get data augmentation transforms.
-    """
-    if is_training:
-        return A.Compose(
-            [
-                # Basic Geometric
-                A.SquareSymmetry(p=0.5),
-                # Affine and Perspective
-                A.Affine(
-                    scale=(0.95, 1.05), translate_percent=0.1, rotate=(-45, 45), p=0.6
-                ),
-                # Blur
-                A.OneOf([A.GaussianBlur(blur_limit=(3, 7), p=0.5),
-                        A.MedianBlur(blur_limit=5, p=0.5),
-                        A.MotionBlur(blur_limit=(3, 7), p=0.5),
-                    ],p=0.2,),
-                # Noise
-                A.OneOf([A.GaussNoise(p=0.5),
-                        A.ISONoise(color_shift=(0.01, 0.05), intensity=(0.1, 0.5), p=0.5),
-                        A.MultiplicativeNoise(multiplier=(0.9, 1.1), per_channel=True, p=0.5),
-                        A.SaltAndPepper(p=0.5),
-                    ],p=0.2,),
-                # Weather effects
-                A.RandomSunFlare(p=0.2),
-                A.RandomFog(p=0.2),
-            ]
-        )
-    else:
-        return None
-\end{pythoncode}
-\captionof{code}{Pipeline augmentation des données}
-\label{code:pipeline_augmentation_donnees}
+
+\begin{code}[H]
+    \begin{pythoncode}
+    import albumentations as A
+    def get_transforms(is_training=True):
+        """
+        Get data augmentation transforms.
+        """
+        if is_training:
+            return A.Compose(
+                [
+                    # Basic Geometric
+                    A.SquareSymmetry(p=0.5),
+                    # Affine and Perspective
+                    A.Affine(
+                        scale=(0.95, 1.05), translate_percent=0.1, rotate=(-45, 45), p=0.6
+                    ),
+                    # Blur
+                    A.OneOf([A.GaussianBlur(blur_limit=(3, 7), p=0.5),
+                            A.MedianBlur(blur_limit=5, p=0.5),
+                            A.MotionBlur(blur_limit=(3, 7), p=0.5),
+                        ],p=0.2,),
+                    # Noise
+                    A.OneOf([A.GaussNoise(p=0.5),
+                            A.ISONoise(color_shift=(0.01, 0.05), intensity=(0.1, 0.5), p=0.5),
+                            A.MultiplicativeNoise(multiplier=(0.9, 1.1), per_channel=True, p=0.5),
+                            A.SaltAndPepper(p=0.5),
+                        ],p=0.2,),
+                    # Weather effects
+                    A.RandomSunFlare(p=0.2),
+                    A.RandomFog(p=0.2),
+                ]
+            )
+        else:
+            return None
+    \end{pythoncode}
+    \captionof{code}{Pipeline augmentation des données}
+    \label{code:pipeline_augmentation_donnees}
+\end{code}
+
 SMP réalise les transformations en mémoire avant qu'elles soient utilisées lors de l'entraînement. L'avantage est qu'il n'y a pas d'images supplémentaires à stocker, mais cela peut en revanche prolonger le temps d'entraînement avec l'ajout de ce processus.
 
 YOLO dispose de stratégies d'augmentation de données propres dans sa librairie Python qui sont utilisées automatiquement. La pertinence de ces transformations est discutable dans le cas d'images aériennes. Par exemple, la transformation \texttt{mosaic} assemble plusieurs images en provenance de dataset d'entraînement (Figure \ref{fig:ch36_augmentation_donnees_yolo_mosaic}).
@@ -1563,7 +1580,7 @@ YOLO dispose de stratégies d'augmentation de données propres dans sa librairie
         \centering
         \includegraphics[width=\textwidth]{02-main/figures/ch3/ch36_augmentations_00b_yolo_exemple1_mosaic.png}
         \caption{Image transformée avec \texttt{mosaic}}
-        \label{fig:ch36_augmentations_00a_yolo_exemple1_original}
+        \label{fig:ch36_augmentations_00b_yolo_exemple1_mosaic}
     \end{subfigure}
     \caption{Transformation \texttt{mosaic} de YOLO}
     \label{fig:ch36_augmentation_donnees_yolo_mosaic}

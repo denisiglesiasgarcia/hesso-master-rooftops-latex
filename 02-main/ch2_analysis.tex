@@ -169,7 +169,7 @@ La méthodologie utilisée est la suivante :
     \item 2013 \cite{sitg_nuages_2013} avec une densité de 15 points au mètre carré. La précision altimétrique est de +/- 10 cm sur surface dure et la précision planimétrique est estimée à 20 cm environ.
     \item 2017 \cite{sitg_nuages_2017} avec une densité de 25 points au mètre carré. La précision altimétrique est de +/- 10 cm sur surface dure et la précision planimétrique est estimée à 20 cm environ.
 \end{itemize}
-\par{En ce qui concerne la région de Nyon, les données \gls{lidar} relevées en 2019 \cite{etat_de_vaud_lidar_nodate} et finalement, pour la France, les données \gls{lidar} relevées en 2014 \cite{ign_ign_nodate} par le \acrshort{ign}.
+\par{En ce qui concerne la région de Nyon, les données \gls{lidar} relevées en 2019 \cite{etat_de_vaud_lidar_nodate} et finalement, pour la France, les données \gls{lidar} relevées en 2014 \cite{ign_ign_nodate} par le \acrshort{ign}.}
 \par{Les données vectorielles proviennent des mêmes fournisseurs de données et ne sont pas spécifiées dans les articles. Les données météo proviennent de Météonorm.}
 
 
@@ -221,7 +221,7 @@ La méthodologie utilisée est la suivante :
 \end{itemize}
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1.00\linewidth]{02-main/figures/cadastre_solaire_ombrage.jpg}
+    \includegraphics[width=1.00\linewidth]{02-main/figures/ch2/cadastre_solaire_ombrage.jpg}
     \caption{Illustration des différents types d'ombrages \cite{desthieux_solar_2018}}
     \label{fig:cadastre_solaire_ombrage}
 \end{figure}
@@ -230,7 +230,7 @@ La méthodologie utilisée est la suivante :
 \par{En complément de l'ombrage direct, le modèle calcule également le "facteur de vue du ciel" (sky view factor). Ce paramètre mesure la portion de ciel visible depuis un point précis de la ville. Conceptuellement, si une personne se tient à un point donné (représenté en rouge sur la Figure \ref{fig:cadastre_solaire_svf}) et observe le ciel dans toutes les directions, certaines portions seront masquées par les bâtiments, la végétation, ou le relief.}
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1\linewidth]{cadastre_solaire_svf.png}
+    \includegraphics[width=1\linewidth]{02-main/figures/ch2/ch2_cadastre_solaire_svf.png}
     \caption{Le sky view factor (SVF) indique la proportion de ciel visible depuis un point \cite{zaksek_sky-view_2011}}
     \label{fig:cadastre_solaire_svf}
 \end{figure}
@@ -393,7 +393,7 @@ Trois horizons d'ombrage sont calculés pour chaque surface :
     \item La segmentation des données \gls{lidar}
     \begin{itemize}
         \item Algorithmes spécifiques pour segmentation nuage de points \gls{lidar} en polygones
-        \item Données : données \gls{lidar} du canton de Genève 2019 \cite{sitg_nuages_nodate}
+        \item Données : données \gls{lidar} du canton de Genève 2019 \cite{sitg_nuages_2019}
         \item F1-score = 0.76 et mIoU = 0.40
         \item Polygones de détection ne sont pas lisses et ne plaisent pas aux experts
     \end{itemize}
@@ -444,14 +444,14 @@ Dans le comité de pilotage du \acrshort{stdl} on retrouve :
 
 \par{\acrshort{sitg} dispose d'une grande quantité de données géographiques, les données suivantes ont été utilisées dans le cadre de ce projet :}
 \begin{itemize}
-    \item Nuage de points \gls{lidar} de l'année 2019 \cite{sitg_nuages_nodate}
+    \item Nuage de points \gls{lidar} de l'année 2019 \cite{sitg_nuages_2019}
     \item Orthophotos de l'année 2019 \cite{sitg_orthophotos_nodate}
     \item Couche \acrshort{sitg} d'emprise des toitures des bâtiments hors sol ``CAD\_BATIMENTS\_HORSOL\_TOIT'' \cite{sitg_toits_nodate}
 \end{itemize}
 
 \paragraph{\gls{lidar}}
 
-\par{Les données \gls{lidar} 2019 \cite{sitg_nuages_nodate} de l'État de Genève ont une densité de 25 points au mètre carré. La précision altimétrique est de +/- 10 cm sur surface dure et la précision planimétrique est estimée à 20 cm environ. Le vol de l'avion a été réalisé en mars 2019.}
+\par{Les données \gls{lidar} 2019 \cite{sitg_nuages_2019} de l'État de Genève ont une densité de 25 points au mètre carré. La précision altimétrique est de +/- 10 cm sur surface dure et la précision planimétrique est estimée à 20 cm environ. Le vol de l'avion a été réalisé en mars 2019.}
 
 Chaque point a une classe assignée dont les principales sont :
 \begin{itemize}
@@ -484,7 +484,7 @@ Chaque point a une classe assignée dont les principales sont :
 \par{Cette couche est régulièrement mise à jour. \acrshort{stdl} a utilisé les données de mars 2023 pour son projet. Les superstructures sont des éléments qui dépassent de la toiture tel qu'une cheminée, cage d'ascenseur, lucarne, etc. ne sont pas représentés dans cette couche. Tout ce qui est en dessous de 9 m² ne figure pas dans cette couche.}
 
 \paragraph{Vérité terrain}
-\par{La Figure \ref{fig:stdl_02_verite_terrain} représente les bâtiments choisis par \acrshort{stdl} pour la vérité terrain.
+\par{La Figure \ref{fig:stdl_02_verite_terrain} représente les bâtiments choisis par \acrshort{stdl} pour la vérité terrain.}
 \begin{figure}[H]
     \centering
     \includegraphics[width=1\linewidth]{02-main//figures/ch2/stdl_02_verite_terrain.png}
@@ -525,8 +525,8 @@ Chaque point a une classe assignée dont les principales sont :
 \par{La première étape est la préparation des données \gls{lidar} :}
 \begin{itemize}
     \item L'intensité du signal \gls{lidar} est interpolée par une méthode de pondération inverse à la distance pour obtenir une valeur continue en chaque point.
-    \item Un modèle numérique de terrain (\arcshort{mnt}) est généré à partir des points \gls{lidar} pour représenter la surface du sol.
-    \item La rugosité de la surface est calculée à partir du \arcshort{mnt} à une échelle de 1 m pour caractériser les variations locales de hauteur.
+    \item Un modèle numérique de terrain (\acrshort{mnt}) est généré à partir des points \gls{lidar} pour représenter la surface du sol.
+    \item La rugosité de la surface est calculée à partir du \acrshort{mnt} à une échelle de 1 m pour caractériser les variations locales de hauteur.
     \item Des statistiques zonales (moyenne, médiane, écart-type, etc.) sont calculées pour l'intensité et la rugosité sur chaque pan de toit.
 \end{itemize}
 \par{La deuxième étape est la classification par seuils manuels :}
@@ -583,7 +583,7 @@ Chaque point a une classe assignée dont les principales sont :
 \par{Dans la Figure \ref{fig:stdl_04_rf_resultats} on observe les différents critères par office, l'\acrshort{ocen} semble classifier plus de surfaces comme ``possiblement libre'' (blanc) que l'\acrshort{ocan}. Une matrice de confiance aurait permis de mieux évaluer les résultats.}
 
 \paragraph{Discussion des résultats (\acrshort{stdl})}
-\par{Dans son rapport \acrshort{stdl} fait une analyse des résultats obtenus dans lequel ils traitent les points suivants :
+\par{Dans son rapport \acrshort{stdl} fait une analyse des résultats obtenus dans lequel ils traitent les points suivants :}
 \begin{itemize}
     \item Comparaison des deux méthodes de classification
     \item Classification des petits pans de toit
@@ -666,7 +666,7 @@ Chaque point a une classe assignée dont les principales sont :
     \label{tab:stdl_02_resultats_segmentation_lidar}
 \end{table}
 
-\par{Les objets de plus de 1 m² (Figure \ref{fig:stdl_06_segmentation_lidar_surfaces}) et situés à plus de 1 m (Figure \ref{fig:stdl_07_segmentation_lidar_distances}) du bord du toit sont bien détectés, avec des F1-score entre 0.82 et 0.92.
+\par{Les objets de plus de 1 m² (Figure \ref{fig:stdl_06_segmentation_lidar_surfaces}) et situés à plus de 1 m (Figure \ref{fig:stdl_07_segmentation_lidar_distances}) du bord du toit sont bien détectés, avec des F1-score entre 0.82 et 0.92.}
 \begin{figure}[H]
     \centering
     \includegraphics[width=1\linewidth]{02-main//figures/ch2/stdl_06_segmentation_lidar_surfaces.png}
@@ -1199,7 +1199,7 @@ Le CNN développé atteint :
 
 \subsubsection{Discussion et limites}
 \par{L'article présente une approche prometteuse pour quantifier les surfaces de toiture disponibles pour l'installation solaire. Le modèle U-Net atteint un IoU de 64\% et une précision de 93\% sur les données de test, avec la capacité notable d'exclure automatiquement les zones ombragées des toits.}
-\par{La comparaison avec les méthodes existantes révèle des différences selon la taille des bâtiments. Pour les grandes toitures, le modèle CNN estime une fraction médiane de surface disponible de 39\% contre 66\% pour l'approche de référence, suggérant une surestimation des méthodes à grande échelle. Pour les petites toitures, la tendance s'inverse avec 47\% contre 32\%.
+\par{La comparaison avec les méthodes existantes révèle des différences selon la taille des bâtiments. Pour les grandes toitures, le modèle CNN estime une fraction médiane de surface disponible de 39\% contre 66\% pour l'approche de référence, suggérant une surestimation des méthodes à grande échelle. Pour les petites toitures, la tendance s'inverse avec 47\% contre 32\%.}
 \par{Le modèle sous-estime en moyenne de 8\% la surface réellement disponible par rapport à la vérité terrain. Cette sous-estimation est principalement observée sur les petites toitures (< 100 m²). Les limites identifiées incluent la difficulté à détecter les lucarnes, construites dans le même matériau que le toit, et les zones de "toits verts" avec végétation.}
 \par{L'étude se limite au centre de Genève avec 524 images principalement résidentielles. Les auteurs mentionnent 12 heures de labellisation manuelle sans préciser la répartition du travail. Pour une extension nationale, ils proposent l'ajout d'un canal infrarouge et l'utilisation d'images plus récentes à haute résolution.}
 
@@ -1333,7 +1333,7 @@ L'efficacité computationnelle est remarquable face aux détecteurs end-to-end, 
 
 Les cartes d'activation (Figure \ref{fig:ch2_yolo_10_perception}) révèlent une amélioration qualitative notable, avec des contours d'objets plus nets et une activation de premier plan plus précise comparé à YOLOv10/v11, illustrant concrètement les bénéfices des mécanismes d'attention optimisés.
 
-\begin{figure}
+\begin{figure}[H]
     \centering
     \includegraphics[width=1\linewidth]{02-main/figures/ch2/ch2_yolo_10_perception.png}
     \caption{Perception des objets dans YOLOv10, YOLOv11 et YOLOv12 \cite{tian_yolov12_2025}}
