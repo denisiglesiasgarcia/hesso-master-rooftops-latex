@@ -27,7 +27,7 @@ Ce chapitre dresse un état de l'art des avancées récentes dans la vision par 
 
 \par{Une brève synthèse permettra de conclure et de justifier l'approche utilisée.}
 
-\par{Les notions théoriques nécessaires pour la compréhension de ce chapitre se trouvent dans deux annexes. Le premier traite de  l'énergie solaire et ses applications dans l'annexe ``\nameref{chap:fondamentaux_energie}''. Le deuxième annexe ``\nameref{chap:fondamentaux_ml}'' va permettre d’avoir les bases nécessaires pour comprendre ce qu’est le machine learning, ses
+\par{Les notions théoriques nécessaires pour la compréhension de ce chapitre se trouvent dans deux annexes. Le premier traite de  l'énergie solaire et ses applications dans l'annexe \textit{\nameref{chap:fondamentaux_energie}} (voir page~\pageref{chap:fondamentaux_energie}). Le deuxième annexe \textit{\nameref{chap:fondamentaux_ml}} (voir page~\pageref{chap:fondamentaux_ml}) va permettre d’avoir les bases nécessaires pour comprendre ce qu’est le machine learning, ses
 limites et ses applications.}
 
 % -----------------------------------------------------------------------------
@@ -38,7 +38,7 @@ limites et ses applications.}
 \subsection{Analyse du potentiel photovoltaïque des toitures résidentielles en Andalousie}
 
 \subsubsection{Contexte et objectifs}
-\par{L'étude menée par \citeauthor{ordonez_analysis_2010} \cite{ordonez_analysis_2010} présente une analyse détaillée du potentiel de production d'énergie photovoltaïque sur les toitures résidentielles en Andalousie (Espagne). Cette région, avec une radiation solaire moyenne de 4,75 kWh/m² par jour et une superficie de 87 597 km², possède le plus fort potentiel solaire d'Europe.}
+\par{L'étude menée par \citeauthor{ordonez_analysis_2010} \cite{ordonez_analysis_2010} présente une analyse détaillée du potentiel de production d'énergie photovoltaïque sur les toitures résidentielles en Andalousie (Espagne). Cette région, avec une radiation solaire moyenne de 4,75 \si{\unit{kWh/m^2}} par jour et une superficie de 87 597 \si{\unit{km^2}}, possède le plus fort potentiel solaire d'Europe.}
 
 \subsubsection{Données}
 \par{Les données utilisées dans cet article sont :}
@@ -58,34 +58,38 @@ limites et ses applications.}
 \subsubsection{Résultats principaux}
 \par{L'analyse a permis d'identifier les potentiels suivants :}
 \begin{itemize}
-    \item La surface totale de toiture disponible est de 265,52 km², dont 218,52 km² (82,29\%) sont effectivement utilisables pour des installations photovoltaïques
-    \item Le potentiel de production énergétique est estimé à 9,73 GWh/an pour des panneaux IS-170 et 9,38 GWh/an pour des panneaux IS-220
+    \item La surface totale de toiture disponible est de 265,52 \si{\unit{km^2}}, dont 218,52 \si{\unit{km^2}} (82,29\%) sont effectivement utilisables pour des installations photovoltaïques
+    \item Le potentiel de production énergétique est estimé à 9,73 \si{\unit{GWh/an}} pour des panneaux IS-170 et 9,38 \si{\unit{GWh/an}} pour des panneaux IS-220
     \item Cette production permettrait de couvrir environ 78,89\% des besoins énergétiques du secteur résidentiel andalou, réduisant la dépendance énergétique extérieure à seulement 21,02\%
 \end{itemize}
 
 \subsubsection{Discussion et limites}
 \par{Cette recherche démontre qu'il est possible d'estimer le potentiel solaire des toitures à partir de données déjà existantes, sans qu'il soit nécessaire d'investir dans l’acquisition de nouvelles données.}
 
-\par{La méthodologie utilisée, bien que statistiquement solide, présente certaines limites. Notamment, elle s'appuie uniquement sur les données cadastrales issues des autorisations de construire et des enquêtes gouvernementales. Lors de la rédaction de cet article (2010), les auteurs se sont basés sur des données de 2000-2007. Actuellement, ils disposent de données \gls{lidar} \cite{nacional_plan_nodate} qui permettraient une évaluation plus précise et exhaustive du potentiel solaire pour l'Andalousie.}
+\par{La méthodologie utilisée, bien que statistiquement solide, présente certaines limites. Notamment, elle s'appuie uniquement sur les données cadastrales issues des autorisations de construire et des enquêtes gouvernementales. En \citeyear{ordonez_analysis_2010}, lors de la rédaction de l'article, les auteurs se sont basés sur des données de 2000-2007. Actuellement, ils disposent de données \gls{lidar} \cite{nacional_plan_nodate} qui permettraient une évaluation plus précise et exhaustive du potentiel solaire pour l'Andalousie.}
 
 % -----------------------------------------------------------------------------
 \subsection{Cadastre solaire Genevois}
 
-\par{Il y a une multitude d'article dédiés à l'étude du potentiel solaire, la région de Genève est l'une des régions du monde avec le plus d'articles publiés après Wuhan (Chine) \cite{drozd_evaluating_2025}. \citeauthor{thebault_large-scale_2022} \cite{thebault_large-scale_2022} vont analyser la pertinence de la pose de panneaux solaire \acrshort{pv} au niveau du \acrshort{grandgeneve}.}
+\par{Il y a une multitude d'article dédiés à l'étude du potentiel solaire, la région de Genève est l'une des régions du monde avec le plus d'articles publiés après Wuhan (Chine) \cite{drozd_evaluating_2025}. \citeauthor{thebault_large-scale_2022} \cite{thebault_large-scale_2022} vont analyser la pertinence de la pose de panneaux solaire \acrshort{pv} au niveau du \gls{grandgeneve}.}
 
 \subsubsection{Contexte et objectifs}
 \par{Le premier cadastre solaire de Genève \cite{desthieux_etude_2011} date de 2011. Il est réalisé par \acrshort{hepia}, l'\acrshort{epfl} et le Politecnico di Milano, financé par les Services Industriels Genevois et le Service de l'énergie du canton (actuellement l'\acrshort{ocen}). Elle vise à cartographier précisément le potentiel solaire sur les toitures genevoises. Les données utilisées sont :}
+
 \begin{itemize}
-    \item Données \gls{lidar} de 2009 (4-6 points/m$^2$)
+    \item Données \gls{lidar} de 2009 (4-6 \si{\unit{points/m^2}}) \cite{sitg_nuages_2009}
     \item Empreinte au sol des toitures issues du modèle vecteur 3D du bâti sur le canton de 2005
     \item Données météo horaires issues de Meteonorm.
 \end{itemize}
+
 La méthodologie utilisée est la suivante :
+
 \begin{itemize}
     \item Construction d'un modèle numérique de surface 2.5D à partir de données \gls{lidar} et d'empreintes au sol des bâtiments
     \item Calcul de l'irradiation solaire horaire sur les toits en tenant compte des ombrages (bâti, végétation, relief), à l'aide d'un outil développé sous Matlab
     \item Production d'indicateurs et de statistiques d'irradiation par toiture dans ArcGIS
 \end{itemize}
+
 \par{Le résultat de l'étude est une couche vectorielle qui indique l'irradiation solaire pour la toiture d'un bâtiment. Le temps de calcul est d'environ 2000 h pour une seule machine.}
 
 \par{Une deuxième phase du cadastre est effectuée en 2014 \cite{desthieux_etude_2014} qui permet d'améliorer la modélisation des toitures, le calcul de l'irradiation solaire et de réaliser certains prédimensionnements :
@@ -119,13 +123,15 @@ La méthodologie utilisée est la suivante :
 \end{itemize}}
 
 \par{En 2020, l'article \cite{stendardo_gpu-enabled_2020} de \citeauthor{stendardo_gpu-enabled_2020} aborde la question de l'optimisation des calculs pour le cadastre du Grand Genève. Les auteurs proposent l'utilisation des \acrshort{gpu} pour réduire considérablement les temps de traitement. Cette amélioration répond à un défi croissant : chaque nouvelle version du cadastre intègre davantage de données et requiert des calculs plus précis, ce qui allonge inévitablement les temps d'exécution. L'optimisation du code devient donc un aspect fondamental pour la viabilité du projet.}
+
 \begin{figure}[H]
     \centering
     \includegraphics[width=1\linewidth]{02-main//figures/ch2/cadastre_solaire_gpu.png}
     \caption{Schéma pour le calcul d'une tuile \cite{stendardo_gpu-enabled_2020}}
     \label{fig:cadastre_solaire_gpu}
 \end{figure}
-\par{La Figure \ref{fig:cadastre_solaire_gpu} montre comment le traitement a été repensé pour chaque tuile de 3 x 3 km. Les parties du code Java qui pouvaient être massivement parallélisées ont été réécrites en CUDA \cite{nvidia_cuda_nodate}, ce qui permet de tirer parti des \acrshort{gpu} au lieu de s'appuyer uniquement sur les \acrshort{cpu}. Les autres parties critiques du code ont été optimisées en C++ \cite{noauthor_c_2025}. On peut voir sur la Figure \ref{fig:cadastre_solaire_gpu_evolution_temps} que cette approche a permis de réduire considérablement le temps de traitement par tuile.}
+
+La Figure \ref{fig:cadastre_solaire_gpu} montre comment le traitement a été repensé pour chaque tuile de \si{\numproduct{3 x 3}} \si{\unit{km}}. Les parties du code Java qui pouvaient être massivement parallélisées ont été réécrites en CUDA \cite{nvidia_cuda_nodate}, ce qui permet de tirer parti des \acrshort{gpu} au lieu de s'appuyer uniquement sur les \acrshort{cpu}. Les autres parties critiques du code ont été optimisées en C++ \cite{noauthor_c_2025}. Cette approche a permis de réduire considérablement le temps de traitement par tuile (Figure \ref{fig:cadastre_solaire_gpu_evolution_temps}).
 
 \begin{figure}[H]
     \centering
@@ -165,9 +171,9 @@ La méthodologie utilisée est la suivante :
 \subsubsection{Données}
 \par{Le cadastre genevois et du \gls{grandgeneve} \cite{desthieux_cadastre_nodate} utilisent plusieurs sources de données. Pour la région de Genève, \acrshort{sitg} a mis à disposition les données \gls{lidar} relevées les années:}
 \begin{itemize}
-    \item 2009 \cite{sitg_nuages_2009} avec une densité de 5 points au mètre carré. La précision altimétrique est de +/- 20 cm sur surface dure et la précision planimétrique est estimée à 30 cm environ.
-    \item 2013 \cite{sitg_nuages_2013} avec une densité de 15 points au mètre carré. La précision altimétrique est de +/- 10 cm sur surface dure et la précision planimétrique est estimée à 20 cm environ.
-    \item 2017 \cite{sitg_nuages_2017} avec une densité de 25 points au mètre carré. La précision altimétrique est de +/- 10 cm sur surface dure et la précision planimétrique est estimée à 20 cm environ.
+    \item 2009 \cite{sitg_nuages_2009} avec une densité de 5 \si{\unit{points/m^2}}. La précision altimétrique est de $\pm\ 20$ \si{\unit{cm}} sur surface dure et la précision planimétrique est estimée à 30 \si{\unit{cm}} environ.
+    \item 2013 \cite{sitg_nuages_2013} avec une densité de 15 \si{\unit{points/m^2}}. La précision altimétrique est de $\pm\ 10$ \si{\unit{cm}} sur surface dure et la précision planimétrique est estimée à 20 \si{\unit{cm}} environ.
+    \item 2017 \cite{sitg_nuages_2017} avec une densité de 25 \si{\unit{points/m^2}}. La précision altimétrique est de $\pm\ 10$ \si{\unit{cm}} sur surface dure et la précision planimétrique est estimée à 20 \si{\unit{cm}} environ.
 \end{itemize}
 \par{En ce qui concerne la région de Nyon, les données \gls{lidar} relevées en 2019 \cite{etat_de_vaud_lidar_nodate} et finalement, pour la France, les données \gls{lidar} relevées en 2014 \cite{ign_ign_nodate} par le \acrshort{ign}.}
 \par{Les données vectorielles proviennent des mêmes fournisseurs de données et ne sont pas spécifiées dans les articles. Les données météo proviennent de Météonorm.}
@@ -193,104 +199,140 @@ La méthodologie utilisée est la suivante :
 \end{figure}
 
 \paragraph{Collecte des données}
-\par{La première étape est d'obtenir les données nécessaires ("Raw data" sur la Figure \ref{fig:cadastre_solaire_methodologie}). À partir des données \gls{lidar}, on construit deux modèles 3D de la ville : un modèle numérique de surface (\acrshort{mns} ou en anglais \acrshort{dsm}) qui représente la surface supérieure des bâtiments et de la végétation, et un modèle numérique de terrain (\acrshort{mnt} ou en anglais \acrshort{dtm}) qui représente le sol nu sans les bâtiments.}
+\par{La première étape est d'obtenir les données nécessaires (``Raw data'' sur la Figure \ref{fig:cadastre_solaire_methodologie}). À partir des données \gls{lidar}, deux modèles 3D de la ville sont construits: un modèle numérique de surface (\acrshort{mns} ou en anglais \acrshort{dsm}) qui représente la surface supérieure des bâtiments et de la végétation, et un modèle numérique de terrain (\acrshort{mnt} ou en anglais \acrshort{dtm}) qui représente le sol nu sans les bâtiments.}
 \par{Les contours et empreintes des toits et bâtiments  sont aussi récupérés à partir de données cadastrales existantes, en 2D et 3D. Ils serviront à délimiter précisément les toits et façades.}
 
 \paragraph{Construction du modèle 3D détaillé}
-\par{La deuxième étape consiste à construire un modèle 3D détaillé de la ville ("mask inputs" sur la Figure \ref{fig:cadastre_solaire_methodologie}), qui servira de base aux calculs d'ensoleillement. Ce modèle est créé à partir des données récoltées à l'étape précédente.}
-\par{Tout d'abord, le modèle numérique de surface (DSM) et le modèle numérique de terrain (DTM) sont transformés en images 3D appelées "rasters". Imaginez une grande grille recouvrant toute la ville, où chaque case de la grille (appelée "pixel") contient une valeur de hauteur. C'est exactement ce que sont le \acrshort{dsm} et le \acrshort{dtm} : des grandes grilles 3D où la hauteur de chaque point de la ville est enregistrée.}
-\par{Ensuite, deux modèles 3D distincts sont créés : un pour les toits et un pour les façades. Pour cela, on combine le \acrshort{dsm} obtenu à partir des données \gls{lidar} avec les données cadastrales qui contiennent les contours des bâtiments. Cela permet d'avoir un modèle 3D, où chaque toit et chaque façade est représenté.}
-\par{Pour chaque pixel du modèle 3D des toits, deux informations supplémentaires sont calculées : la pente (c'est-à-dire l'inclinaison) et l'orientation (nord, sud, est, ouest...). Ces deux paramètres sont très importants car ils influencent grandement la quantité d'énergie solaire reçue. Par exemple, un toit plat horizontal recevra plus de soleil qu'un toit très pentu orienté vers le nord.}
-\par{Le modèle 3D des façades est un peu plus complexe à créer. En effet, un modèle "raster" comme celui des toits ne permet pas de bien représenter les surfaces verticales. Pour contourner ce problème, des points supplémentaires appelés "hyperpoints" sont ajoutés le long des façades (voir Figure \ref{fig:cadastre_solaire_hyperpoints}). Ils permettent de représenter chaque façade comme une série de points verticaux, sur lesquels on pourra ensuite calculer l'ensoleillement de manière précise.}
+
+La deuxième étape consiste à construire un modèle 3D détaillé de la ville (``mask inputs'' sur la Figure \ref{fig:cadastre_solaire_methodologie}), qui servira de base aux calculs d'ensoleillement. Ce modèle s'appuie sur les données récoltées lors de l'étape précédente.
+
+Le processus débute par la transformation du modèle numérique de surface (\acrshort{dsm}) et du modèle numérique de terrain (\acrshort{dtm}) en images 3D appelées rasters. Ces rasters fonctionnent comme une grille matricielle qui recouvre l'ensemble du territoire urbain, où chaque pixel stocke une valeur d'altitude. Le \acrshort{dsm} et le \acrshort{dtm} constituent ainsi des représentations matricielles qui enregistrent l'élévation de chaque point du territoire étudié.
+
+Deux modèles 3D distincts sont ensuite générés : un modèle dédié aux toitures et un second pour les façades. Cette approche combine le \acrshort{dsm} issu des données \gls{lidar} avec les informations cadastrales vectorielles qui délimitent les contours des bâtiments. Cette fusion permet d'obtenir une représentation tridimensionnelle où chaque élément architectural (toits et façades) est individualisé et géoréférencé.
+
+Pour chaque pixel du modèle 3D des toitures, deux paramètres géométriques essentiels sont calculés : la pente (inclinaison par rapport à l'horizontale) et l'orientation azimutale (exposition cardinale). Ces paramètres influencent directement la quantité d'irradiation reçue et jouent un rôle déterminant dans l'estimation du potentiel solaire. Une toiture horizontale captera par exemple davantage d'énergie solaire qu'une surface fortement inclinée exposée vers le nord.
+
+La modélisation des façades présente une complexité supplémentaire car la représentation raster ne permet pas de bien représenter les surfaces verticales. Pour contourner cette limitation, des points supplémentaires appelés ``hyperpoints'' sont distribués le long des façades (Figure \ref{fig:cadastre_solaire_hyperpoints}). Cette méthode permet de discrétiser chaque façade en une série de points verticaux géolocalisés, sur lesquels les calculs d'ensoleillement peuvent être appliqués avec précision.
+
 \begin{figure}[H]
     \centering
     \includegraphics[width=1\linewidth]{02-main//figures/ch2/cadastre_solaire_hyperpoints.png}
     \caption{Méthode de création des hyperpoints sur les façades \cite{desthieux_solar_2018}}
     \label{fig:cadastre_solaire_hyperpoints}
 \end{figure}
-\par{Finalement, on obtient un jumeau numérique très détaillé de la ville, avec un modèle 3D distinct pour les toits et les façades. Ce jumeau numérique contient toutes les informations nécessaires (hauteur, pente, orientation) pour calculer finement l'ensoleillement en tout point. Les étapes suivantes vont s'appuyer sur ce modèle pour simuler les ombres portées et calculer le potentiel solaire.}
+
+Cette phase de modélisation produit un jumeau numérique détaillé du territoire urbain, composé de deux modèles 3D complémentaires pour les toitures et les façades. Cette représentation numérique intègre tous les paramètres géométriques nécessaires (altitudes, pentes, orientations) pour permettre une estimation précise de l'ensoleillement en tout point de l'espace urbain modélisé.
+
+Ce jumeau numérique constitue la base géospatiale sur laquelle s'appuieront les étapes suivantes de la méthodologie. Les algorithmes de simulation des ombres portées et de calcul du potentiel solaire exploiteront cette représentation tridimensionnelle pour quantifier les ressources énergétiques disponibles sur l'ensemble du territoire étudié.
 
 \paragraph{Calcul des zones d'ombre}
-\par{La troisième étape consiste à calculer les zones d'ombre sur les toits et les façades des bâtiments (``mask inputs'' sur Figure \ref{fig:cadastre_solaire_methodologie}). Cette étape est cruciale car les zones ombragées ont un potentiel solaire significativement inférieur aux zones bien exposées au soleil.}
-\par{Pour réaliser ce calcul, le jumeau numérique 3D de la ville créé précédemment est utilisé comme base. Ce modèle contient toutes les informations nécessaires sur la forme et la hauteur des bâtiments et du relief environnant. Un algorithme de simulation reproduit la course du soleil heure par heure tout au long de l'année, projetant les ombres correspondantes sur le modèle 3D.}
-\par{L'ombrage représente l'un des facteurs les plus déterminants pour la performance d'une installation solaire. Pour analyser précisément son impact, trois catégories principales d'ombrages sont identifiées:}
+
+La troisième étape consiste à calculer les zones d'ombre sur les toits et les façades des bâtiments (``mask inputs'' sur Figure \ref{fig:cadastre_solaire_methodologie}). Cette analyse est cruciale car les zones ombragées présentent un potentiel solaire significativement inférieur aux zones bien exposées au soleil.
+
+Le calcul s'appuie sur le jumeau numérique 3D de la ville créé précédemment, qui contient toutes les informations nécessaires sur la géométrie des bâtiments et du relief environnant. Un algorithme de simulation reproduit la course du soleil heure par heure tout au long de l'année, en projetant les ombres correspondantes sur le modèle 3D.
+
+L'ombrage constitue l'un des facteurs les plus déterminants pour la performance d'une installation solaire. Pour analyser précisément son impact, trois catégories principales d'ombrages sont identifiées:
+
 \begin{itemize}
-    \item Les ombrages proches: Causés par des éléments situés directement sur le toit comme les cheminées, antennes ou systèmes de ventilation.
-    \item Les ombrages lointains: Proviennent du relief naturel (collines, montagnes) ou des grands bâtiments environnants. L'évaluation de leur impact nécessite une étude complète du masque solaire sur l'ensemble de l'année, car leur influence varie considérablement selon les saisons et la position du soleil.
-    \item Les ombrages saisonniers: Générés par des éléments variables comme la végétation ou l'accumulation de neige. Ces ombrages évoluent au cours des saisons et nécessitent une gestion adaptative par un entretien régulier et une conception appropriée de l'installation.
+    \item Les ombrages proches: causés par des éléments situés à proximité tel que des bâtiments voisins ou directement sur le toit comme les cheminées, antennes ou systèmes de ventilation.
+    \item Les ombrages lointains: proviennent du relief naturel (collines, montagnes) ou des grands bâtiments environnants. L'évaluation de leur impact nécessite une étude complète du masque solaire sur l'ensemble de l'année, car leur influence varie considérablement selon les saisons et la position du soleil.
+    \item Les ombrages saisonniers: générés par des éléments variables comme la végétation ou l'accumulation de neige. Ces ombrages évoluent au cours des saisons et nécessitent une gestion adaptative par un entretien régulier et une conception appropriée de l'installation.
 \end{itemize}
+
 \begin{figure}[H]
     \centering
     \includegraphics[width=1.00\linewidth]{02-main/figures/ch2/cadastre_solaire_ombrage.jpg}
     \caption{Illustration des différents types d'ombrages \cite{desthieux_solar_2018}}
     \label{fig:cadastre_solaire_ombrage}
 \end{figure}
-\par{La Figure \ref{fig:cadastre_solaire_ombrage} illustre ces concepts d'ombrage. À la position 1, le soleil n'est obstrué par aucun obstacle, donc le point $P_0$ reçoit un ensoleillement direct. À la position 2, un arbre projette une ombre sur $P_0$, créant un ombrage saisonnier dont l'intensité varie selon le type de végétation et la période de l'année. La position 3 représente une situation typique en milieu urbain où un bâtiment plus élevé projette une ombre sur les structures plus basses. Cette situation peut correspondre à un ombrage proche ou lointain selon la distance et les dimensions du bâtiment obstructif.}
-\par{Le résultat de cette analyse produit des "cartes d'ombrage" indiquant, pour chaque heure de la journée, quelles zones des toits et façades sont à l'ombre ou exposées au soleil. Ces cartes constituent une donnée fondamentale pour le calcul final du potentiel solaire.}
-\par{En complément de l'ombrage direct, le modèle calcule également le "facteur de vue du ciel" (sky view factor). Ce paramètre mesure la portion de ciel visible depuis un point précis de la ville. Conceptuellement, si une personne se tient à un point donné (représenté en rouge sur la Figure \ref{fig:cadastre_solaire_svf}) et observe le ciel dans toutes les directions, certaines portions seront masquées par les bâtiments, la végétation, ou le relief.}
+
+La Figure \ref{fig:cadastre_solaire_ombrage} illustre ces concepts d'ombrage à travers trois situations caractéristiques. À la position 1, le soleil n'est obstrué par aucun obstacle, le point $P_0$ reçoit donc un ensoleillement direct. À la position 2, un arbre projette une ombre sur $P_0$, créant un ombrage saisonnier dont l'intensité varie selon le type de végétation et la période de l'année. La position 3 représente une situation typique en milieu urbain où un bâtiment plus élevé projette une ombre sur les structures plus basses. Cette configuration peut correspondre à un ombrage proche ou lointain selon la distance et les dimensions du bâtiment obstructeur.
+
+Cette analyse produit des cartes d'ombrage qui indiquent, pour chaque heure de la journée, quelles zones des toits et façades sont à l'ombre ou exposées au soleil. Ces cartes constituent une donnée fondamentale pour le calcul final du potentiel solaire.
+
+En complément de l'ombrage direct, le modèle calcule également le facteur de vue du ciel (sky view factor). Ce paramètre mesure la portion de ciel visible depuis un point précis de la ville. Si une personne se tient à un point donné (représenté en rouge sur la Figure \ref{fig:cadastre_solaire_svf}) et observe le ciel dans toutes les directions, certaines portions seront masquées par les bâtiments, la végétation, ou le relief.
+
 \begin{figure}[H]
     \centering
     \includegraphics[width=1\linewidth]{02-main/figures/ch2/ch2_cadastre_solaire_svf.png}
     \caption{Le sky view factor (SVF) indique la proportion de ciel visible depuis un point \cite{zaksek_sky-view_2011}}
     \label{fig:cadastre_solaire_svf}
 \end{figure}
-\par{Le facteur de vue du ciel est exprimé en pourcentage: 100\% correspond à une vue entièrement dégagée (comme au sommet d'une tour ou d'une colline), tandis que 0\% indique un point complètement obstrué (sous un porche ou dans un tunnel). Ce facteur est crucial car il détermine la quantité de lumière naturelle et de rayonnement solaire diffus (indirect) reçue en ce point, en complément du rayonnement direct.}
-\par{L'intégration des cartes d'ombrage avec le facteur de vue du ciel fournit une caractérisation complète des conditions d'ensoleillement pour chaque point de la ville. Cette analyse prend en compte à la fois les ombres portées par les obstacles proches et les masques créés par les éléments lointains, constituant ainsi une base solide pour le calcul définitif du potentiel solaire.}
+
+Le facteur de vue du ciel s'exprime en pourcentage: 100\% correspond à une vue entièrement dégagée (comme au sommet d'une tour ou d'une colline), tandis que 0\% indique un point complètement obstrué (sous un porche ou dans un tunnel). Ce facteur détermine la quantité de lumière naturelle et de rayonnement solaire diffus (indirect) reçue en ce point, en complément du rayonnement direct.
+
+L'intégration des cartes d'ombrage avec le facteur de vue du ciel fournit une caractérisation complète des conditions d'ensoleillement pour chaque point de la ville. Cette analyse prend en compte à la fois les ombres portées par les obstacles proches et les masques créés par les éléments lointains, constituant ainsi une base solide pour le calcul définitif du potentiel solaire.
 
 \paragraph{Modélisation du rayonnement solaire}
-\par{La quatrième étape consiste à modéliser la quantité d'énergie solaire reçue en chaque point des toits et des façades (``Radiation modelling'' sur Figure \ref{fig:cadastre_solaire_methodologie}), en tenant compte des conditions météorologiques locales et de la position du soleil dans le ciel.}
-\par{Pour cela, on récupère tout d'abord des données météorologiques précises pour la zone étudiée :
+
+La quatrième étape consiste à modéliser la quantité d'énergie solaire reçue en chaque point des toits et des façades (``Radiation modelling'' sur Figure \ref{fig:cadastre_solaire_methodologie}), en tenant compte des conditions météorologiques locales et de la position du soleil dans le ciel.
+
+Cette modélisation s'appuie d'abord sur l'acquisition de données météorologiques précises pour la zone étudiée :
 \begin{itemize}
     \item Le rayonnement solaire global, c'est-à-dire la quantité totale d'énergie solaire reçue sur une surface horizontale.
     \item La part de rayonnement qui arrive en ligne droite du soleil (rayonnement direct).
     \item La part de rayonnement qui arrive de façon indirecte, après avoir été diffusée par les nuages et l'atmosphère (rayonnement diffus).
-\end{itemize}}
-\par{Ensuite, on utilise des modèles qui reproduisent la position exacte du soleil dans le ciel à chaque heure de la journée et à chaque période de l'année. Cela permet de calculer l'angle avec lequel les rayons du soleil frappent chaque point des toits et des façades.}
-\par{En effet, la quantité d'énergie reçue en un point dépend fortement de son orientation (est, sud, ouest...) et de son inclinaison (surface horizontale, verticale ou inclinée). Un point orienté plein sud et incliné à 45° recevra par exemple beaucoup plus d'énergie qu'une façade verticale orientée au nord.}
-\par{Les modèles de rayonnement utilisent des équations mathématiques pour calculer précisément la quantité d'énergie directe et diffuse reçue en chaque point, en fonction de tous ces paramètres.}
-\par{De plus, ces modèles prennent aussi en compte les effets d'ombrage calculés à l'étape précédente. Ainsi, un point sera considéré comme ne recevant aucune énergie directe s'il est à l'ombre à l'instant considéré.}
-\par{Ils intègrent également le "facteur de vue du ciel", qui traduit la portion de ciel visible depuis chaque point. Moins il y a de ciel visible (à cause des bâtiments et du relief alentour), moins il y aura de rayonnement diffus reçu.}
-\par{Au final, on obtient une estimation très fine de la quantité d'énergie solaire reçue par chaque mètre carré des toits et façades, heure par heure, tout au long de l'année. Cela permet ensuite de sélectionner les zones les plus intéressantes pour installer des panneaux solaires par exemple.}
+\end{itemize}
+
+La modélisation utilise ensuite des algorithmes qui reproduisent la position exacte du soleil dans le ciel à chaque heure de la journée et à chaque période de l'année. Cette approche permet de calculer l'angle avec lequel les rayons du soleil frappent chaque point des toits et des façades.
+
+La quantité d'énergie reçue en un point dépend fortement de son orientation (est, sud, ouest) et de son inclinaison (surface horizontale, verticale ou inclinée). Une surface orientée plein sud et inclinée à 45° recevra par exemple beaucoup plus d'énergie qu'une façade verticale orientée au nord.
+
+Les modèles de rayonnement utilisent des équations mathématiques pour calculer précisément la quantité d'énergie directe et diffuse reçue en chaque point, en fonction de l'ensemble de ces paramètres géométriques et temporels.
+
+Ces modèles intègrent également les effets d'ombrage calculés à l'étape précédente. Ainsi, un point sera considéré comme ne recevant aucune énergie directe s'il se trouve à l'ombre à l'instant considéré. Le facteur de vue du ciel est également pris en compte, traduisant la portion de ciel visible depuis chaque point. Moins il y a de ciel visible à cause des bâtiments et du relief alentour, moins il y aura de rayonnement diffus reçu.
+
+Cette analyse produit une estimation fine de la quantité d'énergie solaire reçue par chaque mètre carré des toits et façades, heure par heure, tout au long de l'année. Ces données permettent ensuite d'identifier les zones les plus favorables pour l'installation de systèmes solaires photovoltaïques ou thermiques.
 
 \paragraph{Résultats de la simulation}
-\par{À la fin de tout ce processus, on obtient des résultats concrets et utilisables sous plusieurs formes. Ces résultats (``Roof outputs'' et ``façade outputs'' sur Figure \ref{fig:cadastre_solaire_methodologie}) sont :
+
+L'ensemble de ce processus de simulation produit des résultats concrets et directement exploitables sous plusieurs formes. Ces résultats (``Roof outputs'' et ``façade outputs'' sur Figure \ref{fig:cadastre_solaire_methodologie}) comprennent :
+
 \begin{itemize}
-    \item Des cartes de rayonnement solaire pour les toits et façades
-    \item Des valeurs d'énergie regroupées par pan de toit, façade, et bâtiment entier
-    \item Des indicateurs pratiques comme la production d'énergie possible et la rentabilité économique
-\end{itemize}}
+    \item Des cartes de rayonnement solaire détaillées pour les toits et façades, visualisant la distribution spatiale du potentiel énergétique
+    \item Des valeurs d'énergie agrégées par pan de toit, façade, et bâtiment entier, permettant une analyse à différentes échelles
+    \item Des indicateurs pratiques comme la production d'énergie potentielle et la rentabilité économique des installations solaires
+\end{itemize}
+
+Ces données constituent une base d'aide à la décision pour l'identification des sites les plus propices au déploiement de systèmes solaires, que ce soit à l'échelle d'un bâtiment individuel ou dans le cadre d'une planification énergétique territoriale.
 
 \subsubsection{Résultats principaux}
-\par{Tous les résultats sont disponibles pour les citoyens et les professionnels sur le géoportail cartographique de \acrshort{sitg} (Figure \ref{fig:cadastre_solaire_couche_vec_sitg}). Ils peuvent être affichés sous forme de couches cartographiques, au même titre que
-d'autres données territoriales.}
+
+L'ensemble des résultats de simulation est mis à disposition des citoyens et des professionnels sur le géoportail cartographique de \acrshort{sitg} (Figure \ref{fig:cadastre_solaire_couche_vec_sitg}). Ces données peuvent être visualisées sous forme de couches cartographiques, intégrées aux autres informations territoriales disponibles sur la plateforme.
+
 \begin{figure}[H]
     \centering
     \includegraphics[width=1\linewidth]{02-main//figures/ch2/cadastre_solaire_couche_vec_sitg.png}
     \caption{Visualisation des couches vectorielles sur l'interface \acrshort{sitg} \cite{desthieux_solar_2018}}
     \label{fig:cadastre_solaire_couche_vec_sitg}
 \end{figure}
-\par{Un site web dédié au cadastre solaire a également été créé (Figure \ref{fig:cadastre_solaire_sitg_labs}). Il permet à chacun de rechercher une adresse et de visualiser très simplement le potentiel solaire du bâtiment correspondant, ainsi que des estimations de production d'énergie et de rentabilité économique.}
+
+Un site web spécifiquement dédié au cadastre solaire a également été développé (Figure \ref{fig:cadastre_solaire_sitg_labs}). Cette interface permet à tout utilisateur de rechercher une adresse et de visualiser simplement le potentiel solaire du bâtiment correspondant. L'outil fournit des estimations de production d'énergie et des analyses de rentabilité économique.
+
 \begin{figure}[H]
     \centering
     \includegraphics[width=1\linewidth]{02-main//figures/ch2/cadastre_solaire_sitg_labs.png}
     \caption{Interface utilisateur du cadastre solaire destinée au grand public \cite{desthieux_solar_2018}}
     \label{fig:cadastre_solaire_sitg_labs}
 \end{figure}
-\par{En rendant ces informations facilement accessibles à tous, le cadastre solaire devient un outil précieux pour encourager le développement de l'énergie solaire à Genève, que ce soit pour des projets individuels ou des planifications à grande échelle.}
+
+Cette mise à disposition publique des données transforme le cadastre solaire en un outil stratégique pour encourager le développement de l'énergie solaire à Genève. Il accompagne aussi bien les projets individuels de particuliers que les planifications énergétiques à l'échelle territoriale, facilitant ainsi la transition vers des sources d'énergie renouvelables.
 
 \subsubsection{Discussion et limites}
-\par{L'article de \citeauthor{desthieux_solar_2018} \cite{desthieux_solar_2018} présente une méthodologie complète pour évaluer le potentiel solaire d'une région. Cette approche explore notamment le potentiel des façades, qui constitue un gisement énergétique intéressant mais encore peu exploité. Dans le cadre de ce travail, les façades ne sont pas considérées, leur utilisation étant souvent limitée par des contraintes esthétiques, légales (notamment pour les bâtiments protégés) ou simplement par méconnaissance de leurs avantages. Si certains bâtiments récents intègrent désormais des panneaux solaires en façade, ces installations sont relativement rares.}
-\par{Le calculateur a été validée de manière indépendante par l'Université de Genève, ce qui confirme la robustesse de la méthodologie. Un atout majeur réside dans l'utilisation des données relatives aux superstructures \cite{sitg_superstructures_nodate}, qui permet de prendre en compte les ombres projetées par ces éléments sur le reste de la toiture. Cependant, cette couche de données présente certaines limitations, la plupart des toitures comportent des éléments techniques tels que des gaines de ventilation ou des monoblocs qui ne sont pas systématiquement répertoriés dans la couche des superstructures. Ces surfaces pourraient potentiellement être considérées comme utilisables pour l'installation de panneaux solaires, puisqu'elles ne sont pas formellement classées comme superstructures. En définitive, c'est le niveau d'irradiation solaire et la présence ou non d'ombrage qui déterminent véritablement si une surface peut être exploitée efficacement pour la production d'énergie solaire.}
+
+L'article de \citeauthor{desthieux_solar_2018} \cite{desthieux_solar_2018} présente une méthodologie complète pour évaluer le potentiel solaire d'une région. Cette approche explore notamment le potentiel des façades, qui constitue un gisement énergétique intéressant mais encore peu exploité. Dans le cadre de ce travail, les façades ne sont pas considérées, leur utilisation étant souvent limitée par des contraintes esthétiques, légales (notamment pour les bâtiments protégés) ou simplement par méconnaissance de leurs avantages. Si certains bâtiments récents intègrent désormais des panneaux solaires en façade, ces installations sont relativement rares.
+
+Le calculateur a été validée de manière indépendante par l'Université de Genève, ce qui confirme la robustesse de la méthodologie. Un atout majeur réside dans l'utilisation des données relatives aux superstructures \cite{sitg_superstructures_nodate}, qui permet de prendre en compte les ombres projetées par ces éléments sur le reste de la toiture. Cependant, cette couche de données présente certaines limitations, la plupart des toitures comportent des éléments techniques tels que des gaines de ventilation ou des monoblocs ne sont pas systématiquement répertoriés dans la couche des superstructures. Ces surfaces pourraient potentiellement être considérées comme utilisables pour l'installation de panneaux solaires, puisqu'elles ne sont pas formellement classées comme superstructures. En définitive, c'est le niveau d'irradiation solaire et la présence ou non d'ombrage qui déterminent véritablement si une surface peut être exploitée efficacement pour la production d'énergie solaire.
 
 % -----------------------------------------------------------------------------
 \subsection{ToitSolaire}
 
-\par{Ce chapitre présente l'application toitsolaire.ch \cite{bfe_wie_nodate} et sa documentation technique \cite{klauser_energie_nodate} qui a été rédigée par l'Office fédéral de l'énergie (\acrshort{ofen}) ainsi que Meteotest \cite{meteotest_wir_2025}.}
+Ce chapitre présente l'application toitsolaire.ch \cite{bfe_wie_nodate} et sa documentation technique \cite{klauser_energie_nodate} qui a été rédigée par l'Office fédéral de l'énergie (\acrshort{ofen}) ainsi que Meteotest \cite{meteotest_wir_2025}.
 
 \subsubsection{Contexte et objectifs}
-\par{L'application toitsolaire.ch, développée par l'\acrshort{ofen}, constitue un cadastre solaire pour l'ensemble du territoire suisse et sert d'instrument d'encouragement pour l'utilisation de l'énergie solaire.}
+L'application toitsolaire.ch, développée par l'\acrshort{ofen}, constitue un cadastre solaire pour l'ensemble du territoire suisse et sert d'instrument d'encouragement pour l'utilisation de l'énergie solaire.
 
-\par{Ce projet s'inscrit dans la volonté fédérale de favoriser la transition énergétique en fournissant aux propriétaires et aux professionnels un outil permettant d'évaluer rapidement le potentiel solaire des toitures et des façades des bâtiments suisses. L'objectif principal est d'offrir une plateforme en ligne accessible qui présente de manière claire et précise le potentiel d'exploitation de l'énergie solaire pour chaque bâtiment, tant sur les toitures (toitsolaire.ch) que sur les façades (facade-au-soleil.ch).}
+Ce projet s'inscrit dans la volonté fédérale de favoriser la transition énergétique en fournissant aux propriétaires et aux professionnels un outil permettant d'évaluer rapidement le potentiel solaire des toitures et des façades des bâtiments suisses. L'objectif principal est d'offrir une plateforme en ligne accessible qui présente de manière claire et précise le potentiel d'exploitation de l'énergie solaire pour chaque bâtiment, tant sur les toitures (toitsolaire.ch) que sur les façades (facade-au-soleil.ch).
 
 \subsubsection{Données}
 \par{Le projet s'appuie sur trois types de données principales :}
@@ -316,7 +358,54 @@ d'autres données territoriales.}
 \par{Le traitement des données commence par l'analyse des géométries, suivi par le calcul du rayonnement solaire sur les surfaces et se termine par leur classification.}
 
 \paragraph{Traitement des géométries}
-\par{Les données 3D des bâtiments sont converties en polygones 2D pour les toits (vue d'oiseau) et polylignes 2D pour les façades. L'orientation, l'inclinaison et la surface de chaque pan de toit sont calculées.}
+
+Les données 3D des bâtiments sont converties en polygones 2D pour les toits (vue d'oiseau) et en polylignes 2D pour les façades. L'orientation, l'inclinaison et la surface de chaque pan de toit sont calculées lors de cette étape de transformation géométrique.
+
+La Figure \ref{fig:ch2_montoitsolaire_01_mns} présente un exemple d'élévation de surface \acrshort{mns} (Modèle Numérique de Surface).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{02-main//figures/ch2/ch2_montoitsolaire_01_mns.png}
+    \caption{\acrshort{mns} \cite{bfe_wie_nodate}}
+    \label{fig:ch2_montoitsolaire_01_mns}
+\end{figure}
+
+Sur ce même exemple, la Figure \ref{fig:ch2_montoitsolaire_02_mns_3d} superpose les bâtiments en 3D au modèle numérique de surface, illustrant la combinaison des données altimétriques et volumétriques.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{02-main//figures/ch2/ch2_montoitsolaire_02_mns_3d.png}
+    \caption{\acrshort{mns} avec bâtiments 3D \cite{bfe_wie_nodate}}
+    \label{fig:ch2_montoitsolaire_02_mns_3d}
+\end{figure}
+
+La Figure \ref{fig:ch2_montoitsolaire_03_3d_vectoriel1} illustre la conversion des bâtiments 3D en données vectorielles bidimensionnelles, processus essentiel pour la suite des calculs.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{02-main//figures/ch2/ch2_montoitsolaire_03_3d_vectoriel1.png}
+    \caption{Réduction des données 3D de swissBUILDINGS3D 2.0 en polygones 2D \cite{bfe_wie_nodate}}
+    \label{fig:ch2_montoitsolaire_03_3d_vectoriel1}
+\end{figure}
+
+ArcGIS permet de convertir les données 3D en vectorielles à l'aide d'entités multipatch, qui représentent les arêtes et limites des surfaces tridimensionnelles. Dans la Figure \ref{fig:ch2_montoitsolaire_04_3d_vectoriel2}, les surfaces partielles (multipatch) sont délimitées par des lignes bleu clair.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{02-main//figures/ch2/ch2_montoitsolaire_04_3d_vectoriel2.png}
+    \caption{Fonctions multipatch 3D sur les données swissBUILDINGS3D 2.0 \cite{bfe_wie_nodate}}
+    \label{fig:ch2_montoitsolaire_04_3d_vectoriel2}
+\end{figure}
+
+Ces entités multipatch sont ensuite converties en polygones 2D. La Figure \ref{fig:ch2_montoitsolaire_05_3d_vectoriel3} présente deux exemples de toiture avec une lucarne et illustre comment cette géométrie complexe est simplifiée en représentation bidimensionnelle.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{02-main/figures/ch2/ch2_montoitsolaire_05_3d_vectoriel3.png}
+    \caption{Exemples de surfaces de toitures imbriquées issues de swissBUILDINGS3D 2.0 \cite{bfe_wie_nodate}}
+    \label{fig:ch2_montoitsolaire_05_3d_vectoriel3}
+\end{figure}
+
 
 \paragraph{Calcul du rayonnement solaire}
 Trois horizons d'ombrage sont calculés pour chaque surface :
@@ -337,7 +426,7 @@ Trois horizons d'ombrage sont calculés pour chaque surface :
 \end{itemize}
 
 \paragraph{Classification}
-\par{Les surfaces sont classées selon leur potentiel solaire, de "faible" à "excellent", en fonction du rayonnement solaire annuel moyen :}
+\par{Les surfaces sont classées selon leur potentiel solaire, de ``faible'' à ``excellent'', en fonction du rayonnement solaire annuel moyen :}
 \begin{itemize}
     \item Pour les toits : < 800, 800-1000, 1000-1200, 1200-1400, > 1400 kWh/m²/an
     \item Pour les façades : < 600, 600-800, 800-1000, 1000-1200, > 1200 kWh/m²/an
@@ -363,20 +452,22 @@ Trois horizons d'ombrage sont calculés pour chaque surface :
 \paragraph{Paramètres mensuels}
 \par{Pour chaque mois, des paramètres permettent de calculer le rayonnement sur surface inclinée à partir du rayonnement horizontal direct et diffus.}
 \subsubsection{Discussion et limites}
-\par{L'objectif de cet outil est très similaire au cadastre solaire genevois mais pour toute la Suisse. Il a les mêmes limites en ce qui concerne les superstructures des toitures, c'est-à-dire que les éléments de toiture qui ne sont pas renseignés dans la superstructure, seront considérés comme surface apte pour la mise en place de panneaux solaire.}
-\par{La modélisation de la météo semble plus sophistiquée que celle du cadastre genevois. L'actualisation des données va dépendre principalement des relevés \gls{lidar} réalisés par swisstopo, mais en principe ceux-ci sont plus fréquents que pour le cadastre solaire genevois}
+
+L'objectif de cet outil est très similaire au cadastre solaire genevois mais pour l'ensemble de la Suisse. Une différence majeure entre les deux approches réside dans l'utilisation de données 3D des bâtiments au lieu de données \gls{lidar}. Cette méthode simplifie les calculs car les bâtiments présentent une géométrie beaucoup plus simplifiée que celle obtenue à partir des données \gls{lidar}. Cependant, cette simplification géométrique présente un risque de surestimation du potentiel solaire dû au manque de précision des données 3D.
+
+La modélisation météorologique semble plus sophistiquée que celle du cadastre genevois. L'actualisation des données dépendra principalement des relevés \gls{lidar} réalisés par swisstopo, mais en principe ceux-ci sont plus fréquents que pour le cadastre solaire genevois, permettant ainsi une mise à jour plus régulière des informations.
 
 % -----------------------------------------------------------------------------
 % -----------------------------------------------------------------------------
 \section{Approche machine learning}
 
-\par{Ce chapitre va permettre d'explorer l'état de l'art en vision par ordinateur appliqué aux données géomatiques.}
+\par{Ce chapitre va permettre d'explorer l'état de l'art en machine learning appliqué aux données géomatiques.}
 
 % -----------------------------------------------------------------------------
 \subsection{Détection des objets présents sur les toitures et identification des espaces libres}
 \label{subsec:stdl_analyse}
 \vspace{2mm}
-\par{Ce sous-chapitre va traiter en détail le projet \cite{herny_detection_2024} réalisé par l'équipe du Swiss Territorial Data Lab (\acrshort{stdl}) pour identifier les objets présents sur les toitures.}
+\par{Ce sous-section va traiter en détail le projet \cite{herny_detection_2024} réalisé par l'équipe du Swiss Territorial Data Lab (\acrshort{stdl}) pour identifier les objets présents sur les toitures.}
 
 \subsubsection{Résumé}
 \par{Les toits libres offrent un potentiel important pour l'installation de nouvelles infrastructures, comme les panneaux solaires et les toits végétalisés, afin de s'adapter au changement climatique. Cependant, il est souvent difficile d'évaluer ce potentiel en raison du manque d'inventaire des objets existants sur les toits.}
@@ -425,7 +516,7 @@ Trois horizons d'ombrage sont calculés pour chaque surface :
 
 \par{Le \acrshort{stdl} a pour but de résoudre les problématiques concrètes des administrations publiques en utilisant la science des données appliquée aux géodonnées \cite{stdl_swiss_nodate}.}
 
-Dans le comité de pilotage du \acrshort{stdl} on retrouve :
+Dans le comité de pilotage du \acrshort{stdl} se trouvent:
 \begin{itemize}
     \item Office fédéral de topographie swisstopo
     \item Office fédéral de la statistique (OFS)
@@ -451,7 +542,7 @@ Dans le comité de pilotage du \acrshort{stdl} on retrouve :
 
 \paragraph{\gls{lidar}}
 
-\par{Les données \gls{lidar} 2019 \cite{sitg_nuages_2019} de l'État de Genève ont une densité de 25 points au mètre carré. La précision altimétrique est de +/- 10 cm sur surface dure et la précision planimétrique est estimée à 20 cm environ. Le vol de l'avion a été réalisé en mars 2019.}
+\par{Les données \gls{lidar} 2019 \cite{sitg_nuages_2019} de l'État de Genève ont une densité de 25 \si{\unit{points/m^2}}. La précision altimétrique est de $\pm\ 10$ \si{\unit{cm}} sur surface dure et la précision planimétrique est estimée à 20 \si{\unit{cm}} environ. Le vol de l'avion a été réalisé en mars 2019.}
 
 Chaque point a une classe assignée dont les principales sont :
 \begin{itemize}
@@ -469,9 +560,9 @@ Chaque point a une classe assignée dont les principales sont :
 \end{itemize}
 
 \paragraph{Orthophotos}
-\par{Le canton de Genève a réalisé en mai 2019 des images aériennes de haute résolution \cite{sitg_orthophotos_nodate} de tout le canton qui ont ensuite été converties en true orthophotos (XXXXX)}
-\todo[inline]{Ajouter ici le lien correct à l'annexe des ortophotos}
-\par{Ces orthophotos ont la particularité de ne pas avoir de décalage vis-à-vis d'un modèle numérique du terrain, donc les couches vectorielles devraient s'aligner avec les orthophotos. Chaque pixel représente 5 cm.}
+Le canton de Genève a réalisé en mai 2019 des images aériennes de haute résolution \cite{sitg_orthophotos_nodate} de tout le canton qui ont ensuite été converties en true orthophotos. En annexe, la sous-section \textit{\nameref{subsec:annexe_ortophotos}} à la page~\pageref{subsec:annexe_ortophotos} présente en détail ce que sont les orthophotos, les différents types et comment elles sont produites.
+
+\par{Ces orthophotos ont la particularité de ne pas avoir de décalage vis-à-vis d'un modèle numérique du terrain, donc les couches vectorielles devraient s'aligner avec les orthophotos. Chaque pixel représente 5 \si{\unit{cm}}.}
 
 \paragraph{Couche vectorielle d'emprise au sol des toitures}
 \par{\acrshort{sitg} dispose d'une couche vectorielle d'emprise des toitures des bâtiments hors sol ``CAD\_BATIMENTS\_HORSOL\_TOIT'' \cite{sitg_toits_nodate}. Cette couche provient de la numérisation 3D des bâtiments. La Figure \ref{fig:stdl_01_couche_vectorielle} représente un exemple de cette couche avec une orthophoto en fond d'image.}
@@ -481,7 +572,7 @@ Chaque point a une classe assignée dont les principales sont :
     \caption{Image d’exemple de la couche vectorielle d’emprise au sol des bâtiments ``CAD\_BATIMENTS\_HORSOL\_TOIT'' \cite{sitg_toits_nodate}}
     \label{fig:stdl_01_couche_vectorielle}
 \end{figure}
-\par{Cette couche est régulièrement mise à jour. \acrshort{stdl} a utilisé les données de mars 2023 pour son projet. Les superstructures sont des éléments qui dépassent de la toiture tel qu'une cheminée, cage d'ascenseur, lucarne, etc. ne sont pas représentés dans cette couche. Tout ce qui est en dessous de 9 m² ne figure pas dans cette couche.}
+\par{Cette couche est régulièrement mise à jour. \acrshort{stdl} a utilisé les données de mars 2023 pour son projet. Les superstructures sont des éléments qui dépassent de la toiture tel qu'une cheminée, cage d'ascenseur, lucarne, etc. ne sont pas représentés dans cette couche. Tout ce qui est en dessous de 9 \si{\unit{m^2}} ne figure pas dans cette couche.}
 
 \paragraph{Vérité terrain}
 \par{La Figure \ref{fig:stdl_02_verite_terrain} représente les bâtiments choisis par \acrshort{stdl} pour la vérité terrain.}
@@ -511,8 +602,9 @@ Chaque point a une classe assignée dont les principales sont :
 
 \paragraph{Données}
 \par{Les données utilisées sont la couche vectorielle de l'emprise des toitures, ainsi que les données \gls{lidar}.}
-\par{Comme indiqué au chapitre ``XXXXXX'', la rugosité et l'intensité sont deux informations complémentaires fournies par les nuages de points \gls{lidar}. La rugosité mesure la variation locale de l'altitude des points et reflète la texture de la surface. Une rugosité élevée indique la présence d'obstacles. L'intensité mesure la quantité d'énergie réfléchie par la surface et dépend des propriétés de réflectance des matériaux. Elle varie selon le type de surface et peut aider à distinguer différents matériaux.}
-\todo[inline]{Ajouter ici le lien correct aux annexes}
+
+\par{La rugosité et l'intensité sont deux informations complémentaires fournies par les nuages de points \gls{lidar}. La rugosité mesure la variation locale de l'altitude des points et reflète la texture de la surface. Une rugosité élevée indique la présence d'obstacles. L'intensité mesure la quantité d'énergie réfléchie par la surface et dépend des propriétés de réflectance des matériaux. Elle varie selon le type de surface et peut aider à distinguer différents matériaux.}
+
 \par{Pour constituer le dataset (vérité terrain), \acrshort{stdl} a annoté la couche vectorielle de l'emprise des toitures avec l'aide des données \gls{lidar}. Les 3 classes résultantes sont :}
 \begin{itemize}
     \item Occupé : pas de surface disponible
@@ -531,17 +623,17 @@ Chaque point a une classe assignée dont les principales sont :
 \end{itemize}
 \par{La deuxième étape est la classification par seuils manuels :}
 \begin{itemize}
-    \item Les pans de toit de moins de 2 m² sont automatiquement classés comme "occupés" car trop petits pour des installations.
-    \item Les pans avec moins de 25\% de points classés comme "bâtiment" (données \gls{lidar}) sont classés en "non défini" par manque d'information.
+    \item Les pans de toit de moins de 2 \si{\unit{m^2}} sont automatiquement classés comme ``occupés'' car trop petits pour des installations.
+    \item Les pans avec moins de 25\% de points classés comme ``bâtiment'' (données \gls{lidar}) sont classés en ``non défini'' par manque d'information.
     \item Pour les autres pans
     \begin{itemize}
         \item Des seuils sont fixés empiriquement sur 4 variables :
         \begin{itemize}
             \item La marge d'erreur et l'écart-type de l'intensité
             \item La rugosité médiane
-            \item Le pourcentage de recouvrement avec des pixels non classés comme "bâtiment" (données \gls{lidar})
+            \item Le pourcentage de recouvrement avec des pixels non classés comme ``bâtiment'' (données \gls{lidar})
         \end{itemize}
-        \item Si un pan dépasse le seuil pour au moins une variable, il est classé comme "occupé", sinon il est "potentiellement libre".
+        \item Si un pan dépasse le seuil pour au moins une variable, il est classé comme ``occupé'', sinon il est ``potentiellement libre''.
     \end{itemize}
     \item Cette classification est validée manuellement par des experts sur un échantillon de 650 pans de toit.
 \end{itemize}
@@ -573,14 +665,16 @@ Chaque point a une classe assignée dont les principales sont :
 \end{table}
 \par{La classification avec RF est plus performante que les seuils manuels, avec des taux de satisfaction augmentant de 7 et 6 points pour \acrshort{ocan} et \acrshort{ocen} respectivement.}
 
-\par{La Figure \ref{fig:stdl_04_rf_resultats} présente un aperçu des résultats obtenus :}
+La Figure \ref{fig:stdl_04_rf_resultats} présente un aperçu des résultats obtenus.
+
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1\linewidth]{02-main//figures/ch2/stdl_04_rf_resultats.png}
+    \makebox[\textwidth][c]{\includegraphics[width=1.05\textwidth]{02-main//figures/ch2/stdl_04_rf_resultats.png}}
     \caption{Comparatif des différents algorithmes de classification \cite{herny_detection_2024}}
     \label{fig:stdl_04_rf_resultats}
 \end{figure}
-\par{Dans la Figure \ref{fig:stdl_04_rf_resultats} on observe les différents critères par office, l'\acrshort{ocen} semble classifier plus de surfaces comme ``possiblement libre'' (blanc) que l'\acrshort{ocan}. Une matrice de confiance aurait permis de mieux évaluer les résultats.}
+
+Les critères par office sont relativement différents, l'\acrshort{ocen} semble classifier plus de surfaces comme ``possiblement libre'' (blanc) que l'\acrshort{ocan}. Une matrice de confiance aurait permis de mieux évaluer les résultats.
 
 \paragraph{Discussion des résultats (\acrshort{stdl})}
 \par{Dans son rapport \acrshort{stdl} fait une analyse des résultats obtenus dans lequel ils traitent les points suivants :}
@@ -600,7 +694,7 @@ Chaque point a une classe assignée dont les principales sont :
 \end{itemize}
 \par{Le deuxième point est la classification des petits pans de toit :}
 \begin{itemize}
-    \item Avec les seuils manuels, les petits pans sont souvent classés comme "occupés" à cause de leur rugosité médiane élevée.
+    \item Avec les seuils manuels, les petits pans sont souvent classés comme ``occupés'' à cause de leur rugosité médiane élevée.
     \item La rugosité des petits pans est plus influencée par leur environnement à cause de l'échelle de calcul (1 m).
     \item La rugosité minimale, importante dans la forêt aléatoire, dépend fortement de la taille du pan.
     \item Bien que potentiellement utilisables, les petits pans dégagés sont difficiles à exploiter et moins prioritaires.
@@ -616,8 +710,8 @@ Chaque point a une classe assignée dont les principales sont :
 
 \par{Le quatrième point est la pertinence de la méthodologie utilisée :}
 \begin{itemize}
-    \item Les surfaces "potentiellement libres" doivent être examinées plus en détail.
-    \item Les surfaces "occupées" sont considérées comme inutilisables.
+    \item Les surfaces ``potentiellement libres'' doivent être examinées plus en détail.
+    \item Les surfaces ``occupées'' sont considérées comme inutilisables.
     \item Les experts sont satisfaits des résultats obtenus.
     \item Il est prévu d'appliquer la méthode à plus grande échelle.
     \item La classification n'évalue que l'occupation, sans considérer la pente ou le matériau.
@@ -666,7 +760,7 @@ Chaque point a une classe assignée dont les principales sont :
     \label{tab:stdl_02_resultats_segmentation_lidar}
 \end{table}
 
-\par{Les objets de plus de 1 m² (Figure \ref{fig:stdl_06_segmentation_lidar_surfaces}) et situés à plus de 1 m (Figure \ref{fig:stdl_07_segmentation_lidar_distances}) du bord du toit sont bien détectés, avec des F1-score entre 0.82 et 0.92.}
+\par{Les objets de plus de 1 \si{\unit{m^2}} (Figure \ref{fig:stdl_06_segmentation_lidar_surfaces}) et situés à plus de 1 m (Figure \ref{fig:stdl_07_segmentation_lidar_distances}) du bord du toit sont bien détectés, avec des F1-score entre 0.82 et 0.92.}
 \begin{figure}[H]
     \centering
     \includegraphics[width=1\linewidth]{02-main//figures/ch2/stdl_06_segmentation_lidar_surfaces.png}
@@ -778,7 +872,7 @@ La Figure \ref{fig:stdl_08_methodo_segmentation_images} ci-dessous représente l
 
 \par{La troisième étape est la vectorisation des objets (Figure \ref{fig:stdl_08_methodo_segmentation_images} ``c''). Dans cette étape, les masques segmentés sont convertis en données vectorielles. Certains de ces polygones sont supprimés basé sur des critères géométriques :}
 \begin{itemize}
-    \item Polygone de moins de 0.2 m²
+    \item Polygone de moins de 0.2 \si{\unit{m^2}}
     \item Polygones qui occupent plus de 90\% de la surface de la toiture
     \item Polygones qui ont une surface de plus de 50\% de la toiture et qui n'ont pas d'intersection avec la toiture
 \end{itemize}
@@ -790,7 +884,8 @@ La Figure \ref{fig:stdl_08_methodo_segmentation_images} ci-dessous représente l
 \newpage
 \paragraph{Résultats}
 
-\par{La Figure \ref{fig:stdl_09_segmentation_image_resultats} représente un exemple de résultat de la segmentation de plusieurs toitures. On peut observer que la segmentation rencontre des difficultés avec certains éléments de toiture tel que les puits de lumière.}
+La Figure \ref{fig:stdl_09_segmentation_image_resultats} représente un exemple de résultat de la segmentation de plusieurs toitures. La segmentation rencontre des difficultés avec certains éléments de toiture tel que les puits de lumière.
+
 \begin{figure}[H]
     \centering
     \includegraphics[width=1\linewidth]{02-main//figures/ch2/stdl_09_segmentation_image_resultats.png}
@@ -817,7 +912,7 @@ La Figure \ref{fig:stdl_08_methodo_segmentation_images} ci-dessous représente l
 \begin{figure}[H]
     \centering
     \includegraphics[width=1\linewidth]{02-main//figures/ch2/stdl_10_segmentation_image_taille.png}
-    \caption{Objets segmentés selon taille en m² pour la segmentation d’images \cite{herny_detection_2024}}
+    \caption{Objets segmentés selon taille en \si{\unit{m^2}} pour la segmentation d’images \cite{herny_detection_2024}}
     \label{fig:stdl_10_segmentation_image_taille}
 \end{figure}
 \newpage
@@ -830,7 +925,7 @@ La Figure \ref{fig:stdl_08_methodo_segmentation_images} ci-dessous représente l
     \label{fig:stdl_11_segmentation_image_distance}
 \end{figure}
 
-\par{Les experts sont au minimum partiellement satisfait de 86\% des résultats (Tableau .}
+Les experts sont au minimum partiellement satisfait de 86\% des résultats (Tableau \ref{tab:stdl_07_segmentation_image_resultats_experts}).
 \begin{table}[h]
     \centering
     \begin{tabular}{|l|c|c|}
@@ -1046,9 +1141,9 @@ Les points positifs de cette approche sont :
 \begin{enumerate}
     \item Un réseau de neurones multi fonctions (partie 1 de la Figure \ref{fig:solar_net_plus_methodo}) va réaliser les opérations suivantes sur chaque image:
     \begin{itemize}
-        \item Segmenter l'image pour avoir le masque de la toiture ainsi que son orientation géographique ("Roof orientation map" de la Figure \ref{fig:solar_net_plus_methodo}).
-        \item Segmenter les éléments de toiture pour identifier tous les obstacles qui s'y trouvent ("Roof superstructure map" de la Figure \ref{fig:solar_net_plus_methodo}).
-        \item Extraire les surfaces exploitables de toiture par superposition des masques. Cette étape consiste à soustraire les zones occupées par les obstacles ("Roof superstructure map") des segments de toiture identifiés ("Roof orientation map"), permettant ainsi d'isoler les surfaces disponibles.
+        \item Segmenter l'image pour avoir le masque de la toiture ainsi que son orientation géographique (``Roof orientation map'' de la Figure \ref{fig:solar_net_plus_methodo}).
+        \item Segmenter les éléments de toiture pour identifier tous les obstacles qui s'y trouvent (``Roof superstructure map'' de la Figure \ref{fig:solar_net_plus_methodo}).
+        \item Extraire les surfaces exploitables de toiture par superposition des masques. Cette étape consiste à soustraire les zones occupées par les obstacles (``Roof superstructure map'') des segments de toiture identifiés (``Roof orientation map''), permettant ainsi d'isoler les surfaces disponibles.
     \end{itemize}
     \item Estimer le potentiel solaire pour chaque surface identifiée (partie 2 de la Figure \ref{fig:solar_net_plus_methodo}) qui comprend :
     \begin{itemize}
@@ -1058,7 +1153,7 @@ Les points positifs de cette approche sont :
             \item Pente toiture 30° pour toutes les orientations sauf toiture plate 0°
             \item Pans de toiture de moins de 5 \si{\unit{\square\meter}} ne sont pas considérés comme surface disponible
         \end{itemize}
-        \item Calcul du nombre maximum de panneaux installables sur chaque segment de toiture disponible, en tenant compte des contraintes géométriques. La Figure \ref{fig:solar_net_plus_placement_pv}) présente deux exemples, avec et sans obstacles sur la toiture. Le placement des panneaux commence du côté gauche en bas et va éviter les obstacles présents.
+        \item Calcul du nombre maximum de panneaux installables sur chaque segment de toiture disponible, en tenant compte des contraintes géométriques. La Figure \ref{fig:solar_net_plus_placement_pv} présente deux exemples, avec et sans obstacles sur la toiture. Le placement des panneaux commence du côté gauche en bas et va éviter les obstacles présents.
         \item Acquisition des données d'irradiation solaire spécifiques à chaque orientation via l'API PVGIS
         \item Estimation de l'énergie annuelle générée pour chaque pans de toiture en multipliant le nombre de panneaux installables par la production unitaire correspondant à l'orientation
         \item Additionner les potentiels de tous les pans de toiture pour obtenir le potentiel solaire total du bâtiment
@@ -1078,7 +1173,7 @@ Les points positifs de cette approche sont :
     \label{fig:solar_net_plus_placement_pv}
 \end{figure}
 
-\par{La Figure \ref{fig:solar_net_plus_exemple_methodo} permet d'avoir un aperçu des différentes phases du calcul de potentiel solaire. En allant de gauche à droite dans la lecture de la Figure \ref{fig:solar_net_plus_exemple_methodo}, les deux premières images indiquent l'irradiation solaire avec et sans les obstacles. En bas à gauche de ces deux images, on peut observer une toiture avec plusieurs obstacles détectés (trous), sans les obstacles son irradiation solaire est bonne, mais avec les obstacles son irradiation solaire totale est réduite. La troisième image représente le placement des panneaux solaires. Finalement la quatrième image, représente le potentiel solaire total par pan de toiture selon le nombre de panneaux solaire placés dans la troisième image et l'irradiation solaire de la deuxième image.}
+\par{La Figure \ref{fig:solar_net_plus_exemple_methodo} permet d'avoir un aperçu des différentes phases du calcul de potentiel solaire. En allant de gauche à droite dans la lecture de la Figure \ref{fig:solar_net_plus_exemple_methodo}, les deux premières images indiquent l'irradiation solaire avec et sans les obstacles. En bas à gauche de ces deux images, il y a une toiture avec plusieurs obstacles détectés (trous), sans les obstacles son irradiation solaire est bonne, mais avec les obstacles son irradiation solaire totale est réduite. La troisième image représente le placement des panneaux solaires. Finalement la quatrième image, représente le potentiel solaire total par pan de toiture selon le nombre de panneaux solaire placés dans la troisième image et l'irradiation solaire de la deuxième image.}
 
 \begin{figure}[H]
     \makebox[\textwidth][c]{\includegraphics[width=1.15\textwidth]{02-main//figures/ch2/solar_net_plus_exemple_methodo.png}}
@@ -1134,7 +1229,7 @@ Les points positifs de cette approche sont :
 \par{Cet article \cite{castello_quantification_2021} présente une approche innovante pour quantifier les surfaces disponibles sur les toitures pour l'installation de panneaux solaires photovoltaïques. Face au défi de l'évaluation précise du potentiel solaire à grande échelle, \citeauthor{castello_quantification_2021} proposent une méthode combinant le deep learning, la vision par ordinateur et des données de bâtiments 3D.}
 
 \subsubsection{Méthodologie}
-\par{L'approche utilise un réseau de neurones convolutif (CNN) basé sur l'architecture U-Net, adapté pour la segmentation sémantique d'images aériennes à haute résolution. Le modèle a été entraîné sur 524 images (orthophotos de swisstopo 2015) de taille 250x250 pixels de Genève, avec une résolution spatiale de 0,25 m/pixel. Les données d'entraînement ont été annotées manuellement (classe unique "libre") pour identifier les zones disponibles sur les toits. Ces données ne sont pas disponibles.}
+\par{L'approche utilise un réseau de neurones convolutif (CNN) basé sur l'architecture U-Net, adapté pour la segmentation sémantique d'images aériennes à haute résolution. Le modèle a été entraîné sur 524 images (orthophotos de swisstopo 2015) de taille 250x250 pixels de Genève, avec une résolution spatiale de 0,25 m/pixel. Les données d'entraînement ont été annotées manuellement (classe unique ``libre'') pour identifier les zones disponibles sur les toits. Ces données ne sont pas disponibles.}
 
 \par{La méthodologie comporte trois étapes principales :}
 \begin{enumerate}
@@ -1148,7 +1243,7 @@ Les points positifs de cette approche sont :
 \subsubsection{Résultats principaux}
 Le CNN développé atteint :
 \begin{itemize}
-    \item Une précision de 93\% dans l'identification des surfaces disponibles
+    \item Une accuracy de 93\% dans l'identification des surfaces disponibles
     \item Un score d'Intersection over Union (IoU) de 64\%
     \item Une sous-estimation moyenne de 8\% des surfaces disponibles par rapport aux annotations manuelles
 \end{itemize}
@@ -1170,9 +1265,9 @@ Le CNN développé atteint :
 
 \par{Le modèle réussit à détecter automatiquement les obstacles présents sur les toits, y compris les panneaux solaires existants, fenêtres, cheminées, équipements techniques et zones ombragées. L'étude révèle que la fraction médiane de la surface disponible varie selon la taille des toits :}
 \begin{itemize}
-    \item 61\% pour les grands toits (>500 m²)
-    \item 77\% pour les toits moyens (100-500 m²)
-    \item 80\% pour les petits toits (10-100 m²)
+    \item 61\% pour les grands toits (>500 \si{\unit{m^2}})
+    \item 77\% pour les toits moyens (100-500 \si{\unit{m^2}})
+    \item 80\% pour les petits toits (10-100 \si{\unit{m^2}})
 \end{itemize}
 
 \par{La Figure \ref{fig:castello_quantification_image_resultat} permet de voir deux exemples de résultat.}
@@ -1198,9 +1293,9 @@ Le CNN développé atteint :
 \par{La comparaison avec d'autres méthodes d'estimation montre que les approches existantes tendent à surestimer la surface disponible sur les grands toits et à sous-estimer celle des petits toits.}
 
 \subsubsection{Discussion et limites}
-\par{L'article présente une approche prometteuse pour quantifier les surfaces de toiture disponibles pour l'installation solaire. Le modèle U-Net atteint un IoU de 64\% et une précision de 93\% sur les données de test, avec la capacité notable d'exclure automatiquement les zones ombragées des toits.}
+\par{L'article présente une approche prometteuse pour quantifier les surfaces de toiture disponibles pour l'installation solaire. Le modèle U-Net atteint un IoU de 64\% et une accuracy de 93\% sur les données de test, avec la capacité notable d'exclure automatiquement les zones ombragées des toits.}
 \par{La comparaison avec les méthodes existantes révèle des différences selon la taille des bâtiments. Pour les grandes toitures, le modèle CNN estime une fraction médiane de surface disponible de 39\% contre 66\% pour l'approche de référence, suggérant une surestimation des méthodes à grande échelle. Pour les petites toitures, la tendance s'inverse avec 47\% contre 32\%.}
-\par{Le modèle sous-estime en moyenne de 8\% la surface réellement disponible par rapport à la vérité terrain. Cette sous-estimation est principalement observée sur les petites toitures (< 100 m²). Les limites identifiées incluent la difficulté à détecter les lucarnes, construites dans le même matériau que le toit, et les zones de "toits verts" avec végétation.}
+\par{Le modèle sous-estime en moyenne de 8\% la surface réellement disponible par rapport à la vérité terrain. Cette sous-estimation est principalement observée sur les petites toitures (< 100 \si{\unit{m^2}}). Les limites identifiées incluent la difficulté à détecter les lucarnes, construites dans le même matériau que le toit, et les zones de ``toits verts'' avec végétation.}
 \par{L'étude se limite au centre de Genève avec 524 images principalement résidentielles. Les auteurs mentionnent 12 heures de labellisation manuelle sans préciser la répartition du travail. Pour une extension nationale, ils proposent l'ajout d'un canal infrarouge et l'utilisation d'images plus récentes à haute résolution.}
 
 % -----------------------------------------------------------------------------
@@ -1213,7 +1308,7 @@ La détection d'objets en temps réel repose traditionnellement sur les réseaux
 YOLOv12 relève ce défi en proposant le premier framework YOLO centré sur l'attention qui atteint la vitesse des modèles CNN traditionnels tout en conservant les avantages de performance de l'attention. L'objectif est de démontrer qu'il est possible de casser la domination des CNN dans YOLO.
 
 \subsubsection{Données}
-L'évaluation utilise le dataset de référence MS COCO 2017 pour la détection d'objets. Cinq variantes de modèles sont développées (YOLOv12-N/S/M/L/X) correspondant à différentes tailles et complexités. L'entraînement suit le protocole standard : 600 époques avec l'optimiseur SGD, augmentations de données classiques (Mosaic, Mixup, copy-paste). Les performances sont mesurées sur GPU T4 avec TensorRT FP16 pour assurer la reproductibilité.
+L'évaluation utilise le dataset de référence MS COCO 2017 \cite{coco_coco_nodate} pour la détection d'objets. Cinq variantes de modèles sont développées (YOLOv12-N/S/M/L/X) correspondant à différentes tailles et complexités. L'entraînement suit le protocole standard : 600 époques avec l'optimiseur SGD, augmentations de données classiques (Mosaic, Mixup, copy-paste). Les performances sont mesurées sur GPU T4 avec TensorRT FP16 pour assurer la reproductibilité.
 
 \subsubsection{Méthodologie}
 YOLOv12 introduit trois innovations clés pour rendre l'attention efficace :
@@ -1223,10 +1318,10 @@ YOLOv12 introduit trois innovations clés pour rendre l'attention efficace :
     \item Améliorations architecturales
 \end{itemize}
 
-\paragraph{Area Attention (A2)}
+\paragraph{Area Attention}
 Plutôt que de calculer l'attention sur toute l'image (coûteux), la carte de caractéristiques est divisée en zones rectangulaires (par défaut 4 segments). L'attention n'est calculée qu'à l'intérieur de chaque zone, réduisant la complexité de moitié tout en préservant un champ réceptif suffisant. C'est l'équivalent de regarder plusieurs « fenêtres » de l'image simultanément plutôt que l'image entière.
 
-Le mécanisme d'attention (Figure \ref{fig:ch2_yolo_mecanismes_attention}) local est simplifié par rapport aux autres alternatives (Figures \ref{fig:ch2_yolo_01_attention_area_criss_cross}, \ref{fig:ch2_yolo_02_attention_area_window} et \ref{fig:ch2_yolo_03_attention_area_criss_axial}). Celui-ci divise la carte de caractéristiques en $l$ segments (par défaut 4) verticalement (Figure \ref{fig:ch2_yolo_05_attention_area_yolo2}) ou horizontalement (Figure \ref{fig:ch2_yolo_04_attention_area_yolo1}), réduisant la complexité tout en maintenant un large champ réceptif.
+Le mécanisme d'attention (Figure \ref{fig:ch2_yolo_mecanismes_attention}) local est simplifié par rapport aux autres alternatives (Figures \ref{fig:ch2_yolo_01_attention_area_criss_cross}, \ref{fig:ch2_yolo_02_attention_area_window} et \ref{fig:ch2_yolo_03_attention_area_criss_axial}). Celui-ci divise la carte de caractéristiques en $l$ segments (par défaut 4) horizontalement (Figure \ref{fig:ch2_yolo_04_attention_area_yolo1}) ou verticalement (Figure \ref{fig:ch2_yolo_05_attention_area_yolo2}), réduisant la complexité tout en maintenant un large champ réceptif.
 
 \begin{figure}[H]
     \centering
@@ -1319,7 +1414,11 @@ R-ELAN (Figure \ref{fig:ch2_yolo_09_architecture_relan}) est l'architecture de b
 
 FlashAttention \cite{dao_flashattention_2022} résout le problème fondamental d'accès mémoire des transformers. Traditionnellement, l'attention stocke des matrices intermédiaires volumineuses en mémoire GPU lente (HBM), créant un goulot d'étranglement. FlashAttention optimise ces accès mémoire, réduisant significativement la latence sans perte de précision.
 
-La suppression de l'encodage positionnel simplifie drastiquement l'architecture par rapport aux Vision Transformers classiques. Cette décision contre-intuitive s'avère bénéfique, l'information spatiale est préservée grâce à un ``position perceiver'' (convolution séparable 7×7) appliqué aux valeurs d'attention, plus efficace que les encodages positionnels traditionnels.
+YOLOv12 introduit une innovation architecturale contre-intuitive : la suppression complète de l'encodage positionnel traditionnel des Vision Transformers. Cette décision simplifie drastiquement l'architecture en éliminant l'étape d'ajout explicite d'information positionnelle aux embeddings d'entrée.
+
+Pour préserver l'information spatiale nécessaire, YOLOv12 utilise un position perceiver : une convolution séparable $7 \times 7$ appliquée directement aux valeurs d'attention $V$. Cette approche exploite les propriétés intrinsèques de la convolution pour encoder implicitement la position spatiale. L'effet de lissage du noyau convolutionnel préserve la cohérence positionnelle locale tout en capturant les relations spatiales dans un voisinage étendu.
+
+Cette méthode s'avère plus efficace que l'encodage positionnel traditionnel car elle intègre l'information spatiale dans le flux de calcul de l'attention, évitant ainsi les opérations d'addition préliminaires. Le résultat est une architecture plus simple, plus rapide, et paradoxalement plus performante pour les tâches de détection temps réel.
 
 La réduction du ratio MLP (Multilayer Perceptron) de 4.0 vers 1.2 rééquilibre la charge computationnelle entre les blocs d'attention et les réseaux feed-forward. Dans les Vision Transformers standards, le MLP consomme 75 \% des calculs ; YOLOv12 privilégie l'attention (plus bénéfique pour la détection) en réduisant la taille des MLP.
 
@@ -1347,40 +1446,313 @@ Si l'étude démontre théoriquement qu'il est possible de rendre l'attention su
 
 La contrainte matérielle constitue une limitation majeure souvent sous-estimée. La dépendance exclusive à FlashAttention restreint l'utilisation aux GPU d'architecture Turing ou plus récente (RTX 20/30/40, A100, H100), excluant de facto une large base d'utilisateurs équipés de matériel plus ancien. Cette limitation est particulièrement problématique pour les applications industrielles où les cycles de renouvellement matériel sont longs. Cela affecte également les applications edge, dans lesquelles les ressources sont limitées et l'efficience énergétique du modèle est un paramètre critique.
 
-\subsection{Segment}
+% -----------------------------------------------------------------------------
+
+\subsection{Segment Anything Model 2 : Segmentation d'images et de vidéos}
+\label{subsec:sam2_segment_anything_2024}
 
 \subsubsection{Contexte et objectifs}
+Avant de présenter le modèle Segment Anything 2 (SAM2), il est important de rappeler le modèle Segment Anything (SAM) qui a été publié en \citeyear{kirillov_segment_2023}.
+
+\paragraph{Segment Anything Model (SAM)}
+\label{par:sam_segment_anything_2023}
+SAM \cite{kirillov_segment_2023} est un modèle de segmentation d'images développé par Meta AI. L'objectif de Segment Anything est de générer des masques de segmentation de haute qualité pour n'importe quel objet d'une image à partir de prompts simples comme des points ou des boîtes. Cela lui permet d'effectuer diverses tâches de segmentation de manière flexible sans avoir besoin d'être entraîné à nouveau pour chacune d'entre elles.
+
+Le modèle Segment Anything (SAM) comporte trois éléments principaux :
+\begin{itemize}
+    \item Encodeur d'images
+    \item ``Prompt encoder''
+    \item Décodeur de masques
+\end{itemize}
+La Figure \ref{fig:ch2_sam2_01_fonctionnement_sam} permet d’avoir une vue d’ensemble des différentes parties de SAM.
+
+\begin{figure}[H]
+    \centering
+    \makebox[\textwidth][c]{\includegraphics[width=1.20\textwidth]{02-main//figures//ch2/ch2_sam2_01_fonctionnement_sam.png}}
+    \caption{Fonctionnement de segment anything (SAM)}
+    \label{fig:ch2_sam2_01_fonctionnement_sam}
+\end{figure}
+
+Le premier élément est l'encodeur d'images (``1'' sur la Figure \ref{fig:ch2_sam2_01_fonctionnement_sam}). L'encodeur d'image est un réseau de neurones qui a été pré-entraîné à l'aide d'une technique d'apprentissage auto-supervisé appelée Masked Autoencoder (MAE). L'encodeur prend une image en entrée et la fait passer par une série de couches d'auto-attention (self-attention), ce qui permet au modèle de capturer le contexte global et les relations entre les différentes parties de l'image. La sortie de l'encodeur d'image est l'image embedding, qui est une représentation vectorielle compacte à hautes dimensions d'une image d'entrée qui capture ses caractéristiques essentielles et ses informations spatiales.
+
+Le deuxième élément est le prompt encoder (``2'' sur la Figure \ref{fig:ch2_sam2_01_fonctionnement_sam}). SAM fonctionne avec une interface graphique, la Figure \ref{fig:ch2_sam2_02_prompt_encoder} 
+montre l'interface graphique développée par Meta AI pour tester SAM.
+
+\begin{figure}[H]
+    \centering
+    \makebox[\textwidth][c]{\includegraphics[width=1.20\textwidth]{02-main//figures//ch2/ch2_sam2_02_prompt_encoder.png}}
+    \caption{Interface graphique de démonstration de SAM \cite{fair_segment_nodate}}
+    \label{fig:ch2_sam2_02_prompt_encoder}
+\end{figure}
+
+A l’aide des outils à gauche de la Figure \ref{fig:ch2_sam2_02_prompt_encoder}, il est possible de sélectionner un point (Figure \ref{fig:ch2_sam2_03_prompt1}) ou sélectionner une partie de l’image avec une boite rectangulaire (Figure \ref{fig:ch2_sam2_04_prompt2}). Le modèle va alors segmenter la partie de l’image (voir Figure \ref{fig:ch2_sam2_prompt_exemple_point_rectangle}).
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.35\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch2/ch2_sam2_03_prompt1.png}
+        \caption{Exemple de sélection de masque avec un point}
+        \label{fig:ch2_sam2_03_prompt1}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.435\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch2/ch2_sam2_04_prompt2.png}
+        \caption{Exemple de sélection de masque avec une boite rectangulaire}
+        \label{fig:ch2_sam2_04_prompt2}
+    \end{subfigure}
+    \caption{Interface graphique de démonstration de SAM \cite{fair_segment_nodate}}
+    \label{fig:ch2_sam2_prompt_exemple_point_rectangle}
+\end{figure}
+
+SAM permet aussi de décrire avec du texte ce que l’on souhaite segmenter sur l’image. Le prompt encoder va convertir toutes les informations (points, boite rectangulaire, texte) en une représentation vectorielle (embeddings) unique pour toutes les données renseignées. Cette représentation vectorielle sera ensuite utilisée pour le mask decoder.
+
+La troisième partie est le mask decoder (``3'' sur la Figure \ref{fig:ch2_sam2_01_fonctionnement_sam}). Le mask decoder va utiliser les représentations vectorielles de l’encodeur d’images (``1'' sur la Figure \ref{fig:ch2_sam2_01_fonctionnement_sam}), ainsi que celles du prompt encoder (``2'' sur la Figure \ref{fig:ch2_sam2_01_fonctionnement_sam}) pour segmenter l’image en différents masques. Chacun de ces masques est une polyligne fermée, comme indiqué sur la Figure \ref{fig:ch2_sam2_05_masques}. Le modèle indique aussi la probabilité (confidence) qu’il estime que la segmentation est juste.
+
+\begin{figure}[H]
+    \centering
+    \makebox[\textwidth][c]{\includegraphics[width=1\textwidth]{02-main//figures//ch2/ch2_sam2_05_masques.png}}
+    \caption{Interface graphique de démonstration de SAM. Exemple de segmentation}
+    \label{fig:ch2_sam2_05_masques}
+\end{figure}
+
+Meta AI a accordé une attention particulière à la création du dataset SA-1B, utilisé pour entraîner le modèle SAM. Ce dataset est une collection d'images et de masques annotés pour la segmentation, avec 11 millions d'images et 1,1 milliard de masques. L'objectif principal de Meta AI était de constituer un ensemble de données plus représentatif et diversifié que les datasets existants, afin d'améliorer les performances et la généralisation des modèles de segmentation.
+
+Le dataset couvre environ 70 pays et a été annoté manuellement par des travailleurs qualifiés. Les images ont été triées selon leur géolocalisation et leur niveau de revenu, afin d'assurer une représentativité adéquate des différents groupes socio-économiques. La Figure \ref{fig:ch2_sam2_sa1b_diversite_pays} représente l’origine et la distribution des images utilisées par pays.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.70\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch2/ch2_sam2_06_dataset_sa1b_pays1.png}
+        \caption{Carte de monde avec les pays les plus représentés dans le dataset SA-1B}
+        \label{fig:ch2_sam2_06_dataset_sa1b_pays1}
+    \end{subfigure}
+    \vspace{0.35cm}
+    \begin{subfigure}[b]{1\textwidth}
+        \centering
+        \makebox[\textwidth][c]{\includegraphics[width=1\textwidth]{02-main/figures/ch2/ch2_sam2_07_dataset_sa1b_pays2.png}}
+        \caption{Distribution des images par pays dans le dataset SA-1B}
+        \label{fig:ch2_sam2_07_dataset_sa1b_pays2}
+    \end{subfigure}
+    \caption{Origine des images qui forment le dataset SA-1B utilisé pour l’entrainement de SAM \cite{kirillov_segment_2023}}
+    \label{fig:ch2_sam2_sa1b_diversite_pays}
+\end{figure}
+
+Le dataset contient des annotations précises pour chaque objet dans chaque image, ce qui en fait un outil utile pour les chercheurs et les développeurs travaillant sur des applications de segmentation.
+
+Dans la Figure \ref{fig:ch2_sam2_08_eval_sam_humain}, Meta AI a demandé a des personnes d’évaluer la qualité de la segmentation sur 7 datasets différents. SAM est plus performant que le modèle RITM \cite{sofiiuk_reviving_2021} dans tous les cas.
+
+\begin{figure}[H]
+    \centering
+    \makebox[\textwidth][c]{\includegraphics[width=1\textwidth]{02-main//figures//ch2/ch2_sam2_08_eval_sam_humain.png}}
+    \caption{Evaluation par des humains de la qualité des masques générés par SAM et RITM  \cite{kirillov_segment_2023}}
+    \label{fig:ch2_sam2_08_eval_sam_humain}
+\end{figure}
+
+Dans une autre comparaison (Figure \ref{fig:ch2_sam2_09_eval_sam_miou}), l'objectif est de comparer plusieurs modèles qui effectuent de la segmentation sur 23 datasets. SAM a un mIoU plus élevé que les autres modèles.
+
+\begin{figure}[H]
+    \centering
+    \makebox[\textwidth][c]{\includegraphics[width=0.5\textwidth]{02-main//figures//ch2/ch2_sam2_09_eval_sam_miou.png}}
+    \caption{Comparatif de mIoU sur 23 datasets de SAM \cite{kirillov_segment_2023}}
+    \label{fig:ch2_sam2_09_eval_sam_miou}
+\end{figure}
+
+La Figure \ref{fig:ch2_sam2_09_eval_sam_miou} inclus également un résultat ``oracle'', dans lequel la plus pertinente des 3 segmentations de SAM est sélectionnée en les comparant à la vérité terrain, plutôt que de sélectionner le masque avec la confidence la plus élevée. Cela révèle l'impact de l'ambiguïté sur l'évaluation automatique.
+
+Pour conclure, jusqu'a l'arrivée de SAM2 en \citeyear{ravi_sam_2024}, l’état de l’art en segmentation d’image était SAM. Il est plus performant que tous les autres modèles existants qui réalisent cette tâche.
+
+\paragraph{Segment Anything Model 2 (SAM2)}
+L'article \cite{ravi_sam_2024} présente Segment Anything Model 2 (SAM2), une extension du modèle de segmentation SAM vers le domaine vidéo. Alors que SAM révolutionna la segmentation d'images en 2023, les vidéos représentent une part croissante du contenu multimédia et nécessitent une localisation temporelle pour des applications critiques en réalité augmentée/virtuelle, robotique et véhicules autonomes.
+
+\citeauthor{ravi_sam_2024} identifient les défis spécifiques à la segmentation vidéo : changements d'apparence dus au mouvement, déformations, occlusions, variations d'éclairage, et qualité souvent inférieure aux images statiques. L'objectif est de développer un système universel capable de ``segmenter n'importe quoi dans les vidéos'' avec la même facilité que SAM pour les images.
+
+Le travail introduit la tâche PVS (Promptable Visual Segmentation) qui généralise la segmentation interactive d'images aux vidéos, permettant de fournir des prompts (clics, boîtes, masques) sur n'importe quelle frame pour définir et raffiner des segments spatio-temporels appelés ``masklets''.
+
+La Figure \ref{fig:ch2_sam2_fonctionnement} représente une vue d'ensemble montrant la tâche PVS (Figure \ref{fig:ch2_sam2_pvs}), l'architecture SAM 2 (Figure \ref{fig:ch2_sam2_model}) et le processus de collecte de données (Figure \ref{fig:ch2_sam2_data}).
+
+\begin{figure}[H]
+    \centering
+    \makebox[\textwidth][c]{\includegraphics[width=1.25\textwidth]{02-main//figures//ch2/ch2_sam2_10_dataset_sam2.png}}
+   
+    \begin{subfigure}{0.20\textwidth}
+        \subcaption{Promptable Visual Segmentation (PVS)}
+        \label{fig:ch2_sam2_pvs}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.25\textwidth}
+        \subcaption{Segment Anything Model 2 (SAM2)}
+        \label{fig:ch2_sam2_model}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.20\textwidth}
+        \subcaption{Dataset SA-V}
+        \label{fig:ch2_sam2_data}
+    \end{subfigure}
+    
+    \caption{Fonctionnement SAM2 \cite{ravi_sam_2024}}
+    \label{fig:ch2_sam2_fonctionnement}
+\end{figure}
 
 \subsubsection{Données}
+Les auteurs développent un moteur de données (data engine) en trois phases pour créer le dataset SA-V, le plus grand dataset de segmentation vidéo à ce jour. Le processus évolue de l'annotation manuelle pure vers l'assistance progressive par SAM 2 :
+\begin{itemize}
+    \item Phase 1 : Annotation manuelle photogramme par photogramme avec SAM (37.8s/photogramme)
+    \item Phase 2 : SAM + propagation temporelle par SAM 2 (7.4s/photogramme)
+    \item Phase 3 : SAM 2 complet avec mémoire temporelle (4.5s/photogramme)
+\end{itemize}
+
+Le dataset final SA-V comprend 50.9K vidéos avec 642.6K masklets (190.9K manuels + 451.7K automatiques), représentant 53× plus de masques que tout dataset VOS existant. La diversité géographique couvre 47 pays, avec annotation de segments entiers et de parties d'objets, sans contraintes catégorielles.
+
+Un processus de vérification qualité garantit la cohérence temporelle des annotations, avec classification ``satisfaisant/non-satisfaisant'' par des annotateurs dédiés.
 
 \subsubsection{Méthodologie}
+SAM 2 adopte une architecture (Figure \ref{fig:ch2_sam2_11_architecture_sam2}) de traitement en flux continu (streaming) qui analyse les vidéos photogramme par photogramme, équipée d'un système de mémoire sophistiqué pour préserver le contexte temporel entre les images. Cette approche permet un traitement en temps réel de vidéos de longueur arbitraire. Les composants clés incluent :
+
+\begin{itemize}
+    \item Encodeur d'image : Utilise l'architecture Hiera, un transformateur de vision hiérarchique pré-entraîné avec la méthode MAE (Masked Autoencoder). Cette structure hiérarchique extrait des caractéristiques visuelles à différentes résolutions spatiales, des détails fins aux motifs globaux.
+    
+    \item Module d'attention mémoire : Composé de L couches de transformateurs qui conditionnent les caractéristiques de l'image actuelle en fonction des informations stockées en mémoire des images précédentes, permettant une cohérence temporelle.
+    
+    \item Banque mémoire : Système de stockage organisé en files d'attente FIFO (premier entré, premier sorti) qui conserve les informations de N photogrammes récents et de M photogrammes contenant des instructions utilisateur. Inclut également des ``pointeurs d'objets'' (object pointers), des vecteurs compacts encodant l'information sémantique de haut niveau sur l'objet suivi.
+    
+    \item Décodeur de masque : Architecture similaire à celle de SAM original, augmentée d'une tête de prédiction supplémentaire qui détermine si l'objet d'intérêt est visible ou caché dans le photogramme actuel, gérant ainsi les disparitions temporaires d'objets.
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \makebox[\textwidth][c]{\includegraphics[width=1.15\textwidth]{02-main//figures//ch2/ch2_sam2_11_architecture_sam2.png}}
+    \caption{Architecture SAM2 \cite{ravi_sam_2024}}
+    \label{fig:ch2_sam2_11_architecture_sam2}
+\end{figure}
+
+\paragraph{Stratégie d'entraînement}
+
+L'entraînement de SAM 2 simule des sessions d'annotation interactive réelles pour apprendre au modèle à gérer efficacement les interactions utilisateur dans le contexte vidéo. Le processus d'apprentissage s'appuie sur des séquences de 8 images consécutives extraites de vidéos d'entraînement.
+
+Pour chaque séquence, les chercheurs simulent le comportement d'un annotateur humain en sélectionnant jusqu'à 2 images qui recevront des instructions explicites (prompts). Les prompts initiaux suivent une distribution réaliste : masque de segmentation correct dans 50\% des cas, clic simple sur l'objet dans 25\% des cas, et boîte englobante dans les 25\% restants. Des clics correctifs supplémentaires sont introduits de manière probabiliste durant l'entraînement pour simuler les corrections qu'un utilisateur réel effectuerait face à une segmentation imparfaite.
+
+L'objectif pédagogique consiste à apprendre au modèle à prédire la segmentation temporelle complète (masklet) sur l'ensemble des 8 images de la séquence, en s'appuyant uniquement sur ces quelques instructions partielles et en exploitant sa mémoire temporelle.
+
+\paragraph{Fonctionnement en inférence interactive}
+
+Une fois entraîné, SAM 2 effectue la segmentation interactive selon un processus en deux étapes qui exploite sa mémoire temporelle pour maintenir la cohérence des masques à travers les séquences d'images (Figure \ref{fig:ch2_sam2_12_entrainement_sam2}).
+
+La première étape consiste en la sélection initiale de l'objet cible (frame 1, step 1 sur Figure \ref{fig:ch2_sam2_12_entrainement_sam2}). L'utilisateur fournit des invites sur une image de référence : les points verts correspondent aux zones à inclure dans la segmentation, tandis que les points rouges représentent les régions à exclure. Dans l'exemple, SAM 2 identifie le segment de l'objet d'intérêt (la langue) dans l'image 1, puis propage automatiquement ce segment aux images suivantes pour former un masque temporel continu.
+
+\begin{figure}[H]
+    \centering
+    \makebox[\textwidth][c]{\includegraphics[width=1.15\textwidth]{02-main//figures//ch2/ch2_sam2_12_entrainement_sam2.png}}
+    \caption{Processus de segmentation interactive avec SAM 2 : sélection initiale et raffinement par mémoire temporelle \cite{ravi_sam_2024}}
+    \label{fig:ch2_sam2_12_entrainement_sam2}
+\end{figure}
+
+La seconde étape intervient lors des situations de perte de suivi. Il arrive que SAM 2 perde la trace de l'objet au cours de la propagation temporelle, comme observé l'exemple (frame 3, step 1 sur Figure \ref{fig:ch2_sam2_12_entrainement_sam2}). Dans ce cas, l'utilisateur peut corriger le masque en fournissant une invite supplémentaire (frame 3, step 2 sur Figure \ref{fig:ch2_sam2_12_entrainement_sam2}) dans une nouvelle image de la séquence.
+
+L'avantage de SAM 2 réside dans sa capacité à raffiner la segmentation grâce à la mémoire temporelle. Un seul clic dans l'image suffit pour récupérer l'objet perdu et relancer la propagation correcte pour la suite de la séquence. Cette approche contraste favorablement avec les méthodes découplées combinant SAM et un tracker vidéo traditionnel, qui nécessiteraient de recommencer entièrement le processus de segmentation, obligeant l'utilisateur à fournir plusieurs clics dans le frame 3 (Figure \ref{fig:ch2_sam2_12_entrainement_sam2}) comme lors de l'annotation initiale. La mémoire temporelle de SAM 2 réduit ainsi considérablement l'effort d'annotation requis pour maintenir un suivi précis des objets dans les vidéos.
 
 \subsubsection{Résultats principaux}
+SAM 2 démontre des performances supérieures sur de multiples benchmarks, validant son efficacité dans trois domaines d'application principaux.
+
+\paragraph{Segmentation vidéo interactive}
+Les évaluations en segmentation vidéo interactive menées sur 9 datasets densément annotés démontrent la supériorité de SAM 2 par rapport aux méthodes de référence qui combinent SAM avec des trackers vidéo spécialisés (SAM+XMem++ \cite{bekuzarov_xmem_2023} \cite{noauthor_mbzuai-metaversexmem2_2025} et SAM+Cutie \cite{cheng_putting_2024} \cite{cheng_hkchengrexcutie_2025}). Ces tests ont été réalisés avec un protocole standardisé de 3 clics par photogramme, les résultats complets sont présentés dans la Figure \ref{fig:ch2_sam2_resultats_sam2_segmentation_video}.
+
+L'évaluation s'organise selon deux protocoles distincts qui reflètent différents scénarios d'usage pratique. Le premier mode, appelé évaluation hors ligne (offline), permet d'effectuer plusieurs passes successives à travers une vidéo. Cette approche autorise l'annotateur à sélectionner de manière stratégique les images sur lesquelles intervenir, en se basant sur l'analyse des erreurs de modèle les plus critiques identifiées lors des passes précédentes (Figure \ref{fig:ch2_sam2_13_resultats_sam2_segmentation_video_offline}).
+
+Le second mode correspond à l'évaluation en ligne (online), qui simule un contexte d'annotation en temps réel. Dans cette configuration, les images sont annotées au cours d'un unique passage séquentiel à travers la vidéo, sans possibilité de retour en arrière ou d'optimisation a posteriori (Figure \ref{fig:ch2_sam2_14_resultats_sam2_segmentation_video_online}). Ce protocole reflète davantage les contraintes rencontrées lors d'applications pratiques où l'annotation doit s'effectuer de manière continue.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.75\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch2/ch2_sam2_13_resultats_sam2_segmentation_video_offline.png}
+        \caption{Evaluation en mode offline}
+        \label{fig:ch2_sam2_13_resultats_sam2_segmentation_video_offline}
+    \end{subfigure}
+    \vspace{0.35cm}
+    \begin{subfigure}[b]{0.75\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch2/ch2_sam2_14_resultats_sam2_segmentation_video_online.png}
+        \caption{Evaluation en mode online}
+        \label{fig:ch2_sam2_14_resultats_sam2_segmentation_video_online}
+    \end{subfigure}
+    \caption{Zero-shot accuracy sur 9 datasets de segmentation vidéo interactive \cite{ravi_sam_2024}}
+    \label{fig:ch2_sam2_resultats_sam2_segmentation_video}
+\end{figure}
+
+
+\paragraph{Segmentation d'objets vidéo semi-supervisée}
+Pour la segmentation d'objets vidéo semi-supervisée (VOS - Video Object Segmentation), SAM 2 démontre d'excellentes capacités dans un contexte d'annotation minimale. Cette tâche consiste à segmenter et suivre un objet à travers une séquence vidéo complète en ne disposant que d'une seule annotation manuelle sur la première image de la vidéo. Le modèle doit ensuite propager automatiquement cette segmentation initiale sur toutes les images suivantes, en gérant les défis comme les changements d'apparence, les occlusions temporaires, et les variations d'éclairage.
+
+SAM 2 établit de nouveaux records de performance sur 17 datasets de référence. Les évaluations utilisent la métrique J\&F, qui combine l'accuracy de la segmentation (mesure J, basée sur l'intersection sur union des masques) et l'accuracy des contours (mesure F, évaluant la qualité des frontières d'objets). Cette métrique composite, exprimée en pourcentage, reflète fidèlement la qualité globale de la segmentation temporelle.
+
+Les gains sont particulièrement remarquables sur les benchmarks les plus exigeants du domaine (Figure \ref{tab:ch2_sam2_resultats_sam2_vos_zeroshot}). Sur le dataset MOSE \cite{noauthor_mose_nodate}, reconnu pour sa complexité avec des objets subissant des transformations importantes et des occlusions prolongées, SAM 2 atteint 76.6\% de score J\&F contre 71.7\% pour la meilleure méthode précédente (Cutie-base+), soit une amélioration absolue de 4.9 points. Sur DAVIS 2017 \cite{noauthor_davis_nodate}, le benchmark historique de référence en segmentation vidéo, SAM 2 obtient 90.2\% contre 88.1\% pour les approches existantes, établissant un nouveau standard de performance.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{lccccc}
+        \hline
+        Method & 1-click & 3-click & 5-click & bounding box & ground-truth mask \\
+        \hline
+        SAM+XMem++ & 56.9 & 68.4 & 70.6 & 67.6 & 72.7 \\
+        SAM+Cutie & 56.7 & 70.1 & 72.2 & 69.4 & 74.1 \\
+        SAM 2 & 64.7 & 75.3 & 77.6 & 74.4 & 79.3 \\
+        \hline
+    \end{tabular}
+    \caption{Zero-shot accuracy sur 17 datasets vidéo avec différents types de prompts. Accuracy moyenne pour chaque type de prompt (1, 3 ou 5 clics, boîtes englobantes, ou masques de vérité terrain) appliqué sur la première image de chaque vidéo \cite{ravi_sam_2024}}
+    \label{tab:ch2_sam2_resultats_sam2_vos_zeroshot}
+\end{table}
+
+Ces résultats sont d'autant plus remarquables que SAM 2, contrairement aux méthodes spécialisées qu'il surpasse, reste un modèle généraliste capable de segmenter n'importe quel objet sans restriction catégorielle, démontrant ainsi la puissance de son approche unifiée.
+
+\paragraph{Segmentation d'images}
+
+En segmentation d'images, SAM 2 maintient et améliore significativement les performances de son prédécesseur sur une suite étendue de 37 datasets, incluant les 23 benchmarks originaux de SAM. L'évaluation utilise la métrique mIoU (mean Intersection over Union), qui mesure la précision moyenne de segmentation en calculant le rapport entre l'intersection et l'union des masques prédits et réels, exprimé en pourcentage.
+
+Le Tableau \ref{tab:ch2_sam2_resultats_segmentation_image_miou} présente une analyse comparative détaillée des performances de SAM et SAM 2. Les résultats sont organisés par domaine d'application et montrent les scores mIoU moyens pour 1 et 5 clics utilisateur. Les métriques correspondent aux moyennes calculées sur les 23 datasets originellement utilisés pour l'évaluation de SAM (SA-23), subdivisés entre datasets d'images et de vidéos, ainsi qu'aux résultats sur 14 datasets vidéo supplémentaires évalués en inférence directe.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{llccccr}
+        \multirow{2}{*}{Model} & \multirow{2}{*}{Data} & \multicolumn{4}{c}{1 (5) click mIoU} & \multirow{2}{*}{FPS} \\
+        \cline{3-6}
+        & & SA-23 All & SA-23 Image & SA-23 Video & 14 new Video & \\
+        \hline
+        SAM & SA-1B & 58.1 (81.3) & 60.8 (82.1) & 54.5 (80.3) & 59.1 (83.4) & 21.7 \\
+        SAM 2 & SA-1B & 58.9 (81.7) & 60.8 (82.1) & 56.4 (81.2) & 56.6 (83.7) & 130.1 \\
+        SAM 2 & mix & 61.9 (83.5) & 63.3 (83.8) & 60.1 (83.2) & 69.6 (85.8) & 130.1 \\
+        \hline
+    \end{tabular}
+    \caption{Performances de SAM 2 en inférence directe sur la tâche de segmentation d'images évaluées sur 37 datasets \cite{ravi_sam_2024}.}
+    \label{tab:ch2_sam2_resultats_segmentation_image_miou}
+\end{table}
+
+Les résultats révèlent plusieurs éléments importants. Premièrement, si le modèle est entrainé uniquement sur le dataset SA-1B (comme SAM original), SAM 2 atteint 58.9\% de mIoU avec un seul clic contre 58.1\% pour SAM, démontrant une amélioration modeste mais par contre le gain de vitesse est remarquable : 130.1 contre 21.7 images par seconde, soit environ 6 fois plus rapide. Ce gain provient principalement de l'architecture Hiera plus compacte et optimisée.
+
+Deuxièmement, l'entraînement conjoint sur données image-vidéo (configuration ``mix'' dans le Tableau \ref{tab:ch2_sam2_resultats_segmentation_image_miou}) révèle tout le potentiel de l'approche multimodale de SAM 2. Les performances grimpent à 61.9\% de mIoU moyen, avec des gains particulièrement marqués sur les données vidéo : 69.6\% sur les 14 nouveaux datasets vidéo contre 56.6\% pour la version entraînée uniquement sur images. Cette amélioration illustre comment l'apprentissage temporel enrichit la compréhension spatiale du modèle.
+
+Cette capacité d'adaptation automatique à de nouveaux domaines sans réentraînement constitue un atout majeur pour les applications pratiques, où la diversité des données d'entrée est souvent imprévisible.
 
 \subsubsection{Discussion et limites}
+Malgré ses performances remarquables, SAM 2 présente certaines limitations techniques identifiées par les auteurs.
 
-\todo[inline]{Ajouter l'état de l'art pour les CNN choisies}
-% -----------------------------------------------------------------------------
-\subsection{?}
+Les principales défaillances concernent les discontinuités temporelles (changements de plan brutaux), les scènes visuellement encombrées, les occlusions prolongées et le traitement de vidéos très longues. Néanmoins, l'architecture interactive permet de récupérer rapidement d'erreurs par des prompts correctifs sur n'importe quel photogramme.
 
-\subsubsection{Contexte et objectifs}
+Les limitations de précision spatiale se manifestent avec les objets comportant des détails très fins (cheveux, contours complexes), particulièrement en mouvement rapide, ainsi qu'avec les objets d'apparence très similaire que le modèle peut confondre en s'appuyant principalement sur les caractéristiques visuelles.
 
-\subsubsection{Données}
+Sur le plan architectural, SAM 2 traite chaque objet indépendamment sans communication inter-objets, partageant uniquement les embeddings d'images. Cette approche ignore les relations spatiales et temporelles entre objets, qui pourraient enrichir la compréhension de scène.
 
-\subsubsection{Méthodologie}
+Les auteurs proposent plusieurs améliorations : intégration d'une modélisation explicite du mouvement (flux optique, prédicteurs de trajectoire), incorporation d'informations contextuelles partagées entre objets, et automatisation partielle du processus d'annotation par des métriques de confiance automatiques.
 
-\subsubsection{Résultats principaux}
-
-\subsubsection{Discussion et limites}
-\todo[inline]{Effacer ça une fois l'état de l'art terminé}
-
-% -----------------------------------------------------------------------------
+Malgré ces limitations, SAM 2 représente une avancée considérable vers la segmentation universelle d'objets dans les images et vidéos, ouvrant de nouvelles possibilités pour la réalité augmentée, la robotique autonome, les systèmes de conduite assistée et l'édition vidéo professionnelle.
 % -----------------------------------------------------------------------------
 \section{Datasets disponibles}
 \label{sec:dataset_disponible}
 \par{Quelques datasets de qualité sont disponibles actuellement. Ce chapitre va parcourir certains d'entre eux.}
 
-% -----------------------------------------------------------------------------
+
 \subsection{Roof Information Dataset for Computer Vision-Based Photovoltaic Potential Assessment (RID)}
 \label{subsec:rid_roof_information_dataset}
 
@@ -1389,12 +1761,12 @@ La contrainte matérielle constitue une limitation majeure souvent sous-estimée
 
 \subsubsection{Données}
 \par{Le RID se compose d'images aériennes géo-référencées et d'annotations.}
-\par{Les images sont des photos aériennes à haute résolution (environ 10 cm/pixel) centrées sur chaque bâtiment, téléchargées via l'API Google Maps Static pour la zone rurale de Wartenberg en Allemagne. Ces images sont géo-référencées au format GeoTIFF.}
+\par{Les images sont des photos aériennes à haute résolution (environ 10 \si{\unit{cm/pixel}}) centrées sur chaque bâtiment, téléchargées via l'API Google Maps Static pour la zone rurale de Wartenberg en Allemagne. Ces images sont géo-référencées au format GeoTIFF.}
 \par{Les annotations sont des images rasterisées au format PNG}
 
 \par{Les principaux chiffres-clés de ce dataset :}
 \begin{itemize}
-    \item 1880 bâtiments uniques répartis sur une zone de 1,5 km² (4,9 km² avec superposition)
+    \item 1880 bâtiments uniques répartis sur une zone de 1,5 \si{\unit{km^2}} (4,9 \si{\unit{km^2}} avec superposition)
     \item 4520 polygones de segments de toiture classés selon leur orientation géographique, en tout 5 classes :
     \begin{itemize}
         \item Nord, sud, est et ouest
@@ -1440,7 +1812,7 @@ La contrainte matérielle constitue une limitation majeure souvent sous-estimée
     \item Acquisition des données :
     \begin{itemize}
         \item Téléchargement d'images aériennes via l'API Google Maps
-        \item Résolution d'environ 10 cm/pixel, suffisante pour identifier les petites éléments présents sur les toitures comme les cheminées
+        \item Résolution d'environ 10 \si{\unit{cm/pixel}}, suffisante pour identifier les petites éléments présents sur les toitures comme les cheminées
     \end{itemize}
     \item Processus d'annotation initial :
     \begin{itemize}
@@ -1504,7 +1876,7 @@ L'article présente plusieurs catégories de résultats :
 
 \subsubsection{Discussion et limites}
 \par{Le dataset se concentre sur une zone rurale allemande et ne représente pas adéquatement d'autres styles architecturaux. Comme indiqué dans la section \ref{subsec:solar_net_plus} qui fait référence a un article postérieur du même auteur, le dataset n'est pas adapté au milieu urbain de Bruxelles. Les classes sont trop spécifiques au rural allemand, dans le cas de Bruxelles, il manque les classes pour des éléments typiquement urbains tel que les ventilation/climatisation.}
-\par{Il y a une forte disproportion entre les classes d'éléments de toiture, avec certaines classes très peu représentées et d'autres classes étant dans toutes les images (cas classe "background").}
+\par{Il y a une forte disproportion entre les classes d'éléments de toiture, avec certaines classes très peu représentées et d'autres classes étant dans toutes les images (cas classe ``background'').}
 \par{L'article s'intéresse aussi à la variabilité de la qualité d'annotation. Les annotateurs ne sont pas toujours d'accord sur les annotations (polygone) et les classes. La qualité des annotations a un impact sur la performance des modèles. Les variations dans les annotations sont aussi en partie dues a la résolution des images, celle-ci peux être insuffisante pour clairement identifier et annoter les petits objets.}
 \par{Les résultats des deux modèles sont encourageants, mais doivent être pris comme point de départ pour améliorer la qualité du dataset.}
 
