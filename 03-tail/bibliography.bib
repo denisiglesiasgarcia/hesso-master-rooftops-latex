@@ -1,3 +1,73 @@
+
+@misc{bekuzarov_xmem_2023,
+	title = {{XMem}++: {Production}-level {Video} {Segmentation} {From} {Few} {Annotated} {Frames}},
+	shorttitle = {{XMem}++},
+	url = {http://arxiv.org/abs/2307.15958},
+	doi = {10.48550/arXiv.2307.15958},
+	abstract = {Despite advancements in user-guided video segmentation, extracting complex objects consistently for highly complex scenes is still a labor-intensive task, especially for production. It is not uncommon that a majority of frames need to be annotated. We introduce a novel semi-supervised video object segmentation (SSVOS) model, XMem++, that improves existing memory-based models, with a permanent memory module. Most existing methods focus on single frame annotations, while our approach can effectively handle multiple user-selected frames with varying appearances of the same object or region. Our method can extract highly consistent results while keeping the required number of frame annotations low. We further introduce an iterative and attention-based frame suggestion mechanism, which computes the next best frame for annotation. Our method is real-time and does not require retraining after each user input. We also introduce a new dataset, PUMaVOS, which covers new challenging use cases not found in previous benchmarks. We demonstrate SOTA performance on challenging (partial and multi-class) segmentation scenarios as well as long videos, while ensuring significantly fewer frame annotations than any existing method. Project page: https://max810.github.io/xmem2-project-page/},
+	urldate = {2025-06-23},
+	publisher = {arXiv},
+	author = {Bekuzarov, Maksym and Bermudez, Ariana and Lee, Joon-Young and Li, Hao},
+	month = aug,
+	year = {2023},
+	note = {arXiv:2307.15958 [cs]},
+	keywords = {Computer Science - Computer Vision and Pattern Recognition, Computer Science - Graphics},
+}
+
+@misc{cheng_putting_2024,
+	title = {Putting the {Object} {Back} into {Video} {Object} {Segmentation}},
+	url = {http://arxiv.org/abs/2310.12982},
+	doi = {10.48550/arXiv.2310.12982},
+	abstract = {We present Cutie, a video object segmentation (VOS) network with object-level memory reading, which puts the object representation from memory back into the video object segmentation result. Recent works on VOS employ bottom-up pixel-level memory reading which struggles due to matching noise, especially in the presence of distractors, resulting in lower performance in more challenging data. In contrast, Cutie performs top-down object-level memory reading by adapting a small set of object queries. Via those, it interacts with the bottom-up pixel features iteratively with a query-based object transformer (qt, hence Cutie). The object queries act as a high-level summary of the target object, while high-resolution feature maps are retained for accurate segmentation. Together with foreground-background masked attention, Cutie cleanly separates the semantics of the foreground object from the background. On the challenging MOSE dataset, Cutie improves by 8.7 J\&F over XMem with a similar running time and improves by 4.2 J\&F over DeAOT while being three times faster. Code is available at: https://hkchengrex.github.io/Cutie},
+	urldate = {2025-06-23},
+	publisher = {arXiv},
+	author = {Cheng, Ho Kei and Oh, Seoung Wug and Price, Brian and Lee, Joon-Young and Schwing, Alexander},
+	month = apr,
+	year = {2024},
+	note = {arXiv:2310.12982 [cs]},
+	keywords = {Computer Science - Computer Vision and Pattern Recognition},
+}
+
+@misc{cheng_hkchengrexcutie_2025,
+	title = {hkchengrex/{Cutie}},
+	copyright = {MIT},
+	url = {https://github.com/hkchengrex/Cutie},
+	abstract = {[CVPR 2024 Highlight] Putting the Object Back Into Video Object Segmentation},
+	urldate = {2025-06-23},
+	author = {Cheng, Rex},
+	month = jun,
+	year = {2025},
+	note = {original-date: 2023-10-19T17:49:24Z},
+	keywords = {computer-vision, cvpr2024, deep-learning, pytorch, segmentation, video-editing, video-object-segmentation, video-segmentation},
+}
+
+@misc{noauthor_mbzuai-metaversexmem2_2025,
+	title = {mbzuai-metaverse/{XMem2}},
+	copyright = {GPL-3.0},
+	url = {https://github.com/mbzuai-metaverse/XMem2},
+	abstract = {A tool for efficient semi-supervised video object segmentation (great results with minimal manual labor) and a dataset for benchmarking},
+	urldate = {2025-06-23},
+	publisher = {mbzuai-metaverse},
+	month = jun,
+	year = {2025},
+	note = {original-date: 2022-11-16T08:46:44Z},
+	keywords = {annotation-tool, computer-vision, dataset, deep-learning, interactive-segmentation, segmentation, video-object-segmentation},
+}
+
+@misc{noauthor_davis_nodate,
+	title = {{DAVIS}: {Densely} {Annotated} {VIdeo} {Segmentation}},
+	url = {https://davischallenge.org/},
+	urldate = {2025-06-23},
+}
+
+@misc{noauthor_mose_nodate,
+	title = {{MOSE}: {Complex} {Video} {Object} {Segmentation} {Dataset}},
+	shorttitle = {{MOSE}},
+	url = {https://henghuiding.github.io/MOSE},
+	abstract = {MOSE: Complex Video Object Segmentation Dataset},
+	urldate = {2025-06-23},
+}
+
 @misc{sofiiuk_reviving_2021,
 	title = {Reviving {Iterative} {Training} with {Mask} {Guidance} for {Interactive} {Segmentation}},
 	url = {http://arxiv.org/abs/2102.06583},
