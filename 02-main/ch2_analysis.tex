@@ -1510,33 +1510,41 @@ Le dataset final SA-V comprend 50.9K vidéos avec 642.6K masklets (190.9K manuel
 Un processus de vérification qualité garantit la cohérence temporelle des annotations, avec classification "satisfaisant/non-satisfaisant" par des annotateurs dédiés.
 
 \subsubsection{Méthodologie}
-SAM 2 adopte une architecture de streaming traitant les vidéos photogramme par photogramme, équipée d'un système de mémoire pour maintenir le contexte temporel. Les composants clés incluent :
+SAM 2 adopte une architecture (Figure \ref{fig:ch2_sam2_11_architecture_sam2}) de traitement en flux continu (streaming) qui analyse les vidéos photogramme par photogramme, équipée d'un système de mémoire sophistiqué pour préserver le contexte temporel entre les images. Cette approche permet un traitement en temps réel de vidéos de longueur arbitraire. Les composants clés incluent :
 
 \begin{itemize}
-    \item Encodeur d'image : Hiera pré-entraîné MAE, hiérarchique pour features multi-échelles
-    \item Attention mémoire : L transformers conditionnant les features actuelles sur les mémoires passées
-    \item Banque mémoire : File FIFO stockant N photogrammes récents et M photogrammes avec prompts, plus des "object pointers" pour l'information sémantique
-    \item Décodeur de masque : Similaire à SAM, avec tête additionnelle prédisant la visibilité d'objet
+    \item Encodeur d'image : Utilise l'architecture Hiera, un transformateur de vision hiérarchique pré-entraîné avec la méthode MAE (Masked Autoencoder). Cette structure hiérarchique extrait des caractéristiques visuelles à différentes résolutions spatiales, des détails fins aux motifs globaux.
+    
+    \item Module d'attention mémoire : Composé de L couches de transformateurs qui conditionnent les caractéristiques de l'image actuelle en fonction des informations stockées en mémoire des images précédentes, permettant une cohérence temporelle.
+    
+    \item Banque mémoire : Système de stockage organisé en files d'attente FIFO (premier entré, premier sorti) qui conserve les informations de N photogrammes récents et de M photogrammes contenant des instructions utilisateur. Inclut également des "pointeurs d'objets" (object pointers), des vecteurs compacts encodant l'information sémantique de haut niveau sur l'objet suivi.
+    
+    \item Décodeur de masque : Architecture similaire à celle de SAM original, augmentée d'une tête de prédiction supplémentaire qui détermine si l'objet d'intérêt est visible ou caché dans le photogramme actuel, gérant ainsi les disparitions temporaires d'objets.
 \end{itemize}
-
-L'encodeur d'image (Hiera pré-entraîné MAE) effectue un traitement unique de chaque image pour générer des représentations vectorielles non conditionnées. Le module d'attention mémoire conditionne ensuite les caractéristiques de l'image courante en fonction des mémoires des images précédentes, utilisant des blocs transformer combinant mécanismes de self-attention et cross-attention. Le décodeur de masques, reprenant l'architecture de SAM, génère plusieurs masques candidats en cas d'ambiguïté et intègre une tête de prédiction d'occlusion permettant de détecter l'absence de l'objet dans l'image.
-
-L'encodeur mémoire produit des représentations en fusionnant le masque prédit avec les représentations vectorielles de l'image, tandis que la banque mémoire gère une file d'attente FIFO stockant les N images récentes et les M images ayant reçu des prompts. Le système maintient également des « pointeurs d'objets » sous forme de vecteurs compacts encodant l'information sémantique de haut niveau.
-
-L'entraînement conjoint sur données d'images et de vidéos reproduit un environnement interactif en échantillonnant des séquences de 8 images avec jusqu'à 2 images recevant des prompts. La stratégie d'initialisation des prompts se répartit entre masques de vérité terrain (50 \%), clics positifs (25 \%) et boîtes englobantes (25 \%).
 
 \begin{figure}[H]
     \centering
-    \makebox[\textwidth][c]{\includegraphics[width=1.10\textwidth]{02-main//figures//ch2/ch2_sam2_11_architecture_sam2.png}}
+    \makebox[\textwidth][c]{\includegraphics[width=1.15\textwidth]{02-main//figures//ch2/ch2_sam2_11_architecture_sam2.png}}
     \caption{Architecture SAM2 \cite{ravi_sam_2024}}
     \label{fig:ch2_sam2_11_architecture_sam2}
 \end{figure}
 
+L'entraînement simule des sessions d'annotation interactive réelles. Le modèle reçoit des séquences de 8 images consécutives extraites de vidéos, sur lesquelles les chercheurs simulent le comportement d'un utilisateur humain. Pour chaque séquence, jusqu'à 2 images sont sélectionnées pour recevoir des instructions (prompts) de l'utilisateur simulé.
+
+Les prompts initiaux varient selon trois modalités : dans 50\% des cas, le modèle reçoit directement le masque de segmentation correct (ground truth), dans 25\% des cas un simple clic sur l'objet à segmenter, et dans 25\% des cas une boîte englobante délimitant l'objet. Durant l'entraînement, des clics correctifs supplémentaires sont ajoutés de manière probabiliste pour simuler les corrections qu'un utilisateur ferait si la segmentation initiale était imparfaite.
+
+L'objectif pédagogique est d'apprendre au modèle à prédire la segmentation temporelle complète (masklet) de l'objet cible sur toutes les 8 images de la séquence, en se basant uniquement sur ces quelques instructions partielles.
+
 \subsubsection{Résultats principaux}
-SAM 2 démontre des performances supérieures sur de multiples benchmarks. En segmentation vidéo interactive, le modèle atteint une meilleure précision avec 3 fois moins d'interactions que les approches précédentes (SAM+XMem++, SAM+Cutie). Sur 17 datasets vidéo zero-shot, SAM 2 surpasse systématiquement les méthodes existantes avec différents types de prompts.
-En segmentation d'images, SAM 2 surpasse SAM sur 37 datasets zero-shot tout en étant 6 fois plus rapide (130.1 FPS vs 21.7 FPS). L'entraînement sur le mélange de données image-vidéo améliore encore les performances, atteignant 61.9% de mIoU moyen contre 58.1% pour SAM.
-Pour la segmentation vidéo semi-supervisée (VOS), SAM 2 établit de nouveaux états de l'art sur les benchmarks établis. Sur DAVIS 2017, le modèle atteint 90.2% en J&F, et sur YouTube-VOS 2019, 88.6%. Les performances sont particulièrement impressionnantes sur SA-V val/test (76.8%/77.0%), démontrant la capacité à "segmenter n'importe quoi" dans les vidéos.
-Le modèle fonctionne en temps réel avec 43.8 FPS pour Hiera-B+ et 30.2 FPS pour Hiera-L sur GPU A100, permettant des applications interactives pratiques.
+SAM 2 démontre des performances supérieures sur de multiples benchmarks, validant son efficacité dans trois domaines d'application principaux.
+
+En segmentation vidéo interactive, les évaluations sur 9 datasets densément annotés révèlent que SAM 2 surpasse systématiquement les méthodes de référence combinant SAM avec des trackers vidéo (SAM+XMem++ et SAM+Cutie). Remarquablement, le modèle atteint une précision supérieure tout en nécessitant trois fois moins d'interactions utilisateur, démontrant une efficacité d'annotation considérablement améliorée.
+
+Pour la segmentation d'objets vidéo semi-supervisée (VOS), où seule une annotation est fournie sur la première image, SAM 2 établit de nouveaux records sur 17 datasets de référence. Les gains sont particulièrement notables sur les benchmarks les plus exigeants : 76.6\% de score J\&F sur MOSE contre 71.7\% pour la meilleure méthode précédente (Cutie-base+), et 90.2\% sur DAVIS 2017 contre 88.1\% pour les approches existantes.
+
+En segmentation d'images, SAM 2 maintient et améliore les performances de son prédécesseur sur une suite étendue de 37 datasets, incluant les 23 benchmarks originaux de SAM. Le modèle atteint 58.9\% de mIoU avec un seul clic contre 58.1\% pour SAM, tout en fonctionnant six fois plus rapidement (130.1 contre 21.7 images par seconde). L'entraînement conjoint sur données image-vidéo pousse encore ces performances à 61.9\%, illustrant les bénéfices de l'approche multimodale.
+
+Les évaluations en généralisation zero-shot confirment la robustesse du modèle sur des domaines variés non vus durant l'entraînement : imagerie médicale par microscopie, scènes de conduite automobile, chirurgie endoscopique robotisée, et vidéos égocentriques. Cette diversité témoigne de la capacité du modèle à s'adapter à de nouveaux contextes d'application sans réentraînement spécifique.
 \subsubsection{Discussion et limites}
 SAM 2 présente certaines limitations identifiées par les auteurs. Le modèle peut échouer lors de changements de plan brutaux et peut perdre la trace d'objets dans des scènes encombrées, après de longues occlusions ou dans des vidéos très longues. La capacité de prompting sur n'importe quelle frame permet cependant de récupérer rapidement d'erreurs par des clics de raffinement.
 Le modèle a des difficultés avec le suivi précis d'objets ayant des détails très fins, particulièrement lorsqu'ils sont en mouvement rapide. Les scénarios avec plusieurs objets d'apparence similaire (par exemple, des balles de jonglage identiques) représentent également un défi. L'intégration d'une modélisation explicite du mouvement pourrait atténuer ces problèmes.
