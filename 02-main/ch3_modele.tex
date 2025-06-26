@@ -62,7 +62,7 @@ La sélection des données va dépendre de l'algorithme utilisé. Dans ce cas, l
 \end{itemize}
 
 \subsection{Orthophotos}
-Les orthophotos de 2019 (Figure \ref{fig:ch3_dataset_methodo_01_orthophoto_2019}) ont été sélectionnées car ce sont les seules true-orthophotos disponibles sur \acrshort{sitg} avec une résolution de 7cm par pixel. Selon un document de SITG \cite{etat_de_geneve_inventaire_2025}, ils ont réalisé plusieurs survols du canton en 2024 pour acquérir de nouvelles true-orthophotos avec une résolution de 3.6cm par pixel, ces orthophotos ne sont pas encore disponibles sur \acrshort{sitg}.
+Les orthophotos de 2019 (Figure \ref{fig:ch3_dataset_methodo_01_orthophoto_2019}) ont été sélectionnées car ce sont les seules true-orthophotos disponibles sur \acrshort{sitg} avec une résolution de 7 \si{\unit{cm}} par pixel. Selon un document de SITG \cite{etat_de_geneve_inventaire_2025}, ils ont réalisé plusieurs survols du canton en 2024 pour acquérir de nouvelles true-orthophotos avec une résolution de 3.6 \si{\unit{cm}} par pixel, ces orthophotos ne sont pas encore disponibles sur \acrshort{sitg}.
 
 La sous-section \textit{\nameref{subsec:annexe_ortophotos}} (voir page~\pageref{subsec:annexe_ortophotos}) parcourt en détail les types d'orthophotos les plus utilisées dans la géomatique.
 
@@ -389,10 +389,10 @@ Le format choisi pour le stockage du fichier est le geoparquet \cite{noauthor_ge
 \label{subsubsec:decoupe_orthophoto_tuile}
 
 \paragraph{Dimensions des orthophotos et contraintes}
-Les 416 orthophotos sont des fichiers au format GeoTIFF de dimensions 20000×20000 pixels. Cependant, la plupart des réseaux de neurones convolutifs sont entraînés sur des images de tailles comprises entre 224×224 et 1024×1024 pixels, correspondant aux standards des architectures classiques. Le découpage de ces orthophotos est nécessaire pour adapter les données aux contraintes des modèles.
+Les 416 orthophotos sont des fichiers au format GeoTIFF de dimensions \si{\numproduct{20000x20000}} pixels. Cependant, la plupart des réseaux de neurones convolutifs sont entraînés sur des images de tailles comprises entre \si{\numproduct{224x224}} et \si{\numproduct{1024x1024}} pixels, correspondant aux standards des architectures classiques. Le découpage de ces orthophotos est nécessaire pour adapter les données aux contraintes des modèles.
 
 \paragraph{Processus de découpage}
-La Figure \ref{fig:ch3_preparation_donnees_orthophotos_01_etl} décrit les étapes de ce processus de découpage. Chaque tuile générée mesure 1280×1280 pixels (64×64 mètres) avec un recouvrement de 256 pixels (12,80 mètres) avec les tuiles adjacentes. Ce recouvrement garantit qu'aucun bâtiment ne soit coupé aux bordures des tuiles.
+La Figure \ref{fig:ch3_preparation_donnees_orthophotos_01_etl} décrit les étapes de ce processus de découpage. Chaque tuile générée mesure \si{\numproduct{1280x1280}} pixels (\si{\numproduct{64x64}} mètres) avec un recouvrement de 256 pixels (12,80 mètres) avec les tuiles adjacentes. Ce recouvrement garantit qu'aucun bâtiment ne soit coupé aux bordures des tuiles.
 \begin{figure}[H]
     \centering
     \includegraphics[width=1\linewidth]{02-main/figures/ch3/ch3_preparation_donnees_orthophotos_01_etl.png}
@@ -404,7 +404,7 @@ La Figure \ref{fig:ch3_preparation_donnees_orthophotos_01_etl} décrit les étap
 \paragraph{Zone urbaine}
 La Figure \ref{fig:ch3_preparation_donnees_orthophotos_02_exemple_decoupe_orthophoto1} illustre la démarche adoptée. Pour chaque orthophoto, l'algorithme charge d'abord l'image et identifie toutes les toitures situées dans son périmètre. 
 
-Un quadrillage de tuiles de 1280×1280 pixels avec un recouvrement de 256 pixels est ensuite créé. Le processus parcourt le quadrillage de manière itérative, du coin supérieur gauche vers le coin inférieur droit. Seules les tuiles contenant au moins une toiture sont conservées et sauvegardées; les tuiles vides sont rejetées. Dans ce cas, 388 tuiles ont été retenues sur les 400 tuiles possibles par orthophoto.
+Un quadrillage de tuiles de \si{\numproduct{1280x1280}} pixels avec un recouvrement de 256 pixels est ensuite créé. Le processus parcourt le quadrillage de manière itérative, du coin supérieur gauche vers le coin inférieur droit. Seules les tuiles contenant au moins une toiture sont conservées et sauvegardées; les tuiles vides sont rejetées. Dans ce cas, 388 tuiles ont été retenues sur les 400 tuiles possibles par orthophoto.
 
 Dans les zones urbaines caractérisées par une forte densité de bâtiments, chaque orthophoto génère un nombre élevé de tuiles. Cette concentration de données est particulièrement intéressante pour l'entraînement du modèle, car elle offre une grande variété d'exemples architecturaux dans un espace géographique restreint.
 
@@ -418,7 +418,7 @@ Dans les zones urbaines caractérisées par une forte densité de bâtiments, ch
 \newpage
 La Figure \ref{fig:ch3_preparation_donnees_orthophotos_03_exemple_decoupe_orthophoto2} présente le calepinage des tuiles conservées. Cette représentation illustre plus clairement le principe de recouvrement que la Figure \ref{fig:ch3_preparation_donnees_orthophotos_02_exemple_decoupe_orthophoto1}, une tuile peut être entièrement entourée par d'autres tuiles qui se chevauchent avec elle.
 
-Il convient de noter que toutes les tuiles générées ne présentent pas des dimensions de 1280×1280 pixels. Les tuiles situées en bordure droite de la Figure \ref{fig:ch3_preparation_donnees_orthophotos_03_exemple_decoupe_orthophoto2} sont plus étroites (tuile 18), de même que celles situées en partie basse (tuile 371).
+Il convient de noter que toutes les tuiles générées ne présentent pas des dimensions de \si{\numproduct{1280x1280}} pixels. Les tuiles situées en bordure droite de la Figure \ref{fig:ch3_preparation_donnees_orthophotos_03_exemple_decoupe_orthophoto2} sont plus étroites (tuile 18), de même que celles situées en partie basse (tuile 371).
 
 Ces cas particuliers seront traités après la finalisation de l'annotation. La priorité a été donnée à l'obtention de distributions de tuiles identiques pour l'ensemble des orthophotos, afin d'avoir une cohérence dans le processus de découpage et post-traitement.
 
@@ -430,7 +430,7 @@ Ces cas particuliers seront traités après la finalisation de l'annotation. La 
 \end{figure}
 
 \newpage
-La tuile 258 (Figure \ref{fig:ch3_preparation_donnees_orthophotos_04a_exemple_decoupe_orthophoto3}), située à proximité de HEPIA, illustre bien cette complexité. Chaque tuile peut avoir jusqu'à 8 zones de recouvrement avec ses voisines (Figure \ref{fig:ch3_preparation_donnees_orthophotos_04_exemple_decoupe_orthophoto3}) au nord (238), nord-est (239), est (259), sud-est (279), sud (278), sud-ouest (277), ouest (257) et nord-ouest (237). Seule la zone centrale de 1024×1024 pixels n'a aucun recouvrement et constitue la partie unique de chaque tuile.
+La tuile 258 (Figure \ref{fig:ch3_preparation_donnees_orthophotos_04a_exemple_decoupe_orthophoto3}), située à proximité de HEPIA, illustre bien cette complexité. Chaque tuile peut avoir jusqu'à 8 zones de recouvrement avec ses voisines (Figure \ref{fig:ch3_preparation_donnees_orthophotos_04_exemple_decoupe_orthophoto3}) au nord (238), nord-est (239), est (259), sud-est (279), sud (278), sud-ouest (277), ouest (257) et nord-ouest (237). Seule la zone centrale de \si{\numproduct{1024x1024}}  pixels n'a aucun recouvrement et constitue la partie unique de chaque tuile.
 
 \begin{figure}[H]
     \centering
@@ -484,7 +484,7 @@ Le Code \ref{code:pseudo_code_decoupe_orthophotos_tuiles_1280_1280} utilise du p
         FILTRER les bâtiments qui intersectent avec le GeoTIFF sélectionné
         
         // Découpage en tuiles
-        CALCULER le nombre de tuiles nécessaires (largeur × hauteur / taille_tuile)
+        CALCULER le nombre de tuiles nécessaires (largeur x hauteur / taille_tuile)
         
         POUR chaque position de tuile (i, j) FAIRE
             DÉFINIR la fenêtre de la tuile courante (1024x1024 pixels)
@@ -1239,9 +1239,9 @@ La Figure \ref{fig:exemple_post_traitement_validation_tuile_bas} illustre un cas
 
 Suite aux vérifications de la correction des chevauchements, des vérifications supplémentaires sont nécessaires. Certaines des images qui ont été rognées ont tous leurs pixels à 0, ce qui produit des images complètement noires. Le même phénomène affecte aussi leurs annotations. Dans ce cas, l'image est supprimée du dataset car elle n'apporte aucune information utile pour l'entraînement. Au total, 9 cas sur les 539 images annotées initiales sont concernés, ce qui réduit le nombre d'images annotées à distribuer en datasets à 530.
 
-La vérification suivante concerne la taille des images qui doivent toutes avoir des dimensions de 1280×1280 pixels. Cependant, comme indiqué précédemment dans la sous-section \textit{\nameref{subsubsec:decoupe_orthophoto_tuile}} (voir page~\pageref{subsubsec:decoupe_orthophoto_tuile}), certaines tuiles situées aux extrémités droites et inférieures de l'orthophoto ne respectent pas ce prérequis en raison des contraintes géométriques liées au découpage de la zone d'étude. Un découpage uniforme des orthophotos a été privilégié plutôt que d'avoir des tuiles s'étendant sur plusieurs orthophotos adjacentes.
+La vérification suivante concerne la taille des images qui doivent toutes avoir des dimensions de si{\numproduct{1280x1280}} pixels. Cependant, comme indiqué précédemment dans la sous-section \textit{\nameref{subsubsec:decoupe_orthophoto_tuile}} (voir page~\pageref{subsubsec:decoupe_orthophoto_tuile}), certaines tuiles situées aux extrémités droites et inférieures de l'orthophoto ne respectent pas ce prérequis en raison des contraintes géométriques liées au découpage de la zone d'étude. Un découpage uniforme des orthophotos a été privilégié plutôt que d'avoir des tuiles s'étendant sur plusieurs orthophotos adjacentes.
 
-La solution adoptée (Figure \ref{fig:ch3_postprocessing_dataset_verification_taille}) pour gérer ces tuiles consiste à ajouter des bandes noires (pixels à 0) afin d'atteindre les dimensions requises. La ligne pointillée délimite la tuile et les annotations originales au format 672×1280 pixels. L'ajout de bandes noires des deux côtés permet de conserver les coordonnées géographiques correctes dans le fichier GeoTIFF.
+La solution adoptée (Figure \ref{fig:ch3_postprocessing_dataset_verification_taille}) pour gérer ces tuiles consiste à ajouter des bandes noires (pixels à 0) afin d'atteindre les dimensions requises. La ligne pointillée délimite la tuile et les annotations originales au format si{\numproduct{672x1280}} pixels. L'ajout de bandes noires des deux côtés permet de conserver les coordonnées géographiques correctes dans le fichier GeoTIFF.
 
 \begin{figure}[H]
     \centering
@@ -1301,14 +1301,14 @@ Une des architectures les plus populaires est U-Net \cite{ronneberger_u-net_2015
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1\linewidth]{02-main//figures//ch3/ch36_architecture_01_architecture_unet.png}
+    \makebox[\textwidth][c]{\includegraphics[width=1.05\textwidth]{02-main//figures/ch3/ch36_architecture_01_architecture_unet.png}}
     \caption{Architecture U-Net \cite{ronneberger_u-net_2015}}
     \label{fig:ch36_architecture_01_architecture_unet}
 \end{figure}
 
 L'encodeur capture les caractéristiques de l'image en appliquant successivement plusieurs couches convolutionnelles et des opérations de max pooling. Ce processus permet d'extraire les caractéristiques sémantiques à plusieurs échelles tout en réduisant progressivement la résolution spatiale, comme illustré dans la partie descendante de l'architecture U-Net.
 
-Il correspond au côté gauche de la forme en ``U'' (Figure \ref{fig:ch36_architecture_01_architecture_unet}), suivant un parcours descendant. Il commence avec l'image d'entrée (572×572×1) située en haut à gauche et procède par des opérations successives de max pooling (représentées par les flèches rouges). Au fur et à mesure de la descente, les dimensions spatiales diminuent progressivement 572→284→140→68→32 pixels, alors que le nombre de canaux augmente 1→64→128→256→512→1024. L'encodeur se termine avec un format de 30×30 pixels et 1024 canaux, au centre du ``U''.
+Il correspond au côté gauche de la forme en ``U'' (Figure \ref{fig:ch36_architecture_01_architecture_unet}), suivant un parcours descendant. Il commence avec l'image d'entrée (\si{\numproduct{572x572x1}}) située en haut à gauche et procède par des opérations successives de max pooling (représentées par les flèches rouges). Au fur et à mesure de la descente, les dimensions spatiales diminuent progressivement $572 \rightarrow 284 \rightarrow 140 \rightarrow 68 \rightarrow 32$ pixels, alors que le nombre de canaux augmente $1 \rightarrow 64 \rightarrow 128 \rightarrow 256 \rightarrow 512 \rightarrow 1024$. L'encodeur se termine avec un format de \si{\numproduct{30x30}} pixels et 1024 canaux, au centre du ``U''.
 
 Le décodeur effectue le processus inverse de l'encodeur en sur-échantillonnant les cartes de caractéristiques pour retrouver la résolution originale. Il utilise des convolutions transposées (représentées par les flèches vertes) pour récupérer progressivement les détails spatiaux nécessaires aux prédictions au niveau des pixels. Ce processus correspond à la partie droite du ``U'' (Figure \ref{fig:ch36_architecture_01_architecture_unet}) et permet de reconstruire une carte de segmentation de même dimension que l'image d'entrée.
 
@@ -1334,13 +1334,20 @@ SMP propose plusieurs architectures qui sont déjà prêtes à l'utilisation. Le
 
 En synthèse, le Tableau \ref{tab:ch36_architecture_smp_avantage_inconvenient} présente les avantages et inconvénients de chacune des architectures. L'architecture DeepLabV3 est disponible dans SMP mais n'est pas incluse car DeepLabV3+ est sa nouvelle version.
 
-\begin{longtable}{|p{2.2cm}|p{6cm}|p{6cm}|}
-\hline
+\begin{longtblr}[
+  caption = {Avantages et inconvénients des architectures proposées dans SMP},
+  label = {tab:ch36_architecture_smp_avantage_inconvenient},
+]{
+  colspec = {|Q[l,wd=2.2cm]|Q[l,wd=6cm]|Q[l,wd=6cm]|},
+  hlines,
+  vlines,
+  rowhead = 1,
+  rows = {valign=t},
+  stretch = -1,
+}
 \textbf{Architecture} & \textbf{Avantages} & \textbf{Inconvénients} \\
-\hline
-\endhead
 
-\textbf{U-Net} (\citeyear{ronneberger_u-net_2015}) \cite{ronneberger_u-net_2015} & 
+\textbf{U-Net}  (\citeyear{ronneberger_u-net_2015}) \cite{ronneberger_u-net_2015} & 
 \begin{itemize}[leftmargin=0.4cm]
     \item Architecture simple et efficace
     \item Skip connections préservant les détails fins
@@ -1352,7 +1359,6 @@ En synthèse, le Tableau \ref{tab:ch36_architecture_smp_avantage_inconvenient} p
     \item Pas d'agrégation multi-échelle sophistiquée
     \item Performance moindre sur objets de tailles très variées
 \end{itemize} \\
-\hline
 
 \textbf{FPN} (\citeyear{lin_feature_2017}) \cite{lin_feature_2017} &
 \begin{itemize}[leftmargin=0.4cm]
@@ -1366,7 +1372,6 @@ En synthèse, le Tableau \ref{tab:ch36_architecture_smp_avantage_inconvenient} p
     \item Complexité de réglage des hyperparamètres
     \item Peut nécessiter plus de mémoire GPU
 \end{itemize} \\
-\hline
 
 \textbf{PSPNet} (\citeyear{zhao_pyramid_2017}) \cite{zhao_pyramid_2017} & 
 \begin{itemize}[leftmargin=0.4cm]
@@ -1380,7 +1385,6 @@ En synthèse, le Tableau \ref{tab:ch36_architecture_smp_avantage_inconvenient} p
     \item Perte potentielle de détails fins
     \item Consommation mémoire élevée
 \end{itemize} \\
-\hline
 
 \textbf{LinkNet} (\citeyear{chaurasia_linknet_2017}) \cite{chaurasia_linknet_2017} & 
 \begin{itemize}[leftmargin=0.4cm]
@@ -1394,7 +1398,6 @@ En synthèse, le Tableau \ref{tab:ch36_architecture_smp_avantage_inconvenient} p
     \item Skip connections simplifiées
     \item Moins de capacité représentationnelle
 \end{itemize} \\
-\hline
 
 \textbf{U-Net++} (\citeyear{zhou_unet_2018}) \cite{zhou_unet_2018} & 
 \begin{itemize}[leftmargin=0.4cm]
@@ -1408,7 +1411,6 @@ En synthèse, le Tableau \ref{tab:ch36_architecture_smp_avantage_inconvenient} p
     \item Plus de paramètres que U-Net
     \item Temps d'entraînement plus long
 \end{itemize} \\
-\hline
 
 \textbf{DeepLabV3+} (\citeyear{chen_encoder-decoder_2018}) \cite{chen_encoder-decoder_2018} & 
 \begin{itemize}[leftmargin=0.4cm]
@@ -1422,7 +1424,6 @@ En synthèse, le Tableau \ref{tab:ch36_architecture_smp_avantage_inconvenient} p
     \item Hyperparamètres nombreux à ajuster
     \item Temps d'entraînement conséquent
 \end{itemize} \\
-\hline
 
 \textbf{PAN}  (\citeyear{liu_path_2018}) \cite{liu_path_2018} & 
 \begin{itemize}[leftmargin=0.4cm]
@@ -1436,7 +1437,6 @@ En synthèse, le Tableau \ref{tab:ch36_architecture_smp_avantage_inconvenient} p
     \item Paramètres additionnels
     \item Optimisation délicate
 \end{itemize} \\
-\hline
 
 \textbf{UperNet} (\citeyear{xiao_unified_2018}) \cite{xiao_unified_2018} & 
 \begin{itemize}[leftmargin=0.4cm]
@@ -1450,7 +1450,6 @@ En synthèse, le Tableau \ref{tab:ch36_architecture_smp_avantage_inconvenient} p
     \item Complexité d'implémentation
     \item Temps d'entraînement long
 \end{itemize} \\
-\hline
 
 \textbf{MANet} (\citeyear{fan_ma-net_2020}) \cite{fan_ma-net_2020} & 
 \begin{itemize}[leftmargin=0.4cm]
@@ -1464,7 +1463,6 @@ En synthèse, le Tableau \ref{tab:ch36_architecture_smp_avantage_inconvenient} p
     \item Modules d'attention coûteux
     \item Risque de surapprentissage
 \end{itemize} \\
-\hline
 
 \textbf{SegFormer} (\citeyear{xie_segformer_2021}) \cite{xie_segformer_2021} & 
 \begin{itemize}[leftmargin=0.4cm]
@@ -1479,7 +1477,6 @@ En synthèse, le Tableau \ref{tab:ch36_architecture_smp_avantage_inconvenient} p
     \item Complexité de fine-tuning
     \item Interprétabilité limitée
 \end{itemize} \\
-\hline
 
 \textbf{DPT} (\citeyear{ranftl_vision_2021}) \cite{ranftl_vision_2021} & 
 \begin{itemize}[leftmargin=0.4cm]
@@ -1494,21 +1491,214 @@ En synthèse, le Tableau \ref{tab:ch36_architecture_smp_avantage_inconvenient} p
     \item Complexité d'optimisation
     \item Inférence lente
 \end{itemize} \\
-\hline
+\end{longtblr}
 
-\caption{Avantages et inconvénients des architectures proposées dans SMP}
-\label{tab:ch36_architecture_smp_avantage_inconvenient}
-\end{longtable}
+
+Afin d'améliorer les performances des architectures de base, il est possible d'intégrer des encodeurs plus modernes tout en conservant le décodeur d'origine. La Figure \ref{fig:ch36_architecture_02_architecture_taille_decodeur} présente la taille des décodeurs des différentes architectures SMP. La taille du décodeur s'étend de 0,1M de paramètres pour PAN à 29,6M pour DPT, ce qui aura une influence sur les performances et le temps d'entraînement des modèles.
+
+\begin{figure}[H]
+    \centering
+    \makebox[\textwidth][c]{\includegraphics[width=1\textwidth]{02-main//figures/ch3/ch36_architecture_02_architecture_taille_decodeur.png}}
+    \caption{Taille des décodeurs des architectures SMP}
+    \label{fig:ch36_architecture_02_architecture_taille_decodeur}
+\end{figure}
 
 \paragraph{Encodeurs testés}
-Afin d'augmenter les performances des architectures de base, il est possible d'utiliser des encodeurs plus modernes tout en conservant le décodeur de base.
-\todo[inline]{Remplir les backbones}
+Le choix des encodeurs est crucial pour la performance du modèle de segmentation. Les encodeurs sont des modèles pré-entraînés sur tel que le dataset ImageNet \cite{noauthor_imagenet_nodate}, permettant d'extraire des caractéristiques pertinentes des images d'entrée. Dans SMP, une vingtaine d'encodeurs sont disponibles. En complément, Pytorch-Image-Models (timm) \cite{wightman_pytorch_2025} propose plus de 800 encodeurs, bien que la compatibilité entre SMP et timm ne soit pas garantie.
+
+Les encodeurs sélectionnés sont les plus populaires et les plus performants, indépendamment de leur taille, et ont tous été pré-entraînés sur ImageNet. Cette approche permet d'accélérer l'entraînement du modèle en exploitant les caractéristiques que le modèle de base a déjà apprises. Le Tableau \ref{tab:ch36_encodeurs_smp_avantage_inconvenient} présente les avantages et inconvénients des encodeurs testés dans SMP.
+
+\begin{longtblr}[
+  caption = {Avantages et inconvénients des architectures des encodeurs testés},
+  label = {tab:ch36_encodeurs_smp_avantage_inconvenient},
+]{
+  colspec = {|Q[l,wd=2.6cm]|Q[l,wd=6cm]|Q[l,wd=6cm]|},
+  hlines,
+  vlines,
+  rowhead = 1,
+  rows = {valign=t},
+  stretch = -1,
+}
+\textbf{Encodeur} & \textbf{Avantages} & \textbf{Inconvénients} \\
+
+\textbf{ResNeXt50/101} (\citeyear{xie_aggregated_2017}) \cite{xie_aggregated_2017} & 
+\begin{itemize}[leftmargin=0.4cm,nosep]
+    \item Cardinalité : nouvelle dimension de mise à l'échelle
+    \item Convolutions groupées réduisant la complexité
+    \item Architecture modulaire facile à comprendre
+    \item Équilibre efficacité/performance prouvé
+\end{itemize} & 
+\begin{itemize}[leftmargin=0.4cm,nosep]
+    \item Paramètre cardinalité à optimiser manuellement
+    \item Plus complexe qu'un ResNet standard
+    \item Consommation mémoire élevée
+    \item Nécessite optimisations hardware spécifiques
+\end{itemize} \\
+
+\textbf{EfficientNet B3/B5} (\citeyear{tan_efficientnet_2020}) \cite{tan_efficientnet_2020} & 
+\begin{itemize}[leftmargin=0.4cm,nosep]
+    \item Scaling uniforme profondeur/largeur/résolution
+    \item Rapport performances/paramètres exceptionnel
+    \item Architecture mature et bien documentée
+    \item Transfert d'apprentissage très efficace
+    \item Famille complète de modèles (B0 à B7)
+\end{itemize} & 
+\begin{itemize}[leftmargin=0.4cm,nosep]
+    \item Entraînement long pour les grandes variantes
+    \item Nombreux hyperparamètres à ajuster
+    \item B5+ très gourmand en mémoire GPU
+\end{itemize} \\
+
+\textbf{RegNetY} (\citeyear{radosavovic_designing_2020}) \cite{radosavovic_designing_2020} & 
+\begin{itemize}[leftmargin=0.4cm,nosep]
+    \item Design space méthodique et reproductible
+    \item Mise à l'échelle efficace et prévisible
+    \item Excellente vitesse d'inférence
+\end{itemize} & 
+\begin{itemize}[leftmargin=0.4cm,nosep]
+    \item Capacité d'expression limitée
+    \item Performance insuffisante sur tâches complexes
+    \item Nécessite recherche d'architecture préalable
+\end{itemize} \\
+
+\textbf{ResNeSt200e} (\citeyear{zhang_resnest_2020}) \cite{zhang_resnest_2020} & 
+\begin{itemize}[leftmargin=0.4cm,nosep]
+    \item Mécanisme d'attention split-attention innovant
+    \item Gestion efficace des dépendances inter-canaux
+    \item Améliore significativement ResNet classique
+\end{itemize} & 
+\begin{itemize}[leftmargin=0.4cm,nosep]
+    \item Très profond (200 couches) = difficile à entraîner
+    \item Coût computationnel prohibitif
+    \item Temps d'entraînement longs
+    \item Risque de surapprentissage élevé
+\end{itemize} \\
+
+\textbf{EfficientNetV2} (\citeyear{tan_efficientnetv2_2021}) \cite{tan_efficientnetv2_2021} & 
+\begin{itemize}[leftmargin=0.4cm,nosep]
+    \item Entraînement progressif accélérant la convergence
+    \item Blocs Fused-MBConv plus efficaces
+    \item Vitesse d'entraînement nettement supérieure
+    \item Régularisation adaptative intelligente
+    \item Optimisé pour images haute résolution
+\end{itemize} & 
+\begin{itemize}[leftmargin=0.4cm,nosep]
+    \item Configuration d'hyperparamètres complexe
+    \item Forte consommation mémoire GPU
+    \item Coût computationnel élevé à l'entraînement
+\end{itemize} \\
+
+\textbf{Res2Net101} (\citeyear{gao_res2net_2021}) \cite{gao_res2net_2021} & 
+\begin{itemize}[leftmargin=0.4cm,nosep]
+    \item Multi-échelle granulaire dans chaque bloc
+    \item Connexions hiérarchiques sophistiquées
+    \item Amélioration claire par rapport à ResNet
+    \item Champ récepteur plus riche et varié
+\end{itemize} & 
+\begin{itemize}[leftmargin=0.4cm,nosep]
+    \item Architecture plus complexe à comprendre
+    \item Surcoût computationnel notable
+    \item Paramètres d'échelle supplémentaires
+    \item Optimisation plus délicate que ResNet
+\end{itemize} \\
+
+\textbf{FastViT T8} (\citeyear{vasu_fastvit_2023}) \cite{vasu_fastvit_2023} & 
+\begin{itemize}[leftmargin=0.4cm,nosep]
+    \item Hybride CNN-Transformer très efficace
+    \item Reparamétérisation structurelle novatrice
+    \item Accès mémoire optimisés pour la vitesse
+    \item Idéal pour applications temps réel
+    \item Performances élevées avec latence minimale
+\end{itemize} & 
+\begin{itemize}[leftmargin=0.4cm,nosep]
+    \item Implémentation hybride complexe
+    \item Dépendance aux optimisations hardware
+    \item Documentation et exemples limités
+\end{itemize} \\
+
+\textbf{RepViT M1} (\citeyear{wang_repvit_2024}) \cite{wang_repvit_2024} &
+\begin{itemize}[leftmargin=0.4cm,nosep]
+    \item CNN mobile inspiré des Transformers
+    \item Équilibre optimal précision/rapidité
+    \item Spécialement conçu pour appareils mobiles
+\end{itemize} & 
+\begin{itemize}[leftmargin=0.4cm,nosep]
+    \item Capacité limitée pour tâches très complexes
+    \item Performance réduite en détection/segmentation
+    \item Fortement dépendant du hardware mobile
+\end{itemize} \\
+
+\textbf{MambaOut} (\citeyear{yu_mambaout_2024}) \cite{yu_mambaout_2024} & 
+\begin{itemize}[leftmargin=0.4cm,nosep]
+    \item CNN avec portes, sans complexité SSM (Mamba)
+    \item Surpasse les Transformers visuels
+    \item Efficacité computationnelle remarquable
+    \item Prouve l'inutilité de Mamba en vision
+\end{itemize} & 
+\begin{itemize}[leftmargin=0.4cm,nosep]
+    \item Très récent (2024), peu de recul
+    \item Validation limitée sur diverses tâches
+    \item Écosystème et support limités
+\end{itemize} \\
+
+\textbf{EfficientViT B2} (\citeyear{cai_efficientvit_2024}) \cite{cai_efficientvit_2024} & 
+\begin{itemize}[leftmargin=0.4cm,nosep]
+    \item Attention linéaire multi-échelle efficace
+    \item Spécialisé pour traitement haute résolution
+    \item Architecture sandwich réduisant la complexité
+    \item Attention en cascade progressive
+\end{itemize} & 
+\begin{itemize}[leftmargin=0.4cm,nosep]
+    \item Implémentation très complexe
+    \item Optimisations hardware indispensables
+\end{itemize} \\
+
+\end{longtblr}
+
+
+La Figure \ref{fig:ch36_architecture_03_backbone_taille_encodeur_famille} présente les encodeurs (backbone) séléctionnés groupés par architecture. Certains encodeurs sont disponibles dans plusieurs tailles pour une même architecture, par exemple EfficientNet-B3 et EfficientNet-B5.
+
+\begin{figure}[H]
+    \centering
+    \makebox[\textwidth][c]{\includegraphics[width=1\textwidth]{02-main//figures/ch3/ch36_architecture_03_backbone_taille_encodeur_famille.png}}
+    \caption{Encodeurs groupés par type d'architecture}
+    \label{fig:ch36_architecture_03_backbone_taille_encodeur_famille}
+\end{figure}
+
+La Figure \ref{fig:ch36_architecture_04_backbone_taille_encodeur_ordonnee} présente les encodeurs par ordre croissant de taille, mesurée en nombre de paramètres. Cette représentation permet de visualiser rapidement la complexité relative des différents encodeurs. Le plus petit encodeur est FastViT T8 avec 3.2 millions de paramètres, tandis que le plus grand est EfficientNetV2-XL avec 206.0 millions de paramètres.
+
+\begin{figure}[H]
+    \centering
+    \makebox[\textwidth][c]{\includegraphics[width=1\textwidth]{02-main//figures/ch3/ch36_architecture_04_backbone_taille_encodeur_ordonnee.png}}
+    \caption{Encodeurs par ordre croissant de paramètres}
+    \label{fig:ch36_architecture_04_backbone_taille_encodeur_ordonnee}
+\end{figure}
+
+Cette sélection d'encodeurs représente une bonne variété tant en termes de taille que de complexité, les modèles plus récents ou avec plus de paramètres n'auront pas forcément de meilleures performances sur une tâche concrète.
 
 \subsubsection{YOLO}
-YOLO (You Only Look Once) est un algorithme de détection et segmentation d'images qui a révolutionné le domaine de la vision par ordinateur. Sa dernière version YOLO12 \cite{tian_yolov12_2025} est sortie en début \citeyear{tian_yolov12_2025}. 
+YOLO (You Only Look Once) est un algorithme de détection et segmentation instance d'images qui a révolutionné le domaine de la vision par ordinateur. Sa dernière version YOLOv12 est décrite en détail dans \textit{\nameref{subsec:yolov12_attention_centric}} (voir page~\pageref{subsec:yolov12_attention_centric}). YOLOv12 dispose de plusieurs modèles pré-entraînés de différentes tailles selon la complexité des images à segmenter. Le Tableau \ref{tab:yolov12_modeles_testes} présente les modèles YOLOv12-seg testés.
 
-\subsection{Préparation des données} % dataload
+\begin{table}[H]
+    \centering
+    \begin{tabular}{@{}lr@{}}
+    \toprule
+    \textbf{Modèle} & \textbf{Paramètres} \\
+    \midrule
+    YOLOv12n-seg & 2.8M \\
+    YOLOv12s-seg & 9.8M \\
+    YOLOv12m-seg & 21.9M \\
+    YOLOv12l-seg & 28.8M \\
+    YOLOv12x-seg & 64.5M \\
+    \bottomrule
+    \end{tabular}
+    \caption{YOLOv12-seg modèles testés}
+    \label{tab:yolov12_modeles_testes}
+\end{table}
+
+\subsection{Préparation des données}
 Cette sous-section traite de la préparation des données avant de débuter l'entraînement du modèle.
+
 \subsubsection{Dataset}
 Le dataset compte en tout 530 images, réparties de la manière suivante:
 \begin{itemize}
@@ -1516,9 +1706,11 @@ Le dataset compte en tout 530 images, réparties de la manière suivante:
     \item 89 images pour l'évaluation finale (dataset de test)
     \item 530 masques qui comptent une seule classe (toiture libre) avec l'arrière-plan comme classe négative
 \end{itemize}
+
 Chaque fold dispose d'un fichier de texte où sont indiquées les tuiles incluses, en tout 5 fichiers de texte. Tour à tour, chacun des folds est utilisé comme dataset de validation et les folds restants comme dataset d'entraînement. Par exemple, la première combinaison utilise le fold 0 comme dataset de validation et les folds restants (1, 2, 3, 4) comme dataset d'entraînement.
 
 \subsubsection{Augmentation des données}
+\label{subsubsec:augmentation_donnees}
 L'augmentation des données permet de créer plusieurs versions d'une même image, ce qui améliore les performances du modèle en augmentant artificiellement la variété des images présentes dans le dataset d'entraînement.
 
 \paragraph{Stratégie d'augmentation de données}
@@ -1565,7 +1757,7 @@ La librairie Albumentations \cite{albumentations_albumentations_nodate} permet d
 
 SMP réalise les transformations en mémoire avant qu'elles soient utilisées lors de l'entraînement. L'avantage est qu'il n'y a pas d'images supplémentaires à stocker, mais cela peut en revanche prolonger le temps d'entraînement avec l'ajout de ce processus.
 
-YOLO dispose de stratégies d'augmentation de données propres dans sa librairie Python qui sont utilisées automatiquement. La pertinence de ces transformations est discutable dans le cas d'images aériennes. Par exemple, la transformation \texttt{mosaic} assemble plusieurs images en provenance de dataset d'entraînement (Figure \ref{fig:ch36_augmentation_donnees_yolo_mosaic}).
+YOLO dispose de stratégies d'augmentation de données propres dans sa librairie Python qui sont utilisées automatiquement. La pertinence de ces transformations est discutable dans le cas d'images aériennes. Par exemple, la transformation \texttt{mosaic} assemble plusieurs images en provenance du dataset d'entraînement (Figure \ref{fig:ch36_augmentation_donnees_yolo_mosaic}).
 
 \begin{figure}[H]
     \centering
@@ -1588,7 +1780,9 @@ YOLO dispose de stratégies d'augmentation de données propres dans sa librairie
 
 YOLO applique aussi des transformations qui affectent le contraste et les couleurs, ce qui n'est pas adapté aux images aériennes. Les premiers tests avec ces réglages automatiques ont donné des résultats relativement mauvais. YOLO dispose en théorie d'une compatibilité totale avec Albumentations; dans la pratique, ils ne permettent d'utiliser qu'une partie des transformations d'Albumentations.
 
-La solution trouvée est d'inclure exactement les mêmes transformations que pour SMP (Code \ref{code:pipeline_augmentation_donnees}), mais de le faire au sein du dataset d'entraînement pour chacun des folds. Chaque image est augmentée 10 fois. Ainsi, le dataset d'entraînement pour YOLO consiste en 353 images et 3530 images augmentées, au total 3880 images. Les annotations subissent les mêmes transformations que les images. L'augmentation de données automatique est désactivée lors de l'entraînement des modèles YOLO. Cette démarche permet d'avoir des résultats comparables entre SMP et YOLO.
+La solution adoptée consiste à inclure exactement les mêmes transformations que pour SMP (Code \ref{code:pipeline_augmentation_donnees}), mais en les intégrant directement au sein du dataset d'entraînement pour chacun des folds. Chaque image est augmentée 10 fois, portant ainsi le dataset d'entraînement pour YOLO à 353 images originales et 3530 images augmentées, soit un total de 3880 images. Les annotations subissent les mêmes transformations que les images correspondantes. Les datasets de test et de validation ne subissent pas d'augmentation de données. L'augmentation de données automatique est désactivée lors de l'entraînement des modèles YOLO, permettant ainsi d'obtenir des résultats comparables entre SMP et YOLO.
+
+Cette méthode d'augmentation de données pour YOLO implique un temps d'entraînement plus long, car il faut traiter dix fois plus d'images durant le processus d'apprentissage. Cependant, les résultats obtenus s'avèrent supérieurs à ceux des transformations automatiques natives de YOLO.
 
 Les explications des transformations utilisées sont faites à partir de la documentation \cite{albumentations_documentation_nodate} d'Albumentations. 
 
@@ -1759,7 +1953,144 @@ La Figure \ref{fig:ch36_augmentations_14_exemples_complets1} et \ref{fig:ch36_au
 
 
 \subsection{Configuration d'entraînement} % hyperparamètres
-\subsection{Métriques d'évaluation} % discussion iou, precision, recall
+Cette sous-secton traite de la configuration d'entraînement des modèles, y compris les hyperparamètres et les stratégies d'entraînement.
+\subsubsection{YOLO}
+YOLOv12 privilégie un paramétrage minimal de l'utilisateur, qui se limite dans ce cas à la sélection du modèle à entraîner parmi les modèles disponibles, la taille du batch, la taille des images et le nombre de classes à prédire. Le Code \ref{code:ch36_entrainement_config_yolo} présente un exemple de fichier de configuration pour YOLOv12.
+
+\begin{code}[H]
+    \begin{pythoncode}
+    CUSTOM_PARAMS = {
+        'epochs': args.epochs,
+        'batch': BATCH_SIZE,
+        'imgsz': args.image_size,
+        'patience': args.patience,
+        'lr0': 0.01,
+        'warmup_epochs': 3,
+        'plots': True,  # Enable YOLO's built-in plots
+        'save_period': 50,
+        
+        # Data augmentation disabled for consistency
+        "hsv_h": 0.0,
+        "hsv_s": 0.0,
+        "hsv_v": 0.0,
+        "degrees": 0.0,
+        "translate": 0.0,
+        "scale": 0.0,
+        "shear": 0.0,
+        "perspective": 0.0,
+        "flipud": 0.0,
+        "fliplr": 0.0,
+        "bgr": 0.0,
+        "mosaic": 0.0,
+        "mixup": 0.0,
+        "cutmix": 0.0,
+        "copy_paste": 0.0,
+        "erasing": 0.0,
+        'close_mosaic': False,
+        "auto_augment": None,
+    }
+    \end{pythoncode}
+    \caption{Exemple de fichier de configuration d'entraînement pour YOLOv12}
+    \label{code:ch36_entrainement_config_yolo}
+\end{code}
+
+\texttt{epochs} correspond au nombre d'itérations d'entraînement (1000 par défaut), \texttt{batch} à la taille du batch, et \texttt{imgsz} à la taille des images d'entrée. \texttt{patience} définit le nombre d'époques sans amélioration avant d'arrêter l'entraînement. Le taux d'apprentissage initial (\texttt{lr0}) est fixé à 0,01 et un échauffement de 3 époques est prévu (\texttt{warmup\_epochs}), mais ces paramètres sont ignorés lors de l'entraînement. Les graphiques de YOLO sont activés avec \texttt{plots=True}, et les sauvegardes sont effectuées toutes les 50 itérations (\texttt{save\_period=50}).
+
+Toutes les options d'augmentation de données sont désactivées (\texttt{auto\_augment} et \texttt{close\_mosaic}) comme indiqué dans \textit{\nameref{subsubsec:augmentation_donnees}} (voir page~\pageref{subsubsec:augmentation_donnees}).
+
+La taille du batch est définie manuellement par le lancement d'un entraînement de 5 itérations avec validation. Le Tableau \ref{tab:ch36_batch_size_yolo} présente les tailles de batch utilisées pour chaque catégorie de modèle.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{@{}lcc@{}}
+    \toprule
+    \textbf{Type de modèle} & \textbf{Taille du batch} \\
+    \midrule
+    yolo12n-seg.yaml & 8 \\
+    yolo12s-seg.yaml & 4 \\
+    yolo12m-seg.yaml & 2 \\
+    yolo12l-seg.yaml & 2 \\
+    yolo12x-seg.yaml & 1 \\
+    \bottomrule
+    \end{tabular}
+    \caption{Taille du batch pour chaque type de modèle YOLO}
+    \label{tab:ch36_batch_size_yolo}
+\end{table}
+
+
+\subsubsection{SMP}
+La configuration des hyperparamètres est réalisée dans un fichier \texttt{training\_configs.py}, qui est ensuite importé dans le script d'entraînement. Le Code \ref{code:ch36_entrainement_config_smp} présente un exemple de fichier de configuration pour SMP. Dans cet exemple, la configuration correspond à un modèle U-Net avec un encodeur EfficientNet-B3 pré-entraîné sur ImageNet.
+
+\begin{code}[H]
+    \begin{pythoncode}
+    # training_configs.py
+    IMG_SIZE = (1280, 1280)
+    NUM_CLASSES = 1
+    EPOCHS = 1000
+    PATIENCE = 50
+    LEARNING_RATE = 0.001
+    ACCUMULATION_STEPS = 4
+
+    BATCH_SIZE_SMALL = 4
+    BATCH_SIZE_MEDIUM = 2
+    BATCH_SIZE_LARGE = 1
+    BATCH_SIZE_HUGE = 2
+
+    BATCH_SIZE_MIN = 1
+    BATCH_SIZE_MAX = 128
+    BATCH_SIZE_NB_TESTS = 2
+
+    CONFIGS = {
+        "unet_efficientnet_b3_imagenet": {
+            "architecture": "unet",
+            "backbone": "timm-efficientnet-b3",
+            "encoder_weights": "imagenet",
+            "img_size": IMG_SIZE,
+            "num_classes": NUM_CLASSES,
+            "learning_rate": LEARNING_RATE,
+            "epochs": EPOCHS,
+            "patience": PATIENCE,
+            "accumulation_steps": ACCUMULATION_STEPS,
+            "auto_batch_size": False,
+            "batch_size": BATCH_SIZE_SMALL,
+            "min_batch_size_search": BATCH_SIZE_MIN,
+            "max_batch_size_search": BATCH_SIZE_MAX,
+            "batch_size_test_steps": BATCH_SIZE_NB_TESTS,
+        },
+    }
+    \end{pythoncode}
+    \caption{Exemple de fichier de configuration d'entraînement pour SMP}
+    \label{code:ch36_entrainement_config_smp}
+\end{code}
+
+\texttt{architecture}, ici U-Net, définit le type de modèle utilisé. \texttt{backbone} spécifie l'encodeur utilisé, ici EfficientNet-B3 pré-entraîné sur ImageNet (\texttt{encoder\_weights}). \texttt{img\_size} correspond à la taille des images d'entrée, \texttt{num\_classes} au nombre de classes à prédire (1 pour la toiture libre). \texttt{learning\_rate} définit le taux d'apprentissage, \texttt{epochs} le nombre d'époques d'entraînement, et \texttt{patience} le nombre d'époques sans amélioration avant d'arrêter l'entraînement. \texttt{accumulation\_steps} permet l'accumulation de gradients pour simuler une taille de batch plus importante.
+
+\texttt{batch\_size} définit la taille du batch pour l'entraînement. Selon la taille de l'encodeur et du décodeur sélectionnés, ce paramètre doit être ajusté. Pour améliorer la gestion des ressources, il est possible de laisser le script déterminer automatiquement la taille du batch en fonction de la mémoire disponible. Les paramètres \texttt{auto\_batch\_size}, \texttt{min\_batch\_size\_search}, \texttt{max\_batch\_size\_search} et \texttt{batch\_size\_test\_steps} permettent de configurer cette fonctionnalité. Cette option pose des problèmes lors de l'entraînement sur l'un des clusters de l'Université de Genève et reste désactivée par défaut.
+
+La taille des images exige un ajustement précis du paramètre \texttt{batch\_size} pour éviter les erreurs de mémoire. Cette valeur est généralement évaluée manuellement à travers un entraînement de 5 itérations avec validation. Un modèle qualifié de \texttt{small} compte moins de 25 millions de paramètres, un modèle \texttt{medium} entre 25 et 50 millions de paramètres, un modèle \texttt{large} entre 50 et 100 millions de paramètres, et un modèle \texttt{huge} au-delà de 100 millions de paramètres. Le Tableau \ref{tab:ch36_batch_size} présente les tailles de batch utilisées pour chaque catégorie de modèle.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{@{}lcc@{}}
+    \toprule
+    \textbf{Type de modèle} & \textbf{Taille du batch} & \textbf{Taille du batch (accumulation)} \\
+    \midrule
+    Small & 4 & 16 \\
+    Medium & 2 & 8 \\
+    Large & 1 & 4 \\
+    Huge & 2 & 2 \\
+    \bottomrule
+    \end{tabular}
+    \caption{Taille du batch pour chaque type de modèle}
+    \label{tab:ch36_batch_size}
+\end{table}
+
+La raison de l'utilisation d'un batch size plus important pour les gros modèles tient au fait que ces derniers sont entraînés sur des GPU disposant de 80 GB de mémoire, permettant ainsi d'exploiter des batches plus volumineux, par contre l'accumulation de gradients est désactivée (\texttt{accumulation\_steps}) car cette fonctionnalité génère des problèmes de mémoire. Tous les autres modèles sont entraînés sur des GPU dotés de 24 GB de mémoire.
+
+Ces paramètres sont utilisés pour la majorité des modèles. MambaOut constitue la seule exception, exigeant un taux d'apprentissage plus faible de 0,0001. Le script d'entraînement comprend d'autres paramètres qui sont identiques pour tous les modèles entrainés.
+
+\subsection{Métriques d'évaluation}
+
 \subsection{Processus d'entraînement} % data augmentation, stratégies de lr, patience,nb epoch
 \subsection{Résultats préliminaires}
 \todo[inline]{Exemple de todo}

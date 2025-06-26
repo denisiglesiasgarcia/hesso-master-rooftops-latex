@@ -8,9 +8,9 @@
 
 % PDF settings
 % --------------
-% Disable PDF compression - x5 size increase
-\pdfcompresslevel=0
-\pdfobjcompresslevel=0
+% PDF compression
+\pdfcompresslevel=1
+\pdfobjcompresslevel=1
 
 % General tools
 % -------------
@@ -124,12 +124,22 @@
 	}%
 }
 
+\captionsetup[longtable]{
+	format=hang,
+	labelformat=hangout,
+	singlelinecheck=false,
+	font={it}
+}
+
 % Tables
 % ------
 \usepackage{booktabs} % much better tables
 \usepackage{multirow} % allows to fuse rows
 \usepackage{array}    % manipulate array
 \usepackage{tabularx} % better tables
+\usepackage{tabularray} % long tables with captions
+\usepackage{tblr-extras} % tblr extras for tabularray
+\UseTblrLibrary{babel} % Use babel for tabularray
 
 % Define new tabularx column types:
 %  - R: streteched right aligned
