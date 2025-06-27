@@ -2085,13 +2085,320 @@ La taille des images exige un ajustement précis du paramètre \texttt{batch\_si
     \label{tab:ch36_batch_size}
 \end{table}
 
-La raison de l'utilisation d'un batch size plus important pour les gros modèles tient au fait que ces derniers sont entraînés sur des GPU disposant de 80 GB de mémoire, permettant ainsi d'exploiter des batches plus volumineux, par contre l'accumulation de gradients est désactivée (\texttt{accumulation\_steps}) car cette fonctionnalité génère des problèmes de mémoire. Tous les autres modèles sont entraînés sur des GPU dotés de 24 GB de mémoire.
+L'utilisation d'un batch size plus important pour les gros modèles s'explique par le fait que ces derniers sont entraînés sur des GPU disposant de 40 ou 80 GB de mémoire, permettant ainsi d'exploiter des batches plus volumineux et d'accélérer l'entraînement. Cependant, l'accumulation de gradients est désactivée (\texttt{accumulation\_steps}) car cette fonctionnalité génère des problèmes de mémoire. Tous les autres modèles sont entraînés sur des GPU dotés de 24 GB de mémoire.
 
-Ces paramètres sont utilisés pour la majorité des modèles. MambaOut constitue la seule exception, exigeant un taux d'apprentissage plus faible de 0,0001. Le script d'entraînement comprend d'autres paramètres qui sont identiques pour tous les modèles entrainés.
+Ces paramètres sont utilisés pour la majorité des modèles. MambaOut constitue la seule exception, exigeant un taux d'apprentissage plus faible de 0,0001. Le script d'entraînement comprend d'autres paramètres qui sont identiques pour tous les modèles entraînés.
 
 \subsection{Métriques d'évaluation}
+Les métriques constituent un élément essentiel pour évaluer les performances des modèles de segmentation d'instances. Elles permettent de quantifier la précision des prédictions du modèle par rapport aux annotations de référence. La sous-section \textit{\nameref{subsec:evaluation_performance_modele}} (voir page~\pageref{subsec:evaluation_performance_modele}) présente en détail les principales métriques utilisées en machine learning (accuracy, precision, recall, F1-score). La sous-section \textit{\nameref{subsec:evaluation_des_performances}} (voir page~\pageref{subsec:evaluation_des_performances}) présente les métriques spécifiques à la segmentation d'images (IoU, AP, mAP, PA).
 
-\subsection{Processus d'entraînement} % data augmentation, stratégies de lr, patience,nb epoch
+\subsubsection{YOLO}
+YOLOv12 évalue les performances de segmentation d'instances au moyen de deux types de métriques complémentaires :
+
+Pour la détection d'objets (localisation) :
+\begin{itemize}
+    \item mAP@0.5 (box) : Average precision (AP) des boîtes englobantes avec un seuil IoU de 0,5, indiquant la capacité du modèle à localiser les objets.
+    \item mAP@0.5:0.95 (box) : Average precision sur une plage de seuils IoU de 0,5 à 0,95.
+\end{itemize}
+
+Pour la segmentation (contours précis) :
+\begin{itemize}
+    \item mAP@0.5 (seg) : Average precision des masques de segmentation à un seuil IoU de 0,5, évaluant la qualité de la délimitation des contours d'objets.
+    \item mAP@0.5:0.95 (seg) : Average precision des masques sur une plage de seuils, mesurant la finesse de la segmentation.
+\end{itemize}
+
+Les métriques classiques (accuracy, precision, recall, F1-score) sont également calculées pour évaluer la performance globale du modèle.
+
+\subsubsection{SMP}
+
+SMP évalue les performances de segmentation en utilisant les métriques suivantes :
+\begin{itemize}
+    \item IoU (Intersection over Union) : Mesure la superposition entre les prédictions du modèle et les annotations de référence.
+    \item accuracy, precision, recall et F1-score
+ \end{itemize}
+
+\subsection{Processus d'entraînement}
+\subsubsection{YOLO}
+Le processus d'entraînement de YOLOv12 est géré par la bibliothèque ultralytics qui prend certaines décisions à la place de l'utilisateur et automatise certains choix, tels que l'optimiseur pour améliorer la convergence du modèle ou encore la stratégie d'apprentissage. L'interface n'indique pas clairement les choix effectués par la bibliothèque, ce qui constitue un inconvénient notable.
+
+\subsubsection{SMP}
+Le processus d'entraînement des modèles SMP suit une approche structurée organisée en plusieurs phases distinctes.
+
+\paragraph{Initialisation du modèle}
+La première étape consiste à créer le modèle en combinant l'architecture sélectionnée (U-Net, FPN, etc.) avec l'encodeur choisi. Le Code \ref{code:ch36_creation_modele_smp} illustre cette initialisation.
+
+\begin{code}[H]
+    \begin{pythoncode}
+        import segmentation_models_pytorch as smp
+
+        # Création du modèle
+        model = smp.Unet(
+            encoder_name="timm-efficientnet-b3",
+            encoder_weights="imagenet",  # Poids pré-entraînés
+            in_channels=3,               # Images RGB
+            classes=1,                   # Une seule classe (toiture libre)
+            activation=None              # Activation appliquée après
+        )
+        
+        # Optimisation pour GPU
+        model = model.to(device)
+        model = model.to(memory_format=torch.channels_last)
+    \end{pythoncode}
+    \caption{Création et initialisation d'un modèle SMP}
+    \label{code:ch36_creation_modele_smp}
+\end{code}
+
+L'utilisation de poids pré-entraînés (\texttt{encoder\_weights="imagenet"}) permet de bénéficier des caractéristiques apprises sur ImageNet, accélérant ainsi la convergence et améliorant les performances finales. Le paramètre \texttt{memory\_format=torch.channels\_last} \cite{noauthor_beta_nodate} optimise le format des images pour une utilisation plus efficiente de la mémoire GPU, ce qui s'avère crucial dans le cas d'images haute résolution.
+
+\paragraph{Configuration de l'optimisation}
+L'optimiseur AdamW est utilisé avec une stratégie de réduction adaptative du taux d'apprentissage. Le Code \ref{code:ch36_optimiseur_smp} présente cette configuration.
+
+\begin{code}[H]
+    \begin{pythoncode}
+    # Optimiseur AdamW avec régularisation
+    optimizer = optim.AdamW(
+        model.parameters(),
+        lr=0.001,                    # Taux d'apprentissage initial
+        weight_decay=0.01,           # Régularisation L2
+        betas=(0.9, 0.999),
+        eps=1e-8,
+        fused=True                   # Optimisation GPU
+    )
+    
+    # Planificateur adaptatif
+    scheduler = ReduceLROnPlateau(
+        optimizer,
+        mode="max",                  # Maximiser l'IoU
+        factor=0.75,                 # Réduction de 25%
+        patience=10,                 # Attendre 10 epochs
+        min_lr=0.000001             # Taux minimum 1/1000 du lr initial
+    )
+    
+    # Fonction de perte
+    criterion = nn.BCEWithLogitsLoss()
+    \end{pythoncode}
+    \caption{Configuration de l'optimiseur et planificateur}
+    \label{code:ch36_optimiseur_smp}
+\end{code}
+
+L'optimiseur AdamW \cite{noauthor_adamw_nodate} est choisi pour sa capacité à gérer efficacement les gradients et à réduire le surapprentissage grâce à la régularisation L2 (\texttt{weight\_decay=0.01}). Cette régularisation constitue une technique courante pour éviter le surapprentissage en ajoutant une pénalité sur la taille des poids du modèle. Le paramètre \texttt{betas} contrôle les moments du gradient, et \texttt{eps} représente un petit nombre pour éviter la division par zéro. Le paramètre \texttt{fused=True} optimise les calculs sur GPU, réduisant ainsi la consommation de mémoire et accélérant l'entraînement. Les paramètres choisis correspondent aux valeurs par défaut d'AdamW qui conviennent dans la plupart des cas.
+
+La fonction de perte \texttt{BCEWithLogitsLoss} combine une activation sigmoïde avec la perte d'entropie croisée binaire, optimisée pour la segmentation binaire.
+
+\texttt{ReduceLROnPlateau} permet de réduire progressivement le taux d'apprentissage pour affiner l'entraînement lorsque les performances stagnent. Le taux d'apprentissage sera réduit en fonction de l'IoU : si celui-ci n'évolue pas après 10 epochs (\texttt{patience=10}), il est réduit de 25\% (\texttt{factor=0.75}). Le taux d'apprentissage minimum est fixé à 0,000001 (\texttt{min\_lr}).
+
+\paragraph{Entraînement avec précision mixte}
+La précision mixte \cite{noauthor_automatic_nodate} permet d'accélérer l'entraînement en utilisant des types de données à virgule flottante 16 bits (FP16) pour les calculs, tout en conservant la précision des poids en 32 bits (FP32). Cette technique réduit la consommation de mémoire et accélère les calculs sur les GPU modernes. L'entraînement peut être accéléré d'un facteur de 2 à 3. Le Code \ref{code:ch36_boucle_entrainement} illustre la boucle d'entraînement principale avec précision mixte.
+
+\begin{code}[H]
+    \begin{pythoncode}
+    from torch.amp import GradScaler, autocast
+
+    scaler = GradScaler()
+    accumulation_steps = 4  # Simule un batch 4x plus grand
+    
+    for epoch in range(epochs):
+        model.train()
+        total_loss = 0
+        
+        # Réinitialisation des gradients au début de l'époque
+        optimizer.zero_grad(set_to_none=True)
+        
+        for batch_idx, (images, masks) in enumerate(train_loader):
+            # Transfert vers GPU avec format optimisé des images
+            images = images.to(device, memory_format=torch.channels_last)
+            masks = masks.to(device)
+            
+            # Forward pass avec précision mixte
+            with autocast(device_type="cuda"):
+                outputs = model(images)
+                loss = criterion(outputs.squeeze(1), masks)
+                # Division par accumulation_steps pour normaliser
+                loss = loss / accumulation_steps
+            
+            # Backward pass avec mise à l'échelle des gradients
+            scaler.scale(loss).backward()
+            
+            # Mise à jour des poids seulement tous les accumulation_steps
+            if (batch_idx + 1) % accumulation_steps == 0:
+                # Dé-mise à l'échelle avant écrêtage des gradients
+                scaler.unscale_(optimizer)
+                
+                # Gradient cliping pour stabilité
+                torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
+                
+                # Mise à jour des paramètres
+                scaler.step(optimizer)
+                scaler.update()
+                
+                # Réinitialisation pour le prochain cycle d'accumulation
+                optimizer.zero_grad(set_to_none=True)
+            
+            total_loss += loss.item() * accumulation_steps
+        
+        # Validation et mise à jour du planificateur
+        val_loss, val_metrics = validate_model(model, val_loader)
+        scheduler.step(val_metrics["iou"])
+    \end{pythoncode}
+    \caption{Boucle d'entraînement avec précision mixte et accumulation de gradients}
+    \label{code:ch36_boucle_entrainement}
+\end{code}
+
+La boucle d'entraînement du Code \ref{code:ch36_boucle_entrainement} fonctionne selon le processus suivant :
+\begin{itemize}
+    \item Un \texttt{GradScaler} est créé pour gérer la précision mixte (FP16/FP32) et le paramètre \texttt{accumulation\_steps} définit le nombre de mini-batches à accumuler avant la mise à jour des poids.
+    \item Pour chaque époque \texttt{for epoch in range(epochs)}, le modèle est mis en mode entraînement et les gradients sont réinitialisés au début de l'époque.
+    \item Pour chaque batch de données \texttt{for batch\_idx, (images, masks) in enumerate(train\_loader)} :
+    \begin{itemize}
+        \item Les données sont transférées sur le GPU avec un format mémoire optimisé (\texttt{memory\_format=torch.channels\_last}) pour améliorer les performances des Tensor Cores.
+        \item Le passage avant (forward pass) s'effectue avec précision mixte (\texttt{with autocast(device\_type="cuda")}) pour réduire la consommation mémoire.
+        \item La perte (\texttt{loss}) est calculée entre la sortie du modèle (\texttt{outputs}) et le masque cible (\texttt{masks}), puis divisée par \texttt{accumulation\_steps} pour normaliser l'accumulation des gradients.
+        \item Le passage arrière (backward pass) accumule les gradients avec mise à l'échelle (\texttt{scaler.scale(loss).backward()}).
+        \item La mise à jour des poids n'intervient que tous les \texttt{accumulation\_steps} batches. À ce moment, les gradients sont d'abord démis à l'échelle (\texttt{scaler.unscale\_(optimizer)}), puis écrêtés (\texttt{clip\_grad\_norm\_}) pour éviter l'explosion des gradients, avant que l'optimiseur ne mette à jour les paramètres.
+        \item Les gradients sont réinitialisés seulement après chaque cycle d'accumulation complet, permettant ainsi de simuler un batch plus important.
+    \end{itemize}
+    \item Après chaque époque, le modèle est évalué sur le jeu de validation et le planificateur de taux d'apprentissage (\texttt{ReduceLROnPlateau}) ajuste automatiquement le taux d'apprentissage selon l'évolution de la métrique d'IoU de validation.
+\end{itemize}
+
+Cette boucle permet d'entraîner efficacement un modèle de segmentation sémantique sur GPU, en optimisant la mémoire et la vitesse grâce à la précision mixte.
+
+\paragraph{Validation croisée}
+L'entraînement utilise une validation croisée à 5 folds pour maximiser l'utilisation des données annotées. Chaque fold sert alternativement de dataset de validation, permettant d'obtenir une évaluation robuste des performances. Le Code \ref{code:ch36_validation_croisee} illustre cette approche.
+
+\begin{code}[H]
+    \begin{pythoncode}
+    for fold in range(5):
+        # Préparation des datasets
+        val_paths = data_paths[fold]
+        train_paths = {"images": [], "masks": []}
+        
+        for i, fold_data in enumerate(data_paths):
+            if i != fold:
+                train_paths["images"].extend(fold_data["images"])
+                train_paths["masks"].extend(fold_data["masks"])
+        
+        # Entraînement du modèle pour ce fold
+        fold_result = train_single_fold(
+            fold=fold,
+            train_paths=train_paths,
+            val_paths=val_paths,
+            test_paths=test_paths,
+            config=config
+        )
+        
+        # Sauvegarde des résultats
+        all_results.append(fold_result)
+    \end{pythoncode}
+    \caption{Validation croisée à 5 folds}
+    \label{code:ch36_validation_croisee}
+\end{code}
+
+La validation croisée du Code \ref{code:ch36_validation_croisee} fonctionne ainsi:
+\begin{itemize}
+    \item Pour chaque fold de 0 à 4 (\texttt{for fold in range(5)}), une configuration différente des datasets d'entraînement et de validation est créée.
+    \item Préparation des datasets pour le fold courant :
+    \begin{itemize}
+        \item Le fold actuel (\texttt{data\_paths[fold]}) est assigné comme dataset de validation (\texttt{val\_paths}).
+        \item Un dictionnaire \texttt{train\_paths} est initialisé pour regrouper les chemins des images et masques d'entraînement.
+        \item Tous les autres folds (\texttt{if i != fold}) sont combinés pour former le dataset d'entraînement, leurs chemins d'images et de masques étant ajoutés aux listes \texttt{train\_paths["images"]} et \texttt{train\_paths["masks"]}.
+    \end{itemize}
+    \item Entraînement du modèle : La fonction \texttt{train\_single\_fold} lance l'entraînement complet pour ce fold spécifique, en utilisant les datasets préparés ainsi que le dataset de test fixe (\texttt{test\_paths}) qui reste identique pour tous les folds.
+    \item Sauvegarde des résultats : Les métriques de performance, le modèle entraîné et les statistiques d'entraînement (\texttt{fold\_result}) sont stockés dans la liste \texttt{all\_results} pour analyse ultérieure.
+    \item Répétition : Ce processus garantit que chaque échantillon du dataset sera utilisé exactement une fois pour la validation et quatre fois pour l'entraînement, maximisant ainsi l'exploitation des données annotées disponibles.
+\end{itemize}
+
+\paragraph{Calcul des métriques}
+L'évaluation des performances s'effectue à l'aide des métriques IoU, F1-score, accuracy, precision et recall. Ces métriques sont calculées à l'aide de SMP, ce qui permet de faire tous les calculs sur GPU et éviter les échanges CPU-GPU si on le fait avec numpy. Le Code \ref{code:ch36_calcul_metriques} présente le calcul de ces métriques.
+
+\begin{code}[H]
+    \begin{pythoncode}
+    def calculate_metrics_smp(pred_logits, target):
+        # Application de la sigmoïde aux logits
+        pred_probs = torch.sigmoid(pred_logits)
+        target_binary = (target > 0.5).long()
+        
+        # Ajout de la dimension canal pour SMP
+        pred_probs = pred_probs.unsqueeze(1)
+        target_binary = target_binary.unsqueeze(1)
+        
+        # Calcul des statistiques de base
+        tp, fp, fn, tn = smp.metrics.get_stats(
+            pred_probs, target_binary,
+            mode="binary", threshold=0.5
+        )
+        
+        # Calcul des métriques finales
+        metrics = {
+            "iou": smp.metrics.iou_score(tp, fp, fn, tn, reduction="micro"),
+            "f1_score": smp.metrics.f1_score(tp, fp, fn, tn, reduction="micro"),
+            "accuracy": smp.metrics.accuracy(tp, fp, fn, tn, reduction="micro"),
+            "recall": smp.metrics.recall(tp, fp, fn, tn, reduction="micro"),
+            "precision": smp.metrics.precision(tp, fp, fn, tn, reduction="micro")
+        }
+        
+        return metrics
+    \end{pythoncode}
+    \caption{Calcul des métriques d'évaluation}
+    \label{code:ch36_calcul_metriques}
+\end{code}
+
+Les étapes pour le calcul des métriques du Code \ref{code:ch36_calcul_metriques} sont les suivantes:
+\begin{itemize}
+    \item Préparation des données d'entrée :
+    \begin{itemize}
+        \item Les logits bruts du modèle (\texttt{pred\_logits}) sont convertis en probabilités par application de la fonction sigmoïde (\texttt{torch.sigmoid}).
+        \item Les masques cibles (\texttt{target}) sont binarisés en appliquant un seuil de 0,5 et convertis en entiers longs (\texttt{.long()}) pour assurer la compatibilité avec SMP.
+    \end{itemize}
+    \item Formatage pour SMP : Les tenseurs de prédictions et de cibles sont redimensionnés en ajoutant une dimension canal (\texttt{.unsqueeze(1)}) car SMP attend un format \texttt{[batch, channels, height, width]}.
+    \item Calcul des statistiques fondamentales : La fonction \texttt{smp.metrics.get\_stats} calcule les valeurs de base de la matrice de confusion :
+    \begin{itemize}
+        \item \texttt{tp} (vrais positifs) : pixels correctement prédits comme toiture libre
+        \item \texttt{fp} (faux positifs) : pixels incorrectement prédits comme toiture libre
+        \item \texttt{fn} (faux négatifs) : pixels de toiture libre manqués par le modèle
+        \item \texttt{tn} (vrais négatifs) : pixels correctement prédits comme non-toiture libre
+    \end{itemize}
+    \item Calcul des métriques dérivées : À partir des statistiques de base, les métriques finales sont calculées avec une réduction \texttt{"micro"} qui agrège les résultats sur tous les pixels avant le calcul des ratios.
+    \item Retour des résultats : Un dictionnaire contenant les cinq métriques principales est retourné, permettant une évaluation complète des performances de segmentation du modèle.
+\end{itemize}
+
+\paragraph{Stratégies d'optimisation}
+Plusieurs stratégies d'optimisation sont mises en place pour améliorer les performances d'entraînement et la stabilité du processus d'apprentissage :
+
+\begin{itemize}
+    \item Arrêt précoce (early stopping) : L'entraînement s'arrête automatiquement si l'IoU de validation ne s'améliore pas pendant 50 epochs consécutifs, évitant ainsi le surapprentissage et réduisant le temps de calcul inutile.
+    \item Sauvegarde sélective : Seul le modèle ayant obtenu la meilleure IoU de validation est conservé, garantissant que le modèle final correspond aux meilleures performances observées durant l'entraînement.
+    \item Gestion optimisée de la mémoire GPU : Des nettoyages périodiques (\texttt{torch.cuda.empty\_cache()}) libèrent la mémoire non utilisée, tandis que le format \texttt{channels\_last} optimise l'utilisation des Tensor Cores et réduit la fragmentation mémoire.
+    \item Accumulation de gradients : Cette technique permet de simuler des tailles de batch plus importantes en accumulant les gradients sur plusieurs mini-batches avant la mise à jour des paramètres, particulièrement utile pour les modèles volumineux avec des contraintes mémoire.
+    \item Écrêtage des gradients (gradient clipping) : L'application d'une norme maximale (\texttt{max\_norm=1.0}) prévient l'explosion des gradients et stabilise l'entraînement, notamment lors de l'accumulation de gradients.
+    \item Précision mixte adaptative : L'utilisation automatique de FP16 et FP32 selon les opérations accélère l'entraînement tout en préservant la stabilité numérique grâce au \texttt{GradScaler}.
+    \item Planification adaptative du taux d'apprentissage : Le \texttt{ReduceLROnPlateau} réduit automatiquement le taux d'apprentissage de 25\% lorsque l'IoU de validation stagne, permettant une convergence plus fine.
+    \item Régularisation L2 : Intégrée dans l'optimiseur AdamW (\texttt{weight\_decay=0.01}), elle limite la complexité du modèle et améliore la généralisation sur de nouvelles données.
+    \item Optimisations de Pytorch spécifiques au GPU Ampere
+\end{itemize}
+
+\paragraph{Monitoring et visualisation}
+Le processus génère automatiquement des graphiques de suivi des métriques d'entraînement et de validation (Figure \ref{fig:ch36_entrainement_01_suivi_metriques}), ainsi que des visualisations des prédictions pour évaluer qualitativement les performances du modèle. Ces éléments permettent de diagnostiquer d'éventuels problèmes.
+
+\begin{figure}[H]
+    \centering
+    \makebox[\textwidth]{\includegraphics[width=1.2\linewidth]{02-main//figures/ch3/ch36_entrainement_01_suivi_metriques.png}}
+    \caption{Suivi des métriques d'entraînement et de validation}
+    \label{fig:ch36_entrainement_01_suivi_metriques}
+\end{figure}
+
+Le processus complet, de l'initialisation à l'évaluation finale, prend généralement entre 2 et 12 heures selon la complexité du modèle et la taille de l'encodeur utilisé.
+
+\paragraph{Stratégies testées mais abandonnées}
+L'entraînement des modèles sur le cluster de l'Université de Genève a révélé des problèmes qui étaient passés inaperçus lors des tests sur un ou deux GPU. Ce cluster met à disposition des GPU avec 24, 40 ou 80 GB de mémoire de la génération Ampere.
+
+Le calcul automatique du batch size permet en principe de mieux utiliser la mémoire du GPU assigné et par conséquent de réduire le temps d'entraînement. Cette fonctionnalité a cependant causé des problèmes de mémoire et des arrêts inopinés d'entraînements. Le temps gagné par cette fonctionnalité ne compense pas le temps consacré à surveiller les entraînements.
+
+Les modèles pré-entraînés sont stockés dans un cache commun (dossier invisible), ce qui permet d'éviter des téléchargements répétés. Lors d'entraînements du même modèle mais sur des folds différents, des problèmes d'accès surviennent car plusieurs processus tentent de télécharger simultanément le même fichier. La stratégie initialement testée consiste à faire réessayer le modèle d'accéder au fichier selon des délais progressifs en cas de conflit : 30 secondes, puis 60 secondes, puis 120 secondes, puis 240 secondes. Cette approche devrait a priori laisser suffisamment de temps pour compléter le téléchargement. Cependant, cette stratégie n'a pas réussi car des conflits d'accès persistaient malgré ces délais. La solution finalement adoptée consiste à faire créer par chaque entraînement son propre dossier où il télécharge individuellement le modèle pré-entraîné, évitant ainsi tout conflit d'accès concurrent.
+
+Le chargement des données représente un processus potentiellement long et bloquant car le GPU reste en attente du batch à traiter. \texttt{torch.utils.data.DataLoader} peut utiliser plusieurs processus en parallèle et d'autres fonctionnalités pour accélérer significativement le chargement des données. Cependant, le cluster de l'Université de Genève ne supporte pas bien cette fonctionnalité, bien que le nombre de cœurs CPU (8) et la mémoire RAM assignés soient suffisants (64Gb), cette approche fait planter l'entraînement. Un autre responsable peut être aussi les nombres accès au stockage pour la lecture des données. La stratégie adoptée consiste à utiliser un traitement séquentiel sans pré-chargement en mémoire.
+
+La mémoire GPU est rapidement devenue un problème majeur lors des entraînements, même avec des petits modèles. La compilation du modèle avec \texttt{torch.compile} permet d'optimiser les performances d'entraînement en réduisant la consommation mémoire et en accélérant les calculs. Cette fonctionnalité n'est cependant pas compatible avec tous les modèles et n'a pas offert de gains significatifs en temps d'entraînement. Il est donc préférable de ne pas utiliser cette fonctionnalité pour le moment.
+
 \subsection{Résultats préliminaires}
 \todo[inline]{Exemple de todo}
 % -----------------------------------------------------------------------------
