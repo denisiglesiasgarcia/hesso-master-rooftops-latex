@@ -71,7 +71,7 @@ limites et ses applications.}
 % -----------------------------------------------------------------------------
 \subsection{Cadastre solaire Genevois}
 
-\par{Il y a une multitude d'article dédiés à l'étude du potentiel solaire, la région de Genève est l'une des régions du monde avec le plus d'articles publiés après Wuhan (Chine) \cite{drozd_evaluating_2025}. \citeauthor{thebault_large-scale_2022} \cite{thebault_large-scale_2022} vont analyser la pertinence de la pose de panneaux solaire \acrshort{pv} au niveau du \gls{grandgeneve}.}
+\par{Il y a une multitude d'article dédiés à l'étude du potentiel solaire, la région de Genève est l'une des régions du monde avec le plus d'articles publiés après Wuhan (Chine) \cite{drozd_evaluating_2025}. \citeauthor{thebault_large-scale_2022} \cite{thebault_large-scale_2022} ont analyser la pertinence de la pose de panneaux solaire \acrshort{pv} au niveau du \gls{grandgeneve}.}
 
 \subsubsection{Contexte et objectifs}
 \par{Le premier cadastre solaire de Genève \cite{desthieux_etude_2011} date de 2011. Il est réalisé par \acrshort{hepia}, l'\acrshort{epfl} et le Politecnico di Milano, financé par les Services Industriels Genevois et le Service de l'énergie du canton (actuellement l'\acrshort{ocen}). Elle vise à cartographier précisément le potentiel solaire sur les toitures genevoises. Les données utilisées sont :}
@@ -92,7 +92,7 @@ La méthodologie utilisée est la suivante :
 
 \par{Le résultat de l'étude est une couche vectorielle qui indique l'irradiation solaire pour la toiture d'un bâtiment. Le temps de calcul est d'environ 2000 h pour une seule machine.}
 
-\par{Une deuxième phase du cadastre est effectuée en 2014 \cite{desthieux_etude_2014} qui permet d'améliorer la modélisation des toitures, le calcul de l'irradiation solaire et de réaliser certains prédimensionnements :
+\par{Une deuxième phase du cadastre est effectuée en 2014 \cite{desthieux_etude_2014} qui permet d'améliorer la modélisation des toitures, le calcul l'irradiation solaire et de réaliser certains prédimensionnements :
 \begin{itemize}
     \item Estimation de production d'électricité
     \item Estimations pour le solaire thermique
@@ -110,7 +110,7 @@ La méthodologie utilisée est la suivante :
 \begin{itemize}
     \item L'utilisation des données \gls{lidar} de 2013 \cite{sitg_nuages_2013}
     \item L'amélioration des algorithmes de calcul du potentiel solaire
-    \item Utilisation d'un cluster (24 machines) pour réaliser les calculs (environ 900h)
+    \item Utilisation d'un cluster (24 machines / projet CTI IceBOUND) pour réaliser les calculs (environ 900h)
 \end{itemize}}
 
 \par{Dès 2018, plusieurs mises à jour \cite{desthieux_solar_2018} sont effectuées. Les principales nouveautés sont :
@@ -118,7 +118,6 @@ La méthodologie utilisée est la suivante :
     \item Prise en compte des toitures et des façades des bâtiments pour l'évaluation du potentiel solaire
     \item Amélioration des algorithmes de calcul du modèle de ciel
     \item Réécriture du code Matlab en Java
-    \item Utilisation du cloud CTI IceBOUND
     \item Expansion du cadastre solaire au Grand Genève (canton de Genève, district de Nyon, et pôle métropolitain du Genevois Français)
 \end{itemize}}
 
