@@ -29,7 +29,9 @@ La création d'un dataset dédié à la segmentation sémantique représente un 
 % -----------------------------------------------------------------------------
 % -----------------------------------------------------------------------------
 \section{Tâche}
-La tâche que ce modèle doit accomplir est d'identifier les espaces disponibles sur les toitures. Cette tâche est identique à celle de \acrshort{stdl} du chapitre \textit{\nameref{subsec:stdl_analyse}} (voir page~\pageref{subsec:stdl_analyse}), par contre l'approche utilisée va être différente.
+La tâche à accomplir consiste à identifier les espaces disponibles sur les toitures. La segmentation des différents obstacles en classes distinctes telles que cheminées, gaines, velux n'a pas été retenue car cela aurait significativement complexifié la création du dataset pour finalement présenter une utilité limitée.
+
+Cette tâche est identique à celle de \acrshort{stdl} présentée à la sous-section \textit{\nameref{subsec:stdl_analyse}} (voir page~\pageref{subsec:stdl_analyse}), mais l'approche utilisée sera différente.
 
 \section{Algorithme}
 Une fois la tâche définie, il faut déterminer une approche. \acrshort{stdl} a exploré 3 approches différentes:
@@ -62,7 +64,7 @@ La sélection des données va dépendre de l'algorithme utilisé. Dans ce cas, l
 \end{itemize}
 
 \subsection{Orthophotos}
-Les orthophotos de 2019 (Figure \ref{fig:ch3_dataset_methodo_01_orthophoto_2019}) ont été sélectionnées car ce sont les seules true-orthophotos disponibles sur \acrshort{sitg} avec une résolution de 7 \si{\unit{cm}} par pixel. Selon un document de SITG \cite{etat_de_geneve_inventaire_2025}, ils ont réalisé plusieurs survols du canton en 2024 pour acquérir de nouvelles true-orthophotos avec une résolution de 3.6 \si{\unit{cm}} par pixel, ces orthophotos ne sont pas encore disponibles sur \acrshort{sitg}.
+Les orthophotos de 2019 (Figure \ref{fig:ch3_dataset_methodo_01_orthophoto_2019}) ont été sélectionnées car ce sont les seules true-orthophotos disponibles sur \acrshort{sitg} avec une résolution de 7 \si{\unit{cm}} par pixel. Selon un document de \acrshort{sitg} \cite{etat_de_geneve_inventaire_2025}, ils ont réalisé plusieurs survols du canton en 2024 pour acquérir de nouvelles true-orthophotos avec une résolution de 3.6 \si{\unit{cm}} par pixel, ces orthophotos ne sont pas encore disponibles sur \acrshort{sitg}.
 
 La sous-section \textit{\nameref{subsec:annexe_ortophotos}} (voir page~\pageref{subsec:annexe_ortophotos}) parcourt en détail les types d'orthophotos les plus utilisées dans la géomatique.
 
@@ -134,7 +136,7 @@ La couche vectorielle ``CAD\_BATIMENTS\_HORSOL\_TOIT'' \cite{sitg_toits_nodate} 
 
 \newpage
 \subsubsection{Superstructures des toits des bâtiments}
-La couche vectorielle ``CAD\_BATIMENT\_HORSOL\_TOIT\_SP'' \cite{sitg_toits_nodate} inclus les superstructures de plus de 9 \si{\unit{\square\meter}} présentes sur les toitures des bâtiments hors-sol du Canton de Genève (Figure \ref{fig:ch3_dataset_methodo_04_batiment_horsol_toiture_sp}). Un \gls{egid} est associé à chacun des polygones des superstructures.
+La couche vectorielle ``CAD\_BATIMENT\_HORSOL\_TOIT\_SP'' \cite{sitg_toits_nodate} recense les éléments de toiture (superstructures) d'une surface inférieure à 9 \si{\unit{\square\meter}} présents sur les toitures des bâtiments hors-sol du Canton de Genève (Figure \ref{fig:ch3_dataset_methodo_04_batiment_horsol_toiture_sp}). Un \gls{egid} est associé à chacun des polygones de ces superstructures.
 
 \begin{figure}[H]
     \centering
@@ -786,7 +788,7 @@ L'exemple suivant (Figure \ref{fig:labellisation_solaire_exemple}) représente u
     \label{fig:labellisation_solaire_exemple}
 \end{figure}
 
-Le dataset inclut aussi des images qui contiennent une toiture selon la couche \acrshort{sitg} des toitures mais où il n'y a pas de surface libre. Dans la Figure \ref{fig:ch3_labellisation_02_exemples_04_image_non_annotee}, il y a bien un bâtiment dans la zone nord-est de l'image, mais celui-ci semble être une serre vitrée.
+Le dataset inclut également des images qui contiennent une toiture selon la couche \acrshort{sitg} des toitures mais où il n'y a pas de surface libre. Dans la Figure \ref{fig:ch3_labellisation_02_exemples_04_image_non_annotee}, un bâtiment est bien présent dans la zone nord-est de l'image, mais celui-ci semble être une serre vitrée. Bien qu'il soit possible d'installer des panneaux solaires semi-translucides sur ce type de toiture, celle-ci a été exclue pour éviter la confusion avec les puits de lumière, car il y a beaucoup plus de puits de lumière vitrés que de serres translucides.
 
 L'ajout de ce type d'exemples sans toiture exploitable devrait permettre à l'algorithme de mieux comprendre les caractéristiques recherchées dans un espace libre. Cette approche pourrait également éviter que l'algorithme considère automatiquement toutes les surfaces comme libres, ce qui l'aiderait à développer une capacité de discrimination plus fine entre les espaces réellement disponibles et ceux qui ne le sont pas.
 
@@ -835,7 +837,7 @@ Les données ont été annotées sur l'intégralité de l'image pour des raisons
     \label{fig:exemple_post_traitement_dataset}
 \end{figure}
 
-Les images étant au format GeoTIFF, il suffit de définir à 0 (noir) toutes les zones qui n'intersectent pas avec la couche des toitures. Lors de l'annotation, il n'est pas toujours évident de distinguer une toiture d'un couvert, ce qui peut conduire à identifier des zones libres en dehors de la couche des toitures. L'opération de rognage est donc également appliquée aux annotations correspondantes, évitant ainsi que le modèle considère à tort qu'une zone masquée (pixels à 0) puisse correspondre à une toiture libre.
+Les images étant au format GeoTIFF, il suffit de définir à 0 (noir) toutes les zones qui n'intersectent pas avec la couche \acrshort{sitg} des toitures ``CAD\_BATIMENTS\_HORSOL\_TOIT''. Lors de l'annotation, il n'est pas toujours évident de distinguer une toiture d'un couvert, ce qui peut conduire à identifier des zones libres en dehors de la couche des toitures. L'opération de rognage est donc également appliquée aux annotations correspondantes, évitant ainsi que le modèle considère à tort qu'une zone masquée (pixels à 0) puisse correspondre à une toiture libre.
 
 \paragraph{Fuite de données entre datasets}
 Les tuiles présentent un recouvrement de 256 pixels qui peut causer des problèmes s'il n'est pas géré correctement. La Figure \ref{fig:ch3_postprocessing_dataset_04_data_leakage} illustre cette problématique avec 3 datasets destinés à l'entraînement d'un modèle. Si les tuiles sont assignées de manière aléatoire aux différents datasets, il existe un risque que le dataset d'entraînement contienne une partie de toiture également présente dans le dataset de test. Cette situation compromet l'évaluation des performances du modèle, puisque celui-ci aura déjà été exposé à certaines zones lors de la phase d'apprentissage, faussant ainsi les résultats obtenus sur des données supposées inconnues.
@@ -2386,7 +2388,7 @@ Le processus génère automatiquement des graphiques de suivi des métriques d'e
     \label{fig:ch36_entrainement_01_suivi_metriques}
 \end{figure}
 
-Le processus complet, de l'initialisation à l'évaluation finale, prend généralement entre 2 et 12 heures selon la complexité du modèle et la taille de l'encodeur utilisé.
+Le processus complet, de l'initialisation à l'évaluation finale, prend généralement entre 2 et 12 heures par fold selon la complexité du modèle et la taille de l'encodeur utilisé.
 
 \paragraph{Stratégies testées mais abandonnées}
 L'entraînement des modèles sur le cluster de l'Université de Genève a révélé des problèmes qui étaient passés inaperçus lors des tests sur un ou deux GPU. Ce cluster met à disposition des GPU avec 24, 40 ou 80 GB de mémoire de la génération Ampere.
@@ -2399,8 +2401,17 @@ Le chargement des données représente un processus potentiellement long et bloq
 
 La mémoire GPU est rapidement devenue un problème majeur lors des entraînements, même avec des petits modèles. La compilation du modèle avec \texttt{torch.compile} permet d'optimiser les performances d'entraînement en réduisant la consommation mémoire et en accélérant les calculs. Cette fonctionnalité n'est cependant pas compatible avec tous les modèles et n'a pas offert de gains significatifs en temps d'entraînement. Il est donc préférable de ne pas utiliser cette fonctionnalité pour le moment.
 
-\subsection{Résultats préliminaires}
-\todo[inline]{Exemple de todo}
+\subsection{Traitement des résultats}
+Une fois tous les entraînements terminés, les résultats sont traités selon la procédure suivante :
+\begin{itemize}
+    \item Les configurations encodeur-décodeur (modèle) avec un IoU inférieur à 0,2 sont éliminées
+    \item Vérification que chaque modèle dispose bien d'au moins un entraînement par fold
+    \item Si le modèle dispose de plusieurs entraînements pour un même fold, conserver celui qui présente le meilleur IoU
+\end{itemize}
+
+Pour SMP, 89 modèles sont retenus sur les 160 modèles testés, avec un IoU moyen sur les 5 folds compris entre 0,62 et 0,74. Pour YOLO, 4 modèles sur les 5 testés sont conservés, avec des IoU variant entre 0,70 et 0,73.
+
+
 % -----------------------------------------------------------------------------
 % -----------------------------------------------------------------------------
 \newpage
