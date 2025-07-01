@@ -1952,76 +1952,16 @@ La Figure \ref{fig:ch36_augmentations_14_exemples_complets1} et \ref{fig:ch36_au
     \label{fig:ch36_augmentations_15_exemples_complets2}
 \end{figure}
 
+% --------------------------------
 
-
-\subsection{Configuration d'entraînement} % hyperparamètres
-Cette sous-secton traite de la configuration d'entraînement des modèles, y compris les hyperparamètres et les stratégies d'entraînement.
-\subsubsection{YOLO}
-YOLOv12 privilégie un paramétrage minimal de l'utilisateur, qui se limite dans ce cas à la sélection du modèle à entraîner parmi les modèles disponibles, la taille du batch, la taille des images et le nombre de classes à prédire. Le Code \ref{code:ch36_entrainement_config_yolo} présente un exemple de fichier de configuration pour YOLOv12.
-
-\begin{code}[H]
-    \begin{pythoncode}
-    CUSTOM_PARAMS = {
-        'epochs': args.epochs,
-        'batch': BATCH_SIZE,
-        'imgsz': args.image_size,
-        'patience': args.patience,
-        'lr0': 0.01,
-        'warmup_epochs': 3,
-        'plots': True,  # Enable YOLO's built-in plots
-        'save_period': 50,
-        
-        # Data augmentation disabled for consistency
-        "hsv_h": 0.0,
-        "hsv_s": 0.0,
-        "hsv_v": 0.0,
-        "degrees": 0.0,
-        "translate": 0.0,
-        "scale": 0.0,
-        "shear": 0.0,
-        "perspective": 0.0,
-        "flipud": 0.0,
-        "fliplr": 0.0,
-        "bgr": 0.0,
-        "mosaic": 0.0,
-        "mixup": 0.0,
-        "cutmix": 0.0,
-        "copy_paste": 0.0,
-        "erasing": 0.0,
-        'close_mosaic': False,
-        "auto_augment": None,
-    }
-    \end{pythoncode}
-    \caption{Exemple de fichier de configuration d'entraînement pour YOLOv12}
-    \label{code:ch36_entrainement_config_yolo}
-\end{code}
-
-\texttt{epochs} correspond au nombre d'itérations d'entraînement (1000 par défaut), \texttt{batch} à la taille du batch, et \texttt{imgsz} à la taille des images d'entrée. \texttt{patience} définit le nombre d'époques sans amélioration avant d'arrêter l'entraînement. Le taux d'apprentissage initial (\texttt{lr0}) est fixé à 0,01 et un échauffement de 3 époques est prévu (\texttt{warmup\_epochs}), mais ces paramètres sont ignorés lors de l'entraînement. Les graphiques de YOLO sont activés avec \texttt{plots=True}, et les sauvegardes sont effectuées toutes les 50 itérations (\texttt{save\_period=50}).
-
-Toutes les options d'augmentation de données sont désactivées (\texttt{auto\_augment} et \texttt{close\_mosaic}) comme indiqué dans \textit{\nameref{subsubsec:augmentation_donnees}} (voir page~\pageref{subsubsec:augmentation_donnees}).
-
-La taille du batch est définie manuellement par le lancement d'un entraînement de 5 itérations avec validation. Le Tableau \ref{tab:ch36_batch_size_yolo} présente les tailles de batch utilisées pour chaque catégorie de modèle.
-
-\begin{table}[H]
-    \centering
-    \begin{tabular}{@{}lcc@{}}
-    \toprule
-    \textbf{Type de modèle} & \textbf{Taille du batch} \\
-    \midrule
-    yolo12n-seg.yaml & 8 \\
-    yolo12s-seg.yaml & 4 \\
-    yolo12m-seg.yaml & 2 \\
-    yolo12l-seg.yaml & 2 \\
-    yolo12x-seg.yaml & 1 \\
-    \bottomrule
-    \end{tabular}
-    \caption{Taille du batch pour chaque type de modèle YOLO}
-    \label{tab:ch36_batch_size_yolo}
-\end{table}
-
+\subsection{Processus d'entraînement}
+Cette sous-section décrit le processus d'entraînement des modèles SMP et YOLO, en précisant les étapes clés et les configurations utilisées.
 
 \subsubsection{SMP}
-La configuration des hyperparamètres est réalisée dans un fichier \texttt{training\_configs.py}, qui est ensuite importé dans le script d'entraînement. Le Code \ref{code:ch36_entrainement_config_smp} présente un exemple de fichier de configuration pour SMP. Dans cet exemple, la configuration correspond à un modèle U-Net avec un encodeur EfficientNet-B3 pré-entraîné sur ImageNet.
+Le processus d'entraînement des modèles SMP suit une approche structurée organisée en plusieurs phases distinctes.
+
+\paragraph{Configuration modèles}
+La configuration des hyperparamètres est réalisée dans le fichier \texttt{training\_configs.py}, qui est ensuite importé dans le script d'entraînement. Le Code \ref{code:ch36_entrainement_config_smp} présente un exemple de fichier de configuration pour SMP. Dans cet exemple, la configuration correspond à un modèle U-Net avec un encodeur EfficientNet-B3 pré-entraîné sur ImageNet.
 
 \begin{code}[H]
     \begin{pythoncode}
@@ -2073,61 +2013,28 @@ La taille des images exige un ajustement précis du paramètre \texttt{batch\_si
 
 \begin{table}[H]
     \centering
-    \begin{tabular}{@{}lcc@{}}
+    \begin{tabular}{@{}lccc@{}}
     \toprule
-    \textbf{Type de modèle} & \textbf{Taille du batch} & \textbf{Taille du batch (accumulation)} \\
+    \textbf{Type de modèle} & \textbf{Taille du batch} & \textbf{Taille du batch (accumulation)} & \textbf{VRAM GPU} \\
     \midrule
-    Small & 4 & 16 \\
-    Medium & 2 & 8 \\
-    Large & 1 & 4 \\
-    Huge & 2 & 2 \\
+    Small & 4 & 16 & 24Gb \\
+    Medium & 2 & 8 & 24Gb \\
+    Large & 1 & 4 & 24Gb \\
+    Huge & 2 & 2 & 40Gb \\
     \bottomrule
     \end{tabular}
     \caption{Taille du batch pour chaque type de modèle}
     \label{tab:ch36_batch_size}
 \end{table}
 
-L'utilisation d'un batch size plus important pour les gros modèles s'explique par le fait que ces derniers sont entraînés sur des GPU disposant de 40 ou 80 GB de mémoire, permettant ainsi d'exploiter des batches plus volumineux et d'accélérer l'entraînement. Cependant, l'accumulation de gradients est désactivée (\texttt{accumulation\_steps}) car cette fonctionnalité génère des problèmes de mémoire. Tous les autres modèles sont entraînés sur des GPU dotés de 24 GB de mémoire.
+L'utilisation d'un batch size plus important pour les gros modèles (huge) s'explique par le fait que ces derniers sont entraînés sur des GPU disposant de 40 ou 80 GB de mémoire, permettant ainsi d'exploiter des batches plus volumineux et d'accélérer l'entraînement. Cependant, l'accumulation de gradients est désactivée (\texttt{accumulation\_steps}) car cette fonctionnalité génère des problèmes de mémoire. 
+
+Tous les autres modèles sont entraînés sur des GPU dotés de 24 GB de mémoire. Ce choix revêt également un aspect stratégique car les GPU de 24 GB sont plus disponibles dans les clusters de l'Université de Genève que ceux de 40 ou 80 GB.
 
 Ces paramètres sont utilisés pour la majorité des modèles. MambaOut constitue la seule exception, exigeant un taux d'apprentissage plus faible de 0,0001. Le script d'entraînement comprend d'autres paramètres qui sont identiques pour tous les modèles entraînés.
 
-\subsection{Métriques d'évaluation}
-Les métriques constituent un élément essentiel pour évaluer les performances des modèles de segmentation d'instances. Elles permettent de quantifier la précision des prédictions du modèle par rapport aux annotations de référence. La sous-section \textit{\nameref{subsec:evaluation_performance_modele}} (voir page~\pageref{subsec:evaluation_performance_modele}) présente en détail les principales métriques utilisées en machine learning (accuracy, precision, recall, F1-score). La sous-section \textit{\nameref{subsec:evaluation_des_performances}} (voir page~\pageref{subsec:evaluation_des_performances}) présente les métriques spécifiques à la segmentation d'images (IoU, AP, mAP, PA).
-
-\subsubsection{YOLO}
-YOLOv12 évalue les performances de segmentation d'instances au moyen de deux types de métriques complémentaires :
-
-Pour la détection d'objets (localisation) :
-\begin{itemize}
-    \item mAP@0.5 (box) : Average precision (AP) des boîtes englobantes avec un seuil IoU de 0,5, indiquant la capacité du modèle à localiser les objets.
-    \item mAP@0.5:0.95 (box) : Average precision sur une plage de seuils IoU de 0,5 à 0,95.
-\end{itemize}
-
-Pour la segmentation (contours précis) :
-\begin{itemize}
-    \item mAP@0.5 (seg) : Average precision des masques de segmentation à un seuil IoU de 0,5, évaluant la qualité de la délimitation des contours d'objets.
-    \item mAP@0.5:0.95 (seg) : Average precision des masques sur une plage de seuils, mesurant la finesse de la segmentation.
-\end{itemize}
-
-Les métriques classiques (accuracy, precision, recall, F1-score) sont également calculées pour évaluer la performance globale du modèle.
-
-\subsubsection{SMP}
-
-SMP évalue les performances de segmentation en utilisant les métriques suivantes :
-\begin{itemize}
-    \item IoU (Intersection over Union) : Mesure la superposition entre les prédictions du modèle et les annotations de référence.
-    \item accuracy, precision, recall et F1-score
- \end{itemize}
-
-\subsection{Processus d'entraînement}
-\subsubsection{YOLO}
-Le processus d'entraînement de YOLOv12 est géré par la bibliothèque ultralytics qui prend certaines décisions à la place de l'utilisateur et automatise certains choix, tels que l'optimiseur pour améliorer la convergence du modèle ou encore la stratégie d'apprentissage. L'interface n'indique pas clairement les choix effectués par la bibliothèque, ce qui constitue un inconvénient notable.
-
-\subsubsection{SMP}
-Le processus d'entraînement des modèles SMP suit une approche structurée organisée en plusieurs phases distinctes.
-
 \paragraph{Initialisation du modèle}
-La première étape consiste à créer le modèle en combinant l'architecture sélectionnée (U-Net, FPN, etc.) avec l'encodeur choisi. Le Code \ref{code:ch36_creation_modele_smp} illustre cette initialisation.
+La deuxième étape consiste à créer le modèle en combinant l'architecture sélectionnée (U-Net, FPN, etc.) avec l'encodeur choisi. Le Code \ref{code:ch36_creation_modele_smp} illustre cette initialisation.
 
 \begin{code}[H]
     \begin{pythoncode}
@@ -2249,17 +2156,17 @@ La précision mixte \cite{noauthor_automatic_nodate} permet d'accélérer l'entr
 La boucle d'entraînement du Code \ref{code:ch36_boucle_entrainement} fonctionne selon le processus suivant :
 \begin{itemize}
     \item Un \texttt{GradScaler} est créé pour gérer la précision mixte (FP16/FP32) et le paramètre \texttt{accumulation\_steps} définit le nombre de mini-batches à accumuler avant la mise à jour des poids.
-    \item Pour chaque époque \texttt{for epoch in range(epochs)}, le modèle est mis en mode entraînement et les gradients sont réinitialisés au début de l'époque.
+    \item Pour chaque époque \texttt{for epoch in range(epochs)}, le modèle est mis en mode entraînement et les gradients sont réinitialisés au début de l'epoch.
     \item Pour chaque batch de données \texttt{for batch\_idx, (images, masks) in enumerate(train\_loader)} :
     \begin{itemize}
-        \item Les données sont transférées sur le GPU avec un format mémoire optimisé (\texttt{memory\_format=torch.channels\_last}) pour améliorer les performances des Tensor Cores.
+        \item Les données sont transférées sur le GPU avec un format mémoire optimisé (\texttt{memory\_format=torch.channels\_last}) pour améliorer les performances des Tensor Cores des GPU Ampere.
         \item Le passage avant (forward pass) s'effectue avec précision mixte (\texttt{with autocast(device\_type="cuda")}) pour réduire la consommation mémoire.
         \item La perte (\texttt{loss}) est calculée entre la sortie du modèle (\texttt{outputs}) et le masque cible (\texttt{masks}), puis divisée par \texttt{accumulation\_steps} pour normaliser l'accumulation des gradients.
         \item Le passage arrière (backward pass) accumule les gradients avec mise à l'échelle (\texttt{scaler.scale(loss).backward()}).
-        \item La mise à jour des poids n'intervient que tous les \texttt{accumulation\_steps} batches. À ce moment, les gradients sont d'abord démis à l'échelle (\texttt{scaler.unscale\_(optimizer)}), puis écrêtés (\texttt{clip\_grad\_norm\_}) pour éviter l'explosion des gradients, avant que l'optimiseur ne mette à jour les paramètres.
+        \item La mise à jour des poids n'intervient que tous les \texttt{accumulation\_steps} batches. À ce moment, les gradients sont d'abord dé-mis à l'échelle \\ (\texttt{scaler.unscale\_(optimizer)}), puis écrêtés (\texttt{clip\_grad\_norm\_}) pour éviter l'explosion des gradients, avant que l'optimiseur ne mette à jour les paramètres.
         \item Les gradients sont réinitialisés seulement après chaque cycle d'accumulation complet, permettant ainsi de simuler un batch plus important.
     \end{itemize}
-    \item Après chaque époque, le modèle est évalué sur le jeu de validation et le planificateur de taux d'apprentissage (\texttt{ReduceLROnPlateau}) ajuste automatiquement le taux d'apprentissage selon l'évolution de la métrique d'IoU de validation.
+    \item Après chaque époque, le modèle est évalué sur le dataset de validation et le planificateur de taux d'apprentissage (\texttt{ReduceLROnPlateau}) ajuste automatiquement le taux d'apprentissage selon l'évolution de la métrique d'IoU de validation.
 \end{itemize}
 
 Cette boucle permet d'entraîner efficacement un modèle de segmentation sémantique sur GPU, en optimisant la mémoire et la vitesse grâce à la précision mixte.
@@ -2310,6 +2217,8 @@ La validation croisée du Code \ref{code:ch36_validation_croisee} fonctionne ain
 \end{itemize}
 
 \paragraph{Calcul des métriques}
+Les métriques constituent un élément essentiel pour évaluer les performances des modèles de segmentation d'instances. Elles permettent de quantifier la précision des prédictions du modèle par rapport aux annotations de référence. La sous-section \textit{\nameref{subsec:evaluation_performance_modele}} (voir page~\pageref{subsec:evaluation_performance_modele}) présente en détail les principales métriques utilisées en machine learning (accuracy, precision, recall, F1-score). La sous-section \textit{\nameref{subsec:evaluation_des_performances}} (voir page~\pageref{subsec:evaluation_des_performances}) présente les métriques spécifiques à la segmentation d'images (IoU, AP, mAP, PA).
+
 L'évaluation des performances s'effectue à l'aide des métriques IoU, F1-score, accuracy, precision et recall. Ces métriques sont calculées à l'aide de SMP, ce qui permet de faire tous les calculs sur GPU et éviter les échanges CPU-GPU si on le fait avec numpy. Le Code \ref{code:ch36_calcul_metriques} présente le calcul de ces métriques.
 
 \begin{code}[H]
@@ -2369,7 +2278,7 @@ Plusieurs stratégies d'optimisation sont mises en place pour améliorer les per
 \begin{itemize}
     \item Arrêt précoce (early stopping) : L'entraînement s'arrête automatiquement si l'IoU de validation ne s'améliore pas pendant 50 epochs consécutifs, évitant ainsi le surapprentissage et réduisant le temps de calcul inutile.
     \item Sauvegarde sélective : Seul le modèle ayant obtenu la meilleure IoU de validation est conservé, garantissant que le modèle final correspond aux meilleures performances observées durant l'entraînement.
-    \item Gestion optimisée de la mémoire GPU : Des nettoyages périodiques (\texttt{torch.cuda.empty\_cache()}) libèrent la mémoire non utilisée, tandis que le format \texttt{channels\_last} optimise l'utilisation des Tensor Cores et réduit la fragmentation mémoire.
+    \item Gestion optimisée de la mémoire GPU : Des nettoyages périodiques \\ (\texttt{torch.cuda.empty\_cache()}) libèrent la mémoire non utilisée, tandis que le format \texttt{channels\_last} optimise l'utilisation des Tensor Cores et réduit la fragmentation mémoire.
     \item Accumulation de gradients : Cette technique permet de simuler des tailles de batch plus importantes en accumulant les gradients sur plusieurs mini-batches avant la mise à jour des paramètres, particulièrement utile pour les modèles volumineux avec des contraintes mémoire.
     \item Écrêtage des gradients (gradient clipping) : L'application d'une norme maximale (\texttt{max\_norm=1.0}) prévient l'explosion des gradients et stabilise l'entraînement, notamment lors de l'accumulation de gradients.
     \item Précision mixte adaptative : L'utilisation automatique de FP16 et FP32 selon les opérations accélère l'entraînement tout en préservant la stabilité numérique grâce au \texttt{GradScaler}.
@@ -2410,7 +2319,6 @@ Une fois tous les entraînements terminés, les résultats sont traités selon l
 \end{itemize}
 
 Pour SMP, 89 modèles sont retenus sur les 160 modèles testés, avec un IoU moyen sur les 5 folds compris entre 0,62 et 0,74. Pour YOLO, 4 modèles sur les 5 testés sont conservés, avec des IoU variant entre 0,70 et 0,73.
-
 
 % -----------------------------------------------------------------------------
 % -----------------------------------------------------------------------------
