@@ -12,7 +12,7 @@ Ce chapitre dresse un état de l'art des avancées récentes dans la vision par 
 % -----------------------------------------------------------------------------
 % -----------------------------------------------------------------------------
 \section{Introduction}
-\par{L'évaluation du potentiel solaire des toitures est un élément clé de la transition énergétique urbaine. Sa précision dépend directement de la qualité et de la disponibilité des données utilisées, qui peuvent provenir de différentes sources avec des niveaux de détail variables.}
+L'évaluation du potentiel solaire des toitures constitue un élément clé de la transition énergétique urbaine qui sera abordé dans la deuxième section de ce chapitre. Sa précision dépend directement de la qualité et de la disponibilité des données utilisées, qui peuvent provenir de différentes sources et présenter des niveaux de détail variables.
 
 \par{Les méthodologies d'évaluation du potentiel solaire s'appuient principalement sur trois types de données :}
 \begin{enumerate}
@@ -21,14 +21,9 @@ Ce chapitre dresse un état de l'art des avancées récentes dans la vision par 
     \item Images satellite
 \end{enumerate}
 
-\par{La deuxième partie de ce chapitre va traiter les articles scientifiques qui utilisent du machine learning pour réaliser de la segmentation de toitures.}
+La troisième partie de ce chapitre présente l'état de l'art du machine learning appliqué aux images. La quatrième partie traite ensuite de l'application du machine learning dans le cas du calcul du potentiel solaire. Une cinquième section sera consacrée aux datasets disponibles. Enfin, une synthèse permettra de conclure et de justifier l'approche retenue.
 
-\par{Ensuite, une troisième partie sera dédiée aux dataset disponibles.}
-
-\par{Une brève synthèse permettra de conclure et de justifier l'approche utilisée.}
-
-\par{Les notions théoriques nécessaires pour la compréhension de ce chapitre se trouvent dans deux annexes. Le premier traite de  l'énergie solaire et ses applications dans l'annexe \textit{\nameref{chap:fondamentaux_energie}} (voir page~\pageref{chap:fondamentaux_energie}). Le deuxième annexe \textit{\nameref{chap:fondamentaux_ml}} (voir page~\pageref{chap:fondamentaux_ml}) va permettre d’avoir les bases nécessaires pour comprendre ce qu’est le machine learning, ses
-limites et ses applications.}
+\par{Les notions théoriques nécessaires pour la compréhension de ce chapitre se trouvent dans deux annexes. Le premier traite de  l'énergie solaire et ses applications dans l'annexe \textit{\nameref{chap:fondamentaux_energie}} (voir page~\pageref{chap:fondamentaux_energie}). Le deuxième annexe \textit{\nameref{chap:fondamentaux_ml}} (voir page~\pageref{chap:fondamentaux_ml}) va permettre d’avoir les bases nécessaires pour comprendre ce qu’est le machine learning, ses limites et ses applications.}
 
 % -----------------------------------------------------------------------------
 % -----------------------------------------------------------------------------
@@ -60,7 +55,7 @@ limites et ses applications.}
 \begin{itemize}
     \item La surface totale de toiture disponible est de 265,52 \si{\unit{km^2}}, dont 218,52 \si{\unit{km^2}} (82,29\%) sont effectivement utilisables pour des installations photovoltaïques
     \item Le potentiel de production énergétique est estimé à 9,73 \si{\unit{GWh/an}} pour des panneaux IS-170 et 9,38 \si{\unit{GWh/an}} pour des panneaux IS-220
-    \item Cette production permettrait de couvrir environ 78,89\% des besoins énergétiques du secteur résidentiel andalou, réduisant la dépendance énergétique extérieure à seulement 21,02\%
+    \item Cette production permettrait de couvrir 79\% des besoins énergétiques du secteur résidentiel andalou, réduisant la dépendance énergétique extérieure à seulement 21\%
 \end{itemize}
 
 \subsubsection{Discussion et limites}
@@ -457,10 +452,479 @@ L'objectif de cet outil est très similaire au cadastre solaire genevois mais po
 La modélisation météorologique semble plus sophistiquée que celle du cadastre genevois. L'actualisation des données dépendra principalement des relevés \gls{lidar} réalisés par swisstopo, mais en principe ceux-ci sont plus fréquents que pour le cadastre solaire genevois, permettant ainsi une mise à jour plus régulière des informations.
 
 % -----------------------------------------------------------------------------
+\section{Machine learning appliqué aux images}
+Ce chapitre présente l'état de l'art du machine learning appliqué aux images. Deux modèles de référence pour la segmentation d'images y sont décrits en détail. Ces modèles peuvent être utilisés directement ou adaptés pour des tâches spécifiques à l'aide de nouveaux datasets, en exploitant leurs connaissances pré-acquises.
 % -----------------------------------------------------------------------------
-\section{Approche machine learning}
 
-\par{Ce chapitre va permettre d'explorer l'état de l'art en machine learning appliqué aux données géomatiques.}
+\subsection{YOLOv12: Attention-Centric Real-Time Object Detectors}
+\label{subsec:yolov12_attention_centric}
+
+\subsubsection{Contexte et objectifs}
+Le mécanisme d'attention \cite{noauthor_what_2024} \cite{vaswani_attention_2023} constitue une technique de machine learning qui permet aux réseaux de neurones de traiter sélectivement les données d'entrée en attribuant des poids variables aux différents éléments selon leur pertinence contextuelle. Inspiré par la capacité humaine à se concentrer sélectivement sur des détails importants, ce mécanisme calcule mathématiquement des poids d'attention qui reflètent l'importance relative de chaque partie d'une séquence d'entrée.
+
+Contrairement aux approches traditionnelles qui traitent uniformément toutes les données, l'attention offre une flexibilité cruciale. Elle permet d'examiner simultanément l'ensemble d'une séquence et de capturer les dépendances à long terme, tandis que les CNN restent intrinsèquement locaux et les RNN (réseaux de neurones récurrents) traitent les données de manière séquentielle. Cette capacité à créer des représentations dynamiques explique l'adoption massive de l'attention dans les architectures modernes comme les Transformers.
+
+Dans le domaine de la détection d'objets en temps réel, les réseaux de neurones convolutionnels (CNN) de la famille YOLO constituent l'approche de référence. Les mécanismes d'attention, popularisés par les Vision Transformers, offrent cependant de meilleures capacités de modélisation grâce à leur aptitude à capturer les dépendances globales dans l'image. Le défi majeur réside dans le coût computationnel élevé de l'attention : sa complexité croît quadratiquement avec la taille de l'image ($O(n^2)$), tandis que les convolutions croissent linéairement ($O(n)$).
+
+YOLOv12 relève ce défi en proposant le premier framework YOLO centré sur l'attention qui atteint la vitesse des modèles CNN traditionnels tout en conservant les avantages de performance de l'attention. L'objectif est de démontrer qu'il est possible de remettre en question la domination des CNN dans l'écosystème YOLO.
+
+YOLOv12 peut être utilisé directement ou servir de base pour spécialiser le modèle dans des tâches spécifiques avec un nouveau dataset, s'inscrivant alors dans une approche de transfer learning. YOLO se décline en plusieurs modèles spécialisés (Figure \ref{fig:ch2_yolo_00_type_modeles}) pour la détection, la segmentation, la classification, l'analyse de pose et la détection d'objets avec boîte orientée.
+
+\begin{figure}[H]
+    \centering
+        \makebox[\textwidth][c]{\includegraphics[width=1.20\textwidth]{02-main//figures//ch2/ch2_yolo_00_type_modeles.png}}
+    \caption{Modèles de YOLOv12 \cite{ultralytics_computer_nodate}}
+    \label{fig:ch2_yolo_00_type_modeles}
+\end{figure}
+
+Deux clarifications s'imposent concernant le modèle de segmentation. Premièrement, ce modèle utilise la détection pour localiser les objets à segmenter, il est donc capable de générer des boîtes englobantes autour des masques de segmentation. Cette détection constitue une partie essentielle de son processus d'apprentissage.
+
+Deuxièmement, la dénomination de ce modèle en tant que segmentation instance n'est pas correcte : il s'agit d'un hybride entre détection et segmentation sémantique, réalisant les deux opérations simultanément. Il ne s'agit pas d'un modèle de segmentation d'instance qui n'assigne pas de classe aux masques segmentés, mais bien d'un modèle qui attribue une classe à chaque masque segmenté.
+
+\subsubsection{Données}
+L'évaluation utilise le dataset de référence MS COCO 2017 \cite{coco_coco_nodate} pour la détection d'objets. Cinq variantes de modèles sont développées (YOLOv12-N/S/M/L/X) correspondant à différentes tailles et complexités. L'entraînement suit le protocole standard : 600 époques avec l'optimiseur SGD, augmentations de données classiques (Mosaic, Mixup, copy-paste). Les performances sont mesurées sur GPU T4 avec TensorRT FP16 pour assurer la reproductibilité.
+
+\subsubsection{Méthodologie}
+YOLOv12 introduit trois innovations clés pour rendre l'attention efficace :
+\begin{itemize}
+    \item Réduction de la complexité (Area Attention)
+    \item Stabilisation de l'entraînement (R-ELAN)
+    \item Améliorations architecturales
+\end{itemize}
+
+\paragraph{Area Attention}
+Plutôt que de calculer l'attention sur toute l'image (coûteux), la carte de caractéristiques est divisée en zones rectangulaires (par défaut 4 segments). L'attention n'est calculée qu'à l'intérieur de chaque zone, réduisant la complexité de moitié tout en préservant un champ réceptif suffisant. C'est l'équivalent de regarder plusieurs « fenêtres » de l'image simultanément plutôt que l'image entière.
+
+Le mécanisme d'attention (Figure \ref{fig:ch2_yolo_mecanismes_attention}) local est simplifié par rapport aux autres alternatives (Figures \ref{fig:ch2_yolo_01_attention_area_criss_cross}, \ref{fig:ch2_yolo_02_attention_area_window} et \ref{fig:ch2_yolo_03_attention_area_criss_axial}). Celui-ci divise la carte de caractéristiques en $l$ segments (par défaut 4) horizontalement (Figure \ref{fig:ch2_yolo_04_attention_area_yolo1}) ou verticalement (Figure \ref{fig:ch2_yolo_05_attention_area_yolo2}), réduisant la complexité tout en maintenant un large champ réceptif.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.30\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch2/ch2_yolo_01_attention_area_criss_cross.png}
+        \caption{Mécanisme d'attention type ``criss cross''}
+        \label{fig:ch2_yolo_01_attention_area_criss_cross}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.30\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch2/ch2_yolo_02_attention_area_window.png}
+        \caption{Mécanisme d'attention type ``fenêtre''}
+        \label{fig:ch2_yolo_02_attention_area_window}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.30\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch2/ch2_yolo_03_attention_area_criss_axial.png}
+        \caption{Mécanisme d'attention type ``axial''}
+        \label{fig:ch2_yolo_03_attention_area_criss_axial}
+    \end{subfigure}
+
+    \vspace{0.35cm}
+    \begin{subfigure}[b]{0.30\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch2/ch2_yolo_04_attention_area_yolo1.png}
+        \caption{Mécanisme d'attention horizontal proposé dans YOLOv12}
+        \label{fig:ch2_yolo_04_attention_area_yolo1}
+    \end{subfigure}
+    \hspace{0.04\textwidth}
+    \begin{subfigure}[b]{0.30\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch2/ch2_yolo_05_attention_area_yolo2.png}
+        \caption{Mécanisme d'attention vertical proposé dans YOLOv12}
+        \label{fig:ch2_yolo_05_attention_area_yolo2}
+    \end{subfigure}    
+    \caption{Mécanismes d'attention \cite{tian_yolov12_2025}}
+    \label{fig:ch2_yolo_mecanismes_attention}
+\end{figure}
+
+\paragraph{R-ELAN}
+Les mécanismes d'attention rendent l'entraînement instable, particulièrement pour les gros modèles. La Figure \ref{fig:ch2_yolo_architecture_simplifiee} illustre l'évolution progressive des architectures de blocs dans la famille YOLO, depuis les premières approches jusqu'à la proposition YOLOv12.
+
+CSPNet (Figure \ref{fig:ch2_yolo_06_architecture_csp}), utilisé dans YOLOv4/YOLOv5, est l'architecture fondatrice qui divise le flux de données en deux branches parallèles, permettant un meilleur gradient flow et réduisant les calculs redondants. Une branche traverse directement, l'autre passe par plusieurs blocs convolutionnels avant concaténation.
+
+ELAN (Figure \ref{fig:ch2_yolo_07_architecture_elan}), utilisé dans YOLOv7, correspond aux Efficient Layer Aggregation Networks qui améliorent l'agrégation de caractéristiques en connectant explicitement différentes couches. Cette architecture permet une meilleure réutilisation des caractéristiques, mais souffre de problèmes de stabilité d'optimisation, particulièrement visibles dans les gros modèles.
+
+$C_3K_2$ (Figure \ref{fig:ch2_yolo_08_architecture_c3k2}), utilisé dans YOLOv11, est l'évolution de GELAN (Generalized ELAN) qui simplifie l'architecture tout en conservant l'efficacité. $C_3K_2$ représente un cas particulier optimisé de GELAN, adopté pour réduire la latence dans YOLOv11.
+
+R-ELAN (Figure \ref{fig:ch2_yolo_09_architecture_relan}) est l'architecture de bloc proposée dans YOLOv12. La contribution majeure des Residual Efficient Layer Aggregation Networks est l'ajout d'une connexion résiduelle avec facteur d'échelle (scaling) depuis l'entrée vers la sortie, inspirée des techniques de Vision Transformers. Cette modification résout les problèmes de convergence observés avec les mécanismes d'attention, particulièrement critiques pour les modèles YOLOv12-L et YOLOv12-X qui ne convergent pas sans cette stabilisation.
+
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.30\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch2/ch2_yolo_06_architecture_csp.png}
+        \caption{``CSPNet'' (YOLOv4/v5)}
+        \label{fig:ch2_yolo_06_architecture_csp}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.30\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch2/ch2_yolo_07_architecture_elan.png}
+        \caption{``ELAN'' (YOLOv7)}
+        \label{fig:ch2_yolo_07_architecture_elan}
+    \end{subfigure}
+    \vspace{0.35cm}
+    \begin{subfigure}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch2/ch2_yolo_08_architecture_c3k2.png}
+        \caption{``$C_3K_2$'' (YOLOv11)}
+        \label{fig:ch2_yolo_08_architecture_c3k2}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.33\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch2/ch2_yolo_09_architecture_relan.png}
+        \caption{``R-ELAN'' (YOLOv12)}
+        \label{fig:ch2_yolo_09_architecture_relan}
+    \end{subfigure}
+    \caption{Évolution architecturale des blocs utilisés dans YOLO \cite{tian_yolov12_2025}}
+    \label{fig:ch2_yolo_architecture_simplifiee}
+\end{figure}
+
+\paragraph{Améliorations architecturales}
+\citeauthor{tian_yolov12_2025} introduisent plusieurs optimisations architecturales cruciales pour adapter efficacement les mécanismes d'attention au contexte temps réel de YOLO.
+
+FlashAttention \cite{dao_flashattention_2022} résout le problème fondamental d'accès mémoire des transformers. Traditionnellement, l'attention stocke des matrices intermédiaires volumineuses en mémoire GPU lente (HBM), créant un goulot d'étranglement. FlashAttention optimise ces accès mémoire, réduisant significativement la latence sans perte de précision.
+
+YOLOv12 introduit une innovation architecturale contre-intuitive : la suppression complète de l'encodage positionnel traditionnel des Vision Transformers. Cette décision simplifie drastiquement l'architecture en éliminant l'étape d'ajout explicite d'information positionnelle aux embeddings d'entrée.
+
+Pour préserver l'information spatiale nécessaire, YOLOv12 utilise un position perceiver : une convolution séparable $7 \times 7$ appliquée directement aux valeurs d'attention $V$. Cette approche exploite les propriétés intrinsèques de la convolution pour encoder implicitement la position spatiale. L'effet de lissage du noyau convolutionnel préserve la cohérence positionnelle locale tout en capturant les relations spatiales dans un voisinage étendu.
+
+Cette méthode s'avère plus efficace que l'encodage positionnel traditionnel car elle intègre l'information spatiale dans le flux de calcul de l'attention, évitant ainsi les opérations d'addition préliminaires. Le résultat est une architecture plus simple, plus rapide, et paradoxalement plus performante pour les tâches de détection temps réel.
+
+La réduction du ratio MLP (Multilayer Perceptron) de 4.0 vers 1.2 rééquilibre la charge computationnelle entre les blocs d'attention et les réseaux feed-forward. Dans les Vision Transformers standards, le MLP consomme 75 \% des calculs ; YOLOv12 privilégie l'attention (plus bénéfique pour la détection) en réduisant la taille des MLP.
+
+
+\subsubsection{Résultats principaux}
+YOLOv12 établit un nouveau compromis vitesse-précision optimal qui démontre la viabilité des mécanismes d'attention pour la détection temps réel.
+
+Les performances surpassent systématiquement les modèles existants. YOLOv12-N atteint 40.6\% mAP en 1.64 ms, dépassant YOLOv11-N de 1.2\% mAP à vitesse équivalente. Cette supériorité se maintient sur toutes les échelles de modèles.
+
+L'efficacité computationnelle est remarquable face aux détecteurs bout-à-bout. YOLOv12-S (9.3 M paramètres) surpasse RT-DETR-R18 \cite{zhao_detrs_2024} (20 M paramètres) avec 42~\% de vitesse supplémentaire. Il utilise seulement 36~\% des calculs et 47~\% des paramètres.
+
+Les cartes d'activation (Figure \ref{fig:ch2_yolo_10_perception}) révèlent une amélioration qualitative notable, avec des contours d'objets plus nets et une activation de premier plan plus précise comparé à YOLOv10/v11, illustrant concrètement les bénéfices des mécanismes d'attention optimisés.
+
+\begin{figure}[H]
+    \centering
+    \makebox[\textwidth][c]{\includegraphics[width=1.20\textwidth]{02-main//figures//ch2/ch2_yolo_10_perception.png}}
+    \caption{Perception des objets dans YOLOv10, YOLOv11 et YOLOv12 \cite{tian_yolov12_2025}}
+    \label{fig:ch2_yolo_10_perception}
+\end{figure}
+
+\subsubsection{Discussion et limites}
+YOLOv12 représente une avancée majeure en démontrant que les mécanismes d'attention peuvent être rendus suffisamment efficaces pour la détection temps réel.
+
+Si l'étude démontre théoriquement qu'il est possible de rendre l'attention suffisamment efficace pour la détection temps réel, l'impact pratique reste mitigé. \citeauthor{khanam_review_2025} \cite{khanam_review_2025} révèlent que YOLOv12 est à peine plus performant que ses prédécesseurs avec une architecture relativement complexe et plus gourmande en énergie.
+
+La contrainte matérielle constitue une limitation majeure souvent sous-estimée. La dépendance exclusive à FlashAttention restreint l'utilisation aux GPU d'architecture Turing ou plus récente (RTX 20/30/40, A100, H100), excluant de facto une large base d'utilisateurs équipés de matériel plus ancien. Cette limitation est particulièrement problématique pour les applications industrielles où les cycles de renouvellement matériel sont longs. Cela affecte également les applications edge, dans lesquelles les ressources sont limitées et l'efficience énergétique du modèle est un paramètre critique.
+
+% -----------------------------------------------------------------------------
+
+\subsection{Segment Anything Model 2 : Segmentation d'images et de vidéos}
+\label{subsec:sam2_segment_anything_2024}
+
+\subsubsection{Contexte et objectifs}
+Avant de présenter le modèle Segment Anything 2 (SAM2), il est important de rappeler le modèle Segment Anything (SAM) qui a été publié en \citeyear{kirillov_segment_2023}.
+
+\paragraph{Segment Anything Model (SAM)}
+\label{par:sam_segment_anything_2023}
+SAM \cite{kirillov_segment_2023} est un modèle de segmentation d'images développé par Meta AI. L'objectif de Segment Anything est de générer des masques de segmentation de haute qualité pour n'importe quel objet d'une image à partir de prompts simples comme des points ou des boîtes. Cela lui permet d'effectuer diverses tâches de segmentation de manière flexible sans avoir besoin d'être entraîné à nouveau pour chacune d'entre elles.
+
+Le modèle Segment Anything (SAM) comporte trois éléments principaux :
+\begin{itemize}
+    \item Encodeur d'images
+    \item ``Prompt encoder''
+    \item Décodeur de masques
+\end{itemize}
+La Figure \ref{fig:ch2_sam2_01_fonctionnement_sam} permet d’avoir une vue d’ensemble des différentes parties de SAM.
+
+\begin{figure}[H]
+    \centering
+    \makebox[\textwidth][c]{\includegraphics[width=1.20\textwidth]{02-main//figures//ch2/ch2_sam2_01_fonctionnement_sam.png}}
+    \caption{Fonctionnement de segment anything (SAM)}
+    \label{fig:ch2_sam2_01_fonctionnement_sam}
+\end{figure}
+
+Le premier élément est l'encodeur d'images (``1'' sur la Figure \ref{fig:ch2_sam2_01_fonctionnement_sam}). L'encodeur d'image est un réseau de neurones qui a été pré-entraîné à l'aide d'une technique d'apprentissage auto-supervisé appelée Masked Autoencoder (MAE). L'encodeur prend une image en entrée et la fait passer par une série de couches d'auto-attention (self-attention), ce qui permet au modèle de capturer le contexte global et les relations entre les différentes parties de l'image. La sortie de l'encodeur d'image est l'image embedding, qui est une représentation vectorielle compacte à hautes dimensions d'une image d'entrée qui capture ses caractéristiques essentielles et ses informations spatiales.
+
+Le deuxième élément est le prompt encoder (``2'' sur la Figure \ref{fig:ch2_sam2_01_fonctionnement_sam}). SAM fonctionne avec une interface graphique, la Figure \ref{fig:ch2_sam2_02_prompt_encoder} 
+montre l'interface graphique développée par Meta AI pour tester SAM.
+
+\begin{figure}[H]
+    \centering
+    \makebox[\textwidth][c]{\includegraphics[width=1.20\textwidth]{02-main//figures//ch2/ch2_sam2_02_prompt_encoder.png}}
+    \caption{Interface graphique de démonstration de SAM \cite{fair_segment_nodate}}
+    \label{fig:ch2_sam2_02_prompt_encoder}
+\end{figure}
+
+A l’aide des outils à gauche de la Figure \ref{fig:ch2_sam2_02_prompt_encoder}, il est possible de sélectionner un point (Figure \ref{fig:ch2_sam2_03_prompt1}) ou sélectionner une partie de l’image avec une boite rectangulaire (Figure \ref{fig:ch2_sam2_04_prompt2}). Le modèle va alors segmenter la partie de l’image (voir Figure \ref{fig:ch2_sam2_prompt_exemple_point_rectangle}).
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.35\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch2/ch2_sam2_03_prompt1.png}
+        \caption{Exemple de sélection de masque avec un point}
+        \label{fig:ch2_sam2_03_prompt1}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.435\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch2/ch2_sam2_04_prompt2.png}
+        \caption{Exemple de sélection de masque avec une boite rectangulaire}
+        \label{fig:ch2_sam2_04_prompt2}
+    \end{subfigure}
+    \caption{Interface graphique de démonstration de SAM \cite{fair_segment_nodate}}
+    \label{fig:ch2_sam2_prompt_exemple_point_rectangle}
+\end{figure}
+
+SAM permet aussi de décrire avec du texte ce que l’on souhaite segmenter sur l’image. Le prompt encoder va convertir toutes les informations (points, boite rectangulaire, texte) en une représentation vectorielle (embeddings) unique pour toutes les données renseignées. Cette représentation vectorielle sera ensuite utilisée pour le mask decoder.
+
+La troisième partie est le mask decoder (``3'' sur la Figure \ref{fig:ch2_sam2_01_fonctionnement_sam}). Le mask decoder va utiliser les représentations vectorielles de l’encodeur d’images (``1'' sur la Figure \ref{fig:ch2_sam2_01_fonctionnement_sam}), ainsi que celles du prompt encoder (``2'' sur la Figure \ref{fig:ch2_sam2_01_fonctionnement_sam}) pour segmenter l’image en différents masques. Chacun de ces masques est une polyligne fermée, comme indiqué sur la Figure \ref{fig:ch2_sam2_05_masques}. Le modèle indique aussi la probabilité (confidence) qu’il estime que la segmentation est juste.
+
+\begin{figure}[H]
+    \centering
+    \makebox[\textwidth][c]{\includegraphics[width=1\textwidth]{02-main//figures//ch2/ch2_sam2_05_masques.png}}
+    \caption{Interface graphique de démonstration de SAM. Exemple de segmentation}
+    \label{fig:ch2_sam2_05_masques}
+\end{figure}
+
+Meta AI a accordé une attention particulière à la création du dataset SA-1B, utilisé pour entraîner le modèle SAM. Ce dataset est une collection d'images et de masques annotés pour la segmentation, avec 11 millions d'images et 1,1 milliard de masques. L'objectif principal de Meta AI était de constituer un ensemble de données plus représentatif et diversifié que les datasets existants, afin d'améliorer les performances et la généralisation des modèles de segmentation.
+
+Le dataset couvre environ 70 pays et a été annoté manuellement par des travailleurs qualifiés. Les images ont été triées selon leur géolocalisation et leur niveau de revenu, afin d'assurer une représentativité adéquate des différents groupes socio-économiques. La Figure \ref{fig:ch2_sam2_sa1b_diversite_pays} représente l’origine et la distribution des images utilisées par pays.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.70\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch2/ch2_sam2_06_dataset_sa1b_pays1.png}
+        \caption{Carte de monde avec les pays les plus représentés dans le dataset SA-1B}
+        \label{fig:ch2_sam2_06_dataset_sa1b_pays1}
+    \end{subfigure}
+    \vspace{0.35cm}
+    \begin{subfigure}[b]{1\textwidth}
+        \centering
+        \makebox[\textwidth][c]{\includegraphics[width=1\textwidth]{02-main/figures/ch2/ch2_sam2_07_dataset_sa1b_pays2.png}}
+        \caption{Distribution des images par pays dans le dataset SA-1B}
+        \label{fig:ch2_sam2_07_dataset_sa1b_pays2}
+    \end{subfigure}
+    \caption{Origine des images qui forment le dataset SA-1B utilisé pour l’entrainement de SAM \cite{kirillov_segment_2023}}
+    \label{fig:ch2_sam2_sa1b_diversite_pays}
+\end{figure}
+
+Le dataset contient des annotations précises pour chaque objet dans chaque image, ce qui en fait un outil utile pour les chercheurs et les développeurs travaillant sur des applications de segmentation.
+
+Dans la Figure \ref{fig:ch2_sam2_08_eval_sam_humain}, Meta AI a demandé a des personnes d’évaluer la qualité de la segmentation sur 7 datasets différents. SAM est plus performant que le modèle RITM \cite{sofiiuk_reviving_2021} dans tous les cas.
+
+\begin{figure}[H]
+    \centering
+    \makebox[\textwidth][c]{\includegraphics[width=1\textwidth]{02-main//figures//ch2/ch2_sam2_08_eval_sam_humain.png}}
+    \caption{Evaluation par des humains de la qualité des masques générés par SAM et RITM  \cite{kirillov_segment_2023}}
+    \label{fig:ch2_sam2_08_eval_sam_humain}
+\end{figure}
+
+Dans une autre comparaison (Figure \ref{fig:ch2_sam2_09_eval_sam_miou}), l'objectif est de comparer plusieurs modèles qui effectuent de la segmentation sur 23 datasets. SAM a un mIoU plus élevé que les autres modèles.
+
+\begin{figure}[H]
+    \centering
+    \makebox[\textwidth][c]{\includegraphics[width=0.5\textwidth]{02-main//figures//ch2/ch2_sam2_09_eval_sam_miou.png}}
+    \caption{Comparatif de mIoU sur 23 datasets de SAM \cite{kirillov_segment_2023}}
+    \label{fig:ch2_sam2_09_eval_sam_miou}
+\end{figure}
+
+La Figure \ref{fig:ch2_sam2_09_eval_sam_miou} inclus également un résultat ``oracle'', dans lequel la plus pertinente des 3 segmentations de SAM est sélectionnée en les comparant à la vérité terrain, plutôt que de sélectionner le masque avec la confidence la plus élevée. Cela révèle l'impact de l'ambiguïté sur l'évaluation automatique.
+
+Pour conclure, jusqu'a l'arrivée de SAM2 en \citeyear{ravi_sam_2024}, l’état de l’art en segmentation d’image était SAM. Il est plus performant que tous les autres modèles existants qui réalisent cette tâche.
+
+\paragraph{Segment Anything Model 2 (SAM2)}
+L'article \cite{ravi_sam_2024} présente Segment Anything Model 2 (SAM2), une extension du modèle de segmentation SAM vers le domaine vidéo. Alors que SAM révolutionna la segmentation d'images en 2023, les vidéos représentent une part croissante du contenu multimédia et nécessitent une localisation temporelle pour des applications critiques en réalité augmentée/virtuelle, robotique et véhicules autonomes.
+
+\citeauthor{ravi_sam_2024} identifient les défis spécifiques à la segmentation vidéo : changements d'apparence dus au mouvement, déformations, occlusions, variations d'éclairage, et qualité souvent inférieure aux images statiques. L'objectif est de développer un système universel capable de ``segmenter n'importe quoi dans les vidéos'' avec la même facilité que SAM pour les images.
+
+Le travail introduit la tâche PVS (Promptable Visual Segmentation) qui généralise la segmentation interactive d'images aux vidéos, permettant de fournir des prompts (clics, boîtes, masques) sur n'importe quelle frame pour définir et raffiner des segments spatio-temporels appelés ``masklets''.
+
+La Figure \ref{fig:ch2_sam2_fonctionnement} représente une vue d'ensemble montrant la tâche PVS (Figure \ref{fig:ch2_sam2_pvs}), l'architecture SAM 2 (Figure \ref{fig:ch2_sam2_model}) et le processus de collecte de données (Figure \ref{fig:ch2_sam2_data}).
+
+\begin{figure}[H]
+    \centering
+    \makebox[\textwidth][c]{\includegraphics[width=1.25\textwidth]{02-main//figures//ch2/ch2_sam2_10_dataset_sam2.png}}
+   
+    \begin{subfigure}{0.20\textwidth}
+        \subcaption{Promptable Visual Segmentation (PVS)}
+        \label{fig:ch2_sam2_pvs}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.25\textwidth}
+        \subcaption{Segment Anything Model 2 (SAM2)}
+        \label{fig:ch2_sam2_model}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.20\textwidth}
+        \subcaption{Dataset SA-V}
+        \label{fig:ch2_sam2_data}
+    \end{subfigure}
+    
+    \caption{Fonctionnement SAM2 \cite{ravi_sam_2024}}
+    \label{fig:ch2_sam2_fonctionnement}
+\end{figure}
+
+\subsubsection{Données}
+Les auteurs développent un moteur de données (data engine) en trois phases pour créer le dataset SA-V, le plus grand dataset de segmentation vidéo à ce jour. Le processus évolue de l'annotation manuelle pure vers l'assistance progressive par SAM 2 :
+\begin{itemize}
+    \item Phase 1 : Annotation manuelle photogramme par photogramme avec SAM (37.8s/photogramme)
+    \item Phase 2 : SAM + propagation temporelle par SAM 2 (7.4s/photogramme)
+    \item Phase 3 : SAM 2 complet avec mémoire temporelle (4.5s/photogramme)
+\end{itemize}
+
+Le dataset final SA-V comprend 50.9K vidéos avec 642.6K masklets (190.9K manuels + 451.7K automatiques), représentant 53× plus de masques que tout dataset VOS existant. La diversité géographique couvre 47 pays, avec annotation de segments entiers et de parties d'objets, sans contraintes catégorielles.
+
+Un processus de vérification qualité garantit la cohérence temporelle des annotations, avec classification ``satisfaisant/non-satisfaisant'' par des annotateurs dédiés.
+
+\subsubsection{Méthodologie}
+SAM 2 adopte une architecture (Figure \ref{fig:ch2_sam2_11_architecture_sam2}) de traitement en flux continu (streaming) qui analyse les vidéos photogramme par photogramme, équipée d'un système de mémoire sophistiqué pour préserver le contexte temporel entre les images. Cette approche permet un traitement en temps réel de vidéos de longueur arbitraire. Les composants clés incluent :
+
+\begin{itemize}
+    \item Encodeur d'image : Utilise l'architecture Hiera, un transformateur de vision hiérarchique pré-entraîné avec la méthode MAE (Masked Autoencoder). Cette structure hiérarchique extrait des caractéristiques visuelles à différentes résolutions spatiales, des détails fins aux motifs globaux.
+    
+    \item Module d'attention mémoire : Composé de L couches de transformateurs qui conditionnent les caractéristiques de l'image actuelle en fonction des informations stockées en mémoire des images précédentes, permettant une cohérence temporelle.
+    
+    \item Banque mémoire : Système de stockage organisé en files d'attente FIFO (premier entré, premier sorti) qui conserve les informations de N photogrammes récents et de M photogrammes contenant des instructions utilisateur. Inclut également des ``pointeurs d'objets'' (object pointers), des vecteurs compacts encodant l'information sémantique de haut niveau sur l'objet suivi.
+    
+    \item Décodeur de masque : Architecture similaire à celle de SAM original, augmentée d'une tête de prédiction supplémentaire qui détermine si l'objet d'intérêt est visible ou caché dans le photogramme actuel, gérant ainsi les disparitions temporaires d'objets.
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \makebox[\textwidth][c]{\includegraphics[width=1.15\textwidth]{02-main//figures//ch2/ch2_sam2_11_architecture_sam2.png}}
+    \caption{Architecture SAM2 \cite{ravi_sam_2024}}
+    \label{fig:ch2_sam2_11_architecture_sam2}
+\end{figure}
+
+\paragraph{Stratégie d'entraînement}
+
+L'entraînement de SAM 2 simule des sessions d'annotation interactive réelles pour apprendre au modèle à gérer efficacement les interactions utilisateur dans le contexte vidéo. Le processus d'apprentissage s'appuie sur des séquences de 8 images consécutives extraites de vidéos d'entraînement.
+
+Pour chaque séquence, les chercheurs simulent le comportement d'un annotateur humain en sélectionnant jusqu'à 2 images qui recevront des instructions explicites (prompts). Les prompts initiaux suivent une distribution réaliste : masque de segmentation correct dans 50\% des cas, clic simple sur l'objet dans 25\% des cas, et boîte englobante dans les 25\% restants. Des clics correctifs supplémentaires sont introduits de manière probabiliste durant l'entraînement pour simuler les corrections qu'un utilisateur réel effectuerait face à une segmentation imparfaite.
+
+L'objectif pédagogique consiste à apprendre au modèle à prédire la segmentation temporelle complète (masklet) sur l'ensemble des 8 images de la séquence, en s'appuyant uniquement sur ces quelques instructions partielles et en exploitant sa mémoire temporelle.
+
+\paragraph{Fonctionnement en inférence interactive}
+
+Une fois entraîné, SAM 2 effectue la segmentation interactive selon un processus en deux étapes qui exploite sa mémoire temporelle pour maintenir la cohérence des masques à travers les séquences d'images (Figure \ref{fig:ch2_sam2_12_entrainement_sam2}).
+
+La première étape consiste en la sélection initiale de l'objet cible (frame 1, step 1 sur Figure \ref{fig:ch2_sam2_12_entrainement_sam2}). L'utilisateur fournit des invites sur une image de référence : les points verts correspondent aux zones à inclure dans la segmentation, tandis que les points rouges représentent les régions à exclure. Dans l'exemple, SAM 2 identifie le segment de l'objet d'intérêt (la langue) dans l'image 1, puis propage automatiquement ce segment aux images suivantes pour former un masque temporel continu.
+
+\begin{figure}[H]
+    \centering
+    \makebox[\textwidth][c]{\includegraphics[width=1.15\textwidth]{02-main//figures//ch2/ch2_sam2_12_entrainement_sam2.png}}
+    \caption{Processus de segmentation interactive avec SAM 2 : sélection initiale et raffinement par mémoire temporelle \cite{ravi_sam_2024}}
+    \label{fig:ch2_sam2_12_entrainement_sam2}
+\end{figure}
+
+La seconde étape intervient lors des situations de perte de suivi. Il arrive que SAM 2 perde la trace de l'objet au cours de la propagation temporelle, comme observé l'exemple (frame 3, step 1 sur Figure \ref{fig:ch2_sam2_12_entrainement_sam2}). Dans ce cas, l'utilisateur peut corriger le masque en fournissant une invite supplémentaire (frame 3, step 2 sur Figure \ref{fig:ch2_sam2_12_entrainement_sam2}) dans une nouvelle image de la séquence.
+
+L'avantage de SAM 2 réside dans sa capacité à raffiner la segmentation grâce à la mémoire temporelle. Un seul clic dans l'image suffit pour récupérer l'objet perdu et relancer la propagation correcte pour la suite de la séquence. Cette approche contraste favorablement avec les méthodes découplées combinant SAM et un tracker vidéo traditionnel, qui nécessiteraient de recommencer entièrement le processus de segmentation, obligeant l'utilisateur à fournir plusieurs clics dans le frame 3 (Figure \ref{fig:ch2_sam2_12_entrainement_sam2}) comme lors de l'annotation initiale. La mémoire temporelle de SAM 2 réduit ainsi considérablement l'effort d'annotation requis pour maintenir un suivi précis des objets dans les vidéos.
+
+\subsubsection{Résultats principaux}
+SAM 2 démontre des performances supérieures sur de multiples benchmarks, validant son efficacité dans trois domaines d'application principaux.
+
+\paragraph{Segmentation vidéo interactive}
+Les évaluations en segmentation vidéo interactive menées sur 9 datasets densément annotés démontrent la supériorité de SAM 2 par rapport aux méthodes de référence qui combinent SAM avec des trackers vidéo spécialisés (SAM+XMem++ \cite{bekuzarov_xmem_2023} \cite{noauthor_mbzuai-metaversexmem2_2025} et SAM+Cutie \cite{cheng_putting_2024} \cite{cheng_hkchengrexcutie_2025}). Ces tests ont été réalisés avec un protocole standardisé de 3 clics par photogramme, les résultats complets sont présentés dans la Figure \ref{fig:ch2_sam2_resultats_sam2_segmentation_video}.
+
+L'évaluation s'organise selon deux protocoles distincts qui reflètent différents scénarios d'usage pratique. Le premier mode, appelé évaluation hors ligne (offline), permet d'effectuer plusieurs passes successives à travers une vidéo. Cette approche autorise l'annotateur à sélectionner de manière stratégique les images sur lesquelles intervenir, en se basant sur l'analyse des erreurs de modèle les plus critiques identifiées lors des passes précédentes (Figure \ref{fig:ch2_sam2_13_resultats_sam2_segmentation_video_offline}).
+
+Le second mode correspond à l'évaluation en ligne (online), qui simule un contexte d'annotation en temps réel. Dans cette configuration, les images sont annotées au cours d'un unique passage séquentiel à travers la vidéo, sans possibilité de retour en arrière ou d'optimisation a posteriori (Figure \ref{fig:ch2_sam2_14_resultats_sam2_segmentation_video_online}). Ce protocole reflète davantage les contraintes rencontrées lors d'applications pratiques où l'annotation doit s'effectuer de manière continue.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.75\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch2/ch2_sam2_13_resultats_sam2_segmentation_video_offline.png}
+        \caption{Evaluation en mode offline}
+        \label{fig:ch2_sam2_13_resultats_sam2_segmentation_video_offline}
+    \end{subfigure}
+    \vspace{0.35cm}
+    \begin{subfigure}[b]{0.75\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch2/ch2_sam2_14_resultats_sam2_segmentation_video_online.png}
+        \caption{Evaluation en mode online}
+        \label{fig:ch2_sam2_14_resultats_sam2_segmentation_video_online}
+    \end{subfigure}
+    \caption{Zero-shot accuracy sur 9 datasets de segmentation vidéo interactive \cite{ravi_sam_2024}}
+    \label{fig:ch2_sam2_resultats_sam2_segmentation_video}
+\end{figure}
+
+
+\paragraph{Segmentation d'objets vidéo semi-supervisée}
+Pour la segmentation d'objets vidéo semi-supervisée (VOS - Video Object Segmentation), SAM 2 démontre d'excellentes capacités dans un contexte d'annotation minimale. Cette tâche consiste à segmenter et suivre un objet à travers une séquence vidéo complète en ne disposant que d'une seule annotation manuelle sur la première image de la vidéo. Le modèle doit ensuite propager automatiquement cette segmentation initiale sur toutes les images suivantes, en gérant les défis comme les changements d'apparence, les occlusions temporaires, et les variations d'éclairage.
+
+SAM 2 établit de nouveaux records de performance sur 17 datasets de référence. Les évaluations utilisent la métrique J\&F, qui combine l'accuracy de la segmentation (mesure J, basée sur l'intersection sur union des masques) et l'accuracy des contours (mesure F, évaluant la qualité des frontières d'objets). Cette métrique composite, exprimée en pourcentage, reflète fidèlement la qualité globale de la segmentation temporelle.
+
+Les gains sont particulièrement remarquables sur les benchmarks les plus exigeants du domaine (Figure \ref{tab:ch2_sam2_resultats_sam2_vos_zeroshot}). Sur le dataset MOSE \cite{noauthor_mose_nodate}, reconnu pour sa complexité avec des objets subissant des transformations importantes et des occlusions prolongées, SAM 2 atteint 76.6\% de score J\&F contre 71.7\% pour la meilleure méthode précédente (Cutie-base+), soit une amélioration absolue de 4.9 points. Sur DAVIS 2017 \cite{noauthor_davis_nodate}, le benchmark historique de référence en segmentation vidéo, SAM 2 obtient 90.2\% contre 88.1\% pour les approches existantes, établissant un nouveau standard de performance.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{lccccc}
+        \hline
+        Method & 1-click & 3-click & 5-click & bounding box & ground-truth mask \\
+        \hline
+        SAM+XMem++ & 56.9 & 68.4 & 70.6 & 67.6 & 72.7 \\
+        SAM+Cutie & 56.7 & 70.1 & 72.2 & 69.4 & 74.1 \\
+        SAM 2 & 64.7 & 75.3 & 77.6 & 74.4 & 79.3 \\
+        \hline
+    \end{tabular}
+    \caption{Zero-shot accuracy sur 17 datasets vidéo avec différents types de prompts. Accuracy moyenne pour chaque type de prompt (1, 3 ou 5 clics, boîtes englobantes, ou masques de vérité terrain) appliqué sur la première image de chaque vidéo \cite{ravi_sam_2024}}
+    \label{tab:ch2_sam2_resultats_sam2_vos_zeroshot}
+\end{table}
+
+Ces résultats sont d'autant plus remarquables que SAM 2, contrairement aux méthodes spécialisées qu'il surpasse, reste un modèle généraliste capable de segmenter n'importe quel objet sans restriction catégorielle, démontrant ainsi la puissance de son approche unifiée.
+
+\paragraph{Segmentation d'images}
+
+En segmentation d'images, SAM 2 maintient et améliore significativement les performances de son prédécesseur sur une suite étendue de 37 datasets, incluant les 23 benchmarks originaux de SAM. L'évaluation utilise la métrique mIoU (mean Intersection over Union), qui mesure la précision moyenne de segmentation en calculant le rapport entre l'intersection et l'union des masques prédits et réels, exprimé en pourcentage.
+
+Le Tableau \ref{tab:ch2_sam2_resultats_segmentation_image_miou} présente une analyse comparative détaillée des performances de SAM et SAM 2. Les résultats sont organisés par domaine d'application et montrent les scores mIoU moyens pour 1 et 5 clics utilisateur. Les métriques correspondent aux moyennes calculées sur les 23 datasets originellement utilisés pour l'évaluation de SAM (SA-23), subdivisés entre datasets d'images et de vidéos, ainsi qu'aux résultats sur 14 datasets vidéo supplémentaires évalués en inférence directe.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{llccccr}
+        \multirow{2}{*}{Model} & \multirow{2}{*}{Data} & \multicolumn{4}{c}{1 (5) click mIoU} & \multirow{2}{*}{FPS} \\
+        \cline{3-6}
+        & & SA-23 All & SA-23 Image & SA-23 Video & 14 new Video & \\
+        \hline
+        SAM & SA-1B & 58.1 (81.3) & 60.8 (82.1) & 54.5 (80.3) & 59.1 (83.4) & 21.7 \\
+        SAM 2 & SA-1B & 58.9 (81.7) & 60.8 (82.1) & 56.4 (81.2) & 56.6 (83.7) & 130.1 \\
+        SAM 2 & mix & 61.9 (83.5) & 63.3 (83.8) & 60.1 (83.2) & 69.6 (85.8) & 130.1 \\
+        \hline
+    \end{tabular}
+    \caption{Performances de SAM 2 en inférence directe sur la tâche de segmentation d'images évaluées sur 37 datasets \cite{ravi_sam_2024}.}
+    \label{tab:ch2_sam2_resultats_segmentation_image_miou}
+\end{table}
+
+Les résultats révèlent plusieurs éléments importants. Premièrement, si le modèle est entrainé uniquement sur le dataset SA-1B (comme SAM original), SAM 2 atteint 58.9\% de mIoU avec un seul clic contre 58.1\% pour SAM, démontrant une amélioration modeste mais par contre le gain de vitesse est remarquable : 130.1 contre 21.7 images par seconde, soit environ 6 fois plus rapide. Ce gain provient principalement de l'architecture Hiera plus compacte et optimisée.
+
+Deuxièmement, l'entraînement conjoint sur données image-vidéo (configuration ``mix'' dans le Tableau \ref{tab:ch2_sam2_resultats_segmentation_image_miou}) révèle tout le potentiel de l'approche multimodale de SAM 2. Les performances grimpent à 61.9\% de mIoU moyen, avec des gains particulièrement marqués sur les données vidéo : 69.6\% sur les 14 nouveaux datasets vidéo contre 56.6\% pour la version entraînée uniquement sur images. Cette amélioration illustre comment l'apprentissage temporel enrichit la compréhension spatiale du modèle.
+
+Cette capacité d'adaptation automatique à de nouveaux domaines sans réentraînement constitue un atout majeur pour les applications pratiques, où la diversité des données d'entrée est souvent imprévisible.
+
+\subsubsection{Discussion et limites}
+Malgré ses performances remarquables, SAM 2 présente certaines limitations techniques identifiées par les auteurs.
+
+Les principales défaillances concernent les discontinuités temporelles (changements de plan brutaux), les scènes visuellement encombrées, les occlusions prolongées et le traitement de vidéos très longues. Néanmoins, l'architecture interactive permet de récupérer rapidement d'erreurs par des prompts correctifs sur n'importe quel photogramme.
+
+Les limitations de précision spatiale se manifestent avec les objets comportant des détails très fins (cheveux, contours complexes), particulièrement en mouvement rapide, ainsi qu'avec les objets d'apparence très similaire que le modèle peut confondre en s'appuyant principalement sur les caractéristiques visuelles.
+
+Sur le plan architectural, SAM 2 traite chaque objet indépendamment sans communication inter-objets, partageant uniquement les embeddings d'images. Cette approche ignore les relations spatiales et temporelles entre objets, qui pourraient enrichir la compréhension de scène.
+
+Les auteurs proposent plusieurs améliorations : intégration d'une modélisation explicite du mouvement (flux optique, prédicteurs de trajectoire), incorporation d'informations contextuelles partagées entre objets, et automatisation partielle du processus d'annotation par des métriques de confiance automatiques.
+
+Malgré ces limitations, SAM 2 représente une avancée considérable vers la segmentation universelle d'objets dans les images et vidéos, ouvrant de nouvelles possibilités pour la réalité augmentée, la robotique autonome, les systèmes de conduite assistée et l'édition vidéo professionnelle.
+% -----------------------------------------------------------------------------
+% -----------------------------------------------------------------------------
+\section{Machine learning appliqué au calcul du potentiel solaire}
+Ce chapitre explore l'état de l'art du machine learning appliqué aux données géomatiques et aux images satellite, avec comme objectif le calcul du potentiel solaire. La première sous-section examine en détail le travail réalisé par STDL, suivie de deux autres articles présentant chacun des approches différentes pour le calcul du potentiel solaire.
 
 % -----------------------------------------------------------------------------
 \subsection{Détection des objets présents sur les toitures et identification des espaces libres}
@@ -1289,465 +1753,14 @@ Le CNN développé atteint :
     \label{fig:castello_quantification_image_resultat}
 \end{figure}
 
-\par{La comparaison avec d'autres méthodes d'estimation montre que les approches existantes tendent à surestimer la surface disponible sur les grands toits et à sous-estimer celle des petits toits.}
+La comparaison avec d'autres méthodes d'estimation \cite{walch_big_2020} montre que les approches existantes tendent à surestimer la surface disponible sur les grands toits et à sous-estimer celle des petits toits.
 
 \subsubsection{Discussion et limites}
 \par{L'article présente une approche prometteuse pour quantifier les surfaces de toiture disponibles pour l'installation solaire. Le modèle U-Net atteint un IoU de 64\% et une accuracy de 93\% sur les données de test, avec la capacité notable d'exclure automatiquement les zones ombragées des toits.}
-\par{La comparaison avec les méthodes existantes révèle des différences selon la taille des bâtiments. Pour les grandes toitures, le modèle CNN estime une fraction médiane de surface disponible de 39\% contre 66\% pour l'approche de référence, suggérant une surestimation des méthodes à grande échelle. Pour les petites toitures, la tendance s'inverse avec 47\% contre 32\%.}
+\par{La comparaison avec les méthodes existantes \cite{walch_big_2020} révèle des différences selon la taille des bâtiments. Pour les grandes toitures, le modèle CNN estime une fraction médiane de surface disponible de 39\% contre 66\% pour l'approche de référence, suggérant une surestimation des méthodes à grande échelle. Pour les petites toitures, la tendance s'inverse avec 47\% contre 32\%.}
 \par{Le modèle sous-estime en moyenne de 8\% la surface réellement disponible par rapport à la vérité terrain. Cette sous-estimation est principalement observée sur les petites toitures (< 100 \si{\unit{m^2}}). Les limites identifiées incluent la difficulté à détecter les lucarnes, construites dans le même matériau que le toit, et les zones de ``toits verts'' avec végétation.}
 \par{L'étude se limite au centre de Genève avec 524 images principalement résidentielles. Les auteurs mentionnent 12 heures de labellisation manuelle sans préciser la répartition du travail. Pour une extension nationale, ils proposent l'ajout d'un canal infrarouge et l'utilisation d'images plus récentes à haute résolution.}
 
-% -----------------------------------------------------------------------------
-
-\subsection{YOLOv12: Attention-Centric Real-Time Object Detectors}
-\label{subsec:yolov12_attention_centric}
-
-\subsubsection{Contexte et objectifs}
-La détection d'objets en temps réel repose traditionnellement sur les réseaux de neurones convolutionnels (CNN) dans la famille YOLO. Cependant, les mécanismes d'attention, popularisés par les ``Vision Transformers'', offrent de meilleures capacités de modélisation grâce à leur capacité à capturer les dépendances globales dans l'image. Le problème fondamental est que l'attention a un coût computationnel élevé : sa complexité croît quadratiquement avec la taille de l'image ($O(n^2)$), là où les convolutions croissent linéairement ($O(n)$). 
-
-YOLOv12 relève ce défi en proposant le premier framework YOLO centré sur l'attention qui atteint la vitesse des modèles CNN traditionnels tout en conservant les avantages de performance de l'attention. L'objectif est de démontrer qu'il est possible de casser la domination des CNN dans YOLO.
-
-\subsubsection{Données}
-L'évaluation utilise le dataset de référence MS COCO 2017 \cite{coco_coco_nodate} pour la détection d'objets. Cinq variantes de modèles sont développées (YOLOv12-N/S/M/L/X) correspondant à différentes tailles et complexités. L'entraînement suit le protocole standard : 600 époques avec l'optimiseur SGD, augmentations de données classiques (Mosaic, Mixup, copy-paste). Les performances sont mesurées sur GPU T4 avec TensorRT FP16 pour assurer la reproductibilité.
-
-\subsubsection{Méthodologie}
-YOLOv12 introduit trois innovations clés pour rendre l'attention efficace :
-\begin{itemize}
-    \item Réduction de la complexité (Area Attention)
-    \item Stabilisation de l'entraînement (R-ELAN)
-    \item Améliorations architecturales
-\end{itemize}
-
-\paragraph{Area Attention}
-Plutôt que de calculer l'attention sur toute l'image (coûteux), la carte de caractéristiques est divisée en zones rectangulaires (par défaut 4 segments). L'attention n'est calculée qu'à l'intérieur de chaque zone, réduisant la complexité de moitié tout en préservant un champ réceptif suffisant. C'est l'équivalent de regarder plusieurs « fenêtres » de l'image simultanément plutôt que l'image entière.
-
-Le mécanisme d'attention (Figure \ref{fig:ch2_yolo_mecanismes_attention}) local est simplifié par rapport aux autres alternatives (Figures \ref{fig:ch2_yolo_01_attention_area_criss_cross}, \ref{fig:ch2_yolo_02_attention_area_window} et \ref{fig:ch2_yolo_03_attention_area_criss_axial}). Celui-ci divise la carte de caractéristiques en $l$ segments (par défaut 4) horizontalement (Figure \ref{fig:ch2_yolo_04_attention_area_yolo1}) ou verticalement (Figure \ref{fig:ch2_yolo_05_attention_area_yolo2}), réduisant la complexité tout en maintenant un large champ réceptif.
-
-\begin{figure}[H]
-    \centering
-    \begin{subfigure}[b]{0.30\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{02-main/figures/ch2/ch2_yolo_01_attention_area_criss_cross.png}
-        \caption{Mécanisme d'attention type ``criss cross''}
-        \label{fig:ch2_yolo_01_attention_area_criss_cross}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[b]{0.30\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{02-main/figures/ch2/ch2_yolo_02_attention_area_window.png}
-        \caption{Mécanisme d'attention type ``fenêtre''}
-        \label{fig:ch2_yolo_02_attention_area_window}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[b]{0.30\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{02-main/figures/ch2/ch2_yolo_03_attention_area_criss_axial.png}
-        \caption{Mécanisme d'attention type ``axial''}
-        \label{fig:ch2_yolo_03_attention_area_criss_axial}
-    \end{subfigure}
-
-    \vspace{0.35cm}
-    \begin{subfigure}[b]{0.30\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{02-main/figures/ch2/ch2_yolo_04_attention_area_yolo1.png}
-        \caption{Mécanisme d'attention horizontal proposé dans YOLOv12}
-        \label{fig:ch2_yolo_04_attention_area_yolo1}
-    \end{subfigure}
-    \hspace{0.04\textwidth}
-    \begin{subfigure}[b]{0.30\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{02-main/figures/ch2/ch2_yolo_05_attention_area_yolo2.png}
-        \caption{Mécanisme d'attention vertical proposé dans YOLOv12}
-        \label{fig:ch2_yolo_05_attention_area_yolo2}
-    \end{subfigure}    
-    \caption{Mécanismes d'attention \cite{tian_yolov12_2025}}
-    \label{fig:ch2_yolo_mecanismes_attention}
-\end{figure}
-
-\paragraph{R-ELAN}
-Les mécanismes d'attention rendent l'entraînement instable, particulièrement pour les gros modèles. La Figure \ref{fig:ch2_yolo_architecture_simplifiee} illustre l'évolution progressive des architectures de blocs dans la famille YOLO, depuis les premières approches jusqu'à la proposition YOLOv12.
-
-CSPNet (Figure \ref{fig:ch2_yolo_06_architecture_csp}), utilisé dans YOLOv4/YOLOv5, est l'architecture fondatrice qui divise le flux de données en deux branches parallèles, permettant un meilleur gradient flow et réduisant les calculs redondants. Une branche traverse directement, l'autre passe par plusieurs blocs convolutionnels avant concaténation.
-
-ELAN (Figure \ref{fig:ch2_yolo_07_architecture_elan}), utilisé dans YOLOv7, correspond aux Efficient Layer Aggregation Networks qui améliorent l'agrégation de caractéristiques en connectant explicitement différentes couches. Cette architecture permet une meilleure réutilisation des caractéristiques, mais souffre de problèmes de stabilité d'optimisation, particulièrement visibles dans les gros modèles.
-
-$C_3K_2$ (Figure \ref{fig:ch2_yolo_08_architecture_c3k2}), utilisé dans YOLOv11, est l'évolution de GELAN (Generalized ELAN) qui simplifie l'architecture tout en conservant l'efficacité. $C_3K_2$ représente un cas particulier optimisé de GELAN, adopté pour réduire la latence dans YOLOv11.
-
-R-ELAN (Figure \ref{fig:ch2_yolo_09_architecture_relan}) est l'architecture de bloc proposée dans YOLOv12. La contribution majeure des Residual Efficient Layer Aggregation Networks est l'ajout d'une connexion résiduelle avec facteur d'échelle (scaling) depuis l'entrée vers la sortie, inspirée des techniques de Vision Transformers. Cette modification résout les problèmes de convergence observés avec les mécanismes d'attention, particulièrement critiques pour les modèles YOLOv12-L et YOLOv12-X qui ne convergent pas sans cette stabilisation.
-
-
-\begin{figure}[H]
-    \centering
-    \begin{subfigure}[b]{0.30\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{02-main/figures/ch2/ch2_yolo_06_architecture_csp.png}
-        \caption{``CSPNet'' (YOLOv4/v5)}
-        \label{fig:ch2_yolo_06_architecture_csp}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[b]{0.30\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{02-main/figures/ch2/ch2_yolo_07_architecture_elan.png}
-        \caption{``ELAN'' (YOLOv7)}
-        \label{fig:ch2_yolo_07_architecture_elan}
-    \end{subfigure}
-    \vspace{0.35cm}
-    \begin{subfigure}[b]{0.45\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{02-main/figures/ch2/ch2_yolo_08_architecture_c3k2.png}
-        \caption{``$C_3K_2$'' (YOLOv11)}
-        \label{fig:ch2_yolo_08_architecture_c3k2}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[b]{0.33\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{02-main/figures/ch2/ch2_yolo_09_architecture_relan.png}
-        \caption{``R-ELAN'' (YOLOv12)}
-        \label{fig:ch2_yolo_09_architecture_relan}
-    \end{subfigure}
-    \caption{Évolution architecturale des blocs utilisés dans YOLO \cite{tian_yolov12_2025}}
-    \label{fig:ch2_yolo_architecture_simplifiee}
-\end{figure}
-
-\paragraph{Améliorations architecturales}
-\citeauthor{tian_yolov12_2025} introduisent plusieurs optimisations architecturales cruciales pour adapter efficacement les mécanismes d'attention au contexte temps réel de YOLO.
-
-FlashAttention \cite{dao_flashattention_2022} résout le problème fondamental d'accès mémoire des transformers. Traditionnellement, l'attention stocke des matrices intermédiaires volumineuses en mémoire GPU lente (HBM), créant un goulot d'étranglement. FlashAttention optimise ces accès mémoire, réduisant significativement la latence sans perte de précision.
-
-YOLOv12 introduit une innovation architecturale contre-intuitive : la suppression complète de l'encodage positionnel traditionnel des Vision Transformers. Cette décision simplifie drastiquement l'architecture en éliminant l'étape d'ajout explicite d'information positionnelle aux embeddings d'entrée.
-
-Pour préserver l'information spatiale nécessaire, YOLOv12 utilise un position perceiver : une convolution séparable $7 \times 7$ appliquée directement aux valeurs d'attention $V$. Cette approche exploite les propriétés intrinsèques de la convolution pour encoder implicitement la position spatiale. L'effet de lissage du noyau convolutionnel préserve la cohérence positionnelle locale tout en capturant les relations spatiales dans un voisinage étendu.
-
-Cette méthode s'avère plus efficace que l'encodage positionnel traditionnel car elle intègre l'information spatiale dans le flux de calcul de l'attention, évitant ainsi les opérations d'addition préliminaires. Le résultat est une architecture plus simple, plus rapide, et paradoxalement plus performante pour les tâches de détection temps réel.
-
-La réduction du ratio MLP (Multilayer Perceptron) de 4.0 vers 1.2 rééquilibre la charge computationnelle entre les blocs d'attention et les réseaux feed-forward. Dans les Vision Transformers standards, le MLP consomme 75 \% des calculs ; YOLOv12 privilégie l'attention (plus bénéfique pour la détection) en réduisant la taille des MLP.
-
-
-\subsubsection{Résultats principaux}
-YOLOv12 établit un nouveau compromis vitesse-précision optimal qui démontre la viabilité des mécanismes d'attention pour la détection temps réel.
-
-Les performances surpassent systématiquement les modèles existants. YOLOv12-N atteint 40.6\% mAP en 1.64 ms, dépassant YOLOv11-N de 1.2\% mAP à vitesse équivalente. Cette supériorité se maintient sur toutes les échelles de modèles.
-
-L'efficacité computationnelle est remarquable face aux détecteurs bout-à-bout. YOLOv12-S (9.3 M paramètres) surpasse RT-DETR-R18 \cite{zhao_detrs_2024} (20 M paramètres) avec 42~\% de vitesse supplémentaire. Il utilise seulement 36~\% des calculs et 47~\% des paramètres.
-
-Les cartes d'activation (Figure \ref{fig:ch2_yolo_10_perception}) révèlent une amélioration qualitative notable, avec des contours d'objets plus nets et une activation de premier plan plus précise comparé à YOLOv10/v11, illustrant concrètement les bénéfices des mécanismes d'attention optimisés.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=1\linewidth]{02-main/figures/ch2/ch2_yolo_10_perception.png}
-    \caption{Perception des objets dans YOLOv10, YOLOv11 et YOLOv12 \cite{tian_yolov12_2025}}
-    \label{fig:ch2_yolo_10_perception}
-\end{figure}
-
-\subsubsection{Discussion et limites}
-YOLOv12 représente une avancée majeure en démontrant que les mécanismes d'attention peuvent être rendus suffisamment efficaces pour la détection temps réel.
-
-Si l'étude démontre théoriquement qu'il est possible de rendre l'attention suffisamment efficace pour la détection temps réel, l'impact pratique reste mitigé. \citeauthor{khanam_review_2025} \cite{khanam_review_2025} révèlent que YOLOv12 est à peine plus performant que ses prédécesseurs avec une architecture relativement complexe et plus gourmande en énergie.
-
-La contrainte matérielle constitue une limitation majeure souvent sous-estimée. La dépendance exclusive à FlashAttention restreint l'utilisation aux GPU d'architecture Turing ou plus récente (RTX 20/30/40, A100, H100), excluant de facto une large base d'utilisateurs équipés de matériel plus ancien. Cette limitation est particulièrement problématique pour les applications industrielles où les cycles de renouvellement matériel sont longs. Cela affecte également les applications edge, dans lesquelles les ressources sont limitées et l'efficience énergétique du modèle est un paramètre critique.
-
-% -----------------------------------------------------------------------------
-
-\subsection{Segment Anything Model 2 : Segmentation d'images et de vidéos}
-\label{subsec:sam2_segment_anything_2024}
-
-\subsubsection{Contexte et objectifs}
-Avant de présenter le modèle Segment Anything 2 (SAM2), il est important de rappeler le modèle Segment Anything (SAM) qui a été publié en \citeyear{kirillov_segment_2023}.
-
-\paragraph{Segment Anything Model (SAM)}
-\label{par:sam_segment_anything_2023}
-SAM \cite{kirillov_segment_2023} est un modèle de segmentation d'images développé par Meta AI. L'objectif de Segment Anything est de générer des masques de segmentation de haute qualité pour n'importe quel objet d'une image à partir de prompts simples comme des points ou des boîtes. Cela lui permet d'effectuer diverses tâches de segmentation de manière flexible sans avoir besoin d'être entraîné à nouveau pour chacune d'entre elles.
-
-Le modèle Segment Anything (SAM) comporte trois éléments principaux :
-\begin{itemize}
-    \item Encodeur d'images
-    \item ``Prompt encoder''
-    \item Décodeur de masques
-\end{itemize}
-La Figure \ref{fig:ch2_sam2_01_fonctionnement_sam} permet d’avoir une vue d’ensemble des différentes parties de SAM.
-
-\begin{figure}[H]
-    \centering
-    \makebox[\textwidth][c]{\includegraphics[width=1.20\textwidth]{02-main//figures//ch2/ch2_sam2_01_fonctionnement_sam.png}}
-    \caption{Fonctionnement de segment anything (SAM)}
-    \label{fig:ch2_sam2_01_fonctionnement_sam}
-\end{figure}
-
-Le premier élément est l'encodeur d'images (``1'' sur la Figure \ref{fig:ch2_sam2_01_fonctionnement_sam}). L'encodeur d'image est un réseau de neurones qui a été pré-entraîné à l'aide d'une technique d'apprentissage auto-supervisé appelée Masked Autoencoder (MAE). L'encodeur prend une image en entrée et la fait passer par une série de couches d'auto-attention (self-attention), ce qui permet au modèle de capturer le contexte global et les relations entre les différentes parties de l'image. La sortie de l'encodeur d'image est l'image embedding, qui est une représentation vectorielle compacte à hautes dimensions d'une image d'entrée qui capture ses caractéristiques essentielles et ses informations spatiales.
-
-Le deuxième élément est le prompt encoder (``2'' sur la Figure \ref{fig:ch2_sam2_01_fonctionnement_sam}). SAM fonctionne avec une interface graphique, la Figure \ref{fig:ch2_sam2_02_prompt_encoder} 
-montre l'interface graphique développée par Meta AI pour tester SAM.
-
-\begin{figure}[H]
-    \centering
-    \makebox[\textwidth][c]{\includegraphics[width=1.20\textwidth]{02-main//figures//ch2/ch2_sam2_02_prompt_encoder.png}}
-    \caption{Interface graphique de démonstration de SAM \cite{fair_segment_nodate}}
-    \label{fig:ch2_sam2_02_prompt_encoder}
-\end{figure}
-
-A l’aide des outils à gauche de la Figure \ref{fig:ch2_sam2_02_prompt_encoder}, il est possible de sélectionner un point (Figure \ref{fig:ch2_sam2_03_prompt1}) ou sélectionner une partie de l’image avec une boite rectangulaire (Figure \ref{fig:ch2_sam2_04_prompt2}). Le modèle va alors segmenter la partie de l’image (voir Figure \ref{fig:ch2_sam2_prompt_exemple_point_rectangle}).
-
-\begin{figure}[H]
-    \centering
-    \begin{subfigure}[b]{0.35\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{02-main/figures/ch2/ch2_sam2_03_prompt1.png}
-        \caption{Exemple de sélection de masque avec un point}
-        \label{fig:ch2_sam2_03_prompt1}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[b]{0.435\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{02-main/figures/ch2/ch2_sam2_04_prompt2.png}
-        \caption{Exemple de sélection de masque avec une boite rectangulaire}
-        \label{fig:ch2_sam2_04_prompt2}
-    \end{subfigure}
-    \caption{Interface graphique de démonstration de SAM \cite{fair_segment_nodate}}
-    \label{fig:ch2_sam2_prompt_exemple_point_rectangle}
-\end{figure}
-
-SAM permet aussi de décrire avec du texte ce que l’on souhaite segmenter sur l’image. Le prompt encoder va convertir toutes les informations (points, boite rectangulaire, texte) en une représentation vectorielle (embeddings) unique pour toutes les données renseignées. Cette représentation vectorielle sera ensuite utilisée pour le mask decoder.
-
-La troisième partie est le mask decoder (``3'' sur la Figure \ref{fig:ch2_sam2_01_fonctionnement_sam}). Le mask decoder va utiliser les représentations vectorielles de l’encodeur d’images (``1'' sur la Figure \ref{fig:ch2_sam2_01_fonctionnement_sam}), ainsi que celles du prompt encoder (``2'' sur la Figure \ref{fig:ch2_sam2_01_fonctionnement_sam}) pour segmenter l’image en différents masques. Chacun de ces masques est une polyligne fermée, comme indiqué sur la Figure \ref{fig:ch2_sam2_05_masques}. Le modèle indique aussi la probabilité (confidence) qu’il estime que la segmentation est juste.
-
-\begin{figure}[H]
-    \centering
-    \makebox[\textwidth][c]{\includegraphics[width=1\textwidth]{02-main//figures//ch2/ch2_sam2_05_masques.png}}
-    \caption{Interface graphique de démonstration de SAM. Exemple de segmentation}
-    \label{fig:ch2_sam2_05_masques}
-\end{figure}
-
-Meta AI a accordé une attention particulière à la création du dataset SA-1B, utilisé pour entraîner le modèle SAM. Ce dataset est une collection d'images et de masques annotés pour la segmentation, avec 11 millions d'images et 1,1 milliard de masques. L'objectif principal de Meta AI était de constituer un ensemble de données plus représentatif et diversifié que les datasets existants, afin d'améliorer les performances et la généralisation des modèles de segmentation.
-
-Le dataset couvre environ 70 pays et a été annoté manuellement par des travailleurs qualifiés. Les images ont été triées selon leur géolocalisation et leur niveau de revenu, afin d'assurer une représentativité adéquate des différents groupes socio-économiques. La Figure \ref{fig:ch2_sam2_sa1b_diversite_pays} représente l’origine et la distribution des images utilisées par pays.
-
-\begin{figure}[H]
-    \centering
-    \begin{subfigure}[b]{0.70\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{02-main/figures/ch2/ch2_sam2_06_dataset_sa1b_pays1.png}
-        \caption{Carte de monde avec les pays les plus représentés dans le dataset SA-1B}
-        \label{fig:ch2_sam2_06_dataset_sa1b_pays1}
-    \end{subfigure}
-    \vspace{0.35cm}
-    \begin{subfigure}[b]{1\textwidth}
-        \centering
-        \makebox[\textwidth][c]{\includegraphics[width=1\textwidth]{02-main/figures/ch2/ch2_sam2_07_dataset_sa1b_pays2.png}}
-        \caption{Distribution des images par pays dans le dataset SA-1B}
-        \label{fig:ch2_sam2_07_dataset_sa1b_pays2}
-    \end{subfigure}
-    \caption{Origine des images qui forment le dataset SA-1B utilisé pour l’entrainement de SAM \cite{kirillov_segment_2023}}
-    \label{fig:ch2_sam2_sa1b_diversite_pays}
-\end{figure}
-
-Le dataset contient des annotations précises pour chaque objet dans chaque image, ce qui en fait un outil utile pour les chercheurs et les développeurs travaillant sur des applications de segmentation.
-
-Dans la Figure \ref{fig:ch2_sam2_08_eval_sam_humain}, Meta AI a demandé a des personnes d’évaluer la qualité de la segmentation sur 7 datasets différents. SAM est plus performant que le modèle RITM \cite{sofiiuk_reviving_2021} dans tous les cas.
-
-\begin{figure}[H]
-    \centering
-    \makebox[\textwidth][c]{\includegraphics[width=1\textwidth]{02-main//figures//ch2/ch2_sam2_08_eval_sam_humain.png}}
-    \caption{Evaluation par des humains de la qualité des masques générés par SAM et RITM  \cite{kirillov_segment_2023}}
-    \label{fig:ch2_sam2_08_eval_sam_humain}
-\end{figure}
-
-Dans une autre comparaison (Figure \ref{fig:ch2_sam2_09_eval_sam_miou}), l'objectif est de comparer plusieurs modèles qui effectuent de la segmentation sur 23 datasets. SAM a un mIoU plus élevé que les autres modèles.
-
-\begin{figure}[H]
-    \centering
-    \makebox[\textwidth][c]{\includegraphics[width=0.5\textwidth]{02-main//figures//ch2/ch2_sam2_09_eval_sam_miou.png}}
-    \caption{Comparatif de mIoU sur 23 datasets de SAM \cite{kirillov_segment_2023}}
-    \label{fig:ch2_sam2_09_eval_sam_miou}
-\end{figure}
-
-La Figure \ref{fig:ch2_sam2_09_eval_sam_miou} inclus également un résultat ``oracle'', dans lequel la plus pertinente des 3 segmentations de SAM est sélectionnée en les comparant à la vérité terrain, plutôt que de sélectionner le masque avec la confidence la plus élevée. Cela révèle l'impact de l'ambiguïté sur l'évaluation automatique.
-
-Pour conclure, jusqu'a l'arrivée de SAM2 en \citeyear{ravi_sam_2024}, l’état de l’art en segmentation d’image était SAM. Il est plus performant que tous les autres modèles existants qui réalisent cette tâche.
-
-\paragraph{Segment Anything Model 2 (SAM2)}
-L'article \cite{ravi_sam_2024} présente Segment Anything Model 2 (SAM2), une extension du modèle de segmentation SAM vers le domaine vidéo. Alors que SAM révolutionna la segmentation d'images en 2023, les vidéos représentent une part croissante du contenu multimédia et nécessitent une localisation temporelle pour des applications critiques en réalité augmentée/virtuelle, robotique et véhicules autonomes.
-
-\citeauthor{ravi_sam_2024} identifient les défis spécifiques à la segmentation vidéo : changements d'apparence dus au mouvement, déformations, occlusions, variations d'éclairage, et qualité souvent inférieure aux images statiques. L'objectif est de développer un système universel capable de ``segmenter n'importe quoi dans les vidéos'' avec la même facilité que SAM pour les images.
-
-Le travail introduit la tâche PVS (Promptable Visual Segmentation) qui généralise la segmentation interactive d'images aux vidéos, permettant de fournir des prompts (clics, boîtes, masques) sur n'importe quelle frame pour définir et raffiner des segments spatio-temporels appelés ``masklets''.
-
-La Figure \ref{fig:ch2_sam2_fonctionnement} représente une vue d'ensemble montrant la tâche PVS (Figure \ref{fig:ch2_sam2_pvs}), l'architecture SAM 2 (Figure \ref{fig:ch2_sam2_model}) et le processus de collecte de données (Figure \ref{fig:ch2_sam2_data}).
-
-\begin{figure}[H]
-    \centering
-    \makebox[\textwidth][c]{\includegraphics[width=1.25\textwidth]{02-main//figures//ch2/ch2_sam2_10_dataset_sam2.png}}
-   
-    \begin{subfigure}{0.20\textwidth}
-        \subcaption{Promptable Visual Segmentation (PVS)}
-        \label{fig:ch2_sam2_pvs}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}{0.25\textwidth}
-        \subcaption{Segment Anything Model 2 (SAM2)}
-        \label{fig:ch2_sam2_model}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}{0.20\textwidth}
-        \subcaption{Dataset SA-V}
-        \label{fig:ch2_sam2_data}
-    \end{subfigure}
-    
-    \caption{Fonctionnement SAM2 \cite{ravi_sam_2024}}
-    \label{fig:ch2_sam2_fonctionnement}
-\end{figure}
-
-\subsubsection{Données}
-Les auteurs développent un moteur de données (data engine) en trois phases pour créer le dataset SA-V, le plus grand dataset de segmentation vidéo à ce jour. Le processus évolue de l'annotation manuelle pure vers l'assistance progressive par SAM 2 :
-\begin{itemize}
-    \item Phase 1 : Annotation manuelle photogramme par photogramme avec SAM (37.8s/photogramme)
-    \item Phase 2 : SAM + propagation temporelle par SAM 2 (7.4s/photogramme)
-    \item Phase 3 : SAM 2 complet avec mémoire temporelle (4.5s/photogramme)
-\end{itemize}
-
-Le dataset final SA-V comprend 50.9K vidéos avec 642.6K masklets (190.9K manuels + 451.7K automatiques), représentant 53× plus de masques que tout dataset VOS existant. La diversité géographique couvre 47 pays, avec annotation de segments entiers et de parties d'objets, sans contraintes catégorielles.
-
-Un processus de vérification qualité garantit la cohérence temporelle des annotations, avec classification ``satisfaisant/non-satisfaisant'' par des annotateurs dédiés.
-
-\subsubsection{Méthodologie}
-SAM 2 adopte une architecture (Figure \ref{fig:ch2_sam2_11_architecture_sam2}) de traitement en flux continu (streaming) qui analyse les vidéos photogramme par photogramme, équipée d'un système de mémoire sophistiqué pour préserver le contexte temporel entre les images. Cette approche permet un traitement en temps réel de vidéos de longueur arbitraire. Les composants clés incluent :
-
-\begin{itemize}
-    \item Encodeur d'image : Utilise l'architecture Hiera, un transformateur de vision hiérarchique pré-entraîné avec la méthode MAE (Masked Autoencoder). Cette structure hiérarchique extrait des caractéristiques visuelles à différentes résolutions spatiales, des détails fins aux motifs globaux.
-    
-    \item Module d'attention mémoire : Composé de L couches de transformateurs qui conditionnent les caractéristiques de l'image actuelle en fonction des informations stockées en mémoire des images précédentes, permettant une cohérence temporelle.
-    
-    \item Banque mémoire : Système de stockage organisé en files d'attente FIFO (premier entré, premier sorti) qui conserve les informations de N photogrammes récents et de M photogrammes contenant des instructions utilisateur. Inclut également des ``pointeurs d'objets'' (object pointers), des vecteurs compacts encodant l'information sémantique de haut niveau sur l'objet suivi.
-    
-    \item Décodeur de masque : Architecture similaire à celle de SAM original, augmentée d'une tête de prédiction supplémentaire qui détermine si l'objet d'intérêt est visible ou caché dans le photogramme actuel, gérant ainsi les disparitions temporaires d'objets.
-\end{itemize}
-
-\begin{figure}[H]
-    \centering
-    \makebox[\textwidth][c]{\includegraphics[width=1.15\textwidth]{02-main//figures//ch2/ch2_sam2_11_architecture_sam2.png}}
-    \caption{Architecture SAM2 \cite{ravi_sam_2024}}
-    \label{fig:ch2_sam2_11_architecture_sam2}
-\end{figure}
-
-\paragraph{Stratégie d'entraînement}
-
-L'entraînement de SAM 2 simule des sessions d'annotation interactive réelles pour apprendre au modèle à gérer efficacement les interactions utilisateur dans le contexte vidéo. Le processus d'apprentissage s'appuie sur des séquences de 8 images consécutives extraites de vidéos d'entraînement.
-
-Pour chaque séquence, les chercheurs simulent le comportement d'un annotateur humain en sélectionnant jusqu'à 2 images qui recevront des instructions explicites (prompts). Les prompts initiaux suivent une distribution réaliste : masque de segmentation correct dans 50\% des cas, clic simple sur l'objet dans 25\% des cas, et boîte englobante dans les 25\% restants. Des clics correctifs supplémentaires sont introduits de manière probabiliste durant l'entraînement pour simuler les corrections qu'un utilisateur réel effectuerait face à une segmentation imparfaite.
-
-L'objectif pédagogique consiste à apprendre au modèle à prédire la segmentation temporelle complète (masklet) sur l'ensemble des 8 images de la séquence, en s'appuyant uniquement sur ces quelques instructions partielles et en exploitant sa mémoire temporelle.
-
-\paragraph{Fonctionnement en inférence interactive}
-
-Une fois entraîné, SAM 2 effectue la segmentation interactive selon un processus en deux étapes qui exploite sa mémoire temporelle pour maintenir la cohérence des masques à travers les séquences d'images (Figure \ref{fig:ch2_sam2_12_entrainement_sam2}).
-
-La première étape consiste en la sélection initiale de l'objet cible (frame 1, step 1 sur Figure \ref{fig:ch2_sam2_12_entrainement_sam2}). L'utilisateur fournit des invites sur une image de référence : les points verts correspondent aux zones à inclure dans la segmentation, tandis que les points rouges représentent les régions à exclure. Dans l'exemple, SAM 2 identifie le segment de l'objet d'intérêt (la langue) dans l'image 1, puis propage automatiquement ce segment aux images suivantes pour former un masque temporel continu.
-
-\begin{figure}[H]
-    \centering
-    \makebox[\textwidth][c]{\includegraphics[width=1.15\textwidth]{02-main//figures//ch2/ch2_sam2_12_entrainement_sam2.png}}
-    \caption{Processus de segmentation interactive avec SAM 2 : sélection initiale et raffinement par mémoire temporelle \cite{ravi_sam_2024}}
-    \label{fig:ch2_sam2_12_entrainement_sam2}
-\end{figure}
-
-La seconde étape intervient lors des situations de perte de suivi. Il arrive que SAM 2 perde la trace de l'objet au cours de la propagation temporelle, comme observé l'exemple (frame 3, step 1 sur Figure \ref{fig:ch2_sam2_12_entrainement_sam2}). Dans ce cas, l'utilisateur peut corriger le masque en fournissant une invite supplémentaire (frame 3, step 2 sur Figure \ref{fig:ch2_sam2_12_entrainement_sam2}) dans une nouvelle image de la séquence.
-
-L'avantage de SAM 2 réside dans sa capacité à raffiner la segmentation grâce à la mémoire temporelle. Un seul clic dans l'image suffit pour récupérer l'objet perdu et relancer la propagation correcte pour la suite de la séquence. Cette approche contraste favorablement avec les méthodes découplées combinant SAM et un tracker vidéo traditionnel, qui nécessiteraient de recommencer entièrement le processus de segmentation, obligeant l'utilisateur à fournir plusieurs clics dans le frame 3 (Figure \ref{fig:ch2_sam2_12_entrainement_sam2}) comme lors de l'annotation initiale. La mémoire temporelle de SAM 2 réduit ainsi considérablement l'effort d'annotation requis pour maintenir un suivi précis des objets dans les vidéos.
-
-\subsubsection{Résultats principaux}
-SAM 2 démontre des performances supérieures sur de multiples benchmarks, validant son efficacité dans trois domaines d'application principaux.
-
-\paragraph{Segmentation vidéo interactive}
-Les évaluations en segmentation vidéo interactive menées sur 9 datasets densément annotés démontrent la supériorité de SAM 2 par rapport aux méthodes de référence qui combinent SAM avec des trackers vidéo spécialisés (SAM+XMem++ \cite{bekuzarov_xmem_2023} \cite{noauthor_mbzuai-metaversexmem2_2025} et SAM+Cutie \cite{cheng_putting_2024} \cite{cheng_hkchengrexcutie_2025}). Ces tests ont été réalisés avec un protocole standardisé de 3 clics par photogramme, les résultats complets sont présentés dans la Figure \ref{fig:ch2_sam2_resultats_sam2_segmentation_video}.
-
-L'évaluation s'organise selon deux protocoles distincts qui reflètent différents scénarios d'usage pratique. Le premier mode, appelé évaluation hors ligne (offline), permet d'effectuer plusieurs passes successives à travers une vidéo. Cette approche autorise l'annotateur à sélectionner de manière stratégique les images sur lesquelles intervenir, en se basant sur l'analyse des erreurs de modèle les plus critiques identifiées lors des passes précédentes (Figure \ref{fig:ch2_sam2_13_resultats_sam2_segmentation_video_offline}).
-
-Le second mode correspond à l'évaluation en ligne (online), qui simule un contexte d'annotation en temps réel. Dans cette configuration, les images sont annotées au cours d'un unique passage séquentiel à travers la vidéo, sans possibilité de retour en arrière ou d'optimisation a posteriori (Figure \ref{fig:ch2_sam2_14_resultats_sam2_segmentation_video_online}). Ce protocole reflète davantage les contraintes rencontrées lors d'applications pratiques où l'annotation doit s'effectuer de manière continue.
-
-\begin{figure}[H]
-    \centering
-    \begin{subfigure}[b]{0.75\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{02-main/figures/ch2/ch2_sam2_13_resultats_sam2_segmentation_video_offline.png}
-        \caption{Evaluation en mode offline}
-        \label{fig:ch2_sam2_13_resultats_sam2_segmentation_video_offline}
-    \end{subfigure}
-    \vspace{0.35cm}
-    \begin{subfigure}[b]{0.75\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{02-main/figures/ch2/ch2_sam2_14_resultats_sam2_segmentation_video_online.png}
-        \caption{Evaluation en mode online}
-        \label{fig:ch2_sam2_14_resultats_sam2_segmentation_video_online}
-    \end{subfigure}
-    \caption{Zero-shot accuracy sur 9 datasets de segmentation vidéo interactive \cite{ravi_sam_2024}}
-    \label{fig:ch2_sam2_resultats_sam2_segmentation_video}
-\end{figure}
-
-
-\paragraph{Segmentation d'objets vidéo semi-supervisée}
-Pour la segmentation d'objets vidéo semi-supervisée (VOS - Video Object Segmentation), SAM 2 démontre d'excellentes capacités dans un contexte d'annotation minimale. Cette tâche consiste à segmenter et suivre un objet à travers une séquence vidéo complète en ne disposant que d'une seule annotation manuelle sur la première image de la vidéo. Le modèle doit ensuite propager automatiquement cette segmentation initiale sur toutes les images suivantes, en gérant les défis comme les changements d'apparence, les occlusions temporaires, et les variations d'éclairage.
-
-SAM 2 établit de nouveaux records de performance sur 17 datasets de référence. Les évaluations utilisent la métrique J\&F, qui combine l'accuracy de la segmentation (mesure J, basée sur l'intersection sur union des masques) et l'accuracy des contours (mesure F, évaluant la qualité des frontières d'objets). Cette métrique composite, exprimée en pourcentage, reflète fidèlement la qualité globale de la segmentation temporelle.
-
-Les gains sont particulièrement remarquables sur les benchmarks les plus exigeants du domaine (Figure \ref{tab:ch2_sam2_resultats_sam2_vos_zeroshot}). Sur le dataset MOSE \cite{noauthor_mose_nodate}, reconnu pour sa complexité avec des objets subissant des transformations importantes et des occlusions prolongées, SAM 2 atteint 76.6\% de score J\&F contre 71.7\% pour la meilleure méthode précédente (Cutie-base+), soit une amélioration absolue de 4.9 points. Sur DAVIS 2017 \cite{noauthor_davis_nodate}, le benchmark historique de référence en segmentation vidéo, SAM 2 obtient 90.2\% contre 88.1\% pour les approches existantes, établissant un nouveau standard de performance.
-
-\begin{table}[H]
-    \centering
-    \begin{tabular}{lccccc}
-        \hline
-        Method & 1-click & 3-click & 5-click & bounding box & ground-truth mask \\
-        \hline
-        SAM+XMem++ & 56.9 & 68.4 & 70.6 & 67.6 & 72.7 \\
-        SAM+Cutie & 56.7 & 70.1 & 72.2 & 69.4 & 74.1 \\
-        SAM 2 & 64.7 & 75.3 & 77.6 & 74.4 & 79.3 \\
-        \hline
-    \end{tabular}
-    \caption{Zero-shot accuracy sur 17 datasets vidéo avec différents types de prompts. Accuracy moyenne pour chaque type de prompt (1, 3 ou 5 clics, boîtes englobantes, ou masques de vérité terrain) appliqué sur la première image de chaque vidéo \cite{ravi_sam_2024}}
-    \label{tab:ch2_sam2_resultats_sam2_vos_zeroshot}
-\end{table}
-
-Ces résultats sont d'autant plus remarquables que SAM 2, contrairement aux méthodes spécialisées qu'il surpasse, reste un modèle généraliste capable de segmenter n'importe quel objet sans restriction catégorielle, démontrant ainsi la puissance de son approche unifiée.
-
-\paragraph{Segmentation d'images}
-
-En segmentation d'images, SAM 2 maintient et améliore significativement les performances de son prédécesseur sur une suite étendue de 37 datasets, incluant les 23 benchmarks originaux de SAM. L'évaluation utilise la métrique mIoU (mean Intersection over Union), qui mesure la précision moyenne de segmentation en calculant le rapport entre l'intersection et l'union des masques prédits et réels, exprimé en pourcentage.
-
-Le Tableau \ref{tab:ch2_sam2_resultats_segmentation_image_miou} présente une analyse comparative détaillée des performances de SAM et SAM 2. Les résultats sont organisés par domaine d'application et montrent les scores mIoU moyens pour 1 et 5 clics utilisateur. Les métriques correspondent aux moyennes calculées sur les 23 datasets originellement utilisés pour l'évaluation de SAM (SA-23), subdivisés entre datasets d'images et de vidéos, ainsi qu'aux résultats sur 14 datasets vidéo supplémentaires évalués en inférence directe.
-
-\begin{table}[H]
-    \centering
-    \begin{tabular}{llccccr}
-        \multirow{2}{*}{Model} & \multirow{2}{*}{Data} & \multicolumn{4}{c}{1 (5) click mIoU} & \multirow{2}{*}{FPS} \\
-        \cline{3-6}
-        & & SA-23 All & SA-23 Image & SA-23 Video & 14 new Video & \\
-        \hline
-        SAM & SA-1B & 58.1 (81.3) & 60.8 (82.1) & 54.5 (80.3) & 59.1 (83.4) & 21.7 \\
-        SAM 2 & SA-1B & 58.9 (81.7) & 60.8 (82.1) & 56.4 (81.2) & 56.6 (83.7) & 130.1 \\
-        SAM 2 & mix & 61.9 (83.5) & 63.3 (83.8) & 60.1 (83.2) & 69.6 (85.8) & 130.1 \\
-        \hline
-    \end{tabular}
-    \caption{Performances de SAM 2 en inférence directe sur la tâche de segmentation d'images évaluées sur 37 datasets \cite{ravi_sam_2024}.}
-    \label{tab:ch2_sam2_resultats_segmentation_image_miou}
-\end{table}
-
-Les résultats révèlent plusieurs éléments importants. Premièrement, si le modèle est entrainé uniquement sur le dataset SA-1B (comme SAM original), SAM 2 atteint 58.9\% de mIoU avec un seul clic contre 58.1\% pour SAM, démontrant une amélioration modeste mais par contre le gain de vitesse est remarquable : 130.1 contre 21.7 images par seconde, soit environ 6 fois plus rapide. Ce gain provient principalement de l'architecture Hiera plus compacte et optimisée.
-
-Deuxièmement, l'entraînement conjoint sur données image-vidéo (configuration ``mix'' dans le Tableau \ref{tab:ch2_sam2_resultats_segmentation_image_miou}) révèle tout le potentiel de l'approche multimodale de SAM 2. Les performances grimpent à 61.9\% de mIoU moyen, avec des gains particulièrement marqués sur les données vidéo : 69.6\% sur les 14 nouveaux datasets vidéo contre 56.6\% pour la version entraînée uniquement sur images. Cette amélioration illustre comment l'apprentissage temporel enrichit la compréhension spatiale du modèle.
-
-Cette capacité d'adaptation automatique à de nouveaux domaines sans réentraînement constitue un atout majeur pour les applications pratiques, où la diversité des données d'entrée est souvent imprévisible.
-
-\subsubsection{Discussion et limites}
-Malgré ses performances remarquables, SAM 2 présente certaines limitations techniques identifiées par les auteurs.
-
-Les principales défaillances concernent les discontinuités temporelles (changements de plan brutaux), les scènes visuellement encombrées, les occlusions prolongées et le traitement de vidéos très longues. Néanmoins, l'architecture interactive permet de récupérer rapidement d'erreurs par des prompts correctifs sur n'importe quel photogramme.
-
-Les limitations de précision spatiale se manifestent avec les objets comportant des détails très fins (cheveux, contours complexes), particulièrement en mouvement rapide, ainsi qu'avec les objets d'apparence très similaire que le modèle peut confondre en s'appuyant principalement sur les caractéristiques visuelles.
-
-Sur le plan architectural, SAM 2 traite chaque objet indépendamment sans communication inter-objets, partageant uniquement les embeddings d'images. Cette approche ignore les relations spatiales et temporelles entre objets, qui pourraient enrichir la compréhension de scène.
-
-Les auteurs proposent plusieurs améliorations : intégration d'une modélisation explicite du mouvement (flux optique, prédicteurs de trajectoire), incorporation d'informations contextuelles partagées entre objets, et automatisation partielle du processus d'annotation par des métriques de confiance automatiques.
-
-Malgré ces limitations, SAM 2 représente une avancée considérable vers la segmentation universelle d'objets dans les images et vidéos, ouvrant de nouvelles possibilités pour la réalité augmentée, la robotique autonome, les systèmes de conduite assistée et l'édition vidéo professionnelle.
-% -----------------------------------------------------------------------------
 \section{Datasets disponibles}
 \label{sec:dataset_disponible}
 \par{Quelques datasets de qualité sont disponibles actuellement. Ce chapitre va parcourir certains d'entre eux.}
@@ -1902,7 +1915,9 @@ L'article présente plusieurs catégories de résultats :
 % -----------------------------------------------------------------------------
 \section{Solutions commerciales existantes}
 \par{Quelques entreprises offrent des solutions pour réaliser un cadastre solaire sur la base de leur données. Dans tous les cas leur méthodologie ou les données utilisées ne sont pas disponible.}
-\par{Solargis \cite{solargis_regional_nodate} est un société spécialisée dans le solaire. Cette entreprise offre diverses solutions pour planifier toutes les phases de chantier, depuis la modélisation d'un site jusqu'au suivi et à l'optimisation des performances des panneaux solaires en phase d'exploitation. Ils offrent aussi la prestation de création d'un cadastre solaire pour une région.}
+
+Solargis \cite{solargis_regional_nodate} est une société spécialisée dans le domaine solaire. Cette entreprise propose diverses solutions pour planifier toutes les phases de projet, depuis la modélisation d'un site jusqu'au suivi et à l'optimisation des performances des panneaux solaires en phase d'exploitation. Elle offre également des prestations de création de cadastres solaires pour des régions entières. L'entreprise utilise notamment le machine learning \cite{solargis_temporal_nodate} pour analyser les données météorologiques historiques et réaliser des prévisions de production d'énergie. Bien qu'elle analyse des images satellite pour réaliser ses cadastres, elle n'indique pas la méthodologie employée.
+
 \par{L'entreprise Picterra \cite{picterra_infrastructure_nodate} offre des solutions pour l'utilisation de machine learning sur des données géomatiques. Entre autres, ils proposent l'estimation du potentiel solaire d'une région. Une autre entreprise suisse, Urbio, \cite{urbio_urbio_nodate} offre aussi des prestations similaires à Picterra mais plus axées sur la planification énergétique.}
 \par{Google Projet Sunroof \cite{google_project_nodate} exploite les données de Google pour évaluer le potentiel solaire des différentes régions. Cette plateforme propose également quelques conseils pour l'obtention de subventions. Bien que les données générées soient accessibles au public, Google ne les produit que pour les municipalités et régions qui souscrivent à leurs services. Cette solution est actuellement limitée aux USA.}
 
@@ -1916,8 +1931,14 @@ L'article présente plusieurs catégories de résultats :
 
 \par{Les approches par machine learning supervisé, exemplifiées par les travaux de \citeauthor{castello_quantification_2021} et \citeauthor{li_deep_2024}, démontrent une capacité prometteuse à identifier automatiquement les surfaces disponibles et les obstacles sur les toitures. Ces méthodes atteignent des performances satisfaisantes (IoU de 64\% pour \citeauthor{castello_quantification_2021}, \%RMSE de 19,92\% pour SolarNet+) mais restent limitées par la disponibilité et la qualité des données d'entraînement annotées.}
 
-\par{L'étude du \acrshort{stdl} illustre la complémentarité des différentes sources de données (\gls{lidar}, orthophotos, données vectorielles) et techniques (classification, segmentation). La combinaison par concaténation des résultats de segmentation \gls{lidar} et d'images atteint un F1-score de 0.79 avec un recall de 0.94, démontrant l'intérêt d'approches hybrides.}
+L'étude du \acrshort{stdl} illustre la complémentarité des différentes sources de données (\gls{lidar}, orthophotos, données vectorielles) et techniques (classification, segmentation), mais révèle également des limitations importantes qui questionnent la viabilité opérationnelle de ces approches. 
 
-\par{Concernant les données disponibles, le dataset RID constitue actuellement la seule ressource publique permettant la segmentation sémantique complète des éléments de toiture. Cependant, sa limitation à un contexte rural allemand restreint sa généralisation à d'autres environnements urbains.}
+Bien que la combinaison par concaténation des résultats de segmentation \gls{lidar} et d'images atteigne un F1-score de 0,79 avec un recall de 0,94, les performances individuelles restent modestes avec des mIoU de seulement 0,38 et 0,37 respectivement. Les temps de calcul s'avèrent prohibitifs pour un déploiement à grande échelle : 12 minutes pour traiter 25 bâtiments en segmentation d'images rendraient l'application au canton de Genève (plus de 80'000 bâtiments) difficilement envisageable.
 
-\par{Les limites identifiées pointent vers la nécessité de combiner les approches traditionnelles éprouvées avec les techniques de machine learning, condition nécessaire au développement de datasets couvrant une plus grande diversité architecturale. L'exploitation conjointe d'images aériennes et d'informations géomatiques plus poussée s'impose comme l'approche la plus prometteuse pour obtenir un cadastre solaire fiable.}
+La qualité visuelle des résultats, particulièrement pour la segmentation \gls{lidar}, ne satisfait pas les experts métier qui jugent les polygones générés inadéquats pour une utilisation opérationnelle. Ces limitations, associées à l'absence de prise en compte de paramètres essentiels comme l'orientation des toitures pour le calcul du potentiel solaire, démontrent que malgré l'intérêt conceptuel d'approches hybrides, leur maturité technologique reste insuffisante pour remplacer les méthodes traditionnelles éprouvées.
+
+Concernant les données disponibles, le dataset RID constitue actuellement la seule ressource publique permettant la segmentation sémantique complète des éléments de toiture. Cependant, sa limitation à un contexte rural allemand restreint sa généralisation à d'autres environnements urbains.
+
+Les limites identifiées pointent vers la nécessité de combiner les approches traditionnelles éprouvées avec les techniques de machine learning, condition nécessaire au développement de datasets couvrant une plus grande diversité architecturale. L'exploitation conjointe d'images aériennes et d'informations géomatiques approfondies s'impose comme l'approche la plus prometteuse pour obtenir un cadastre solaire fiable.
+
+C'est précisément dans cette direction que s'oriente le présent travail, qui propose une méthodologie hybride combinant segmentation par deep learning et données géospatiales. Les développements méthodologiques et techniques de cette approche seront détaillés au chapitre suivant.
