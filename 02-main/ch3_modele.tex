@@ -2586,4 +2586,41 @@ Le fine-tuning avec 45 images annotées n'améliore pas les performances. Le dat
 Pour conclure, SAM fonctionne bien sur des images de qualité avec un bon éclairage, par contre son utilité reste limitée à cause des ombrages et du temps de calcul nécessaire.
 
 % -----------------------------------------------------------------------------
+% -----------------------------------------------------------------------------
 \section{Synthèse}
+
+Ce chapitre a présenté la méthodologie complète pour développer un modèle de segmentation sémantique capable d'identifier les espaces libres sur les toitures du canton de Genève. La démarche s'articule autour de trois phases principales : la définition de la tâche et sélection de l'algorithme, la création d'un dataset d'entraînement adapté, et le développement du modèle.
+
+\paragraph{Approche retenue}
+La segmentation sémantique a été choisie comme algorithme principal après l'analyse réalisée dans le chapitre précédent. Cette approche permet d'identifier pixel par pixel les zones libres sur les toitures, offrant une précision supérieure aux méthodes de classification ou de segmentation d'instance.
+
+\paragraph{Dataset créé}
+La constitution du dataset représente l'effort principal de ce travail :
+\begin{itemize}
+    \item Données sources : orthophotos 2019 de \acrshort{sitg} (436 tuiles, 700 GB) et données vectorielles des bâtiments, enrichies d'une classification \gls{sia}
+    \item Préparation : découpage de 38294 tuiles de \si{\numproduct{1280x1280}} pixels avec recouvrement de 256 pixels, couvrant 77993 \gls{egid} uniques
+    \item Sélection : échantillonnage stratifié basé sur la classe \gls{sia} dominante et la surface des toitures, résultant en 539 tuiles représentatives
+    \item Annotation : processus manuel assisté par Supervisely durant 6 semaines (environ 180 heures), produisant 530 masques binaires après post-traitement
+    \item Distribution : répartition en 5 folds pour validation croisée (441 images) et un dataset de test indépendant (89 images)
+\end{itemize}
+
+\paragraph{Modèles développés}
+Deux approches complémentaires ont été implémentées :
+\begin{itemize}
+    \item Segmentation Models PyTorch (SMP) : 160 combinaisons encodeur-décodeur testées, dont 89 retenues avec des IoU moyens entre 0,62 et 0,74
+    \item YOLOv12 : 5 modèles de tailles différentes, dont 4 retenus avec des IoU entre 0,70 et 0,73
+\end{itemize}
+
+L'entraînement a exploité plusieurs optimisations techniques : précision mixte\\(FP16/FP32), accumulation de gradients, augmentation de données via Albumentations, et planification adaptative du taux d'apprentissage. Ces stratégies ont permis d'optimiser l'utilisation des ressources GPU tout en maintenant la qualité des modèles.
+
+\paragraph{Enseignements tirés}
+Les pistes explorées mais non retenues ont fourni des enseignements précieux :
+\begin{itemize}
+    \item La classification basée uniquement sur les données géomatiques s'est révélée inadéquate en raison de l'incomplétude de la couche des superstructures
+    \item SAM, malgré ses capacités de segmentation généraliste, présente des limitations majeures : sensibilité aux ombrages, temps de calcul prohibitif (7 minutes par image), et nécessité d'un dataset conséquent pour le fine-tuning
+\end{itemize}
+
+\paragraph{Contribution principale}
+La création d'un dataset annoté de haute qualité pour la segmentation des espaces libres sur toitures constitue la contribution majeure de ce travail. Ce dataset, stratifié selon les catégories \gls{sia} et les surfaces de toitures, offre une représentation équilibrée de la diversité architecturale du canton. Les modèles entraînés atteignent des performances prometteuses avec des IoU supérieurs à 0,70 pour les meilleurs d'entre eux, validant l'approche méthodologique adoptée.
+
+L'investissement temporel considérable dans l'annotation manuelle (environ 20 minutes par image) souligne l'importance de développer des approches semi-automatiques pour étendre cette méthodologie à d'autres régions. Les résultats obtenus justifient néanmoins cet effort, offrant une base solide pour l'évaluation automatisée du potentiel solaire à l'échelle cantonale.
