@@ -452,7 +452,99 @@ Un résultat surprenant est que les modèles de taille moyenne (25-50M paramètr
 Un autre point important concerne l'architecture elle-même. En prenant l'exemple d'EfficientNet, on constate que selon le décodeur utilisé (UNet, SegFormer ou FPN), les performances peuvent varier significativement même si la taille reste similaire. Le choix du décodeur est donc tout aussi important que celui de l'encodeur pour obtenir de bons résultats en segmentation.
 
 \subsection{Analyse qualitative}
-Ce sous-section présente des exemples de segmentation obtenus à partir des modèles les plus performants selon les métriques
+Cette sous-section examine des exemples concrets de segmentation produits par les modèles ayant obtenu les meilleures performances.
+
+\subsubsection{Modèles retenus}
+La sélection des modèles s'est basée sur leurs performances sur le dataset de test selon plusieurs métriques : IoU, mAP@0.5, mAP@0.75, mAP@0.95 et F1-score. Les combinaisons encodeur-décodeur retenues sont :
+\begin{itemize}
+    \item UNet + mambaout\_small
+    \item UPerNet + EfficientNetV2-S
+    \item Segformer + mambaout\_base
+    \item LinkNet + EfficientNet-B5
+    \item Unet++ + EfficientNetV2-S
+    \item SegFormer + RegNetY-080
+\end{itemize}
+
+Pour chaque combinaison, 5 modèles ont été entraînés suivant la méthode de validation croisée. Chaque modèle utilise un fold différent pour la validation et les quatre autres pour l'entraînement. Il faut donc déterminer comment combiner efficacement les prédictions de ces 5 modèles pour obtenir un résultat final.
+
+\subsubsection{Stratégie d'ensemble k-fold}
+
+L'approche retenue consiste à exploiter la complémentarité des modèles issus de la validation croisée. Plutôt que de sélectionner le meilleur modèle parmi les 5 folds de chaque combinaison, les prédictions des 5 modèles sont combinées. Cette stratégie d'ensemble permet d'obtenir des segmentations plus robustes et moins sensibles aux variations dans les données d'entraînement.
+
+\paragraph{Principe de fonctionnement}
+
+Pour chaque combinaison encodeur-décodeur, voici comment se déroule le processus :
+
+\begin{enumerate}
+    \item Récupération des modèles : Les 5 modèles entraînés sont chargés un par un pour éviter de saturer la mémoire GPU
+    \item Prédiction individuelle : Chaque modèle produit une carte de probabilité pour toutes les images du dataset de test
+    \item Agrégation des prédictions : Les probabilités sont moyennées pixel par pixel avec la formule suivante :
+    \vspace{0.45cm}
+    \begin{equation}
+        P_{ensemble}(x,y) = \frac{1}{K} \sum_{k=1}^{K} P_k(x,y)
+    \end{equation}
+    où $K=5$ correspond au nombre de folds et $P_k(x,y)$ représente la probabilité donnée par le modèle du fold $k$ au pixel $(x,y)$
+    \item Binarisation : Les probabilités moyennées sont transformées en masque binaire en appliquant un seuil de 0.5
+\end{enumerate}
+
+\paragraph{Avantages de l'approche}
+
+Cette stratégie d'ensemble apporte plusieurs avantages :
+
+\begin{itemize}
+    \item Réduction de la variance : La moyenne des prédictions de modèles entraînés sur différents sous-ensembles diminue la sensibilité aux variations aléatoires dans les données
+    \item Amélioration de la généralisation : Comme chaque modèle a vu des données de validation différentes, l'ensemble obtient une vue plus complète du problème
+    \item Robustesse accrue : Les erreurs des modèles individuels ont tendance à se compenser lors de l'agrégation, ce qui limite l'impact des prédictions aberrantes
+    \item Exploitation maximale des données : Avec 5 folds, chaque échantillon participe à l'entraînement de 4 modèles sur 5
+\end{itemize}
+
+\paragraph{Inconvénients et limitations}
+
+Cette approche présente aussi quelques contraintes :
+
+\begin{itemize}
+    \item Coût computationnel : L'inférence prend 5 fois plus de temps, passant de quelques secondes à plusieurs dizaines de secondes par image
+    \item Consommation mémoire : Même si les modèles sont chargés un par un, stocker 5 modèles par configuration demande environ 5 fois plus d'espace disque
+    \item Complexité de déploiement : Gérer plusieurs modèles rend le système plus complexe à mettre en production
+\end{itemize}
+
+\paragraph{Optimisations techniques}
+
+Pour limiter les problèmes de mémoire, plusieurs stratégies ont été mises en place :
+
+\begin{itemize}
+    \item Chargement séquentiel des modèles avec libération de la mémoire GPU après chaque fold (\texttt{torch.cuda.empty\_cache()})
+    \item Traitement par batch des images pour rentabiliser le chargement des modèles
+    \item Accumulation progressive des prédictions pour éviter de garder toutes les probabilités en mémoire en même temps
+\end{itemize}
+
+Cette approche d'ensemble k-fold offre un bon équilibre entre précision et efficacité. Elle convient particulièrement aux cas où la qualité des résultats est plus importante que la vitesse de traitement.
+
+\paragraph{Résultats de l'ensemble k-fold}
+
+Le Tableau \ref{tab:kfold_ensemble} présente les performances des modèles avec et sans ensemble k-fold. Les résultats montrent que l'ensemble est plus performant que la moyenne des folds de chaque modèle.
+
+\begin{table}[H]
+    \centering
+    \makebox[\textwidth][c]{%
+    \begin{tabular}{lccccc}
+    \toprule
+    Modèle & Folds & Moy. fold IoU & Meilleur fold IoU & Ensemble IoU & Amélioration \\
+    \midrule
+    UNet + mambaout\_small & 5 & 0.734 $\pm$ 0.012 & 0.748 & \textbf{0.745} & +1.6\% \\
+    UPerNet + EfficientNetV2-S & 5 & 0.735 $\pm$ 0.005 & 0.743 & \textbf{0.748} & +1.8\% \\
+    Segformer + mambaout\_base & 5 & 0.734 $\pm$ 0.009 & 0.747 & \textbf{0.742} & +1.0\% \\
+    LinkNet + EfficientNet-B5 & 5 & 0.741 $\pm$ 0.003 & 0.744 & \textbf{0.752} & +1.5\% \\
+    Unet++ + EfficientNetV2-S & 5 & 0.723 $\pm$ 0.012 & 0.738 & \textbf{0.737} & +2.0\% \\
+    SegFormer + RegNetY-080 & 5 & 0.738 $\pm$ 0.006 & 0.746 & \textbf{0.745} & +0.9\% \\
+    \bottomrule
+    \end{tabular}%
+    }
+    \caption{Comparaison des performances des modèles avec et sans ensemble k-fold. Amélioration calculée par rapport à l'IoU moyen des folds.}
+    \label{tab:kfold_ensemble}
+\end{table}
+
+
 
 % -----------------------------------------------------------------------------
 \section{Application sur un quartier}
