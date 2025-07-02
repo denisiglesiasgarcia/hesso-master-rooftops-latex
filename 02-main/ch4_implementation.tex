@@ -544,7 +544,778 @@ Le Tableau \ref{tab:kfold_ensemble} présente les performances des modèles avec
     \label{tab:kfold_ensemble}
 \end{table}
 
+\subsubsection{Visualisation des résultats}
 
+Les figures \ref{fig:unet_mambaoutsmall_best_cases} et \ref{fig:unet_mambaoutsmall_worst_cases} illustrent les cas extrêmes de performance du modèle UNet avec mambaout\_small sur le dataset de test.
+
+La Figure \ref{fig:unet_mambaoutsmall_best_cases} montre les 4 segmentations les plus réussies avec des valeurs IoU élevées. Le modèle parvient à identifier correctement les toitures dans diverses situations. Les résultats montrent que même les obstacles de petite taille comme les cheminées sont correctement détectés, ce qui indique une bonne capacité de segmentation fine.
+
+La Figure \ref{fig:unet_mambaoutsmall_worst_cases} présente les 4 cas les plus problématiques avec des IoU très bas. Les erreurs se concentrent sur les toitures végétalisées et les terrasses praticables, révélant les difficultés du modèle à traiter ces types de surfaces particulières.
+
+% =========================================================
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unet_tu-mambaout_small/best_cases/best_5_iou0.998_24991116_tile_5_3_322356_original.png}
+    \caption{Top1 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unet_tu-mambaout_small/best_cases/best_5_iou0.998_24991116_tile_5_3_322356_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unet_tu-mambaout_small/best_cases/best_5_iou0.998_24991116_tile_5_3_322356_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.998}
+\end{subfigure}
+
+\vspace{0.35cm}
+
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unet_tu-mambaout_small/best_cases/best_4_iou0.991_24961121_tile_15_10_cc6553_original.png}
+    \caption{Top2 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unet_tu-mambaout_small/best_cases/best_4_iou0.991_24961121_tile_15_10_cc6553_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unet_tu-mambaout_small/best_cases/best_4_iou0.991_24961121_tile_15_10_cc6553_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.991}
+\end{subfigure}
+
+\vspace{0.35cm}
+
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unet_tu-mambaout_small/best_cases/best_3_iou0.988_24931117_tile_18_5_f475a0_original.png}
+    \caption{Top3 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unet_tu-mambaout_small/best_cases/best_3_iou0.988_24931117_tile_18_5_f475a0_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unet_tu-mambaout_small/best_cases/best_3_iou0.988_24931117_tile_18_5_f475a0_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.988}
+\end{subfigure}
+
+\vspace{0.35cm}
+
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unet_tu-mambaout_small/best_cases/best_2_iou0.984_24931113_tile_13_18_a66e08_original.png}
+    \caption{Top4 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unet_tu-mambaout_small/best_cases/best_2_iou0.984_24931113_tile_13_18_a66e08_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unet_tu-mambaout_small/best_cases/best_2_iou0.984_24931113_tile_13_18_a66e08_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.984}
+\end{subfigure}
+
+\caption{Meilleurs IoU pour Unet avec mambaout\_small backbone sur le dataset de test}
+\label{fig:unet_mambaoutsmall_best_cases}
+\end{figure}
+
+% =========================================================
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unet_tu-mambaout_small/worst_cases/worst_5_iou0.000_25001117_tile_3_9_5ba8f7_original.png}
+    \caption{Top1 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unet_tu-mambaout_small/worst_cases/worst_5_iou0.000_25001117_tile_3_9_5ba8f7_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unet_tu-mambaout_small/worst_cases/worst_5_iou0.000_25001117_tile_3_9_5ba8f7_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.000}
+\end{subfigure}
+
+\vspace{0.35cm}
+
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unet_tu-mambaout_small/worst_cases/worst_4_iou0.000_25001112_tile_9_1_991a94_original.png}
+    \caption{Top2 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unet_tu-mambaout_small/worst_cases/worst_4_iou0.000_25001112_tile_9_1_991a94_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unet_tu-mambaout_small/worst_cases/worst_4_iou0.000_25001112_tile_9_1_991a94_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.000}
+\end{subfigure}
+
+\vspace{0.35cm}
+
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unet_tu-mambaout_small/worst_cases/worst_3_iou0.000_24991122_tile_9_19_7ebcec_original.png}
+    \caption{Top3 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unet_tu-mambaout_small/worst_cases/worst_3_iou0.000_24991122_tile_9_19_7ebcec_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unet_tu-mambaout_small/worst_cases/worst_3_iou0.000_24991122_tile_9_19_7ebcec_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.000}
+\end{subfigure}
+
+\vspace{0.35cm}
+
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unet_tu-mambaout_small/worst_cases/worst_2_iou0.000_24951112_tile_4_13_2bd653_original.png}
+    \caption{Top4 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unet_tu-mambaout_small/worst_cases/worst_2_iou0.000_24951112_tile_4_13_2bd653_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unet_tu-mambaout_small/worst_cases/worst_2_iou0.000_24951112_tile_4_13_2bd653_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.000}
+\end{subfigure}
+
+\caption{Pires IoU pour Unet avec mambaout\_small sur le dataset de test}
+\label{fig:unet_mambaoutsmall_worst_cases}
+\end{figure}
+
+% =========================================================
+
+Les Figures \ref{fig:upernet_efficientnetv2_s_best_cases} et \ref{fig:upernet_efficientnetv2_s_best_cases} illustrent les performances extrêmes du modèle UPerNet + EfficientNetV2\_RW\_S sur le dataset de test.
+
+La Figure \ref{fig:upernet_efficientnetv2_s_best_cases} présente les 4 meilleures segmentations. Les résultats sont proches de ceux obtenus avec UNet + mambaout\_small - trois images sur quatre sont identiques à celles de la Figure \ref{fig:unet_mambaoutsmall_best_cases}.
+
+La Figure \ref{fig:upernet_efficientnetv2_s_best_cases} montre les 4 pires cas. Là aussi, on retrouve trois images communes avec la Figure \ref{fig:unet_mambaoutsmall_worst_cases}, confirmant que les deux modèles peinent sur les mêmes types de surfaces (toitures végétalisées et terrasses praticables). La quatrième image présente une toiture de type hangar où la vérité terrain semble questionnable, les critères de labellisation pourraient ne pas être adaptés à ce cas particulier.
+
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_5_iou0.999_24991116_tile_5_3_322356_original.png}
+    \caption{Top1 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_5_iou0.999_24991116_tile_5_3_322356_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_5_iou0.999_24991116_tile_5_3_322356_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.999}
+\end{subfigure}
+
+\vspace{0.35cm}
+
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_4_iou0.987_24961121_tile_15_10_cc6553_original.png}
+    \caption{Top2 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_4_iou0.987_24961121_tile_15_10_cc6553_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_4_iou0.987_24961121_tile_15_10_cc6553_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.987}
+\end{subfigure}
+
+\vspace{0.35cm}
+
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_3_iou0.987_24941121_tile_16_8_fd3555_original.png}
+    \caption{Top3 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_3_iou0.987_24941121_tile_16_8_fd3555_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_3_iou0.987_24941121_tile_16_8_fd3555_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.987}
+\end{subfigure}
+
+\vspace{0.35cm}
+
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_2_iou0.984_24931113_tile_13_18_a66e08_original.png}
+    \caption{Top4 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_2_iou0.984_24931113_tile_13_18_a66e08_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_2_iou0.984_24931113_tile_13_18_a66e08_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.984}
+\end{subfigure}
+
+\caption{Meilleurs IoU pour UPerNet avec EfficientNetV2-S sur le dataset de test}
+\label{fig:upernet_efficientnetv2_s_best_cases}
+\end{figure}
+
+% =========================================================
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_5_iou0.000_25001117_tile_3_9_5ba8f7_original.png}
+    \caption{Top1 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_5_iou0.000_25001117_tile_3_9_5ba8f7_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_5_iou0.000_25001117_tile_3_9_5ba8f7_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.000}
+\end{subfigure}
+
+\vspace{0.35cm}
+
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_4_iou0.000_25001112_tile_9_1_991a94_original.png}
+    \caption{Top2 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_4_iou0.000_25001112_tile_9_1_991a94_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_4_iou0.000_25001112_tile_9_1_991a94_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.000}
+\end{subfigure}
+
+\vspace{0.35cm}
+
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_3_iou0.000_24991122_tile_9_19_7ebcec_original.png}
+    \caption{Top3 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_3_iou0.000_24991122_tile_9_19_7ebcec_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_3_iou0.000_24991122_tile_9_19_7ebcec_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.000}
+\end{subfigure}
+
+\vspace{0.35cm}
+
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_1_iou0.000_24931113_tile_19_19_52ccbb_original.png}
+    \caption{Top4 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_1_iou0.000_24931113_tile_19_19_52ccbb_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_1_iou0.000_24931113_tile_19_19_52ccbb_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.000}
+\end{subfigure}
+
+\caption{Pires IoU pour UPerNet avec EfficientNetV2-S sur le dataset de test}
+\label{fig:upernet_efficientnetv2_s_worst_cases}
+\end{figure}
+
+% ==========================================================
+
+Les Figures \ref{fig:segformer_mambaoutbase_best_cases} et \ref{fig:segformer_mambaoutbase_worst_cases} montrent les cas extrêmes du modèle SegFormer + mambaout\_base sur le dataset de test.
+
+La Figure \ref{fig:segformer_mambaoutbase_best_cases} présente les 4 meilleures segmentations. Ces images correspondent à celles qui donnent également d'excellents résultats avec les deux modèles précédents (UNet + mambaout\_small et UPerNet + EfficientNetV2-S). Le modèle SegFormer détecte bien les toitures et même les petits éléments comme les cheminées.
+
+La Figure \ref{fig:segformer_mambaoutbase_worst_cases} illustre les 4 pires performances. On retrouve exactement les mêmes images que pour le modèle précédent, avec les mêmes observations.
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/best_cases/best_5_iou0.997_24991116_tile_5_3_322356_original.png}
+    \caption{Top1 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/best_cases/best_5_iou0.997_24991116_tile_5_3_322356_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/best_cases/best_5_iou0.997_24991116_tile_5_3_322356_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.997}
+\end{subfigure}
+
+\vspace{0.35cm}
+
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/best_cases/best_4_iou0.984_24931117_tile_18_5_f475a0_original.png}
+    \caption{Top2 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/best_cases/best_4_iou0.984_24931117_tile_18_5_f475a0_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/best_cases/best_4_iou0.984_24931117_tile_18_5_f475a0_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.984}
+\end{subfigure}
+
+\vspace{0.35cm}
+
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/best_cases/best_3_iou0.984_24931113_tile_13_18_a66e08_original.png}
+    \caption{Top3 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/best_cases/best_3_iou0.984_24931113_tile_13_18_a66e08_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/best_cases/best_3_iou0.984_24931113_tile_13_18_a66e08_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.984}
+\end{subfigure}
+
+\vspace{0.35cm}
+
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/best_cases/best_2_iou0.983_24961121_tile_15_10_cc6553_original.png}
+    \caption{Top4 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/best_cases/best_2_iou0.983_24961121_tile_15_10_cc6553_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/best_cases/best_2_iou0.983_24961121_tile_15_10_cc6553_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.983}
+\end{subfigure}
+
+\caption{Meilleurs IoU pour SegFormer avec mambaout\_base sur le dataset de test}
+\label{fig:segformer_mambaoutbase_best_cases}
+\end{figure}
+
+% =========================================================
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/worst_cases/worst_5_iou0.000_25001117_tile_3_9_5ba8f7_original.png}
+    \caption{Top1 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/worst_cases/worst_5_iou0.000_25001117_tile_3_9_5ba8f7_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/worst_cases/worst_5_iou0.000_25001117_tile_3_9_5ba8f7_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.000}
+\end{subfigure}
+
+\vspace{0.35cm}
+
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/worst_cases/worst_4_iou0.000_25001112_tile_9_1_991a94_original.png}
+    \caption{Top2 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/worst_cases/worst_4_iou0.000_25001112_tile_9_1_991a94_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/worst_cases/worst_4_iou0.000_25001112_tile_9_1_991a94_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.000}
+\end{subfigure}
+
+\vspace{0.35cm}
+
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/worst_cases/worst_3_iou0.000_24991122_tile_9_19_7ebcec_original.png}
+    \caption{Top3 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/worst_cases/worst_3_iou0.000_24991122_tile_9_19_7ebcec_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/worst_cases/worst_3_iou0.000_24991122_tile_9_19_7ebcec_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.000}
+\end{subfigure}
+
+\vspace{0.35cm}
+
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/worst_cases/worst_1_iou0.000_24931113_tile_19_19_52ccbb_original.png}
+    \caption{Top4 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/worst_cases/worst_1_iou0.000_24931113_tile_19_19_52ccbb_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/worst_cases/worst_1_iou0.000_24931113_tile_19_19_52ccbb_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.000}
+\end{subfigure}
+
+\caption{Pires IoU pour SegFormer avec mambaout\_base sur le dataset de test}
+\label{fig:segformer_mambaoutbase_worst_cases}
+\end{figure}
+
+% ===========================================================
+
+Les Figures \ref{fig:linknet_efficientnet_b5_best_cases} et \ref{fig:linknet_efficientnet_b5_worst_cases} illustrent les performances extrêmes du modèle LinkNet + EfficientNet-B5 sur le dataset de test.
+
+La Figure \ref{fig:linknet_efficientnet_b5_best_cases} présente les 4 meilleures segmentations. Les images sont les mêmes que pour les modèles précédents, avec des performances similaires.
+
+La Figure \ref{fig:linknet_efficientnet_b5_worst_cases} montre les 4 cas les plus problématiques. Le premier cas présente une zone sans annotation dans la vérité terrain, mais cette absence semble discutable, ce qui explique pourquoi le modèle segmente cette partie. Le deuxième cas montre une petite portion de toiture qui n'est pas correctement détectée. Les deux dernières images, déjà rencontrées avec les modèles précédents, correspondent aux toitures végétalisées et terrasses praticables qui posent systématiquement problème.
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/best_cases/best_5_iou0.997_24991116_tile_5_3_322356_original.png}
+    \caption{Top1 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/best_cases/best_5_iou0.997_24991116_tile_5_3_322356_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/best_cases/best_5_iou0.997_24991116_tile_5_3_322356_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.997}
+\end{subfigure}
+
+\vspace{0.35cm}
+
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/best_cases/best_4_iou0.992_24931113_tile_13_18_a66e08_original.png}
+    \caption{Top2 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/best_cases/best_4_iou0.992_24931113_tile_13_18_a66e08_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/best_cases/best_4_iou0.992_24931113_tile_13_18_a66e08_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.992}
+\end{subfigure}
+
+\vspace{0.35cm}
+
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/best_cases/best_3_iou0.986_24931117_tile_18_5_f475a0_original.png}
+    \caption{Top3 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/best_cases/best_3_iou0.986_24931117_tile_18_5_f475a0_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/best_cases/best_3_iou0.986_24931117_tile_18_5_f475a0_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.986}
+\end{subfigure}
+
+\vspace{0.35cm}
+
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/best_cases/best_2_iou0.986_24961121_tile_15_10_cc6553_original.png}
+    \caption{Top4 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/best_cases/best_2_iou0.986_24961121_tile_15_10_cc6553_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/best_cases/best_2_iou0.986_24961121_tile_15_10_cc6553_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.986}
+\end{subfigure}
+
+\caption{Meilleurs IoU pour LinkNet avec EfficientNet-B5 sur le dataset de test}
+\label{fig:linknet_efficientnet_b5_best_cases}
+\end{figure}
+
+% =========================================================
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/worst_cases/worst_5_iou0.000_25051119_tile_18_9_ba3084_original.png}
+    \caption{Top1 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/worst_cases/worst_5_iou0.000_25051119_tile_18_9_ba3084_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/worst_cases/worst_5_iou0.000_25051119_tile_18_9_ba3084_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.000}
+\end{subfigure}
+
+\vspace{0.35cm}
+
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/worst_cases/worst_4_iou0.000_25011125_tile_14_5_cdc6dc_original.png}
+    \caption{Top2 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/worst_cases/worst_4_iou0.000_25011125_tile_14_5_cdc6dc_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/worst_cases/worst_4_iou0.000_25011125_tile_14_5_cdc6dc_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.000}
+\end{subfigure}
+
+\vspace{0.35cm}
+
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/worst_cases/worst_3_iou0.000_25011115_tile_17_4_52cb42_original.png}
+    \caption{Top3 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/worst_cases/worst_3_iou0.000_25011115_tile_17_4_52cb42_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/worst_cases/worst_3_iou0.000_25011115_tile_17_4_52cb42_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.000}
+\end{subfigure}
+
+\vspace{0.35cm}
+
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/worst_cases/worst_2_iou0.000_25001117_tile_3_9_5ba8f7_original.png}
+    \caption{Top4 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/worst_cases/worst_2_iou0.000_25001117_tile_3_9_5ba8f7_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/worst_cases/worst_2_iou0.000_25001117_tile_3_9_5ba8f7_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.000}
+\end{subfigure}
+
+\caption{Pires IoU pour LinkNet avec EfficientNet-B5 sur le dataset de test}
+\label{fig:linknet_efficientnet_b5_worst_cases}
+\end{figure}
+
+% ===========================================================
+
+Unet++ + EfficientNetV2-S
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_5_iou0.989_24931113_tile_13_18_a66e08_original.png}
+    \caption{Top1 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_5_iou0.989_24931113_tile_13_18_a66e08_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_5_iou0.989_24931113_tile_13_18_a66e08_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.989}
+\end{subfigure}
+
+\vspace{0.35cm}
+
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_4_iou0.988_24961121_tile_15_10_cc6553_original.png}
+    \caption{Top2 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_4_iou0.988_24961121_tile_15_10_cc6553_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_4_iou0.988_24961121_tile_15_10_cc6553_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.988}
+\end{subfigure}
+
+\vspace{0.35cm}
+
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_3_iou0.987_24931117_tile_18_5_f475a0_original.png}
+    \caption{Top3 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_3_iou0.987_24931117_tile_18_5_f475a0_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_3_iou0.987_24931117_tile_18_5_f475a0_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.987}
+\end{subfigure}
+
+\vspace{0.35cm}
+
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_2_iou0.982_25061124_tile_11_8_51e0da_original.png}
+    \caption{Top4 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_2_iou0.982_25061124_tile_11_8_51e0da_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_2_iou0.982_25061124_tile_11_8_51e0da_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.982}
+\end{subfigure}
+
+\caption{Meilleurs IoU pour Unet++ avec EfficientNetV2-S sur le dataset de test}
+\label{fig:unetplusplus_efficientnetv2_s_best_cases}
+\end{figure}
+
+% ===========================================================
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_4_iou0.000_25011115_tile_17_4_52cb42_original.png}
+    \caption{Top1 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_4_iou0.000_25011115_tile_17_4_52cb42_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_4_iou0.000_25011115_tile_17_4_52cb42_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.000}
+\end{subfigure}
+
+\vspace{0.35cm}
+
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_3_iou0.000_25001117_tile_3_9_5ba8f7_original.png}
+    \caption{Top2 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_3_iou0.000_25001117_tile_3_9_5ba8f7_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_3_iou0.000_25001117_tile_3_9_5ba8f7_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.000}
+\end{subfigure}
+
+\vspace{0.35cm}
+
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_2_iou0.000_24951112_tile_4_13_2bd653_original.png}
+    \caption{Top3 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_2_iou0.000_24951112_tile_4_13_2bd653_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_2_iou0.000_24951112_tile_4_13_2bd653_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.000}
+\end{subfigure}
+
+\vspace{0.35cm}
+
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_1_iou0.000_24931113_tile_19_19_52ccbb_original.png}
+    \caption{Top4 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_1_iou0.000_24931113_tile_19_19_52ccbb_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_1_iou0.000_24931113_tile_19_19_52ccbb_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.000}
+\end{subfigure}
+
+\caption{Pires IoU pour Unet++ avec EfficientNetV2-S sur le dataset de test}
+\label{fig:unetplusplus_efficientnetv2_s_worst_cases}
+\end{figure}
+
+% ===========================================================
+
+SegFormer + RegNetY-080
 
 % -----------------------------------------------------------------------------
 \section{Application sur un quartier}
