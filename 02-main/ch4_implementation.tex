@@ -350,7 +350,7 @@ Les encodeurs mambaout\_base et mambaout\_small affichent également des perform
 
 \subsubsection{Compromis performance-complexité}
 
-L'analyse du front de Pareto (Figures ~\ref{fig:ch4_09_performance_vs_parameters_pareto_01_eval_test_iou_mean} et \ref{fig:ch4_08_performance_vs_training_time_pareto_04_eval_test_map_95_mean}) identifient les modèles offrant le meilleur compromis entre performance et complexité selon les métriques visées.
+L'analyse du front de Pareto (Figures ~\ref{fig:ch4_09_performance_vs_parameters_pareto_01_eval_test_iou_mean} et \ref{fig:ch4_09_performance_vs_parameters_pareto_04_eval_test_map_95_mean}) identifient les modèles offrant le meilleur compromis entre performance et complexité selon les métriques visées.
 
 \begin{figure}[H]
     \centering
@@ -359,23 +359,23 @@ L'analyse du front de Pareto (Figures ~\ref{fig:ch4_09_performance_vs_parameters
     \label{fig:ch4_09_performance_vs_parameters_pareto_01_eval_test_iou_mean}
 \end{figure}
 
-Les modèles optimaux identifiés dans la Figure \ref{fig:ch4_08_performance_vs_training_time_pareto_04_eval_test_map_95_mean} sont :
+Les modèles optimaux identifiés dans la Figure \ref{fig:ch4_09_performance_vs_parameters_pareto_01_eval_test_iou_mean} sont :
 \begin{enumerate}
     \item linknet + EfficientNet-B5 (IoU 0,741, 28,75M params)
     \item segformer + RegNetY-032 (IoU 0,735, 18,87M params)
     \item unet++ + EfficientNet-B3 (IoU 0,735, 13,63M params)
 \end{enumerate}
 
-Au-delà de 25M paramètres, les gains en performance deviennent marginaux (<1\% IoU), suggérant une saturation du bénéfice apporté par la complexité additionnelle.
+Au-delà de 25M paramètres, les gains en IoU deviennent marginaux (<1\% IoU), suggérant une saturation du bénéfice apporté par la complexité additionnelle.
 
 \begin{figure}[H]
     \centering
-    \makebox[\textwidth][c]{\includegraphics[width=1.05\textwidth]{02-main//figures/ch4/ch4_08_performance_vs_training_time_pareto_04_eval_test_map_95_mean.png}}
+    \makebox[\textwidth][c]{\includegraphics[width=1.05\textwidth]{02-main//figures/ch4/ch4_09_performance_vs_parameters_pareto_04_eval_test_map_95_mean.png}}
     \caption{mAP@0.95 vs nombre de paramètres. Les modèles sur la ligne rouge représentent les solutions optimales.}
-    \label{fig:ch4_08_performance_vs_training_time_pareto_04_eval_test_map_95_mean}
+    \label{fig:ch4_09_performance_vs_parameters_pareto_04_eval_test_map_95_mean}
 \end{figure}
 
-La plupart des modèles optimaux identifiés dans la Figure \ref{fig:ch4_09_performance_vs_parameters_pareto_01_eval_test_iou_mean} utilisent les encodeurs mambaout\_base et mambaout\_small qui offrent un bon compromis entre précision de segmentation et complexité.
+Les encodeurs (Figure \ref{fig:ch4_09_performance_vs_parameters_pareto_04_eval_test_map_95_mean}) mambaout\_small et EfficientNetV2\_S et les décodeurs PSPNet offrent un bon compromis entre précision de segmentation et complexité. 
 
 \subsubsection{Analyse temporelle}
 
@@ -452,7 +452,7 @@ Un résultat surprenant est que les modèles de taille moyenne (25-50M paramètr
 Un autre point important concerne l'architecture elle-même. En prenant l'exemple d'EfficientNet, on constate que selon le décodeur utilisé (UNet, SegFormer ou FPN), les performances peuvent varier significativement même si la taille reste similaire. Le choix du décodeur est donc tout aussi important que celui de l'encodeur pour obtenir de bons résultats en segmentation.
 
 \subsection{Analyse qualitative}
-
+Ce sous-section présente des exemples de segmentation obtenus à partir des modèles les plus performants selon les métriques
 
 % -----------------------------------------------------------------------------
 \section{Application sur un quartier}
