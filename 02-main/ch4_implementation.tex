@@ -1,8 +1,8 @@
 \chapter{Évaluation, validation et analyse}
 \label{chap:eval_valid_modele}
-\todo[inline]{compléter ça}
-\lipsum[1]
+Ce chapitre présente l'évaluation des modèles de segmentation développés pour identifier les espaces libres sur les toitures du canton de Genève. L'objectif est d'analyser les performances de 93 configurations sur un dataset de test indépendant pour déterminer les architectures les plus adaptées à un déploiement opérationnel.
 
+L'évaluation suit trois axes principaux : l'analyse quantitative des performances avec plusieurs métriques (IoU, mAP, F1-score), l'étude du rapport entre performance et complexité des modèles, et la validation qualitative sur des cas réels incluant un quartier absent des données d'entraînement. Cette approche permet de sélectionner la meilleure configuration et d'identifier les améliorations nécessaires pour renforcer la robustesse du système.
 \localtableofcontents
 
 \newpage
@@ -97,9 +97,7 @@ La Figure~\ref{fig:ch4_02_top_models_performance_01_eval_test_iou_mean} illustre
     \label{fig:ch4_02_top_models_performance_01_eval_test_iou_mean}
 \end{figure}
 
-Les Figures \ref{fig:ch4_02_top_models_performance_02_eval_test_map_50_mean}, \ref{fig:ch4_02_top_models_performance_03_eval_test_map_75_mean} et \ref{fig:ch4_02_top_models_performance_04_eval_test_map_95_mean} présentent les performances des modèles selon la métrique mAP à différents seuils d'IoU (0.5, 0.75 et 0.95).
-
-La Figure \ref{fig:ch4_02_top_models_performance_08_eval_test_f1_score_mean} présente les performances des modèles selon le F1-score.
+Les Figures \ref{fig:ch4_02_top_models_performance_02_eval_test_map_50_mean}, \ref{fig:ch4_02_top_models_performance_03_eval_test_map_75_mean} et \ref{fig:ch4_02_top_models_performance_04_eval_test_map_95_mean} présentent les performances des modèles selon la métrique mAP à différents seuils d'IoU (0.5, 0.75 et 0.95). La Figure \ref{fig:ch4_02_top_models_performance_08_eval_test_f1_score_mean} présente les performances des modèles selon le F1-score.
 
 \begin{figure}[H]
     \centering
@@ -415,7 +413,7 @@ Le Tableau~\ref{tab:performance_moyenne_map_different_seuils} présente l'évolu
     \bottomrule
     \end{tabular}%
     }
-    \caption{Performances moyennes mAP à différents seuils}
+    \caption{Performances moyennes mAP à différents seuils. Chute relative mAP@0.5 à mAP@0.95}
     \label{tab:performance_moyenne_map_different_seuils}
 \end{table}
 
@@ -1482,7 +1480,7 @@ La zone de HEPIA a été choisie pour tester les modèles sur un secteur qui n'a
 \subsection{Analyse qualitative}
 La Figure \ref{fig:quartier_hepia_original} montre les images originales de la zone HEPIA. La Figure \ref{fig:quartier_hepia_masque_toitures} présente les mêmes images avec un masque appliqué sur les toitures (couche toitures SITG). Cette étape permet au modèle de traiter uniquement les surfaces de toitures en ignorant le reste du paysage urbain.
 
-Les zones identifiées comme toitures (Figure \ref{fig:quartier_hepia_masque_toitures}) ne sont pas toutes évidentes. En bas à gauche, une cour intérieure est identifiée comme toiture. En bas à droite, une terrasse praticable est aussi classée comme toiture, ce qui techniquement est correct car il y a bien un bâtiment dessous, mais cela complique la tâche de segmentation. L'image contient également des terrasses dans la partie supérieure gauche qui permettront d'évaluer le comportement des modèles sur ce type de surface.
+Les zones identifiées comme toitures (Figure \ref{fig:quartier_hepia_masque_toitures}) ne sont pas toutes évidentes. En bas à gauche, une cour intérieure est identifiée comme toiture. En bas à droite, une terrasse praticable est aussi classée comme toiture, ce qui techniquement est correct car il y a bien un bâtiment dessous, mais cela complique la tâche de segmentation. L'image contient également des balcons et terrasses qui permettront d'évaluer le comportement des modèles sur ce type de surface.
 
 \begin{figure}[H]
 \centering
@@ -1842,56 +1840,107 @@ La segmentation des petits obstacles sur les toitures semble moins précise comp
 \label{fig:quartier_hepia_modele_segformer_regnety_080}
 \end{figure}
 
-\paragraph{Synthèse des résultats sur la zone HEPIA}
+% -----------------------------------------------------------------------------
+
+\subsubsection{Synthèse et analyse des résultats}
+
+Le Tableau \ref{tab:quartier_hepia_comparatif_modeles} résume les performances des six modèles testés sur la zone HEPIA, en se basant sur quatre critères : la détection des balcons/terrasses, la segmentation des toitures praticables, la détection des obstacles et la gestion des ombrages.
 
 \begin{table}[H]
 \centering
-\begin{tabular}{|l|c|c|c|c|}
+\begin{tabularx}{\textwidth}{|l|X|X|X|X|}
 \hline
-\textbf{Modèle} & \textbf{Balcons/Terrasses} & \textbf{Toitures praticables} & \textbf{Détection obstacles} & \textbf{Gestion ombrages} \\
+Modèle & {Balcons \newline Terrasses} & {Toitures\newline praticables} & {Petits\newline obstacles} & {Gestion\newline ombrages} \\
 \hline
-UNet + MambaOutSmall & + & - & + & +/- \\
+UNet + MambaOutSmall & $+$ & $--$ & $+/-$ & $-$ \\
 \hline
-UPerNet + EfficientNetV2-S & + & - & + & - \\
+UPerNet + EfficientNetV2-S & $+$ & $-$ & $+$ & $--$ \\
 \hline
-SegFormer + MambaOutBase & + & - & + & + \\
+SegFormer + MambaOutBase & $+$ & $--$ & $+$ & $+$ \\
 \hline
-LinkNet + EfficientNet-B5 & + & +/- & ++ & + \\
+LinkNet + EfficientNet-B5 & $+$ & $+/-$ & $++$ & $+$ \\
 \hline
-UNet++ + EfficientNetV2-S & + & - & + & +/- \\
+UNet++ + EfficientNetV2-S & $+$ & $-$ & $+/-$ & $-$ \\
 \hline
-SegFormer + RegNetY-080 & + & - & - & +/- \\
+SegFormer + RegNetY-080 & $+$ & $-$ & $-$ & $+/-$ \\
 \hline
-\end{tabular}
-\caption{Tableau comparatif des performances les 6 modèles sur la zone HEPIA}
+\end{tabularx}
+\caption{Tableau comparatif des performances des 6 modèles sur la zone HEPIA}
 \label{tab:quartier_hepia_comparatif_modeles}
 \end{table}
 
-\vspace{0.5cm}
-
-\textbf{Légende :}
-\begin{itemize}
-\item \textbf{++} : Très bonne performance
-\item \textbf{+} : Bonne performance
-\item \textbf{+/-} : Performance mitigée
-\item \textbf{-} : Performance insuffisante
+Légende du Tableau \ref{tab:quartier_hepia_comparatif_modeles} :
+\begin{itemize}[label={}]
+\item $++$ : Très bonne performance
+\item $+$ : Bonne performance
+\item $+/-$ : Performance mitigée
+\item $-$ : Performance insuffisante
+\item $--$ : Très mauvaise performance
 \end{itemize}
 
-\vspace{0.5cm}
+Pour conclure cette section, il est important de noter que ces images n'ont pas de vérité terrain associée. L'évaluation reste donc subjective. L'objectif est d'observer comment les modèles se comportent sur des données qu'ils n'ont jamais vues. Cette capacité de généralisation est cruciale pour juger de leur robustesse en conditions réelles.
 
-\textbf{Observations principales :}
-\begin{itemize}
-\item \textbf{Balcons/Terrasses} : Tous les modèles identifient correctement les balcons avec mobilier typique
-\item \textbf{Toitures praticables} : Principale difficulté commune, seul LinkNet montre une amélioration partielle
-\item \textbf{Détection obstacles} : LinkNet se distingue par une précision supérieure, SegFormer + RegNetY-080 est le moins performant
-\item \textbf{Gestion ombrages} : SegFormer + MambaOutBase et LinkNet + EfficientNet-B5 sont les plus robustes
-\end{itemize}
+Cette évaluation qualitative permet aussi de révéler les biais présents dans le dataset d'entraînement. Malgré le soin apporté à sa création, ce dataset reste imparfait et les modèles reproduisent ses limites dans leurs prédictions.
 
-% -----------------------------------------------------------------------------
-\section{Analyse comparative des résultats}
-\subsection{Généralisation du modèle}
-\subsection{Limites identifiées}
+Un problème récurrent concerne les toitures praticables. Ces surfaces, bien que classées comme toitures par SITG (ce qui est techniquement correct puisqu'elles correspondent au dernier étage d'un bâtiment), posent problème aux modèles. La distinction entre surfaces praticables et non praticables reste difficile. L'ajout d'exemples supplémentaires dans le dataset pourrait améliorer les performances sur ce point.
+
+Les balcons montrent aussi des résultats variables. Ceux avec du mobilier sont correctement identifiés par tous les modèles, mais les balcons vides sont souvent confondus avec des toitures. Cela confirme le besoin de diversifier les exemples dans le dataset.
+
+La détection des petits obstacles donne des résultats encourageants. Les modèles identifient correctement la plupart des éléments comme les verrières, panneaux solaires, gaines, cheminées, lucarnes et acrotères. LinkNet + EfficientNet-B5 se démarque avec une précision supérieure sur ces petits éléments.
+
+Les performances sur les zones ombragées dépassent les attentes, particulièrement pour SegFormer + MambaOutBase et LinkNet + EfficientNet-B5. Ces modèles détectent les espaces libres même sous ombrage marqué, ce qui est essentiel pour traiter des images aériennes. Le choix de la combinaison encodeur-décodeur s'avère déterminant : EfficientNet-B5 avec UPerNet gère mal les ombrages, alors qu'avec LinkNet les résultats sont excellents.
+
+Au final, LinkNet + EfficientNet-B5 semble être le modèle le plus performant. Il excelle dans la détection des petits obstacles et la gestion des ombrages, tout en maintenant de bonnes performances sur les autres éléments.
+
 
 % -----------------------------------------------------------------------------
 \section{Synthèse}
-\todo[inline]{Exemple de todo}
+
+Ce chapitre a évalué 93 configurations de modèles de segmentation pour identifier les espaces libres sur les toitures du canton de Genève. L'analyse comparative montre des performances globalement homogènes entre les architectures, avec plusieurs enseignements utiles pour un déploiement pratique.
+
+\subsection{Performances générales et robustesse des modèles}
+
+L'évaluation quantitative utilise un dataset de test indépendant de 89 images. Les modèles obtiennent des performances élevées et stables. Les valeurs d'IoU vont de 0,619 à 0,741, avec une moyenne de 0,708 et un écart-type de 0,024. Cette faible dispersion indique que les architectures sont bien adaptées à cette tâche.
+
+Les modèles de Segmentation Models PyTorch (SMP) surpassent les variantes YOLOv12, notamment sur les métriques F1-score et mAP@0.95. Les modèles SMP gèrent mieux les faux positifs et faux négatifs, ce qui est essentiel pour une segmentation précise des contours.
+
+\subsection{Architectures optimales et compromis performance-complexité}
+
+L'analyse du front de Pareto montre que les gains deviennent marginaux au-delà de 25 millions de paramètres. L'ajout de complexité n'apporte plus grand-chose. Trois configurations ressortent comme solutions optimales :
+
+\begin{itemize}
+    \item LinkNet + EfficientNet-B5 : IoU de 0,741 avec 28,75M paramètres, les meilleures performances absolues
+    \item SegFormer + RegNetY-032 : IoU de 0,735 avec 18,87M paramètres, un bon équilibre performance-efficacité
+    \item UNet++ + EfficientNet-B3 : IoU de 0,735 avec 13,63M paramètres, privilégiant la compacité
+\end{itemize}
+
+La stratégie d'ensemble k-fold améliore ces modèles de 0,9\% à 2,0\% en moyenne par rapport à la moyenne des folds. Cette approche renforce la robustesse pour une utilisation opérationnelle.
+
+\subsection{Analyse qualitative et limites identifiées}
+
+Les tests sur la zone HEPIA montrent une bonne capacité de généralisation mais aussi des limites. Les modèles détectent bien les obstacles classiques (panneaux solaires, cheminées, verrières, végétation) et fonctionnent correctement sur les zones avec ombrage léger à modéré.
+
+Deux défis principaux subsistent :
+
+\begin{itemize}
+    \item Surfaces praticables : Les toitures végétalisées et terrasses praticables sont mal classées, probablement par manque d'exemples dans le dataset d'entraînement
+    \item Ombrages intenses : Les performances chutent sous ombrage marqué, avec des variations selon la combinaison encodeur-décodeur
+\end{itemize}
+
+\subsection{Recommandations pour le déploiement opérationnel}
+
+Cette évaluation permet de formuler plusieurs recommandations pratiques :
+
+\paragraph{Choix du modèle}
+LinkNet + EfficientNet-B5 est la configuration optimale. Elle combine les meilleures performances IoU (0,741), une excellente gestion des ombrages et une détection précise des petits obstacles. L'utilisation d'un ensemble k-fold maximise la robustesse.
+
+\paragraph{Améliorations du dataset}
+Le dataset devrait être enrichi avec plus d'exemples de toitures végétalisées, terrasses praticables et zones fortement ombragées. Augmenter le nombre d'exemples négatifs réduirait aussi les faux positifs. Les images contenant très peu d'informations pertinentes posent également problème - les modèles ont du mal à apprendre dans ces conditions et ces cas devraient être mieux équilibrés dans le dataset.
+
+\paragraph{Stratégie de déploiement}
+L'ensemble k-fold multiplie le temps de calcul par cinq mais reste justifié pour les applications critiques nécessitant une haute fiabilité. Pour les applications avec contraintes temporelles, on peut utiliser le meilleur modèle individuel de chaque configuration.
+
+\paragraph{Perspectives d'amélioration}
+L'augmentation de données ciblée sur les cas difficiles (surfaces praticables, ombrages intenses) et le pré-traitement pour normaliser l'éclairage sont des pistes prometteuses.
+
+Cette évaluation confirme que la segmentation des espaces libres sur toitures est suffisamment mature pour un déploiement opérationnel. Les axes d'amélioration identifiés permettront d'optimiser la robustesse du système en conditions réelles.
