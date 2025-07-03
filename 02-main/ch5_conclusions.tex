@@ -17,7 +17,7 @@ Ce travail apporte plusieurs contributions à l'analyse automatisée des toiture
 La contribution principale est la création d'un dataset annoté pour segmenter les espaces libres sur les toitures. Ce dataset comprend :
 
 \begin{itemize}
-    \item 530 images géoréférencées de \si{\numproduct{1280x1280}} pixels provenant des orthophotos 2019 de SITG
+    \item 530 images géoréférencées de \si{\numproduct{1280x1280}} pixels provenant des orthophotos 2019 de \acrshort{sitg}
     \item Un échantillonnage stratifié par catégorie SIA et surface de toiture pour représenter la diversité architecturale du canton
     \item Des annotations manuelles précises réalisées en environ 180 heures pour distinguer les espaces libres des obstacles
     \item Une méthodologie de post-traitement évitant les fuites de données entre les datasets d'entraînement, validation et test
@@ -42,7 +42,7 @@ L'analyse du front de Pareto montre que les gains deviennent négligeables au-de
 
 \subsection{Validation sur des données réelles}
 
-Les tests sur la zone de HEPIA, qui n'était pas dans les données d'entraînement, confirment la capacité de généralisation des modèles. Les résultats révèlent aussi les limites actuelles, notamment pour les toitures praticables, végétalisées ainsi que les zones très ombragées.
+Les tests sur la zone de \acrshort{hepia}, qui n'était pas dans les données d'entraînement, confirment la capacité de généralisation des modèles. Les résultats révèlent aussi les limites actuelles, notamment pour les toitures praticables, végétalisées ainsi que les zones très ombragées.
 
 % -----------------------------------------------------------------------------
 \section{Analyse comparative avec l'état de l'art}
@@ -51,9 +51,9 @@ Les tests sur la zone de HEPIA, qui n'était pas dans les données d'entraîneme
 
 Ce travail se distingue des approches existantes par plusieurs aspects :
 
-Par rapport aux travaux du Swiss Territorial Data Lab (STDL), cette approche de segmentation sémantique surpasse les méthodes testées par STDL :
+Par rapport aux travaux du Swiss Territorial Data Lab (\acrshort{stdl}), cette approche de segmentation sémantique surpasse les méthodes testées par \acrshort{stdl} :
 \begin{itemize}
-    \item IoU de 0,741 contre 0,38-0,40 pour les segmentations LiDAR et d'images de STDL
+    \item IoU de 0,741 contre 0,38-0,40 pour les segmentations \gls{lidar} et d'images de \acrshort{stdl}
     \item Temps de traitement significativement réduit comparé aux 12 minutes par 25 bâtiments de leur segmentation d'images
     \item Qualité visuelle des résultats supérieure, répondant mieux aux attentes des experts métier
 \end{itemize}
@@ -118,7 +118,7 @@ Le dataset pourrait être amélioré sur plusieurs points :
 \subsubsection{Améliorations techniques}
 \begin{itemize}
     \item Développer un pré-traitement adaptatif pour normaliser l'éclairage
-    \item Intégrer des données complémentaires (LiDAR, modèles 3D) pour mieux discriminer les surfaces
+    \item Intégrer des données complémentaires (\gls{lidar}, modèles 3D) pour mieux discriminer les surfaces
     \item Créer des architectures d'ensemble combinant plusieurs modèles aux forces complémentaires
 \end{itemize}
 

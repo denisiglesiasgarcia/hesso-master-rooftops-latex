@@ -626,13 +626,13 @@ La contrainte matérielle constitue une limitation majeure souvent sous-estimée
 \label{subsec:sam2_segment_anything_2024}
 
 \subsubsection{Contexte et objectifs}
-Avant de présenter le modèle Segment Anything 2 (SAM2), il est important de rappeler le modèle Segment Anything (SAM) qui a été publié en \citeyear{kirillov_segment_2023}.
+Avant de présenter le modèle Segment Anything 2 (\acrshort{sam2}), il est important de rappeler le modèle Segment Anything (\acrshort{sam}) qui a été publié en \citeyear{kirillov_segment_2023}.
 
-\paragraph{Segment Anything Model (SAM)}
+\paragraph{Segment Anything Model (\acrshort{sam})}
 \label{par:sam_segment_anything_2023}
 SAM \cite{kirillov_segment_2023} est un modèle de segmentation d'images développé par Meta AI. L'objectif de Segment Anything est de générer des masques de segmentation de haute qualité pour n'importe quel objet d'une image à partir de prompts simples comme des points ou des boîtes. Cela lui permet d'effectuer diverses tâches de segmentation de manière flexible sans avoir besoin d'être entraîné à nouveau pour chacune d'entre elles.
 
-Le modèle Segment Anything (SAM) comporte trois éléments principaux :
+Le modèle Segment Anything (\acrshort{sam}) comporte trois éléments principaux :
 \begin{itemize}
     \item Encodeur d'images
     \item ``Prompt encoder''
@@ -643,7 +643,7 @@ La Figure \ref{fig:ch2_sam2_01_fonctionnement_sam} permet d’avoir une vue d’
 \begin{figure}[H]
     \centering
     \makebox[\textwidth][c]{\includegraphics[width=1.20\textwidth]{02-main//figures//ch2/ch2_sam2_01_fonctionnement_sam.png}}
-    \caption{Fonctionnement de segment anything (SAM)}
+    \caption{Fonctionnement de segment anything (\acrshort{sam})}
     \label{fig:ch2_sam2_01_fonctionnement_sam}
 \end{figure}
 
@@ -738,14 +738,14 @@ La Figure \ref{fig:ch2_sam2_09_eval_sam_miou} inclus également un résultat ``o
 
 Pour conclure, jusqu'a l'arrivée de SAM2 en \citeyear{ravi_sam_2024}, l’état de l’art en segmentation d’image était SAM. Il est plus performant que tous les autres modèles existants qui réalisent cette tâche.
 
-\paragraph{Segment Anything Model 2 (SAM2)}
-L'article \cite{ravi_sam_2024} présente Segment Anything Model 2 (SAM2), une extension du modèle de segmentation SAM vers le domaine vidéo. Alors que SAM révolutionna la segmentation d'images en 2023, les vidéos représentent une part croissante du contenu multimédia et nécessitent une localisation temporelle pour des applications critiques en réalité augmentée/virtuelle, robotique et véhicules autonomes.
+\paragraph{Segment Anything Model 2 (\acrshort{sam2})}
+L'article \cite{ravi_sam_2024} présente Segment Anything Model 2 (\acrshort{sam2}), une extension du modèle de segmentation SAM vers le domaine vidéo. Alors que SAM révolutionna la segmentation d'images en 2023, les vidéos représentent une part croissante du contenu multimédia et nécessitent une localisation temporelle pour des applications critiques en réalité augmentée/virtuelle, robotique et véhicules autonomes.
 
 \citeauthor{ravi_sam_2024} identifient les défis spécifiques à la segmentation vidéo : changements d'apparence dus au mouvement, déformations, occlusions, variations d'éclairage, et qualité souvent inférieure aux images statiques. L'objectif est de développer un système universel capable de ``segmenter n'importe quoi dans les vidéos'' avec la même facilité que SAM pour les images.
 
 Le travail introduit la tâche PVS (Promptable Visual Segmentation) qui généralise la segmentation interactive d'images aux vidéos, permettant de fournir des prompts (clics, boîtes, masques) sur n'importe quelle frame pour définir et raffiner des segments spatio-temporels appelés ``masklets''.
 
-La Figure \ref{fig:ch2_sam2_fonctionnement} représente une vue d'ensemble montrant la tâche PVS (Figure \ref{fig:ch2_sam2_pvs}), l'architecture SAM 2 (Figure \ref{fig:ch2_sam2_model}) et le processus de collecte de données (Figure \ref{fig:ch2_sam2_data}).
+La Figure \ref{fig:ch2_sam2_fonctionnement} représente une vue d'ensemble montrant la tâche PVS (Figure \ref{fig:ch2_sam2_pvs}), l'architecture \acrshort{sam2} (Figure \ref{fig:ch2_sam2_model}) et le processus de collecte de données (Figure \ref{fig:ch2_sam2_data}).
 
 \begin{figure}[H]
     \centering
@@ -757,7 +757,7 @@ La Figure \ref{fig:ch2_sam2_fonctionnement} représente une vue d'ensemble montr
     \end{subfigure}
     \hfill
     \begin{subfigure}{0.25\textwidth}
-        \subcaption{Segment Anything Model 2 (SAM2)}
+        \subcaption{Segment Anything Model 2 (\acrshort{sam2})}
         \label{fig:ch2_sam2_model}
     \end{subfigure}
     \hfill
@@ -771,11 +771,11 @@ La Figure \ref{fig:ch2_sam2_fonctionnement} représente une vue d'ensemble montr
 \end{figure}
 
 \subsubsection{Données}
-Les auteurs développent un moteur de données (data engine) en trois phases pour créer le dataset SA-V, le plus grand dataset de segmentation vidéo à ce jour. Le processus évolue de l'annotation manuelle pure vers l'assistance progressive par SAM 2 :
+Les auteurs développent un moteur de données (data engine) en trois phases pour créer le dataset SA-V, le plus grand dataset de segmentation vidéo à ce jour. Le processus évolue de l'annotation manuelle pure vers l'assistance progressive par \acrshort{sam2} :
 \begin{itemize}
     \item Phase 1 : Annotation manuelle photogramme par photogramme avec SAM (37.8s/photogramme)
-    \item Phase 2 : SAM + propagation temporelle par SAM 2 (7.4s/photogramme)
-    \item Phase 3 : SAM 2 complet avec mémoire temporelle (4.5s/photogramme)
+    \item Phase 2 : SAM + propagation temporelle par \acrshort{sam2} (7.4s/photogramme)
+    \item Phase 3 : \acrshort{sam2} complet avec mémoire temporelle (4.5s/photogramme)
 \end{itemize}
 
 Le dataset final SA-V comprend 50.9K vidéos avec 642.6K masklets (190.9K manuels + 451.7K automatiques), représentant 53× plus de masques que tout dataset VOS existant. La diversité géographique couvre 47 pays, avec annotation de segments entiers et de parties d'objets, sans contraintes catégorielles.
@@ -783,7 +783,7 @@ Le dataset final SA-V comprend 50.9K vidéos avec 642.6K masklets (190.9K manuel
 Un processus de vérification qualité garantit la cohérence temporelle des annotations, avec classification ``satisfaisant/non-satisfaisant'' par des annotateurs dédiés.
 
 \subsubsection{Méthodologie}
-SAM 2 adopte une architecture (Figure \ref{fig:ch2_sam2_11_architecture_sam2}) de traitement en flux continu (streaming) qui analyse les vidéos photogramme par photogramme, équipée d'un système de mémoire sophistiqué pour préserver le contexte temporel entre les images. Cette approche permet un traitement en temps réel de vidéos de longueur arbitraire. Les composants clés incluent :
+\acrshort{sam2} adopte une architecture (Figure \ref{fig:ch2_sam2_11_architecture_sam2}) de traitement en flux continu (streaming) qui analyse les vidéos photogramme par photogramme, équipée d'un système de mémoire sophistiqué pour préserver le contexte temporel entre les images. Cette approche permet un traitement en temps réel de vidéos de longueur arbitraire. Les composants clés incluent :
 
 \begin{itemize}
     \item Encodeur d'image : Utilise l'architecture Hiera, un transformateur de vision hiérarchique pré-entraîné avec la méthode MAE (Masked Autoencoder). Cette structure hiérarchique extrait des caractéristiques visuelles à différentes résolutions spatiales, des détails fins aux motifs globaux.
@@ -804,7 +804,7 @@ SAM 2 adopte une architecture (Figure \ref{fig:ch2_sam2_11_architecture_sam2}) d
 
 \paragraph{Stratégie d'entraînement}
 
-L'entraînement de SAM 2 simule des sessions d'annotation interactive réelles pour apprendre au modèle à gérer efficacement les interactions utilisateur dans le contexte vidéo. Le processus d'apprentissage s'appuie sur des séquences de 8 images consécutives extraites de vidéos d'entraînement.
+L'entraînement de \acrshort{sam2} simule des sessions d'annotation interactive réelles pour apprendre au modèle à gérer efficacement les interactions utilisateur dans le contexte vidéo. Le processus d'apprentissage s'appuie sur des séquences de 8 images consécutives extraites de vidéos d'entraînement.
 
 Pour chaque séquence, les chercheurs simulent le comportement d'un annotateur humain en sélectionnant jusqu'à 2 images qui recevront des instructions explicites (prompts). Les prompts initiaux suivent une distribution réaliste : masque de segmentation correct dans 50\% des cas, clic simple sur l'objet dans 25\% des cas, et boîte englobante dans les 25\% restants. Des clics correctifs supplémentaires sont introduits de manière probabiliste durant l'entraînement pour simuler les corrections qu'un utilisateur réel effectuerait face à une segmentation imparfaite.
 
@@ -812,26 +812,26 @@ L'objectif pédagogique consiste à apprendre au modèle à prédire la segmenta
 
 \paragraph{Fonctionnement en inférence interactive}
 
-Une fois entraîné, SAM 2 effectue la segmentation interactive selon un processus en deux étapes qui exploite sa mémoire temporelle pour maintenir la cohérence des masques à travers les séquences d'images (Figure \ref{fig:ch2_sam2_12_entrainement_sam2}).
+Une fois entraîné, \acrshort{sam2} effectue la segmentation interactive selon un processus en deux étapes qui exploite sa mémoire temporelle pour maintenir la cohérence des masques à travers les séquences d'images (Figure \ref{fig:ch2_sam2_12_entrainement_sam2}).
 
-La première étape consiste en la sélection initiale de l'objet cible (frame 1, step 1 sur Figure \ref{fig:ch2_sam2_12_entrainement_sam2}). L'utilisateur fournit des invites sur une image de référence : les points verts correspondent aux zones à inclure dans la segmentation, tandis que les points rouges représentent les régions à exclure. Dans l'exemple, SAM 2 identifie le segment de l'objet d'intérêt (la langue) dans l'image 1, puis propage automatiquement ce segment aux images suivantes pour former un masque temporel continu.
+La première étape consiste en la sélection initiale de l'objet cible (frame 1, step 1 sur Figure \ref{fig:ch2_sam2_12_entrainement_sam2}). L'utilisateur fournit des invites sur une image de référence : les points verts correspondent aux zones à inclure dans la segmentation, tandis que les points rouges représentent les régions à exclure. Dans l'exemple, \acrshort{sam2} identifie le segment de l'objet d'intérêt (la langue) dans l'image 1, puis propage automatiquement ce segment aux images suivantes pour former un masque temporel continu.
 
 \begin{figure}[H]
     \centering
     \makebox[\textwidth][c]{\includegraphics[width=1.15\textwidth]{02-main//figures//ch2/ch2_sam2_12_entrainement_sam2.png}}
-    \caption{Processus de segmentation interactive avec SAM 2 : sélection initiale et raffinement par mémoire temporelle \cite{ravi_sam_2024}}
+    \caption{Processus de segmentation interactive avec \acrshort{sam2} : sélection initiale et raffinement par mémoire temporelle \cite{ravi_sam_2024}}
     \label{fig:ch2_sam2_12_entrainement_sam2}
 \end{figure}
 
-La seconde étape intervient lors des situations de perte de suivi. Il arrive que SAM 2 perde la trace de l'objet au cours de la propagation temporelle, comme observé l'exemple (frame 3, step 1 sur Figure \ref{fig:ch2_sam2_12_entrainement_sam2}). Dans ce cas, l'utilisateur peut corriger le masque en fournissant une invite supplémentaire (frame 3, step 2 sur Figure \ref{fig:ch2_sam2_12_entrainement_sam2}) dans une nouvelle image de la séquence.
+La seconde étape intervient lors des situations de perte de suivi. Il arrive que \acrshort{sam2} perde la trace de l'objet au cours de la propagation temporelle, comme observé l'exemple (frame 3, step 1 sur Figure \ref{fig:ch2_sam2_12_entrainement_sam2}). Dans ce cas, l'utilisateur peut corriger le masque en fournissant une invite supplémentaire (frame 3, step 2 sur Figure \ref{fig:ch2_sam2_12_entrainement_sam2}) dans une nouvelle image de la séquence.
 
-L'avantage de SAM 2 réside dans sa capacité à raffiner la segmentation grâce à la mémoire temporelle. Un seul clic dans l'image suffit pour récupérer l'objet perdu et relancer la propagation correcte pour la suite de la séquence. Cette approche contraste favorablement avec les méthodes découplées combinant SAM et un tracker vidéo traditionnel, qui nécessiteraient de recommencer entièrement le processus de segmentation, obligeant l'utilisateur à fournir plusieurs clics dans le frame 3 (Figure \ref{fig:ch2_sam2_12_entrainement_sam2}) comme lors de l'annotation initiale. La mémoire temporelle de SAM 2 réduit ainsi considérablement l'effort d'annotation requis pour maintenir un suivi précis des objets dans les vidéos.
+L'avantage de \acrshort{sam2} réside dans sa capacité à raffiner la segmentation grâce à la mémoire temporelle. Un seul clic dans l'image suffit pour récupérer l'objet perdu et relancer la propagation correcte pour la suite de la séquence. Cette approche contraste favorablement avec les méthodes découplées combinant SAM et un tracker vidéo traditionnel, qui nécessiteraient de recommencer entièrement le processus de segmentation, obligeant l'utilisateur à fournir plusieurs clics dans le frame 3 (Figure \ref{fig:ch2_sam2_12_entrainement_sam2}) comme lors de l'annotation initiale. La mémoire temporelle de \acrshort{sam2} réduit ainsi considérablement l'effort d'annotation requis pour maintenir un suivi précis des objets dans les vidéos.
 
 \subsubsection{Résultats principaux}
-SAM 2 démontre des performances supérieures sur de multiples benchmarks, validant son efficacité dans trois domaines d'application principaux.
+\acrshort{sam2} démontre des performances supérieures sur de multiples benchmarks, validant son efficacité dans trois domaines d'application principaux.
 
 \paragraph{Segmentation vidéo interactive}
-Les évaluations en segmentation vidéo interactive menées sur 9 datasets densément annotés démontrent la supériorité de SAM 2 par rapport aux méthodes de référence qui combinent SAM avec des trackers vidéo spécialisés (SAM+XMem++ \cite{bekuzarov_xmem_2023} \cite{noauthor_mbzuai-metaversexmem2_2025} et SAM+Cutie \cite{cheng_putting_2024} \cite{cheng_hkchengrexcutie_2025}). Ces tests ont été réalisés avec un protocole standardisé de 3 clics par photogramme, les résultats complets sont présentés dans la Figure \ref{fig:ch2_sam2_resultats_sam2_segmentation_video}.
+Les évaluations en segmentation vidéo interactive menées sur 9 datasets densément annotés démontrent la supériorité de \acrshort{sam2} par rapport aux méthodes de référence qui combinent SAM avec des trackers vidéo spécialisés (SAM+XMem++ \cite{bekuzarov_xmem_2023} \cite{noauthor_mbzuai-metaversexmem2_2025} et SAM+Cutie \cite{cheng_putting_2024} \cite{cheng_hkchengrexcutie_2025}). Ces tests ont été réalisés avec un protocole standardisé de 3 clics par photogramme, les résultats complets sont présentés dans la Figure \ref{fig:ch2_sam2_resultats_sam2_segmentation_video}.
 
 L'évaluation s'organise selon deux protocoles distincts qui reflètent différents scénarios d'usage pratique. Le premier mode, appelé évaluation hors ligne (offline), permet d'effectuer plusieurs passes successives à travers une vidéo. Cette approche autorise l'annotateur à sélectionner de manière stratégique les images sur lesquelles intervenir, en se basant sur l'analyse des erreurs de modèle les plus critiques identifiées lors des passes précédentes (Figure \ref{fig:ch2_sam2_13_resultats_sam2_segmentation_video_offline}).
 
@@ -858,11 +858,11 @@ Le second mode correspond à l'évaluation en ligne (online), qui simule un cont
 
 
 \paragraph{Segmentation d'objets vidéo semi-supervisée}
-Pour la segmentation d'objets vidéo semi-supervisée (VOS - Video Object Segmentation), SAM 2 démontre d'excellentes capacités dans un contexte d'annotation minimale. Cette tâche consiste à segmenter et suivre un objet à travers une séquence vidéo complète en ne disposant que d'une seule annotation manuelle sur la première image de la vidéo. Le modèle doit ensuite propager automatiquement cette segmentation initiale sur toutes les images suivantes, en gérant les défis comme les changements d'apparence, les occlusions temporaires, et les variations d'éclairage.
+Pour la segmentation d'objets vidéo semi-supervisée (VOS - Video Object Segmentation), \acrshort{sam2} démontre d'excellentes capacités dans un contexte d'annotation minimale. Cette tâche consiste à segmenter et suivre un objet à travers une séquence vidéo complète en ne disposant que d'une seule annotation manuelle sur la première image de la vidéo. Le modèle doit ensuite propager automatiquement cette segmentation initiale sur toutes les images suivantes, en gérant les défis comme les changements d'apparence, les occlusions temporaires, et les variations d'éclairage.
 
-SAM 2 établit de nouveaux records de performance sur 17 datasets de référence. Les évaluations utilisent la métrique J\&F, qui combine l'accuracy de la segmentation (mesure J, basée sur l'intersection sur union des masques) et l'accuracy des contours (mesure F, évaluant la qualité des frontières d'objets). Cette métrique composite, exprimée en pourcentage, reflète fidèlement la qualité globale de la segmentation temporelle.
+\acrshort{sam2} établit de nouveaux records de performance sur 17 datasets de référence. Les évaluations utilisent la métrique J\&F, qui combine l'accuracy de la segmentation (mesure J, basée sur l'intersection sur union des masques) et l'accuracy des contours (mesure F, évaluant la qualité des frontières d'objets). Cette métrique composite, exprimée en pourcentage, reflète fidèlement la qualité globale de la segmentation temporelle.
 
-Les gains sont particulièrement remarquables sur les benchmarks les plus exigeants du domaine (Figure \ref{tab:ch2_sam2_resultats_sam2_vos_zeroshot}). Sur le dataset MOSE \cite{noauthor_mose_nodate}, reconnu pour sa complexité avec des objets subissant des transformations importantes et des occlusions prolongées, SAM 2 atteint 76.6\% de score J\&F contre 71.7\% pour la meilleure méthode précédente (Cutie-base+), soit une amélioration absolue de 4.9 points. Sur DAVIS 2017 \cite{noauthor_davis_nodate}, le benchmark historique de référence en segmentation vidéo, SAM 2 obtient 90.2\% contre 88.1\% pour les approches existantes, établissant un nouveau standard de performance.
+Les gains sont particulièrement remarquables sur les benchmarks les plus exigeants du domaine (Figure \ref{tab:ch2_sam2_resultats_sam2_vos_zeroshot}). Sur le dataset MOSE \cite{noauthor_mose_nodate}, reconnu pour sa complexité avec des objets subissant des transformations importantes et des occlusions prolongées, \acrshort{sam2} atteint 76.6\% de score J\&F contre 71.7\% pour la meilleure méthode précédente (Cutie-base+), soit une amélioration absolue de 4.9 points. Sur DAVIS 2017 \cite{noauthor_davis_nodate}, le benchmark historique de référence en segmentation vidéo, \acrshort{sam2} obtient 90.2\% contre 88.1\% pour les approches existantes, établissant un nouveau standard de performance.
 
 \begin{table}[H]
     \centering
@@ -879,13 +879,13 @@ Les gains sont particulièrement remarquables sur les benchmarks les plus exigea
     \label{tab:ch2_sam2_resultats_sam2_vos_zeroshot}
 \end{table}
 
-Ces résultats sont d'autant plus remarquables que SAM 2, contrairement aux méthodes spécialisées qu'il surpasse, reste un modèle généraliste capable de segmenter n'importe quel objet sans restriction catégorielle, démontrant ainsi la puissance de son approche unifiée.
+Ces résultats sont d'autant plus remarquables que \acrshort{sam2}, contrairement aux méthodes spécialisées qu'il surpasse, reste un modèle généraliste capable de segmenter n'importe quel objet sans restriction catégorielle, démontrant ainsi la puissance de son approche unifiée.
 
 \paragraph{Segmentation d'images}
 
-En segmentation d'images, SAM 2 maintient et améliore significativement les performances de son prédécesseur sur une suite étendue de 37 datasets, incluant les 23 benchmarks originaux de SAM. L'évaluation utilise la métrique mIoU (mean Intersection over Union), qui mesure la précision moyenne de segmentation en calculant le rapport entre l'intersection et l'union des masques prédits et réels, exprimé en pourcentage.
+En segmentation d'images, \acrshort{sam2} maintient et améliore significativement les performances de son prédécesseur sur une suite étendue de 37 datasets, incluant les 23 benchmarks originaux de SAM. L'évaluation utilise la métrique mIoU (mean Intersection over Union), qui mesure la précision moyenne de segmentation en calculant le rapport entre l'intersection et l'union des masques prédits et réels, exprimé en pourcentage.
 
-Le Tableau \ref{tab:ch2_sam2_resultats_segmentation_image_miou} présente une analyse comparative détaillée des performances de SAM et SAM 2. Les résultats sont organisés par domaine d'application et montrent les scores mIoU moyens pour 1 et 5 clics utilisateur. Les métriques correspondent aux moyennes calculées sur les 23 datasets originellement utilisés pour l'évaluation de SAM (SA-23), subdivisés entre datasets d'images et de vidéos, ainsi qu'aux résultats sur 14 datasets vidéo supplémentaires évalués en inférence directe.
+Le Tableau \ref{tab:ch2_sam2_resultats_segmentation_image_miou} présente une analyse comparative détaillée des performances de SAM et \acrshort{sam2}. Les résultats sont organisés par domaine d'application et montrent les scores mIoU moyens pour 1 et 5 clics utilisateur. Les métriques correspondent aux moyennes calculées sur les 23 datasets originellement utilisés pour l'évaluation de SAM (SA-23), subdivisés entre datasets d'images et de vidéos, ainsi qu'aux résultats sur 14 datasets vidéo supplémentaires évalués en inférence directe.
 
 \begin{table}[H]
     \centering
@@ -899,32 +899,32 @@ Le Tableau \ref{tab:ch2_sam2_resultats_segmentation_image_miou} présente une an
         SAM 2 & mix & 61.9 (83.5) & 63.3 (83.8) & 60.1 (83.2) & 69.6 (85.8) & 130.1 \\
         \hline
     \end{tabular}
-    \caption{Performances de SAM 2 en inférence directe sur la tâche de segmentation d'images évaluées sur 37 datasets \cite{ravi_sam_2024}.}
+    \caption{Performances de \acrshort{sam2} en inférence directe sur la tâche de segmentation d'images évaluées sur 37 datasets \cite{ravi_sam_2024}.}
     \label{tab:ch2_sam2_resultats_segmentation_image_miou}
 \end{table}
 
-Les résultats révèlent plusieurs éléments importants. Premièrement, si le modèle est entrainé uniquement sur le dataset SA-1B (comme SAM original), SAM 2 atteint 58.9\% de mIoU avec un seul clic contre 58.1\% pour SAM, démontrant une amélioration modeste mais par contre le gain de vitesse est remarquable : 130.1 contre 21.7 images par seconde, soit environ 6 fois plus rapide. Ce gain provient principalement de l'architecture Hiera plus compacte et optimisée.
+Les résultats révèlent plusieurs éléments importants. Premièrement, si le modèle est entrainé uniquement sur le dataset SA-1B (comme SAM original), \acrshort{sam2} atteint 58.9\% de mIoU avec un seul clic contre 58.1\% pour SAM, démontrant une amélioration modeste mais par contre le gain de vitesse est remarquable : 130.1 contre 21.7 images par seconde, soit environ 6 fois plus rapide. Ce gain provient principalement de l'architecture Hiera plus compacte et optimisée.
 
-Deuxièmement, l'entraînement conjoint sur données image-vidéo (configuration ``mix'' dans le Tableau \ref{tab:ch2_sam2_resultats_segmentation_image_miou}) révèle tout le potentiel de l'approche multimodale de SAM 2. Les performances grimpent à 61.9\% de mIoU moyen, avec des gains particulièrement marqués sur les données vidéo : 69.6\% sur les 14 nouveaux datasets vidéo contre 56.6\% pour la version entraînée uniquement sur images. Cette amélioration illustre comment l'apprentissage temporel enrichit la compréhension spatiale du modèle.
+Deuxièmement, l'entraînement conjoint sur données image-vidéo (configuration ``mix'' dans le Tableau \ref{tab:ch2_sam2_resultats_segmentation_image_miou}) révèle tout le potentiel de l'approche multimodale de \acrshort{sam2}. Les performances grimpent à 61.9\% de mIoU moyen, avec des gains particulièrement marqués sur les données vidéo : 69.6\% sur les 14 nouveaux datasets vidéo contre 56.6\% pour la version entraînée uniquement sur images. Cette amélioration illustre comment l'apprentissage temporel enrichit la compréhension spatiale du modèle.
 
 Cette capacité d'adaptation automatique à de nouveaux domaines sans réentraînement constitue un atout majeur pour les applications pratiques, où la diversité des données d'entrée est souvent imprévisible.
 
 \subsubsection{Discussion et limites}
-Malgré ses performances remarquables, SAM 2 présente certaines limitations techniques identifiées par les auteurs.
+Malgré ses performances remarquables, \acrshort{sam2} présente certaines limitations techniques identifiées par les auteurs.
 
 Les principales défaillances concernent les discontinuités temporelles (changements de plan brutaux), les scènes visuellement encombrées, les occlusions prolongées et le traitement de vidéos très longues. Néanmoins, l'architecture interactive permet de récupérer rapidement d'erreurs par des prompts correctifs sur n'importe quel photogramme.
 
 Les limitations de précision spatiale se manifestent avec les objets comportant des détails très fins (cheveux, contours complexes), particulièrement en mouvement rapide, ainsi qu'avec les objets d'apparence très similaire que le modèle peut confondre en s'appuyant principalement sur les caractéristiques visuelles.
 
-Sur le plan architectural, SAM 2 traite chaque objet indépendamment sans communication inter-objets, partageant uniquement les embeddings d'images. Cette approche ignore les relations spatiales et temporelles entre objets, qui pourraient enrichir la compréhension de scène.
+Sur le plan architectural, \acrshort{sam2} traite chaque objet indépendamment sans communication inter-objets, partageant uniquement les embeddings d'images. Cette approche ignore les relations spatiales et temporelles entre objets, qui pourraient enrichir la compréhension de scène.
 
 Les auteurs proposent plusieurs améliorations : intégration d'une modélisation explicite du mouvement (flux optique, prédicteurs de trajectoire), incorporation d'informations contextuelles partagées entre objets, et automatisation partielle du processus d'annotation par des métriques de confiance automatiques.
 
-Malgré ces limitations, SAM 2 représente une avancée considérable vers la segmentation universelle d'objets dans les images et vidéos, ouvrant de nouvelles possibilités pour la réalité augmentée, la robotique autonome, les systèmes de conduite assistée et l'édition vidéo professionnelle.
+Malgré ces limitations, \acrshort{sam2} représente une avancée considérable vers la segmentation universelle d'objets dans les images et vidéos, ouvrant de nouvelles possibilités pour la réalité augmentée, la robotique autonome, les systèmes de conduite assistée et l'édition vidéo professionnelle.
 % -----------------------------------------------------------------------------
 % -----------------------------------------------------------------------------
 \section{Machine learning appliqué au calcul du potentiel solaire}
-Ce chapitre explore l'état de l'art du machine learning appliqué aux données géomatiques et aux images satellite, avec comme objectif le calcul du potentiel solaire. La première sous-section examine en détail le travail réalisé par STDL, suivie de deux autres articles présentant chacun des approches différentes pour le calcul du potentiel solaire.
+Ce chapitre explore l'état de l'art du machine learning appliqué aux données géomatiques et aux images satellite, avec comme objectif le calcul du potentiel solaire. La première sous-section examine en détail le travail réalisé par \acrshort{stdl}, suivie de deux autres articles présentant chacun des approches différentes pour le calcul du potentiel solaire.
 
 % -----------------------------------------------------------------------------
 \subsection{Détection des objets présents sur les toitures et identification des espaces libres}
@@ -953,7 +953,7 @@ Ce chapitre explore l'état de l'art du machine learning appliqué aux données 
     \end{itemize}
     \item La segmentation d'images
     \begin{itemize}
-        \item Librairie python ``segment-geospatial'' \cite{wu_samgeo_2023} basé sur segment anything model (SAM) pour détecter et segmenter les objets
+        \item Librairie python ``segment-geospatial'' \cite{wu_samgeo_2023} basé sur segment anything model (\acrshort{sam}) pour détecter et segmenter les objets
         \item Données : Orthophotos du canton de Genève 2019 \cite{sitg_orthophotos_nodate}
         \item F1-score = 0.75 et mIoU = 0.37
         \item Demande beaucoup de ressources informatiques
@@ -1042,7 +1042,7 @@ Le canton de Genève a réalisé en mai 2019 des images aériennes de haute rés
 \begin{figure}[H]
     \centering
     \includegraphics[width=1\linewidth]{02-main//figures/ch2/stdl_02_verite_terrain.png}
-    \caption{Bâtiments choisis par STDL pour la vérité terrain dans le Canton de Genève. Images de \acrshort{sitg}}
+    \caption{Bâtiments choisis par \acrshort{stdl} pour la vérité terrain dans le Canton de Genève. Images de \acrshort{sitg}}
     \label{fig:stdl_02_verite_terrain}
 \end{figure}
 \par{Ces bâtiments se distribuent de la manière suivante :}
@@ -1263,7 +1263,7 @@ Les critères par office sont relativement différents, l'\acrshort{ocen} semble
     Solar photovoltaic & 0.92 \\
     \hline
     \end{tabular}
-    \caption{Recall par classe pour la segmentation LiDAR (STDL, 2024)}
+    \caption{Recall par classe pour la segmentation LiDAR}
     \label{tab:stdl_03_resultats_segmentation_lidar_classes}
 \end{table}
 
@@ -1331,7 +1331,7 @@ La Figure \ref{fig:stdl_08_methodo_segmentation_images} ci-dessous représente l
 
 \par{La première étape est la préparation des orthophotos (Figure \ref{fig:stdl_08_methodo_segmentation_images} ``a''). Celle-ci commence par le découpage des orthophotos avec les données vectorielles des toitures (délimitation des toitures) pour ne conserver que la toiture à segmenter. La ligne bleue représente la marge de 1 mètre (zone tampon) pour faciliter la tâche de l'algorithme. Ensuite chaque toiture fera l'objet d'une tuile (une toiture par image).}
 
-\par{La deuxième étape est la segmentation de l'image (Figure \ref{fig:stdl_08_methodo_segmentation_images} ``b''). Le modèle segment anything model (SAM) est utilisé via la librairie Python ``segment-geospatial'' \cite{wu_samgeo_2023} car cette libraire permet d'utiliser SAM sur des orthophotos tout en conservant les données géospatiales. SAM va segmenter les objets sur la toiture dans chaque tuile, ce qui va produire un masque par objet segmenté.}
+\par{La deuxième étape est la segmentation de l'image (Figure \ref{fig:stdl_08_methodo_segmentation_images} ``b''). Le modèle segment anything model (\acrshort{sam}) est utilisé via la librairie Python ``segment-geospatial'' \cite{wu_samgeo_2023} car cette libraire permet d'utiliser SAM sur des orthophotos tout en conservant les données géospatiales. SAM va segmenter les objets sur la toiture dans chaque tuile, ce qui va produire un masque par objet segmenté.}
 
 \par{La troisième étape est la vectorisation des objets (Figure \ref{fig:stdl_08_methodo_segmentation_images} ``c''). Dans cette étape, les masques segmentés sont convertis en données vectorielles. Certains de ces polygones sont supprimés basé sur des critères géométriques :}
 \begin{itemize}
@@ -1400,7 +1400,7 @@ Les experts sont au minimum partiellement satisfait de 86\% des résultats (Tabl
     Satisfied & 54\% & 37\% \\
     \hline
     \end{tabular}
-    \caption{Evaluation des experts pour la segmentation d'images (STDL, 2024)}
+    \caption{Evaluation des experts pour la segmentation d'images}
     \label{tab:stdl_07_segmentation_image_resultats_experts}
 \end{table}
 \newpage
