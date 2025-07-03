@@ -1165,7 +1165,11 @@ La Figure \ref{fig:linknet_efficientnet_b5_worst_cases} montre les 4 cas les plu
 
 % ===========================================================
 
-Unet++ + EfficientNetV2-S
+Les Figures \ref{fig:unetplusplus_efficientnetv2_s_best_cases} et \ref{fig:unetplusplus_efficientnetv2_s_worst_cases} montrent les cas extrêmes du modèle UNet++ + EfficientNetV2-RW-S sur le dataset de test.
+
+La Figure \ref{fig:unetplusplus_efficientnetv2_s_best_cases} présente les 4 meilleures segmentations. Les images sont similaires à celles des modèles précédents, avec des performances très légèrement en retrait.
+
+La Figure \ref{fig:unetplusplus_efficientnetv2_s_worst_cases} illustre les 4 pires performances. Les iamges ont déjà été rencontrées avec les modèles précédents, et les observations restent les mêmes.
 
 \begin{figure}[H]
 \centering
@@ -1315,11 +1319,573 @@ Unet++ + EfficientNetV2-S
 
 % ===========================================================
 
-SegFormer + RegNetY-080
+Les Figures \ref{fig:segformer_regnety_080_best_cases} et \ref{fig:segformer_regnety_080_worst_cases} montrent les performances extrêmes du modèle SegFormer + RegNetY-080 sur le dataset de test.
+
+La Figure \ref{fig:segformer_regnety_080_best_cases} présente les 4 meilleures segmentations. On retrouve les mêmes cas de succès que pour les modèles précédents.
+
+La Figure \ref{fig:segformer_regnety_080_worst_cases} illustre les 4 cas les plus difficiles. Les images correspondent largement à celles déjà analysées, avec une exception notable : la troisième image montre une toiture végétalisée et une terrasse praticable sans annotation dans la vérité terrain. Le modèle a segmenté une partie de la terrasse, ce qui soulève la difficulté pour l'algorithme de distinguer les surfaces praticables des autres types de toitures.
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/best_cases/best_5_iou0.998_24991116_tile_5_3_322356_original.png}
+    \caption{Top1 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/best_cases/best_5_iou0.998_24991116_tile_5_3_322356_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/best_cases/best_5_iou0.998_24991116_tile_5_3_322356_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.998}
+\end{subfigure}
+
+\vspace{0.35cm}
+
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/best_cases/best_4_iou0.989_24941121_tile_16_8_fd3555_original.png}
+    \caption{Top2 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/best_cases/best_4_iou0.989_24941121_tile_16_8_fd3555_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/best_cases/best_4_iou0.989_24941121_tile_16_8_fd3555_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.989}
+\end{subfigure}
+
+\vspace{0.35cm}
+
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/best_cases/best_3_iou0.987_24961121_tile_15_10_cc6553_original.png}
+    \caption{Top3 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/best_cases/best_3_iou0.987_24961121_tile_15_10_cc6553_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/best_cases/best_3_iou0.987_24961121_tile_15_10_cc6553_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.987}
+\end{subfigure}
+
+\vspace{0.35cm}
+
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/best_cases/best_2_iou0.985_24931117_tile_18_5_f475a0_original.png}
+    \caption{Top4 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/best_cases/best_2_iou0.985_24931117_tile_18_5_f475a0_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/best_cases/best_2_iou0.985_24931117_tile_18_5_f475a0_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.985}
+\end{subfigure}
+
+\caption{Meilleurs IoU pour SegFormer avec RegNetY-080 sur le dataset de test}
+\label{fig:segformer_regnety_080_best_cases}
+\end{figure}
+
+% ===========================================================
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/worst_cases/worst_5_iou0.000_25011115_tile_17_4_52cb42_original.png}
+    \caption{Top1 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/worst_cases/worst_5_iou0.000_25011115_tile_17_4_52cb42_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/worst_cases/worst_5_iou0.000_25011115_tile_17_4_52cb42_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.000}
+\end{subfigure}
+
+\vspace{0.35cm}
+
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/worst_cases/worst_4_iou0.000_25001117_tile_3_9_5ba8f7_original.png}
+    \caption{Top2 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/worst_cases/worst_4_iou0.000_25001117_tile_3_9_5ba8f7_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/worst_cases/worst_4_iou0.000_25001117_tile_3_9_5ba8f7_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.000}
+\end{subfigure}
+
+\vspace{0.35cm}
+
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/worst_cases/worst_3_iou0.000_24991122_tile_9_19_7ebcec_original.png}
+    \caption{Top3 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/worst_cases/worst_3_iou0.000_24991122_tile_9_19_7ebcec_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/worst_cases/worst_3_iou0.000_24991122_tile_9_19_7ebcec_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.000}
+\end{subfigure}
+
+\vspace{0.35cm}
+
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/worst_cases/worst_1_iou0.000_24931113_tile_19_19_52ccbb_original.png}
+    \caption{Top4 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/worst_cases/worst_1_iou0.000_24931113_tile_19_19_52ccbb_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/worst_cases/worst_1_iou0.000_24931113_tile_19_19_52ccbb_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.000}
+\end{subfigure}
+
+\caption{Pires IoU pour SegFormer avec RegNetY-080 sur le dataset de test}
+\label{fig:segformer_regnety_080_worst_cases}
+\end{figure}
+
+Pour conclure cette section, l'évaluation des modèles sélectionnés donne des résultats satisfaisants. Les modèles parviennent à obtenir de bonnes performances sur le dataset de test.
+
+L'analyse révèle cependant plusieurs limites dans le dataset. Premièrement, certaines images contiennent des toitures qui représentent moins de 1\% de la surface totale de l'image, ce qui complique l'apprentissage du modèle. Deuxièmement, les toitures végétalisées et les terrasses praticables restent difficiles à distinguer des autres types de surfaces. Le dataset ne contient probablement pas assez d'exemples de ces cas particuliers pour permettre au modèle d'apprendre à les différencier correctement. Troisièmement, les exemples négatifs (images sans annotation) ont été inclus pour que le modèle apprenne à identifier ce qui ne constitue pas une surface libre. Le nombre de ces exemples négatifs semble insuffisant car tous les modèles rencontrent des difficultés sur ces cas.
 
 % -----------------------------------------------------------------------------
 \section{Application sur un quartier}
+La zone de HEPIA a été choisie pour tester les modèles sur un secteur qui n'a pas servi à l'entraînement.
+
 \subsection{Analyse qualitative}
+La Figure \ref{fig:quartier_hepia_original} montre les images originales de la zone HEPIA. La Figure \ref{fig:quartier_hepia_masque_toitures} présente les mêmes images avec un masque appliqué sur les toitures (couche toitures SITG). Cette étape permet au modèle de traiter uniquement les surfaces de toitures en ignorant le reste du paysage urbain.
+
+Les zones identifiées comme toitures (Figure \ref{fig:quartier_hepia_masque_toitures}) ne sont pas toutes évidentes. En bas à gauche, une cour intérieure est identifiée comme toiture. En bas à droite, une terrasse praticable est aussi classée comme toiture, ce qui techniquement est correct car il y a bien un bâtiment dessous, mais cela complique la tâche de segmentation. L'image contient également des terrasses dans la partie supérieure gauche qui permettront d'évaluer le comportement des modèles sur ce type de surface.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+    % Define your image display width
+    \def\imgwidth{7.7cm}  % Adjust this to your desired size
+    
+    % Calculate effective spacing (80% of image width)
+    \def\effectivespace{0.8*\imgwidth}
+    
+    % Row 1 (top row - 2 images)
+    \node[anchor=center] (img1) at (0, 2*\effectivespace) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/original/24991118_tile_10_7_18eac4.png}
+    };
+    \node[anchor=center] (img2) at (\effectivespace, 2*\effectivespace) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/original/24991118_tile_10_8_2931b8.png}
+    };
+    
+    % Row 2 (middle row - 2 images)
+    \node[anchor=center] (img3) at (0, \effectivespace) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/original/24991118_tile_11_7_4db66f.png}
+    };
+    \node[anchor=center] (img4) at (\effectivespace, \effectivespace) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/original/24991118_tile_11_8_6b34a7.png}
+    };
+    
+    % Row 3 (bottom row - 2 images)
+    \node[anchor=center] (img5) at (0, 0) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/original/24991118_tile_12_7_7ce219.png}
+    };
+    \node[anchor=center] (img6) at (\effectivespace, 0) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/original/24991118_tile_12_8_83485c.png}
+    };
+\end{tikzpicture}
+\caption{Zone HEPIA - Original}
+\label{fig:quartier_hepia_original}
+\end{figure}
+
+% ===========================================================
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+    % Define your image display width
+    \def\imgwidth{7.7cm}  % Adjust this to your desired size
+    
+    % Calculate effective spacing (80% of image width)
+    \def\effectivespace{0.8*\imgwidth}
+    
+    % Row 1 (top row - 2 images)
+    \node[anchor=center] (img1) at (0, 2*\effectivespace) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/masked_images/24991118_tile_10_7_18eac4_masked.png}
+    };
+    \node[anchor=center] (img2) at (\effectivespace, 2*\effectivespace) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/masked_images/24991118_tile_10_8_2931b8_masked.png}
+    };
+    
+    % Row 2 (middle row - 2 images)
+    \node[anchor=center] (img3) at (0, \effectivespace) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/masked_images/24991118_tile_11_7_4db66f_masked.png}
+    };
+    \node[anchor=center] (img4) at (\effectivespace, \effectivespace) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/masked_images/24991118_tile_11_8_6b34a7_masked.png}
+    };
+    
+    % Row 3 (bottom row - 2 images)
+    \node[anchor=center] (img5) at (0, 0) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/masked_images/24991118_tile_12_7_7ce219_masked.png}
+    };
+    \node[anchor=center] (img6) at (\effectivespace, 0) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/masked_images/24991118_tile_12_8_83485c_masked.png}
+    };
+\end{tikzpicture}
+\caption{Zone HEPIA - Masque couche toitures}
+\label{fig:quartier_hepia_masque_toitures}
+\end{figure}
+
+% ===========================================================
+\newpage
+La Figure \ref{fig:quartier_hepia_modele_unet_mambaoutsmall} présente les résultats obtenus avec le modèle UNet + MambaOutSmall sur la zone HEPIA.
+
+Le modèle identifie correctement les balcons et terrases lorsqu'ils ont des éléments tel que des chaises, table ou autre mobilier typique des balcons. En revanche, les toitures praticables (zone à droite) et cours intérieures (en bas à gauche) sont mal interprétées - le modèle les classe comme surfaces libres alors qu'elles ne le sont pas.
+
+Les obstacles tel que les verrières, panneaux solaires, gaines, cheminées, lucarnes, acrotères, bords de toiture, arbres et autres végétaux sont bien détectées et ignorées par le modèle lors de la segmentation.
+
+La gestion des ombrages reste variable. Dans la partie gauche de l'image, les ombrages légèrs sont correctement traitées. Par contre, dans la zone centrale droite où l'ombrage est plus marqué, le modèle a des difficultés à identifier correctement l'intégralité des espaces libres.
+
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+    % Define your image display width
+    \def\imgwidth{7.7cm}  % Adjust this to your desired size
+    
+    % Calculate effective spacing (80% of image width)
+    \def\effectivespace{0.8*\imgwidth}
+    
+    % Row 1 (top row - 2 images)
+    \node[anchor=center] (img1) at (0, 2*\effectivespace) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/1_unet_tu-mambaout_small_20250703_095421/24991118_tile_10_7_18eac4_masked_overlay.png}
+    };
+    \node[anchor=center] (img2) at (\effectivespace, 2*\effectivespace) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/1_unet_tu-mambaout_small_20250703_095421/24991118_tile_10_8_2931b8_masked_overlay.png}
+    };
+    
+    % Row 2 (middle row - 2 images)
+    \node[anchor=center] (img3) at (0, \effectivespace) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/1_unet_tu-mambaout_small_20250703_095421/24991118_tile_11_7_4db66f_masked_overlay.png}
+    };
+    \node[anchor=center] (img4) at (\effectivespace, \effectivespace) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/1_unet_tu-mambaout_small_20250703_095421/24991118_tile_11_8_6b34a7_masked_overlay.png}
+    };
+    
+    % Row 3 (bottom row - 2 images)
+    \node[anchor=center] (img5) at (0, 0) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/1_unet_tu-mambaout_small_20250703_095421/24991118_tile_12_7_7ce219_masked_overlay.png}
+    };
+    \node[anchor=center] (img6) at (\effectivespace, 0) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/1_unet_tu-mambaout_small_20250703_095421/24991118_tile_12_8_83485c_masked_overlay.png}
+    };
+\end{tikzpicture}
+\caption{Zone HEPIA - Unet avec MambaOutSmall}
+\label{fig:quartier_hepia_modele_unet_mambaoutsmall}
+\end{figure}
+
+% ===========================================================
+
+\newpage
+La Figure \ref{fig:quartier_hepia_modele_upernet_efficientnetv2_s} montre les résultats du modèle UPerNet + EfficientNetV2-S sur la zone HEPIA.
+
+Les observations sont similaires au modèle précédent concernant les terrasses et cours intérieures.
+
+Les obstacles comme les verrières, panneaux solaires, gaines, cheminées, lucarnes, acrotères, bords de toiture, arbres et végétation sont correctement détectés. Le modèle les exclut bien lors de la segmentation.
+
+La gestion des ombrages est moins performante qu'avec UNet + MambaOutSmall. UPerNet peine à identifier les espaces libres dans toutes les zones ombragées, peu importe l'intensité de l'ombre.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+    % Define your image display width
+    \def\imgwidth{7.7cm}  % Adjust this to your desired size
+    
+    % Calculate effective spacing (80% of image width)
+    \def\effectivespace{0.8*\imgwidth}
+    
+    % Row 1 (top row - 2 images)
+    \node[anchor=center] (img1) at (0, 2*\effectivespace) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/2_upernet_tu-efficientnetv2_rw_s.ra2_in1k_20250703_095445/24991118_tile_10_7_18eac4_masked_overlay.png}
+    };
+    \node[anchor=center] (img2) at (\effectivespace, 2*\effectivespace) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/2_upernet_tu-efficientnetv2_rw_s.ra2_in1k_20250703_095445/24991118_tile_10_8_2931b8_masked_overlay.png}
+    };
+    
+    % Row 2 (middle row - 2 images)
+    \node[anchor=center] (img3) at (0, \effectivespace) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/2_upernet_tu-efficientnetv2_rw_s.ra2_in1k_20250703_095445/24991118_tile_11_7_4db66f_masked_overlay.png}
+    };
+    \node[anchor=center] (img4) at (\effectivespace, \effectivespace) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/2_upernet_tu-efficientnetv2_rw_s.ra2_in1k_20250703_095445/24991118_tile_11_8_6b34a7_masked_overlay.png}
+    };
+    
+    % Row 3 (bottom row - 2 images)
+    \node[anchor=center] (img5) at (0, 0) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/2_upernet_tu-efficientnetv2_rw_s.ra2_in1k_20250703_095445/24991118_tile_12_7_7ce219_masked_overlay.png}
+    };
+    \node[anchor=center] (img6) at (\effectivespace, 0) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/2_upernet_tu-efficientnetv2_rw_s.ra2_in1k_20250703_095445/24991118_tile_12_8_83485c_masked_overlay.png}
+    };
+\end{tikzpicture}
+\caption{Zone HEPIA - UPerNet avec EfficientNetV2-S}
+\label{fig:quartier_hepia_modele_upernet_efficientnetv2_s}
+\end{figure}
+
+% ===========================================================
+
+\newpage
+La Figure \ref{fig:quartier_hepia_modele_segformer_mambaoutbase} montre les résultats du modèle SegFormer + MambaOutBase sur la zone HEPIA.
+
+Les observations sont similaires aux modèles précédent concernant les terrasses et cours intérieures.
+
+Les obstacles comme les verrières, panneaux solaires, gaines, cheminées, lucarnes, acrotères, bords de toiture, arbres et végétation sont correctement détectés. Le modèle les exclut bien lors de la segmentation.
+
+La gestion des ombrages est bien meilleure que pour les deux modèles précédents. SegFormer parvient à mieux identifier les espaces libres dans les zones ombragées, même lorsque l'ombre est plus marquée.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+    % Define your image display width
+    \def\imgwidth{7.7cm}  % Adjust this to your desired size
+    
+    % Calculate effective spacing (80% of image width)
+    \def\effectivespace{0.8*\imgwidth}
+    
+    % Row 1 (top row - 2 images)
+    \node[anchor=center] (img1) at (0, 2*\effectivespace) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/3_segformer_tu-mambaout_base_20250703_095506/24991118_tile_10_7_18eac4_masked_overlay.png}
+    };
+    \node[anchor=center] (img2) at (\effectivespace, 2*\effectivespace) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/3_segformer_tu-mambaout_base_20250703_095506/24991118_tile_10_8_2931b8_masked_overlay.png}
+    };
+    
+    % Row 2 (middle row - 2 images)
+    \node[anchor=center] (img3) at (0, \effectivespace) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/3_segformer_tu-mambaout_base_20250703_095506/24991118_tile_11_7_4db66f_masked_overlay.png}
+    };
+    \node[anchor=center] (img4) at (\effectivespace, \effectivespace) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/3_segformer_tu-mambaout_base_20250703_095506/24991118_tile_11_8_6b34a7_masked_overlay.png}
+    };
+    
+    % Row 3 (bottom row - 2 images)
+    \node[anchor=center] (img5) at (0, 0) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/3_segformer_tu-mambaout_base_20250703_095506/24991118_tile_12_7_7ce219_masked_overlay.png}
+    };
+    \node[anchor=center] (img6) at (\effectivespace, 0) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/3_segformer_tu-mambaout_base_20250703_095506/24991118_tile_12_8_83485c_masked_overlay.png}
+    };
+\end{tikzpicture}
+\caption{Zone HEPIA - SegFormer avec MambaOutBase}
+\label{fig:quartier_hepia_modele_segformer_mambaoutbase}
+\end{figure}
+
+% ===========================================================
+
+\newpage
+La Figure \ref{fig:quartier_hepia_modele_linknet_efficientnet_b5} illustre les résultats obtenus avec LinkNet + EfficientNet-B5 sur la zone HEPIA.
+
+La cour intérieure de HEPIA (en bas à droite) est partiellement segmentée. Le modèle semble capable de distinguer en partie les surfaces praticables des autres toitures. Toutefois, la cour intérieure située en bas à gauche est incorrectement identifiée comme surface libre.
+
+Les obstacles comme les verrières, panneaux solaires, gaines, cheminées, lucarnes, acrotères, bords de toiture, arbres et végétation sont correctement détectés et exclus de la segmentation. La précision de détection paraît supérieure aux modèles précédents.
+
+Le traitement des ombrages est efficace. Le modèle identifie correctement les espaces libres dans les zones ombragées, y compris celles avec des ombres prononcées.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+    % Define your image display width
+    \def\imgwidth{7.7cm}  % Adjust this to your desired size
+    
+    % Calculate effective spacing (80% of image width)
+    \def\effectivespace{0.8*\imgwidth}
+    
+    % Row 1 (top row - 2 images)
+    \node[anchor=center] (img1) at (0, 2*\effectivespace) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/4_linknet_timm-efficientnet-b5_20250703_095535/24991118_tile_10_7_18eac4_masked_overlay.png}
+    };
+    \node[anchor=center] (img2) at (\effectivespace, 2*\effectivespace) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/4_linknet_timm-efficientnet-b5_20250703_095535/24991118_tile_10_8_2931b8_masked_overlay.png}
+    };
+    
+    % Row 2 (middle row - 2 images)
+    \node[anchor=center] (img3) at (0, \effectivespace) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/4_linknet_timm-efficientnet-b5_20250703_095535/24991118_tile_11_7_4db66f_masked_overlay.png}
+    };
+    \node[anchor=center] (img4) at (\effectivespace, \effectivespace) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/4_linknet_timm-efficientnet-b5_20250703_095535/24991118_tile_11_8_6b34a7_masked_overlay.png}
+    };
+    
+    % Row 3 (bottom row - 2 images)
+    \node[anchor=center] (img5) at (0, 0) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/4_linknet_timm-efficientnet-b5_20250703_095535/24991118_tile_12_7_7ce219_masked_overlay.png}
+    };
+    \node[anchor=center] (img6) at (\effectivespace, 0) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/4_linknet_timm-efficientnet-b5_20250703_095535/24991118_tile_12_8_83485c_masked_overlay.png}
+    };
+\end{tikzpicture}
+\caption{Zone HEPIA - LinkNet avec EfficientNet-B5}
+\label{fig:quartier_hepia_modele_linknet_efficientnet_b5}
+\end{figure}
+
+% ===========================================================
+
+\newpage
+La Figure \ref{fig:quartier_hepia_modele_unetplusplus_efficientnetv2_s} montre les résultats du modèle UNet++ + EfficientNetV2-S sur la zone HEPIA.
+
+Les observations restent identiques pour les terrasses et cours intérieures. Les obstacles présents sur les toitures sont généralement bien identifiés.
+
+Le modèle gère correctement les ombres légères. En revanche, quand l'ombrage devient plus intense, il peine à détecter les espaces libres.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+    % Define your image display width
+    \def\imgwidth{7.7cm}  % Adjust this to your desired size
+    
+    % Calculate effective spacing (80% of image width)
+    \def\effectivespace{0.8*\imgwidth}
+    
+    % Row 1 (top row - 2 images)
+    \node[anchor=center] (img1) at (0, 2*\effectivespace) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/5_unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k_20250703_095601/24991118_tile_10_7_18eac4_masked_overlay.png}
+    };
+    \node[anchor=center] (img2) at (\effectivespace, 2*\effectivespace) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/5_unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k_20250703_095601/24991118_tile_10_8_2931b8_masked_overlay.png}
+    };
+    
+    % Row 2 (middle row - 2 images)
+    \node[anchor=center] (img3) at (0, \effectivespace) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/5_unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k_20250703_095601/24991118_tile_11_7_4db66f_masked_overlay.png}
+    };
+    \node[anchor=center] (img4) at (\effectivespace, \effectivespace) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/5_unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k_20250703_095601/24991118_tile_11_8_6b34a7_masked_overlay.png}
+    };
+    
+    % Row 3 (bottom row - 2 images)
+    \node[anchor=center] (img5) at (0, 0) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/5_unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k_20250703_095601/24991118_tile_12_7_7ce219_masked_overlay.png}
+    };
+    \node[anchor=center] (img6) at (\effectivespace, 0) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/5_unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k_20250703_095601/24991118_tile_12_8_83485c_masked_overlay.png}
+    };
+\end{tikzpicture}
+\caption{Zone HEPIA - UNet++ avec EfficientNetV2-S}
+\label{fig:quartier_hepia_modele_unetplusplus_efficientnetv2_s}
+\end{figure}
+
+% ===========================================================
+
+\newpage
+La Figure \ref{fig:quartier_hepia_modele_segformer_regnety_080} présente les résultats du modèle SegFormer + RegNetY-080 sur la zone HEPIA.
+
+La segmentation des petits obstacles sur les toitures semble moins précise comparé aux autres modèles. La gestion des ombrages est correcte, mais le modèle a des difficultés à identifier les espaces libres dans les zones ombragées, surtout lorsque l'ombre est plus marquée. Les remarques sur les terrasses et cours intérieures restent similaires aux autres modèles.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+    % Define your image display width
+    \def\imgwidth{7.7cm}  % Adjust this to your desired size
+    
+    % Calculate effective spacing (80% of image width)
+    \def\effectivespace{0.8*\imgwidth}
+    
+    % Row 1 (top row - 2 images)
+    \node[anchor=center] (img1) at (0, 2*\effectivespace) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/6_segformer_tu-regnety_080.ra3_in1k_20250703_095620/24991118_tile_10_7_18eac4_masked_overlay.png}
+    };
+    \node[anchor=center] (img2) at (\effectivespace, 2*\effectivespace) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/6_segformer_tu-regnety_080.ra3_in1k_20250703_095620/24991118_tile_10_8_2931b8_masked_overlay.png}
+    };
+    
+    % Row 2 (middle row - 2 images)
+    \node[anchor=center] (img3) at (0, \effectivespace) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/6_segformer_tu-regnety_080.ra3_in1k_20250703_095620/24991118_tile_11_7_4db66f_masked_overlay.png}
+    };
+    \node[anchor=center] (img4) at (\effectivespace, \effectivespace) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/6_segformer_tu-regnety_080.ra3_in1k_20250703_095620/24991118_tile_11_8_6b34a7_masked_overlay.png}
+    };
+    
+    % Row 3 (bottom row - 2 images)
+    \node[anchor=center] (img5) at (0, 0) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/6_segformer_tu-regnety_080.ra3_in1k_20250703_095620/24991118_tile_12_7_7ce219_masked_overlay.png}
+    };
+    \node[anchor=center] (img6) at (\effectivespace, 0) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/6_segformer_tu-regnety_080.ra3_in1k_20250703_095620/24991118_tile_12_8_83485c_masked_overlay.png}
+    };
+\end{tikzpicture}
+\caption{Zone HEPIA - SegFormer avec RegNetY-080}
+\label{fig:quartier_hepia_modele_segformer_regnety_080}
+\end{figure}
+
+\paragraph{Synthèse des résultats sur la zone HEPIA}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|c|c|c|}
+\hline
+\textbf{Modèle} & \textbf{Balcons/Terrasses} & \textbf{Toitures praticables} & \textbf{Détection obstacles} & \textbf{Gestion ombrages} \\
+\hline
+UNet + MambaOutSmall & + & - & + & +/- \\
+\hline
+UPerNet + EfficientNetV2-S & + & - & + & - \\
+\hline
+SegFormer + MambaOutBase & + & - & + & + \\
+\hline
+LinkNet + EfficientNet-B5 & + & +/- & ++ & + \\
+\hline
+UNet++ + EfficientNetV2-S & + & - & + & +/- \\
+\hline
+SegFormer + RegNetY-080 & + & - & - & +/- \\
+\hline
+\end{tabular}
+\caption{Tableau comparatif des performances les 6 modèles sur la zone HEPIA}
+\label{tab:quartier_hepia_comparatif_modeles}
+\end{table}
+
+\vspace{0.5cm}
+
+\textbf{Légende :}
+\begin{itemize}
+\item \textbf{++} : Très bonne performance
+\item \textbf{+} : Bonne performance
+\item \textbf{+/-} : Performance mitigée
+\item \textbf{-} : Performance insuffisante
+\end{itemize}
+
+\vspace{0.5cm}
+
+\textbf{Observations principales :}
+\begin{itemize}
+\item \textbf{Balcons/Terrasses} : Tous les modèles identifient correctement les balcons avec mobilier typique
+\item \textbf{Toitures praticables} : Principale difficulté commune, seul LinkNet montre une amélioration partielle
+\item \textbf{Détection obstacles} : LinkNet se distingue par une précision supérieure, SegFormer + RegNetY-080 est le moins performant
+\item \textbf{Gestion ombrages} : SegFormer + MambaOutBase et LinkNet + EfficientNet-B5 sont les plus robustes
+\end{itemize}
 
 % -----------------------------------------------------------------------------
 \section{Analyse comparative des résultats}
