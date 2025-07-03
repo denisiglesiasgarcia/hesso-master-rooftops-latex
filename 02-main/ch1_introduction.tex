@@ -77,4 +77,14 @@ Cette section présente les objectifs du travail de master (\acrshort{tm}) :
 
 % -----------------------------------------------------------------------------
 \section{Organisation de ce rapport}
-\todo[inline]{A compléter à la fin du rapport}
+Ce rapport est organisé en cinq chapitres principaux et deux annexes techniques. La structure suit une progression logique depuis la présentation du problème jusqu'aux résultats obtenus.
+
+Le Chapitre 2 présente l'état de l'art en trois parties. Il commence par analyser les méthodes existantes pour évaluer le potentiel solaire des toitures, notamment les approches basées sur les données \gls{lidar} et cadastrales. Il examine ensuite les avancées en machine learning appliqué aux images, en particulier les modèles de segmentation. Pour finir, il détaille les travaux combinant machine learning et évaluation du potentiel solaire, incluant ceux du \gls{stdl}, et liste les datasets disponibles.
+
+Le Chapitre 3 décrit la méthodologie développée pour créer un modèle de segmentation sémantique. Il couvre tout le processus : sélection et préparation des données du \gls{sitg}, création du dataset annoté et développement des modèles. Le processus de labellisation, qui a demandé 180 heures de travail manuel, est décrit en détail. Le chapitre présente aussi les pistes explorées mais abandonnées pour montrer le cheminement complet.
+
+Le Chapitre 4 présente l'évaluation des 93 configurations de modèles testées. L'analyse quantitative sur le dataset de test identifie les meilleures architectures selon plusieurs métriques (IoU, mAP, F1-score). L'étude du rapport performance-complexité aide à choisir les modèles pour une utilisation pratique. La validation qualitative sur la zone de \gls{hepia}, non utilisée pour l'entraînement, montre que les modèles généralisent bien mais révèle aussi leurs limites.
+
+Le Chapitre 5 résume les contributions principales et les compare à l'état de l'art. Il identifie les limites actuelles, notamment pour les toitures végétalisées et les zones très ombragées, et propose des améliorations. Les possibilités d'application et d'extension à d'autres territoires sont discutées.
+
+Deux annexes complètent le document. L'Annexe A présente les bases du machine learning et de la segmentation d'images. L'Annexe B explique les concepts d'énergie solaire et leur utilisation dans les cadastres solaires.

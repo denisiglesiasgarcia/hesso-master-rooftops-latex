@@ -41,7 +41,7 @@ Une fois la tâche définie, il faut déterminer une approche. \acrshort{stdl} a
     \item La segmentation d'images
 \end{itemize}
 
-Leur segmentation d'images est réalisée avec Segment Anything Model (SAM). SAM effectue de la segmentation instance et divise l'image en polygones mais n'assigne pas de classe aux objets. Les résultats doivent être post-traités pour identifier les espaces disponibles. Un autre point délicat est le temps de traitement important (12 minutes pour 25 bâtiments).
+Leur segmentation d'images est réalisée avec Segment Anything Model (\acrshort{sam}). \acrshort{sam} effectue de la segmentation instance et divise l'image en polygones mais n'assigne pas de classe aux objets. Les résultats doivent être post-traités pour identifier les espaces disponibles. Un autre point délicat est le temps de traitement important (12 minutes pour 25 bâtiments).
 
 La segmentation sémantique est une autre option explorée par \citeauthor{castello_quantification_2021} dans la sous-section \textit{\nameref{subsec:castello_quantification_2021}} (voir page~\pageref{subsec:castello_quantification_2021}). Ils l'ont utilisée pour exactement la même tâche avec un dataset limité au centre-ville de Genève. Les résultats obtenus avec un IoU supérieur à 0,60 sur leur dataset de test sont très encourageants.
 
@@ -432,7 +432,7 @@ Ces cas particuliers seront traités après la finalisation de l'annotation. La 
 \end{figure}
 
 \newpage
-La tuile 258 (Figure \ref{fig:ch3_preparation_donnees_orthophotos_04a_exemple_decoupe_orthophoto3}), située à proximité de HEPIA, illustre bien cette complexité. Chaque tuile peut avoir jusqu'à 8 zones de recouvrement avec ses voisines (Figure \ref{fig:ch3_preparation_donnees_orthophotos_04_exemple_decoupe_orthophoto3}) au nord (238), nord-est (239), est (259), sud-est (279), sud (278), sud-ouest (277), ouest (257) et nord-ouest (237). Seule la zone centrale de \si{\numproduct{1024x1024}}  pixels n'a aucun recouvrement et constitue la partie unique de chaque tuile.
+La tuile 258 (Figure \ref{fig:ch3_preparation_donnees_orthophotos_04a_exemple_decoupe_orthophoto3}), située à proximité de \acrshort{hepia}, illustre bien cette complexité. Chaque tuile peut avoir jusqu'à 8 zones de recouvrement avec ses voisines (Figure \ref{fig:ch3_preparation_donnees_orthophotos_04_exemple_decoupe_orthophoto3}) au nord (238), nord-est (239), est (259), sud-est (279), sud (278), sud-ouest (277), ouest (257) et nord-ouest (237). Seule la zone centrale de \si{\numproduct{1024x1024}}  pixels n'a aucun recouvrement et constitue la partie unique de chaque tuile.
 
 \begin{figure}[H]
     \centering
@@ -656,7 +656,7 @@ La labellisation (ou annotation) des données consiste à délimiter et classifi
 Dans le cadre de cette étude, une seule classe sera définie pour identifier les espaces libres sur les toitures.
 
 \paragraph{Outils d'annotation}
-La labellisation exige des outils spécialisés pour optimiser le processus, particulièrement pour la segmentation sémantique. Ce type d'annotation nécessite la création de polygones délimitant précisément les zones d'intérêt, ce qui implique souvent des formes géométriques complexes et irrégulières. L'intégration d'algorithmes de segmentation d'instance tels que SAM constitue une aide précieuse pour automatiser la sélection et la délimitation des zones à annoter.
+La labellisation exige des outils spécialisés pour optimiser le processus, particulièrement pour la segmentation sémantique. Ce type d'annotation nécessite la création de polygones délimitant précisément les zones d'intérêt, ce qui implique souvent des formes géométriques complexes et irrégulières. L'intégration d'algorithmes de segmentation d'instance tels que \acrshort{sam} constitue une aide précieuse pour automatiser la sélection et la délimitation des zones à annoter.
 
 Le choix d'un outil approprié représente un défi important, gagner du temps dans chaque annotation devient critique quand il y a 539 images à annoter. Plusieurs solutions ont été évaluées :
 \begin{itemize}
@@ -665,9 +665,9 @@ Le choix d'un outil approprié représente un défi important, gagner du temps d
     \item Supervisely \cite{supervisely_supervisely_nodate}
 \end{itemize}
 
-Label Studio \cite{label_studio_open_nodate}, disponible depuis 2019, offre la possibilité d'intégrer des algorithmes de machine learning pour assister le processus d'annotation. Il s'agit d'une librairie Python permettant de gérer les annotations dans une base de données locale via une interface web. Cet outil n'a pas été retenu car l'utilisation d'aides à l'annotation tels que SAM \cite{label_studio_label_nodate} est complexe à configurer dans la version gratuite, cette fonctionnalité étant principalement accessible via leur offre commerciale.
+Label Studio \cite{label_studio_open_nodate}, disponible depuis 2019, offre la possibilité d'intégrer des algorithmes de machine learning pour assister le processus d'annotation. Il s'agit d'une librairie Python permettant de gérer les annotations dans une base de données locale via une interface web. Cet outil n'a pas été retenu car l'utilisation d'aides à l'annotation tels que \acrshort{sam} \cite{label_studio_label_nodate} est complexe à configurer dans la version gratuite, cette fonctionnalité étant principalement accessible via leur offre commerciale.
 
-Le deuxième outil évalué est Roboflow \cite{roboflow_roboflow_nodate}, une plateforme web qui propose gratuitement l'annotation assistée par SAM. L'un de ses principaux avantages est la possibilité d'entraîner un modèle de machine learning sur les premières images annotées, pour ensuite annoter automatiquement le reste du dataset. La version gratuite inclut l'accès à la plupart des fonctionnalités et offre quelques crédits pour l'annotation automatique.
+Le deuxième outil évalué est Roboflow \cite{roboflow_roboflow_nodate}, une plateforme web qui propose gratuitement l'annotation assistée par \acrshort{sam}. L'un de ses principaux avantages est la possibilité d'entraîner un modèle de machine learning sur les premières images annotées, pour ensuite annoter automatiquement le reste du dataset. La version gratuite inclut l'accès à la plupart des fonctionnalités et offre quelques crédits pour l'annotation automatique.
 
 Cet outil a été utilisé pour créer un dataset de 45 images dans le cadre d'une des pistes explorées dans la sous-section \textit{\nameref{subsubsec:fine_tuning_sam}} (voir page~\pageref{subsubsec:fine_tuning_sam}). L'interface utilisateur est assez intuitive et ergonomique.
 
@@ -678,16 +678,16 @@ Cet outil a été utilisé pour créer un dataset de 45 images dans le cadre d'u
     \label{fig:ch3_labellisation_01_outils_01_robolfow}
 \end{figure}
 
-Malgré que Roboflow a tous les outils nécessaires pour effectuer des annotations rapides, SAM (Figure \ref{fig:ch3_labellisation_01_outils_02_robolfow_sam}) présente certaines limitations et ne permet qu'une sélection simplifiée des zones à annoter. Dans le contexte spécifique des toitures, cette approche nécessite de nombreux clics pour obtenir une annotation correspondant précisément à la zone souhaitée. 
+Malgré que Roboflow a tous les outils nécessaires pour effectuer des annotations rapides, \acrshort{sam} (Figure \ref{fig:ch3_labellisation_01_outils_02_robolfow_sam}) présente certaines limitations et ne permet qu'une sélection simplifiée des zones à annoter. Dans le contexte spécifique des toitures, cette approche nécessite de nombreux clics pour obtenir une annotation correspondant précisément à la zone souhaitée. 
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=1\linewidth]{02-main/figures/ch3/ch3_labellisation_01_outils_02_robolfow_sam.png}
-    \caption{Exemple d'annotation avec SAM dans Roboflow}
+    \caption{Exemple d'annotation avec \acrshort{sam} dans Roboflow}
     \label{fig:ch3_labellisation_01_outils_02_robolfow_sam}
 \end{figure}
 
-Si l'objectif porte sur une zone clairement délimitée, SAM est suffisant. En revanche, dans des situations complexes présentant des zones d'ombrage ou des variations de contraste importantes, le processus d'annotation devient considérablement plus laborieux et chronophage.
+Si l'objectif porte sur une zone clairement délimitée, \acrshort{sam} est suffisant. En revanche, dans des situations complexes présentant des zones d'ombrage ou des variations de contraste importantes, le processus d'annotation devient considérablement plus laborieux et chronophage.
 
 Le troisième outil évalué, Supervisely, propose d'intégrer, en complément de SAM2, l'algorithme ClickSEG \cite{chen_conditional_2021} \cite{chen_focalclick_2022} (Figure \ref{fig:ch3_labellisation_01_outils_03_supervisely_modeles}). Supervisely offre la possibilité d'encadrer la zone d'intérêt (Figure \ref{fig:ch3_labellisation_01_outils_04_supervisely_segmentation}) pour ensuite la segmenter automatiquement. Cette approche permet de sélectionner une toiture dans son ensemble puis de retirer les parties occupées.
 
@@ -2458,31 +2458,31 @@ Pour conclure, les différents problèmes rencontrés et le manque de fiabilité
 
 
 \newpage
-\subsection{SAM}
-Une autre piste explorée est l'utilisation du segment-anything-model (SAM). Cet algorithme présente l'avantage de permettre une segmentation efficace sur des images sur lesquelles SAM n'a pas été spécifiquement entraîné. \acrshort{stdl} avait déjà exploré cette piste dans la sous-section \textit{\nameref{subsec:stdl_analyse}} (voir page~\pageref{subsec:stdl_analyse}) avec quelques différences entre les méthodologies utilisées.
+\subsection{\acrshort{sam}}
+Une autre piste explorée est l'utilisation du segment-anything-model (\acrshort{sam}). Cet algorithme présente l'avantage de permettre une segmentation efficace sur des images sur lesquelles \acrshort{sam} n'a pas été spécifiquement entraîné. \acrshort{stdl} avait déjà exploré cette piste dans la sous-section \textit{\nameref{subsec:stdl_analyse}} (voir page~\pageref{subsec:stdl_analyse}) avec quelques différences entre les méthodologies utilisées.
 
 \subsubsection{Méthodologie}
 La Figure \ref{fig:essai_algo_sam} résume les différentes étapes:
 \begin{enumerate}
     \item Mettre en noir tout ce qui est hors toiture (Figure \ref{fig:ch3_essai_sam_01_image_original})
     \item Détermination zone d'intêret (Figure \ref{fig:ch3_essai_sam_02_ROI})
-    \item SAM va segmenter toute l'image (Figure \ref{fig:ch3_essai_sam_03_200_masks})
+    \item \acrshort{sam} va segmenter toute l'image (Figure \ref{fig:ch3_essai_sam_03_200_masks})
     \item Filtrer les masques (polygones segmentés) (Figure \ref{fig:ch3_essai_sam_04_194_filtered_masks})
     \item Visualisation des masques filtrés avec des couleurs plus vives pour vérification visuelle (Figure \ref{fig:ch3_essai_sam_05_filtered_masks_overlay})
     \item Détermination de l'espace libre (Figure \ref{fig:ch3_essai_sam_06_une_zone_libre})
 \end{enumerate}
 
-La première étape (Figure \ref{fig:ch3_essai_sam_01_image_original}) est de fusionner tous les polygones qui délimitent la toiture. Ce grand polygone de toiture va permettre de centrer l'attention de SAM sur la toiture, les zones hors toitures peuvent être considérées comme du bruit et mises en noir. Un avantage notable de cette démarche est d'éviter du temps de calcul à SAM.
+La première étape (Figure \ref{fig:ch3_essai_sam_01_image_original}) est de fusionner tous les polygones qui délimitent la toiture. Ce grand polygone de toiture va permettre de centrer l'attention de \acrshort{sam} sur la toiture, les zones hors toitures peuvent être considérées comme du bruit et mises en noir. Un avantage notable de cette démarche est d'éviter du temps de calcul à \acrshort{sam}.
 
 La deuxième étape (Figure \ref{fig:ch3_essai_sam_02_ROI}) est de déterminer la zone d'intérêt (ROI). Cette étape utilise la librairie python pillow et permet de mettre en évidence les zones sombres à l'intérieur de la toiture.
 
-La troisième étape (Figure \ref{fig:ch3_essai_sam_03_200_masks}) utilise l'algorithme SAM pour réaliser la segmentation complète de l'image de la Figure \ref{fig:ch3_essai_sam_01_image_original}. Dans ce cas, un total de 200 masques sont segmentés. Le temps de calcul est de 7 minutes pour une image de toiture. SAM dispose de plusieurs paramètres qui peuvent augmenter significativement le temps de calcul; SAM peut par exemple diviser l'image en plusieurs parties pour améliorer la segmentation, plus cette partition est fine, meilleurs seront les résultats. La documentation de SAM est assez rudimentaire et n'explique pas clairement toutes les options disponibles.
+La troisième étape (Figure \ref{fig:ch3_essai_sam_03_200_masks}) utilise l'algorithme \acrshort{sam} pour réaliser la segmentation complète de l'image de la Figure \ref{fig:ch3_essai_sam_01_image_original}. Dans ce cas, un total de 200 masques sont segmentés. Le temps de calcul est de 7 minutes pour une image de toiture. \acrshort{sam} dispose de plusieurs paramètres qui peuvent augmenter significativement le temps de calcul; \acrshort{sam} peut par exemple diviser l'image en plusieurs parties pour améliorer la segmentation, plus cette partition est fine, meilleurs seront les résultats. La documentation de \acrshort{sam} est assez rudimentaire et n'explique pas clairement toutes les options disponibles.
 
 La quatrième étape (Figure \ref{fig:ch3_essai_sam_04_194_filtered_masks}) consiste à filtrer les polygones segmentés selon trois critères principaux :
 \begin{itemize}
     \item Recouvrement avec la ROI : les masques doivent avoir un recouvrement supérieur à 50\% avec la zone d'intérêt
-    \item Taille minimale : élimination des polygones de moins de 50 pixels (paramètre SAM) et suppression additionnelle des masques avec moins de 100 pixels
-    \item Qualité de segmentation : utilisation des seuils SAM avec un IoU prédit > 0.85 et un score de stabilité > 0.85
+    \item Taille minimale : élimination des polygones de moins de 50 pixels (paramètre \acrshort{sam}) et suppression additionnelle des masques avec moins de 100 pixels
+    \item Qualité de segmentation : utilisation des seuils \acrshort{sam} avec un IoU prédit > 0.85 et un score de stabilité > 0.85
 \end{itemize}
 Cette étape réduit le nombre de masques de 200 à 194, éliminant principalement les artefacts de segmentation hors toiture et les zones trop petites.
 
@@ -2555,35 +2555,35 @@ La sixième étape (Figure \ref{fig:ch3_essai_sam_06_une_zone_libre}) détermine
         \label{fig:ch3_essai_sam_06_une_zone_libre}
     \end{subfigure}
 
-    \caption{Essai d'utilisation de SAM}
+    \caption{Essai d'utilisation de \acrshort{sam}}
     \label{fig:essai_algo_sam}
 \end{figure}
 
-\subsubsection{Fine-tuning de SAM}
+\subsubsection{Fine-tuning de \acrshort{sam}}
 \label{subsubsec:fine_tuning_sam}
-La piste d'un fine-tuning de SAM pour mieux l'adapter à la tâche d'identification des espaces libres a été explorée. Un dataset de 45 images (Figure \ref{fig:ch3_piste_exploree_classification_11_fine_tuning_dataset}) n'a pas permis d'améliorer significativement les performances du modèle. Une des problématiques rencontrées lors de la création de ce dataset est qu'il faut identifier tous les obstacles présents sur la toiture, ce qui prend énormément de temps et nécessite une grande quantité de classes différentes.
+La piste d'un fine-tuning de \acrshort{sam} pour mieux l'adapter à la tâche d'identification des espaces libres a été explorée. Un dataset de 45 images (Figure \ref{fig:ch3_piste_exploree_classification_11_fine_tuning_dataset}) n'a pas permis d'améliorer significativement les performances du modèle. Une des problématiques rencontrées lors de la création de ce dataset est qu'il faut identifier tous les obstacles présents sur la toiture, ce qui prend énormément de temps et nécessite une grande quantité de classes différentes.
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=1\linewidth]{02-main/figures/ch3/ch3_piste_exploree_classification_11_fine_tuning_dataset.png}
-    \caption{Image du dataset pour le fine-tuning SAM}
+    \caption{Image du dataset pour le fine-tuning \acrshort{sam}}
     \label{fig:ch3_piste_exploree_classification_11_fine_tuning_dataset}
 \end{figure}
 
 \subsubsection{Résultats}
 
-SAM segmente correctement les toitures bien éclairées avec un contraste suffisant entre obstacles et surface. Les résultats se dégradent significativement en présence d'ombrages ou de faible contraste.
+\acrshort{sam} segmente correctement les toitures bien éclairées avec un contraste suffisant entre obstacles et surface. Les résultats se dégradent significativement en présence d'ombrages ou de faible contraste.
 
 Les principales limitations sont:
 \begin{itemize}
-    \item Principal problème rencontré sont les ombrages. SAM confond les zones ombragées avec l'arrière-plan noir, même avec les filtres de luminosité implémentés. Cela génère des faux négatifs dans les zones ombragées.
+    \item Principal problème rencontré sont les ombrages. \acrshort{sam} confond les zones ombragées avec l'arrière-plan noir, même avec les filtres de luminosité implémentés. Cela génère des faux négatifs dans les zones ombragées.
     \item Le temps de calcul par image est de 7 minutes (sur \acrshort{gpu}), ce qui confirme les résultats de \acrshort{stdl}. La mise à l'échelle du canton est problématique.
     \item Les performances de segmentation sont directement corrélées à la résolution et au contraste de l'image d'entrée.
 \end{itemize}
 
 Le fine-tuning avec 45 images annotées n'améliore pas les performances. Le dataset reste trop petit pour un modèle de cette complexité, et l'annotation manuelle de tous les obstacles de toiture est très chronophage.
 
-Pour conclure, SAM fonctionne bien sur des images de qualité avec un bon éclairage, par contre son utilité reste limitée à cause des ombrages et du temps de calcul nécessaire.
+Pour conclure, \acrshort{sam} fonctionne bien sur des images de qualité avec un bon éclairage, par contre son utilité reste limitée à cause des ombrages et du temps de calcul nécessaire.
 
 % -----------------------------------------------------------------------------
 % -----------------------------------------------------------------------------
@@ -2617,7 +2617,7 @@ L'entraînement a exploité plusieurs optimisations techniques : précision mixt
 Les pistes explorées mais non retenues ont fourni des enseignements précieux :
 \begin{itemize}
     \item La classification basée uniquement sur les données géomatiques s'est révélée inadéquate en raison de l'incomplétude de la couche des superstructures
-    \item SAM, malgré ses capacités de segmentation généraliste, présente des limitations majeures : sensibilité aux ombrages, temps de calcul prohibitif (7 minutes par image), et nécessité d'un dataset conséquent pour le fine-tuning
+    \item \acrshort{sam}, malgré ses capacités de segmentation généraliste, présente des limitations majeures : sensibilité aux ombrages, temps de calcul prohibitif (7 minutes par image), et nécessité d'un dataset conséquent pour le fine-tuning
 \end{itemize}
 
 \paragraph{Contribution principale}

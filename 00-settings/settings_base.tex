@@ -104,6 +104,7 @@
 \setlength{\textfloatsep}{6pt}     % Espace entre le texte et un float en haut/bas de page
 \setlength{\intextsep}{6pt}        % Espace entre le texte et un float dans le texte
 
+
 % Float captions in italics, with label in margin
 \DeclareCaptionLabelFormat{title}{#1 #2}
 \DeclareCaptionLabelFormat{hangout}{\llap{#1 #2\hspace{5mm}}}
@@ -122,13 +123,6 @@
 		
 		\textbf{Source:} #3%
 	}%
-}
-
-\captionsetup[longtable]{
-	format=hang,
-	labelformat=hangout,
-	singlelinecheck=false,
-	font={it}
 }
 
 % Tables
@@ -209,6 +203,7 @@ bibencoding=auto
 \usepackage[pdftex]{graphicx} % graphics importing
 \graphicspath{{02-main/figures/}}
 \definecolor{gray80}{gray}{0.80}
+\usepackage{tikz} % TikZ for drawing
 
 
 % Code and syntax highlighting

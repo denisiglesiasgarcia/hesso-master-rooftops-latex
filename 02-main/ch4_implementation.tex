@@ -1,8 +1,8 @@
 \chapter{Évaluation, validation et analyse}
 \label{chap:eval_valid_modele}
-\todo[inline]{compléter ça}
-\lipsum[1]
+Ce chapitre présente l'évaluation des modèles de segmentation développés pour identifier les espaces libres sur les toitures du canton de Genève. L'objectif est d'analyser les performances de 93 configurations sur un dataset de test indépendant pour déterminer les architectures les plus adaptées à un déploiement opérationnel.
 
+L'évaluation suit trois axes principaux : l'analyse quantitative des performances avec plusieurs métriques (IoU, mAP, F1-score), l'étude du rapport entre performance et complexité des modèles, et la validation qualitative sur des cas réels incluant un quartier absent des données d'entraînement. Cette approche permet de sélectionner la meilleure configuration et d'identifier les améliorations nécessaires pour renforcer la robustesse du système.
 \localtableofcontents
 
 \newpage
@@ -97,9 +97,7 @@ La Figure~\ref{fig:ch4_02_top_models_performance_01_eval_test_iou_mean} illustre
     \label{fig:ch4_02_top_models_performance_01_eval_test_iou_mean}
 \end{figure}
 
-Les Figures \ref{fig:ch4_02_top_models_performance_02_eval_test_map_50_mean}, \ref{fig:ch4_02_top_models_performance_03_eval_test_map_75_mean} et \ref{fig:ch4_02_top_models_performance_04_eval_test_map_95_mean} présentent les performances des modèles selon la métrique mAP à différents seuils d'IoU (0.5, 0.75 et 0.95).
-
-La Figure \ref{fig:ch4_02_top_models_performance_08_eval_test_f1_score_mean} présente les performances des modèles selon le F1-score.
+Les Figures \ref{fig:ch4_02_top_models_performance_02_eval_test_map_50_mean}, \ref{fig:ch4_02_top_models_performance_03_eval_test_map_75_mean} et \ref{fig:ch4_02_top_models_performance_04_eval_test_map_95_mean} présentent les performances des modèles selon la métrique mAP à différents seuils d'IoU (0.5, 0.75 et 0.95). La Figure \ref{fig:ch4_02_top_models_performance_08_eval_test_f1_score_mean} présente les performances des modèles selon le F1-score.
 
 \begin{figure}[H]
     \centering
@@ -415,7 +413,7 @@ Le Tableau~\ref{tab:performance_moyenne_map_different_seuils} présente l'évolu
     \bottomrule
     \end{tabular}%
     }
-    \caption{Performances moyennes mAP à différents seuils}
+    \caption{Performances moyennes mAP à différents seuils. Chute relative mAP@0.5 à mAP@0.95}
     \label{tab:performance_moyenne_map_different_seuils}
 \end{table}
 
@@ -452,17 +450,1497 @@ Un résultat surprenant est que les modèles de taille moyenne (25-50M paramètr
 Un autre point important concerne l'architecture elle-même. En prenant l'exemple d'EfficientNet, on constate que selon le décodeur utilisé (UNet, SegFormer ou FPN), les performances peuvent varier significativement même si la taille reste similaire. Le choix du décodeur est donc tout aussi important que celui de l'encodeur pour obtenir de bons résultats en segmentation.
 
 \subsection{Analyse qualitative}
-Ce sous-section présente des exemples de segmentation obtenus à partir des modèles les plus performants selon les métriques
+Cette sous-section examine des exemples concrets de segmentation produits par les modèles ayant obtenu les meilleures performances.
+
+\subsubsection{Modèles retenus}
+La sélection des modèles s'est basée sur leurs performances sur le dataset de test selon plusieurs métriques : IoU, mAP@0.5, mAP@0.75, mAP@0.95 et F1-score. Les combinaisons encodeur-décodeur retenues sont :
+\begin{itemize}
+    \item UNet + mambaout\_small
+    \item UPerNet + EfficientNetV2-S
+    \item Segformer + mambaout\_base
+    \item LinkNet + EfficientNet-B5
+    \item Unet++ + EfficientNetV2-S
+    \item SegFormer + RegNetY-080
+\end{itemize}
+
+Pour chaque combinaison, 5 modèles ont été entraînés suivant la méthode de validation croisée. Chaque modèle utilise un fold différent pour la validation et les quatre autres pour l'entraînement. Il faut donc déterminer comment combiner efficacement les prédictions de ces 5 modèles pour obtenir un résultat final.
+
+\subsubsection{Stratégie d'ensemble k-fold}
+
+L'approche retenue consiste à exploiter la complémentarité des modèles issus de la validation croisée. Plutôt que de sélectionner le meilleur modèle parmi les 5 folds de chaque combinaison, les prédictions des 5 modèles sont combinées. Cette stratégie d'ensemble permet d'obtenir des segmentations plus robustes et moins sensibles aux variations dans les données d'entraînement.
+
+\paragraph{Principe de fonctionnement}
+
+Pour chaque combinaison encodeur-décodeur, voici comment se déroule le processus :
+
+\begin{enumerate}
+    \item Récupération des modèles : Les 5 modèles entraînés sont chargés un par un pour éviter de saturer la mémoire GPU
+    \item Prédiction individuelle : Chaque modèle produit une carte de probabilité pour toutes les images du dataset de test
+    \item Agrégation des prédictions : Les probabilités sont moyennées pixel par pixel avec la formule suivante :
+    \vspace{0.45cm}
+    \begin{equation}
+        P_{ensemble}(x,y) = \frac{1}{K} \sum_{k=1}^{K} P_k(x,y)
+    \end{equation}
+    où $K=5$ correspond au nombre de folds et $P_k(x,y)$ représente la probabilité donnée par le modèle du fold $k$ au pixel $(x,y)$
+    \item Binarisation : Les probabilités moyennées sont transformées en masque binaire en appliquant un seuil de 0.5
+\end{enumerate}
+
+\paragraph{Avantages de l'approche}
+
+Cette stratégie d'ensemble apporte plusieurs avantages :
+
+\begin{itemize}
+    \item Réduction de la variance : La moyenne des prédictions de modèles entraînés sur différents sous-ensembles diminue la sensibilité aux variations aléatoires dans les données
+    \item Amélioration de la généralisation : Comme chaque modèle a vu des données de validation différentes, l'ensemble obtient une vue plus complète du problème
+    \item Robustesse accrue : Les erreurs des modèles individuels ont tendance à se compenser lors de l'agrégation, ce qui limite l'impact des prédictions aberrantes
+    \item Exploitation maximale des données : Avec 5 folds, chaque échantillon participe à l'entraînement de 4 modèles sur 5
+\end{itemize}
+
+\paragraph{Inconvénients et limitations}
+
+Cette approche présente aussi quelques contraintes :
+
+\begin{itemize}
+    \item Coût computationnel : L'inférence prend 5 fois plus de temps, passant de quelques secondes à plusieurs dizaines de secondes par image
+    \item Consommation mémoire : Même si les modèles sont chargés un par un, stocker 5 modèles par configuration demande environ 5 fois plus d'espace disque
+    \item Complexité de déploiement : Gérer plusieurs modèles rend le système plus complexe à mettre en production
+\end{itemize}
+
+\paragraph{Optimisations techniques}
+
+Pour limiter les problèmes de mémoire, plusieurs stratégies ont été mises en place :
+
+\begin{itemize}
+    \item Chargement séquentiel des modèles avec libération de la mémoire GPU après chaque fold (\texttt{torch.cuda.empty\_cache()})
+    \item Traitement par batch des images pour rentabiliser le chargement des modèles
+    \item Accumulation progressive des prédictions pour éviter de garder toutes les probabilités en mémoire en même temps
+\end{itemize}
+
+Cette approche d'ensemble k-fold offre un bon équilibre entre précision et efficacité. Elle convient particulièrement aux cas où la qualité des résultats est plus importante que la vitesse de traitement.
+
+\paragraph{Résultats de l'ensemble k-fold}
+
+Le Tableau \ref{tab:kfold_ensemble} présente les performances des modèles avec et sans ensemble k-fold. Les résultats montrent que l'ensemble est plus performant que la moyenne des folds de chaque modèle.
+
+\begin{table}[H]
+    \centering
+    \makebox[\textwidth][c]{%
+    \begin{tabular}{lccccc}
+    \toprule
+    Modèle & Folds & Moy. fold IoU & Meilleur fold IoU & Ensemble IoU & Amélioration \\
+    \midrule
+    UNet + mambaout\_small & 5 & 0.734 $\pm$ 0.012 & 0.748 & \textbf{0.745} & +1.6\% \\
+    UPerNet + EfficientNetV2-S & 5 & 0.735 $\pm$ 0.005 & 0.743 & \textbf{0.748} & +1.8\% \\
+    Segformer + mambaout\_base & 5 & 0.734 $\pm$ 0.009 & 0.747 & \textbf{0.742} & +1.0\% \\
+    LinkNet + EfficientNet-B5 & 5 & 0.741 $\pm$ 0.003 & 0.744 & \textbf{0.752} & +1.5\% \\
+    Unet++ + EfficientNetV2-S & 5 & 0.723 $\pm$ 0.012 & 0.738 & \textbf{0.737} & +2.0\% \\
+    SegFormer + RegNetY-080 & 5 & 0.738 $\pm$ 0.006 & 0.746 & \textbf{0.745} & +0.9\% \\
+    \bottomrule
+    \end{tabular}%
+    }
+    \caption{Comparaison des performances des modèles avec et sans ensemble k-fold. Amélioration calculée par rapport à l'IoU moyen des folds.}
+    \label{tab:kfold_ensemble}
+\end{table}
+
+\subsubsection{Visualisation des résultats}
+
+Les figures \ref{fig:unet_mambaoutsmall_best_cases} et \ref{fig:unet_mambaoutsmall_worst_cases} illustrent les cas extrêmes de performance du modèle UNet avec mambaout\_small sur le dataset de test.
+
+La Figure \ref{fig:unet_mambaoutsmall_best_cases} montre les 4 segmentations les plus réussies avec des valeurs IoU élevées. Le modèle parvient à identifier correctement les toitures dans diverses situations. Les résultats montrent que même les obstacles de petite taille comme les cheminées sont correctement détectés, ce qui indique une bonne capacité de segmentation fine.
+
+La Figure \ref{fig:unet_mambaoutsmall_worst_cases} présente les 4 cas les plus problématiques avec des IoU très bas. Les erreurs se concentrent sur les toitures végétalisées et les terrasses praticables, révélant les difficultés du modèle à traiter ces types de surfaces particulières.
+
+% =========================================================
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unet_tu-mambaout_small/best_cases/best_5_iou0.998_24991116_tile_5_3_322356_original.png}
+    \caption{Top1 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unet_tu-mambaout_small/best_cases/best_5_iou0.998_24991116_tile_5_3_322356_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unet_tu-mambaout_small/best_cases/best_5_iou0.998_24991116_tile_5_3_322356_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.998}
+\end{subfigure}
+
+\vspace{0.35cm}
+
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unet_tu-mambaout_small/best_cases/best_4_iou0.991_24961121_tile_15_10_cc6553_original.png}
+    \caption{Top2 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unet_tu-mambaout_small/best_cases/best_4_iou0.991_24961121_tile_15_10_cc6553_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unet_tu-mambaout_small/best_cases/best_4_iou0.991_24961121_tile_15_10_cc6553_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.991}
+\end{subfigure}
+
+\vspace{0.35cm}
+
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unet_tu-mambaout_small/best_cases/best_3_iou0.988_24931117_tile_18_5_f475a0_original.png}
+    \caption{Top3 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unet_tu-mambaout_small/best_cases/best_3_iou0.988_24931117_tile_18_5_f475a0_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unet_tu-mambaout_small/best_cases/best_3_iou0.988_24931117_tile_18_5_f475a0_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.988}
+\end{subfigure}
+
+\vspace{0.35cm}
+
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unet_tu-mambaout_small/best_cases/best_2_iou0.984_24931113_tile_13_18_a66e08_original.png}
+    \caption{Top4 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unet_tu-mambaout_small/best_cases/best_2_iou0.984_24931113_tile_13_18_a66e08_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unet_tu-mambaout_small/best_cases/best_2_iou0.984_24931113_tile_13_18_a66e08_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.984}
+\end{subfigure}
+
+\caption{Meilleurs IoU pour Unet avec mambaout\_small backbone sur le dataset de test}
+\label{fig:unet_mambaoutsmall_best_cases}
+\end{figure}
+
+% =========================================================
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unet_tu-mambaout_small/worst_cases/worst_5_iou0.000_25001117_tile_3_9_5ba8f7_original.png}
+    \caption{Top1 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unet_tu-mambaout_small/worst_cases/worst_5_iou0.000_25001117_tile_3_9_5ba8f7_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unet_tu-mambaout_small/worst_cases/worst_5_iou0.000_25001117_tile_3_9_5ba8f7_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.000}
+\end{subfigure}
+
+\vspace{0.35cm}
+
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unet_tu-mambaout_small/worst_cases/worst_4_iou0.000_25001112_tile_9_1_991a94_original.png}
+    \caption{Top2 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unet_tu-mambaout_small/worst_cases/worst_4_iou0.000_25001112_tile_9_1_991a94_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unet_tu-mambaout_small/worst_cases/worst_4_iou0.000_25001112_tile_9_1_991a94_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.000}
+\end{subfigure}
+
+\vspace{0.35cm}
+
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unet_tu-mambaout_small/worst_cases/worst_3_iou0.000_24991122_tile_9_19_7ebcec_original.png}
+    \caption{Top3 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unet_tu-mambaout_small/worst_cases/worst_3_iou0.000_24991122_tile_9_19_7ebcec_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unet_tu-mambaout_small/worst_cases/worst_3_iou0.000_24991122_tile_9_19_7ebcec_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.000}
+\end{subfigure}
+
+\vspace{0.35cm}
+
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unet_tu-mambaout_small/worst_cases/worst_2_iou0.000_24951112_tile_4_13_2bd653_original.png}
+    \caption{Top4 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unet_tu-mambaout_small/worst_cases/worst_2_iou0.000_24951112_tile_4_13_2bd653_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unet_tu-mambaout_small/worst_cases/worst_2_iou0.000_24951112_tile_4_13_2bd653_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.000}
+\end{subfigure}
+
+\caption{Pires IoU pour Unet avec mambaout\_small sur le dataset de test}
+\label{fig:unet_mambaoutsmall_worst_cases}
+\end{figure}
+
+% =========================================================
+
+Les Figures \ref{fig:upernet_efficientnetv2_s_best_cases} et \ref{fig:upernet_efficientnetv2_s_best_cases} illustrent les performances extrêmes du modèle UPerNet + EfficientNetV2\_RW\_S sur le dataset de test.
+
+La Figure \ref{fig:upernet_efficientnetv2_s_best_cases} présente les 4 meilleures segmentations. Les résultats sont proches de ceux obtenus avec UNet + mambaout\_small - trois images sur quatre sont identiques à celles de la Figure \ref{fig:unet_mambaoutsmall_best_cases}.
+
+La Figure \ref{fig:upernet_efficientnetv2_s_best_cases} montre les 4 pires cas. Là aussi, on retrouve trois images communes avec la Figure \ref{fig:unet_mambaoutsmall_worst_cases}, confirmant que les deux modèles peinent sur les mêmes types de surfaces (toitures végétalisées et terrasses praticables). La quatrième image présente une toiture de type hangar où la vérité terrain semble questionnable, les critères de labellisation pourraient ne pas être adaptés à ce cas particulier.
+
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_5_iou0.999_24991116_tile_5_3_322356_original.png}
+    \caption{Top1 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_5_iou0.999_24991116_tile_5_3_322356_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_5_iou0.999_24991116_tile_5_3_322356_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.999}
+\end{subfigure}
+
+\vspace{0.35cm}
+
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_4_iou0.987_24961121_tile_15_10_cc6553_original.png}
+    \caption{Top2 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_4_iou0.987_24961121_tile_15_10_cc6553_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_4_iou0.987_24961121_tile_15_10_cc6553_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.987}
+\end{subfigure}
+
+\vspace{0.35cm}
+
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_3_iou0.987_24941121_tile_16_8_fd3555_original.png}
+    \caption{Top3 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_3_iou0.987_24941121_tile_16_8_fd3555_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_3_iou0.987_24941121_tile_16_8_fd3555_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.987}
+\end{subfigure}
+
+\vspace{0.35cm}
+
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_2_iou0.984_24931113_tile_13_18_a66e08_original.png}
+    \caption{Top4 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_2_iou0.984_24931113_tile_13_18_a66e08_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_2_iou0.984_24931113_tile_13_18_a66e08_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.984}
+\end{subfigure}
+
+\caption{Meilleurs IoU pour UPerNet avec EfficientNetV2-S sur le dataset de test}
+\label{fig:upernet_efficientnetv2_s_best_cases}
+\end{figure}
+
+% =========================================================
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_5_iou0.000_25001117_tile_3_9_5ba8f7_original.png}
+    \caption{Top1 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_5_iou0.000_25001117_tile_3_9_5ba8f7_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_5_iou0.000_25001117_tile_3_9_5ba8f7_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.000}
+\end{subfigure}
+
+\vspace{0.35cm}
+
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_4_iou0.000_25001112_tile_9_1_991a94_original.png}
+    \caption{Top2 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_4_iou0.000_25001112_tile_9_1_991a94_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_4_iou0.000_25001112_tile_9_1_991a94_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.000}
+\end{subfigure}
+
+\vspace{0.35cm}
+
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_3_iou0.000_24991122_tile_9_19_7ebcec_original.png}
+    \caption{Top3 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_3_iou0.000_24991122_tile_9_19_7ebcec_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_3_iou0.000_24991122_tile_9_19_7ebcec_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.000}
+\end{subfigure}
+
+\vspace{0.35cm}
+
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_1_iou0.000_24931113_tile_19_19_52ccbb_original.png}
+    \caption{Top4 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_1_iou0.000_24931113_tile_19_19_52ccbb_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_1_iou0.000_24931113_tile_19_19_52ccbb_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.000}
+\end{subfigure}
+
+\caption{Pires IoU pour UPerNet avec EfficientNetV2-S sur le dataset de test}
+\label{fig:upernet_efficientnetv2_s_worst_cases}
+\end{figure}
+
+% ==========================================================
+
+Les Figures \ref{fig:segformer_mambaoutbase_best_cases} et \ref{fig:segformer_mambaoutbase_worst_cases} montrent les cas extrêmes du modèle SegFormer + mambaout\_base sur le dataset de test.
+
+La Figure \ref{fig:segformer_mambaoutbase_best_cases} présente les 4 meilleures segmentations. Ces images correspondent à celles qui donnent également d'excellents résultats avec les deux modèles précédents (UNet + mambaout\_small et UPerNet + EfficientNetV2-S). Le modèle SegFormer détecte bien les toitures et même les petits éléments comme les cheminées.
+
+La Figure \ref{fig:segformer_mambaoutbase_worst_cases} illustre les 4 pires performances. On retrouve exactement les mêmes images que pour le modèle précédent, avec les mêmes observations.
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/best_cases/best_5_iou0.997_24991116_tile_5_3_322356_original.png}
+    \caption{Top1 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/best_cases/best_5_iou0.997_24991116_tile_5_3_322356_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/best_cases/best_5_iou0.997_24991116_tile_5_3_322356_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.997}
+\end{subfigure}
+
+\vspace{0.35cm}
+
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/best_cases/best_4_iou0.984_24931117_tile_18_5_f475a0_original.png}
+    \caption{Top2 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/best_cases/best_4_iou0.984_24931117_tile_18_5_f475a0_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/best_cases/best_4_iou0.984_24931117_tile_18_5_f475a0_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.984}
+\end{subfigure}
+
+\vspace{0.35cm}
+
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/best_cases/best_3_iou0.984_24931113_tile_13_18_a66e08_original.png}
+    \caption{Top3 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/best_cases/best_3_iou0.984_24931113_tile_13_18_a66e08_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/best_cases/best_3_iou0.984_24931113_tile_13_18_a66e08_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.984}
+\end{subfigure}
+
+\vspace{0.35cm}
+
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/best_cases/best_2_iou0.983_24961121_tile_15_10_cc6553_original.png}
+    \caption{Top4 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/best_cases/best_2_iou0.983_24961121_tile_15_10_cc6553_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/best_cases/best_2_iou0.983_24961121_tile_15_10_cc6553_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.983}
+\end{subfigure}
+
+\caption{Meilleurs IoU pour SegFormer avec mambaout\_base sur le dataset de test}
+\label{fig:segformer_mambaoutbase_best_cases}
+\end{figure}
+
+% =========================================================
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/worst_cases/worst_5_iou0.000_25001117_tile_3_9_5ba8f7_original.png}
+    \caption{Top1 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/worst_cases/worst_5_iou0.000_25001117_tile_3_9_5ba8f7_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/worst_cases/worst_5_iou0.000_25001117_tile_3_9_5ba8f7_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.000}
+\end{subfigure}
+
+\vspace{0.35cm}
+
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/worst_cases/worst_4_iou0.000_25001112_tile_9_1_991a94_original.png}
+    \caption{Top2 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/worst_cases/worst_4_iou0.000_25001112_tile_9_1_991a94_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/worst_cases/worst_4_iou0.000_25001112_tile_9_1_991a94_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.000}
+\end{subfigure}
+
+\vspace{0.35cm}
+
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/worst_cases/worst_3_iou0.000_24991122_tile_9_19_7ebcec_original.png}
+    \caption{Top3 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/worst_cases/worst_3_iou0.000_24991122_tile_9_19_7ebcec_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/worst_cases/worst_3_iou0.000_24991122_tile_9_19_7ebcec_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.000}
+\end{subfigure}
+
+\vspace{0.35cm}
+
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/worst_cases/worst_1_iou0.000_24931113_tile_19_19_52ccbb_original.png}
+    \caption{Top4 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/worst_cases/worst_1_iou0.000_24931113_tile_19_19_52ccbb_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/worst_cases/worst_1_iou0.000_24931113_tile_19_19_52ccbb_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.000}
+\end{subfigure}
+
+\caption{Pires IoU pour SegFormer avec mambaout\_base sur le dataset de test}
+\label{fig:segformer_mambaoutbase_worst_cases}
+\end{figure}
+
+% ===========================================================
+
+Les Figures \ref{fig:linknet_efficientnet_b5_best_cases} et \ref{fig:linknet_efficientnet_b5_worst_cases} illustrent les performances extrêmes du modèle LinkNet + EfficientNet-B5 sur le dataset de test.
+
+La Figure \ref{fig:linknet_efficientnet_b5_best_cases} présente les 4 meilleures segmentations. Les images sont les mêmes que pour les modèles précédents, avec des performances similaires.
+
+La Figure \ref{fig:linknet_efficientnet_b5_worst_cases} montre les 4 cas les plus problématiques. Le premier cas présente une zone sans annotation dans la vérité terrain, mais cette absence semble discutable, ce qui explique pourquoi le modèle segmente cette partie. Le deuxième cas montre une petite portion de toiture qui n'est pas correctement détectée. Les deux dernières images, déjà rencontrées avec les modèles précédents, correspondent aux toitures végétalisées et terrasses praticables qui posent systématiquement problème.
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/best_cases/best_5_iou0.997_24991116_tile_5_3_322356_original.png}
+    \caption{Top1 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/best_cases/best_5_iou0.997_24991116_tile_5_3_322356_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/best_cases/best_5_iou0.997_24991116_tile_5_3_322356_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.997}
+\end{subfigure}
+
+\vspace{0.35cm}
+
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/best_cases/best_4_iou0.992_24931113_tile_13_18_a66e08_original.png}
+    \caption{Top2 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/best_cases/best_4_iou0.992_24931113_tile_13_18_a66e08_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/best_cases/best_4_iou0.992_24931113_tile_13_18_a66e08_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.992}
+\end{subfigure}
+
+\vspace{0.35cm}
+
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/best_cases/best_3_iou0.986_24931117_tile_18_5_f475a0_original.png}
+    \caption{Top3 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/best_cases/best_3_iou0.986_24931117_tile_18_5_f475a0_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/best_cases/best_3_iou0.986_24931117_tile_18_5_f475a0_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.986}
+\end{subfigure}
+
+\vspace{0.35cm}
+
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/best_cases/best_2_iou0.986_24961121_tile_15_10_cc6553_original.png}
+    \caption{Top4 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/best_cases/best_2_iou0.986_24961121_tile_15_10_cc6553_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/best_cases/best_2_iou0.986_24961121_tile_15_10_cc6553_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.986}
+\end{subfigure}
+
+\caption{Meilleurs IoU pour LinkNet avec EfficientNet-B5 sur le dataset de test}
+\label{fig:linknet_efficientnet_b5_best_cases}
+\end{figure}
+
+% =========================================================
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/worst_cases/worst_5_iou0.000_25051119_tile_18_9_ba3084_original.png}
+    \caption{Top1 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/worst_cases/worst_5_iou0.000_25051119_tile_18_9_ba3084_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/worst_cases/worst_5_iou0.000_25051119_tile_18_9_ba3084_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.000}
+\end{subfigure}
+
+\vspace{0.35cm}
+
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/worst_cases/worst_4_iou0.000_25011125_tile_14_5_cdc6dc_original.png}
+    \caption{Top2 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/worst_cases/worst_4_iou0.000_25011125_tile_14_5_cdc6dc_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/worst_cases/worst_4_iou0.000_25011125_tile_14_5_cdc6dc_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.000}
+\end{subfigure}
+
+\vspace{0.35cm}
+
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/worst_cases/worst_3_iou0.000_25011115_tile_17_4_52cb42_original.png}
+    \caption{Top3 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/worst_cases/worst_3_iou0.000_25011115_tile_17_4_52cb42_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/worst_cases/worst_3_iou0.000_25011115_tile_17_4_52cb42_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.000}
+\end{subfigure}
+
+\vspace{0.35cm}
+
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/worst_cases/worst_2_iou0.000_25001117_tile_3_9_5ba8f7_original.png}
+    \caption{Top4 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/worst_cases/worst_2_iou0.000_25001117_tile_3_9_5ba8f7_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/worst_cases/worst_2_iou0.000_25001117_tile_3_9_5ba8f7_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.000}
+\end{subfigure}
+
+\caption{Pires IoU pour LinkNet avec EfficientNet-B5 sur le dataset de test}
+\label{fig:linknet_efficientnet_b5_worst_cases}
+\end{figure}
+
+% ===========================================================
+
+Les Figures \ref{fig:unetplusplus_efficientnetv2_s_best_cases} et \ref{fig:unetplusplus_efficientnetv2_s_worst_cases} montrent les cas extrêmes du modèle UNet++ + EfficientNetV2-RW-S sur le dataset de test.
+
+La Figure \ref{fig:unetplusplus_efficientnetv2_s_best_cases} présente les 4 meilleures segmentations. Les images sont similaires à celles des modèles précédents, avec des performances très légèrement en retrait.
+
+La Figure \ref{fig:unetplusplus_efficientnetv2_s_worst_cases} illustre les 4 pires performances. Les iamges ont déjà été rencontrées avec les modèles précédents, et les observations restent les mêmes.
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_5_iou0.989_24931113_tile_13_18_a66e08_original.png}
+    \caption{Top1 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_5_iou0.989_24931113_tile_13_18_a66e08_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_5_iou0.989_24931113_tile_13_18_a66e08_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.989}
+\end{subfigure}
+
+\vspace{0.35cm}
+
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_4_iou0.988_24961121_tile_15_10_cc6553_original.png}
+    \caption{Top2 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_4_iou0.988_24961121_tile_15_10_cc6553_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_4_iou0.988_24961121_tile_15_10_cc6553_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.988}
+\end{subfigure}
+
+\vspace{0.35cm}
+
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_3_iou0.987_24931117_tile_18_5_f475a0_original.png}
+    \caption{Top3 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_3_iou0.987_24931117_tile_18_5_f475a0_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_3_iou0.987_24931117_tile_18_5_f475a0_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.987}
+\end{subfigure}
+
+\vspace{0.35cm}
+
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_2_iou0.982_25061124_tile_11_8_51e0da_original.png}
+    \caption{Top4 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_2_iou0.982_25061124_tile_11_8_51e0da_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_2_iou0.982_25061124_tile_11_8_51e0da_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.982}
+\end{subfigure}
+
+\caption{Meilleurs IoU pour Unet++ avec EfficientNetV2-S sur le dataset de test}
+\label{fig:unetplusplus_efficientnetv2_s_best_cases}
+\end{figure}
+
+% ===========================================================
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_4_iou0.000_25011115_tile_17_4_52cb42_original.png}
+    \caption{Top1 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_4_iou0.000_25011115_tile_17_4_52cb42_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_4_iou0.000_25011115_tile_17_4_52cb42_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.000}
+\end{subfigure}
+
+\vspace{0.35cm}
+
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_3_iou0.000_25001117_tile_3_9_5ba8f7_original.png}
+    \caption{Top2 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_3_iou0.000_25001117_tile_3_9_5ba8f7_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_3_iou0.000_25001117_tile_3_9_5ba8f7_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.000}
+\end{subfigure}
+
+\vspace{0.35cm}
+
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_2_iou0.000_24951112_tile_4_13_2bd653_original.png}
+    \caption{Top3 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_2_iou0.000_24951112_tile_4_13_2bd653_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_2_iou0.000_24951112_tile_4_13_2bd653_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.000}
+\end{subfigure}
+
+\vspace{0.35cm}
+
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_1_iou0.000_24931113_tile_19_19_52ccbb_original.png}
+    \caption{Top4 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_1_iou0.000_24931113_tile_19_19_52ccbb_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_1_iou0.000_24931113_tile_19_19_52ccbb_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.000}
+\end{subfigure}
+
+\caption{Pires IoU pour Unet++ avec EfficientNetV2-S sur le dataset de test}
+\label{fig:unetplusplus_efficientnetv2_s_worst_cases}
+\end{figure}
+
+% ===========================================================
+
+Les Figures \ref{fig:segformer_regnety_080_best_cases} et \ref{fig:segformer_regnety_080_worst_cases} montrent les performances extrêmes du modèle SegFormer + RegNetY-080 sur le dataset de test.
+
+La Figure \ref{fig:segformer_regnety_080_best_cases} présente les 4 meilleures segmentations. On retrouve les mêmes cas de succès que pour les modèles précédents.
+
+La Figure \ref{fig:segformer_regnety_080_worst_cases} illustre les 4 cas les plus difficiles. Les images correspondent largement à celles déjà analysées, avec une exception notable : la troisième image montre une toiture végétalisée et une terrasse praticable sans annotation dans la vérité terrain. Le modèle a segmenté une partie de la terrasse, ce qui soulève la difficulté pour l'algorithme de distinguer les surfaces praticables des autres types de toitures.
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/best_cases/best_5_iou0.998_24991116_tile_5_3_322356_original.png}
+    \caption{Top1 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/best_cases/best_5_iou0.998_24991116_tile_5_3_322356_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/best_cases/best_5_iou0.998_24991116_tile_5_3_322356_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.998}
+\end{subfigure}
+
+\vspace{0.35cm}
+
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/best_cases/best_4_iou0.989_24941121_tile_16_8_fd3555_original.png}
+    \caption{Top2 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/best_cases/best_4_iou0.989_24941121_tile_16_8_fd3555_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/best_cases/best_4_iou0.989_24941121_tile_16_8_fd3555_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.989}
+\end{subfigure}
+
+\vspace{0.35cm}
+
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/best_cases/best_3_iou0.987_24961121_tile_15_10_cc6553_original.png}
+    \caption{Top3 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/best_cases/best_3_iou0.987_24961121_tile_15_10_cc6553_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/best_cases/best_3_iou0.987_24961121_tile_15_10_cc6553_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.987}
+\end{subfigure}
+
+\vspace{0.35cm}
+
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/best_cases/best_2_iou0.985_24931117_tile_18_5_f475a0_original.png}
+    \caption{Top4 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/best_cases/best_2_iou0.985_24931117_tile_18_5_f475a0_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/best_cases/best_2_iou0.985_24931117_tile_18_5_f475a0_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.985}
+\end{subfigure}
+
+\caption{Meilleurs IoU pour SegFormer avec RegNetY-080 sur le dataset de test}
+\label{fig:segformer_regnety_080_best_cases}
+\end{figure}
+
+% ===========================================================
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/worst_cases/worst_5_iou0.000_25011115_tile_17_4_52cb42_original.png}
+    \caption{Top1 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/worst_cases/worst_5_iou0.000_25011115_tile_17_4_52cb42_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/worst_cases/worst_5_iou0.000_25011115_tile_17_4_52cb42_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.000}
+\end{subfigure}
+
+\vspace{0.35cm}
+
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/worst_cases/worst_4_iou0.000_25001117_tile_3_9_5ba8f7_original.png}
+    \caption{Top2 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/worst_cases/worst_4_iou0.000_25001117_tile_3_9_5ba8f7_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/worst_cases/worst_4_iou0.000_25001117_tile_3_9_5ba8f7_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.000}
+\end{subfigure}
+
+\vspace{0.35cm}
+
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/worst_cases/worst_3_iou0.000_24991122_tile_9_19_7ebcec_original.png}
+    \caption{Top3 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/worst_cases/worst_3_iou0.000_24991122_tile_9_19_7ebcec_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/worst_cases/worst_3_iou0.000_24991122_tile_9_19_7ebcec_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.000}
+\end{subfigure}
+
+\vspace{0.35cm}
+
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/worst_cases/worst_1_iou0.000_24931113_tile_19_19_52ccbb_original.png}
+    \caption{Top4 - Original}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/worst_cases/worst_1_iou0.000_24931113_tile_19_19_52ccbb_overlay_gt.png}
+    \caption{Vérité terrain}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{02-main//figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/worst_cases/worst_1_iou0.000_24931113_tile_19_19_52ccbb_overlay_pred.png}
+    \caption{Prédiction - IoU = 0.000}
+\end{subfigure}
+
+\caption{Pires IoU pour SegFormer avec RegNetY-080 sur le dataset de test}
+\label{fig:segformer_regnety_080_worst_cases}
+\end{figure}
+
+Pour conclure cette section, l'évaluation des modèles sélectionnés donne des résultats satisfaisants. Les modèles parviennent à obtenir de bonnes performances sur le dataset de test.
+
+L'analyse révèle cependant plusieurs limites dans le dataset. Premièrement, certaines images contiennent des toitures qui représentent moins de 1\% de la surface totale de l'image, ce qui complique l'apprentissage du modèle. Deuxièmement, les toitures végétalisées et les terrasses praticables restent difficiles à distinguer des autres types de surfaces. Le dataset ne contient probablement pas assez d'exemples de ces cas particuliers pour permettre au modèle d'apprendre à les différencier correctement. Troisièmement, les exemples négatifs (images sans annotation) ont été inclus pour que le modèle apprenne à identifier ce qui ne constitue pas une surface libre. Le nombre de ces exemples négatifs semble insuffisant car tous les modèles rencontrent des difficultés sur ces cas.
 
 % -----------------------------------------------------------------------------
 \section{Application sur un quartier}
+La zone de \acrshort{hepia} a été choisie pour tester les modèles sur un secteur qui n'a pas servi à l'entraînement.
+
 \subsection{Analyse qualitative}
+La Figure \ref{fig:quartier_hepia_original} montre les images originales de la zone \acrshort{hepia}. La Figure \ref{fig:quartier_hepia_masque_toitures} présente les mêmes images avec un masque appliqué sur les toitures (couche toitures \acrshort{sitg}). Cette étape permet au modèle de traiter uniquement les surfaces de toitures en ignorant le reste du paysage urbain.
+
+Les zones identifiées comme toitures (Figure \ref{fig:quartier_hepia_masque_toitures}) ne sont pas toutes évidentes. En bas à gauche, une cour intérieure est identifiée comme toiture. En bas à droite, une terrasse praticable est aussi classée comme toiture, ce qui techniquement est correct car il y a bien un bâtiment dessous, mais cela complique la tâche de segmentation. L'image contient également des balcons et terrasses qui permettront d'évaluer le comportement des modèles sur ce type de surface.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+    % Define your image display width
+    \def\imgwidth{7.7cm}  % Adjust this to your desired size
+    
+    % Calculate effective spacing (80% of image width)
+    \def\effectivespace{0.8*\imgwidth}
+    
+    % Row 1 (top row - 2 images)
+    \node[anchor=center] (img1) at (0, 2*\effectivespace) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/original/24991118_tile_10_7_18eac4.png}
+    };
+    \node[anchor=center] (img2) at (\effectivespace, 2*\effectivespace) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/original/24991118_tile_10_8_2931b8.png}
+    };
+    
+    % Row 2 (middle row - 2 images)
+    \node[anchor=center] (img3) at (0, \effectivespace) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/original/24991118_tile_11_7_4db66f.png}
+    };
+    \node[anchor=center] (img4) at (\effectivespace, \effectivespace) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/original/24991118_tile_11_8_6b34a7.png}
+    };
+    
+    % Row 3 (bottom row - 2 images)
+    \node[anchor=center] (img5) at (0, 0) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/original/24991118_tile_12_7_7ce219.png}
+    };
+    \node[anchor=center] (img6) at (\effectivespace, 0) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/original/24991118_tile_12_8_83485c.png}
+    };
+\end{tikzpicture}
+\caption{Zone \acrshort{hepia} - Original}
+\label{fig:quartier_hepia_original}
+\end{figure}
+
+% ===========================================================
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+    % Define your image display width
+    \def\imgwidth{7.7cm}  % Adjust this to your desired size
+    
+    % Calculate effective spacing (80% of image width)
+    \def\effectivespace{0.8*\imgwidth}
+    
+    % Row 1 (top row - 2 images)
+    \node[anchor=center] (img1) at (0, 2*\effectivespace) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/masked_images/24991118_tile_10_7_18eac4_masked.png}
+    };
+    \node[anchor=center] (img2) at (\effectivespace, 2*\effectivespace) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/masked_images/24991118_tile_10_8_2931b8_masked.png}
+    };
+    
+    % Row 2 (middle row - 2 images)
+    \node[anchor=center] (img3) at (0, \effectivespace) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/masked_images/24991118_tile_11_7_4db66f_masked.png}
+    };
+    \node[anchor=center] (img4) at (\effectivespace, \effectivespace) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/masked_images/24991118_tile_11_8_6b34a7_masked.png}
+    };
+    
+    % Row 3 (bottom row - 2 images)
+    \node[anchor=center] (img5) at (0, 0) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/masked_images/24991118_tile_12_7_7ce219_masked.png}
+    };
+    \node[anchor=center] (img6) at (\effectivespace, 0) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/masked_images/24991118_tile_12_8_83485c_masked.png}
+    };
+\end{tikzpicture}
+\caption{Zone \acrshort{hepia} - Masque couche toitures}
+\label{fig:quartier_hepia_masque_toitures}
+\end{figure}
+
+% ===========================================================
+\newpage
+La Figure \ref{fig:quartier_hepia_modele_unet_mambaoutsmall} présente les résultats obtenus avec le modèle UNet + MambaOutSmall sur la zone \acrshort{hepia}.
+
+Le modèle identifie correctement les balcons et terrases lorsqu'ils ont des éléments tel que des chaises, table ou autre mobilier typique des balcons. En revanche, les toitures praticables (zone à droite) et cours intérieures (en bas à gauche) sont mal interprétées - le modèle les classe comme surfaces libres alors qu'elles ne le sont pas.
+
+Les obstacles tel que les verrières, panneaux solaires, gaines, cheminées, lucarnes, acrotères, bords de toiture, arbres et autres végétaux sont bien détectées et ignorées par le modèle lors de la segmentation.
+
+La gestion des ombrages reste variable. Dans la partie gauche de l'image, les ombrages légèrs sont correctement traitées. Par contre, dans la zone centrale droite où l'ombrage est plus marqué, le modèle a des difficultés à identifier correctement l'intégralité des espaces libres.
+
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+    % Define your image display width
+    \def\imgwidth{7.7cm}  % Adjust this to your desired size
+    
+    % Calculate effective spacing (80% of image width)
+    \def\effectivespace{0.8*\imgwidth}
+    
+    % Row 1 (top row - 2 images)
+    \node[anchor=center] (img1) at (0, 2*\effectivespace) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/1_unet_tu-mambaout_small_20250703_095421/24991118_tile_10_7_18eac4_masked_overlay.png}
+    };
+    \node[anchor=center] (img2) at (\effectivespace, 2*\effectivespace) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/1_unet_tu-mambaout_small_20250703_095421/24991118_tile_10_8_2931b8_masked_overlay.png}
+    };
+    
+    % Row 2 (middle row - 2 images)
+    \node[anchor=center] (img3) at (0, \effectivespace) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/1_unet_tu-mambaout_small_20250703_095421/24991118_tile_11_7_4db66f_masked_overlay.png}
+    };
+    \node[anchor=center] (img4) at (\effectivespace, \effectivespace) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/1_unet_tu-mambaout_small_20250703_095421/24991118_tile_11_8_6b34a7_masked_overlay.png}
+    };
+    
+    % Row 3 (bottom row - 2 images)
+    \node[anchor=center] (img5) at (0, 0) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/1_unet_tu-mambaout_small_20250703_095421/24991118_tile_12_7_7ce219_masked_overlay.png}
+    };
+    \node[anchor=center] (img6) at (\effectivespace, 0) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/1_unet_tu-mambaout_small_20250703_095421/24991118_tile_12_8_83485c_masked_overlay.png}
+    };
+\end{tikzpicture}
+\caption{Zone \acrshort{hepia} - Unet avec MambaOutSmall}
+\label{fig:quartier_hepia_modele_unet_mambaoutsmall}
+\end{figure}
+
+% ===========================================================
+
+\newpage
+La Figure \ref{fig:quartier_hepia_modele_upernet_efficientnetv2_s} montre les résultats du modèle UPerNet + EfficientNetV2-S sur la zone \acrshort{hepia}.
+
+Les observations sont similaires au modèle précédent concernant les terrasses et cours intérieures.
+
+Les obstacles comme les verrières, panneaux solaires, gaines, cheminées, lucarnes, acrotères, bords de toiture, arbres et végétation sont correctement détectés. Le modèle les exclut bien lors de la segmentation.
+
+La gestion des ombrages est moins performante qu'avec UNet + MambaOutSmall. UPerNet peine à identifier les espaces libres dans toutes les zones ombragées, peu importe l'intensité de l'ombre.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+    % Define your image display width
+    \def\imgwidth{7.7cm}  % Adjust this to your desired size
+    
+    % Calculate effective spacing (80% of image width)
+    \def\effectivespace{0.8*\imgwidth}
+    
+    % Row 1 (top row - 2 images)
+    \node[anchor=center] (img1) at (0, 2*\effectivespace) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/2_upernet_tu-efficientnetv2_rw_s.ra2_in1k_20250703_095445/24991118_tile_10_7_18eac4_masked_overlay.png}
+    };
+    \node[anchor=center] (img2) at (\effectivespace, 2*\effectivespace) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/2_upernet_tu-efficientnetv2_rw_s.ra2_in1k_20250703_095445/24991118_tile_10_8_2931b8_masked_overlay.png}
+    };
+    
+    % Row 2 (middle row - 2 images)
+    \node[anchor=center] (img3) at (0, \effectivespace) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/2_upernet_tu-efficientnetv2_rw_s.ra2_in1k_20250703_095445/24991118_tile_11_7_4db66f_masked_overlay.png}
+    };
+    \node[anchor=center] (img4) at (\effectivespace, \effectivespace) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/2_upernet_tu-efficientnetv2_rw_s.ra2_in1k_20250703_095445/24991118_tile_11_8_6b34a7_masked_overlay.png}
+    };
+    
+    % Row 3 (bottom row - 2 images)
+    \node[anchor=center] (img5) at (0, 0) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/2_upernet_tu-efficientnetv2_rw_s.ra2_in1k_20250703_095445/24991118_tile_12_7_7ce219_masked_overlay.png}
+    };
+    \node[anchor=center] (img6) at (\effectivespace, 0) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/2_upernet_tu-efficientnetv2_rw_s.ra2_in1k_20250703_095445/24991118_tile_12_8_83485c_masked_overlay.png}
+    };
+\end{tikzpicture}
+\caption{Zone \acrshort{hepia} - UPerNet avec EfficientNetV2-S}
+\label{fig:quartier_hepia_modele_upernet_efficientnetv2_s}
+\end{figure}
+
+% ===========================================================
+
+\newpage
+La Figure \ref{fig:quartier_hepia_modele_segformer_mambaoutbase} montre les résultats du modèle SegFormer + MambaOutBase sur la zone \acrshort{hepia}.
+
+Les observations sont similaires aux modèles précédent concernant les terrasses et cours intérieures.
+
+Les obstacles comme les verrières, panneaux solaires, gaines, cheminées, lucarnes, acrotères, bords de toiture, arbres et végétation sont correctement détectés. Le modèle les exclut bien lors de la segmentation.
+
+La gestion des ombrages est bien meilleure que pour les deux modèles précédents. SegFormer parvient à mieux identifier les espaces libres dans les zones ombragées, même lorsque l'ombre est plus marquée.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+    % Define your image display width
+    \def\imgwidth{7.7cm}  % Adjust this to your desired size
+    
+    % Calculate effective spacing (80% of image width)
+    \def\effectivespace{0.8*\imgwidth}
+    
+    % Row 1 (top row - 2 images)
+    \node[anchor=center] (img1) at (0, 2*\effectivespace) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/3_segformer_tu-mambaout_base_20250703_095506/24991118_tile_10_7_18eac4_masked_overlay.png}
+    };
+    \node[anchor=center] (img2) at (\effectivespace, 2*\effectivespace) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/3_segformer_tu-mambaout_base_20250703_095506/24991118_tile_10_8_2931b8_masked_overlay.png}
+    };
+    
+    % Row 2 (middle row - 2 images)
+    \node[anchor=center] (img3) at (0, \effectivespace) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/3_segformer_tu-mambaout_base_20250703_095506/24991118_tile_11_7_4db66f_masked_overlay.png}
+    };
+    \node[anchor=center] (img4) at (\effectivespace, \effectivespace) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/3_segformer_tu-mambaout_base_20250703_095506/24991118_tile_11_8_6b34a7_masked_overlay.png}
+    };
+    
+    % Row 3 (bottom row - 2 images)
+    \node[anchor=center] (img5) at (0, 0) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/3_segformer_tu-mambaout_base_20250703_095506/24991118_tile_12_7_7ce219_masked_overlay.png}
+    };
+    \node[anchor=center] (img6) at (\effectivespace, 0) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/3_segformer_tu-mambaout_base_20250703_095506/24991118_tile_12_8_83485c_masked_overlay.png}
+    };
+\end{tikzpicture}
+\caption{Zone \acrshort{hepia} - SegFormer avec MambaOutBase}
+\label{fig:quartier_hepia_modele_segformer_mambaoutbase}
+\end{figure}
+
+% ===========================================================
+
+\newpage
+La Figure \ref{fig:quartier_hepia_modele_linknet_efficientnet_b5} illustre les résultats obtenus avec LinkNet + EfficientNet-B5 sur la zone \acrshort{hepia}.
+
+La cour intérieure de \acrshort{hepia} (en bas à droite) est partiellement segmentée. Le modèle semble capable de distinguer en partie les surfaces praticables des autres toitures. Toutefois, la cour intérieure située en bas à gauche est incorrectement identifiée comme surface libre.
+
+Les obstacles comme les verrières, panneaux solaires, gaines, cheminées, lucarnes, acrotères, bords de toiture, arbres et végétation sont correctement détectés et exclus de la segmentation. La précision de détection paraît supérieure aux modèles précédents.
+
+Le traitement des ombrages est efficace. Le modèle identifie correctement les espaces libres dans les zones ombragées, y compris celles avec des ombres prononcées.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+    % Define your image display width
+    \def\imgwidth{7.7cm}  % Adjust this to your desired size
+    
+    % Calculate effective spacing (80% of image width)
+    \def\effectivespace{0.8*\imgwidth}
+    
+    % Row 1 (top row - 2 images)
+    \node[anchor=center] (img1) at (0, 2*\effectivespace) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/4_linknet_timm-efficientnet-b5_20250703_095535/24991118_tile_10_7_18eac4_masked_overlay.png}
+    };
+    \node[anchor=center] (img2) at (\effectivespace, 2*\effectivespace) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/4_linknet_timm-efficientnet-b5_20250703_095535/24991118_tile_10_8_2931b8_masked_overlay.png}
+    };
+    
+    % Row 2 (middle row - 2 images)
+    \node[anchor=center] (img3) at (0, \effectivespace) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/4_linknet_timm-efficientnet-b5_20250703_095535/24991118_tile_11_7_4db66f_masked_overlay.png}
+    };
+    \node[anchor=center] (img4) at (\effectivespace, \effectivespace) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/4_linknet_timm-efficientnet-b5_20250703_095535/24991118_tile_11_8_6b34a7_masked_overlay.png}
+    };
+    
+    % Row 3 (bottom row - 2 images)
+    \node[anchor=center] (img5) at (0, 0) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/4_linknet_timm-efficientnet-b5_20250703_095535/24991118_tile_12_7_7ce219_masked_overlay.png}
+    };
+    \node[anchor=center] (img6) at (\effectivespace, 0) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/4_linknet_timm-efficientnet-b5_20250703_095535/24991118_tile_12_8_83485c_masked_overlay.png}
+    };
+\end{tikzpicture}
+\caption{Zone \acrshort{hepia} - LinkNet avec EfficientNet-B5}
+\label{fig:quartier_hepia_modele_linknet_efficientnet_b5}
+\end{figure}
+
+% ===========================================================
+
+\newpage
+La Figure \ref{fig:quartier_hepia_modele_unetplusplus_efficientnetv2_s} montre les résultats du modèle UNet++ + EfficientNetV2-S sur la zone \acrshort{hepia}.
+
+Les observations restent identiques pour les terrasses et cours intérieures. Les obstacles présents sur les toitures sont généralement bien identifiés.
+
+Le modèle gère correctement les ombres légères. En revanche, quand l'ombrage devient plus intense, il peine à détecter les espaces libres.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+    % Define your image display width
+    \def\imgwidth{7.7cm}  % Adjust this to your desired size
+    
+    % Calculate effective spacing (80% of image width)
+    \def\effectivespace{0.8*\imgwidth}
+    
+    % Row 1 (top row - 2 images)
+    \node[anchor=center] (img1) at (0, 2*\effectivespace) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/5_unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k_20250703_095601/24991118_tile_10_7_18eac4_masked_overlay.png}
+    };
+    \node[anchor=center] (img2) at (\effectivespace, 2*\effectivespace) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/5_unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k_20250703_095601/24991118_tile_10_8_2931b8_masked_overlay.png}
+    };
+    
+    % Row 2 (middle row - 2 images)
+    \node[anchor=center] (img3) at (0, \effectivespace) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/5_unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k_20250703_095601/24991118_tile_11_7_4db66f_masked_overlay.png}
+    };
+    \node[anchor=center] (img4) at (\effectivespace, \effectivespace) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/5_unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k_20250703_095601/24991118_tile_11_8_6b34a7_masked_overlay.png}
+    };
+    
+    % Row 3 (bottom row - 2 images)
+    \node[anchor=center] (img5) at (0, 0) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/5_unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k_20250703_095601/24991118_tile_12_7_7ce219_masked_overlay.png}
+    };
+    \node[anchor=center] (img6) at (\effectivespace, 0) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/5_unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k_20250703_095601/24991118_tile_12_8_83485c_masked_overlay.png}
+    };
+\end{tikzpicture}
+\caption{Zone \acrshort{hepia} - UNet++ avec EfficientNetV2-S}
+\label{fig:quartier_hepia_modele_unetplusplus_efficientnetv2_s}
+\end{figure}
+
+% ===========================================================
+
+\newpage
+La Figure \ref{fig:quartier_hepia_modele_segformer_regnety_080} présente les résultats du modèle SegFormer + RegNetY-080 sur la zone \acrshort{hepia}.
+
+La segmentation des petits obstacles sur les toitures semble moins précise comparé aux autres modèles. La gestion des ombrages est correcte, mais le modèle a des difficultés à identifier les espaces libres dans les zones ombragées, surtout lorsque l'ombre est plus marquée. Les remarques sur les terrasses et cours intérieures restent similaires aux autres modèles.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+    % Define your image display width
+    \def\imgwidth{7.7cm}  % Adjust this to your desired size
+    
+    % Calculate effective spacing (80% of image width)
+    \def\effectivespace{0.8*\imgwidth}
+    
+    % Row 1 (top row - 2 images)
+    \node[anchor=center] (img1) at (0, 2*\effectivespace) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/6_segformer_tu-regnety_080.ra3_in1k_20250703_095620/24991118_tile_10_7_18eac4_masked_overlay.png}
+    };
+    \node[anchor=center] (img2) at (\effectivespace, 2*\effectivespace) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/6_segformer_tu-regnety_080.ra3_in1k_20250703_095620/24991118_tile_10_8_2931b8_masked_overlay.png}
+    };
+    
+    % Row 2 (middle row - 2 images)
+    \node[anchor=center] (img3) at (0, \effectivespace) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/6_segformer_tu-regnety_080.ra3_in1k_20250703_095620/24991118_tile_11_7_4db66f_masked_overlay.png}
+    };
+    \node[anchor=center] (img4) at (\effectivespace, \effectivespace) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/6_segformer_tu-regnety_080.ra3_in1k_20250703_095620/24991118_tile_11_8_6b34a7_masked_overlay.png}
+    };
+    
+    % Row 3 (bottom row - 2 images)
+    \node[anchor=center] (img5) at (0, 0) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/6_segformer_tu-regnety_080.ra3_in1k_20250703_095620/24991118_tile_12_7_7ce219_masked_overlay.png}
+    };
+    \node[anchor=center] (img6) at (\effectivespace, 0) {
+        \includegraphics[width=\imgwidth]{02-main//figures/ch4/quartier/6_segformer_tu-regnety_080.ra3_in1k_20250703_095620/24991118_tile_12_8_83485c_masked_overlay.png}
+    };
+\end{tikzpicture}
+\caption{Zone \acrshort{hepia} - SegFormer avec RegNetY-080}
+\label{fig:quartier_hepia_modele_segformer_regnety_080}
+\end{figure}
 
 % -----------------------------------------------------------------------------
-\section{Analyse comparative des résultats}
-\subsection{Généralisation du modèle}
-\subsection{Limites identifiées}
+
+\subsubsection{Synthèse et analyse des résultats}
+
+Le Tableau \ref{tab:quartier_hepia_comparatif_modeles} résume les performances des six modèles testés sur la zone \acrshort{hepia}, en se basant sur quatre critères : la détection des balcons/terrasses, la segmentation des toitures praticables, la détection des obstacles et la gestion des ombrages.
+
+\begin{table}[H]
+\centering
+\begin{tabularx}{\textwidth}{|l|X|X|X|X|}
+\hline
+Modèle & {Balcons \newline Terrasses} & {Toitures\newline praticables} & {Petits\newline obstacles} & {Gestion\newline ombrages} \\
+\hline
+UNet + MambaOutSmall & $+$ & $--$ & $+/-$ & $-$ \\
+\hline
+UPerNet + EfficientNetV2-S & $+$ & $-$ & $+$ & $--$ \\
+\hline
+SegFormer + MambaOutBase & $+$ & $--$ & $+$ & $+$ \\
+\hline
+LinkNet + EfficientNet-B5 & $+$ & $+/-$ & $++$ & $+$ \\
+\hline
+UNet++ + EfficientNetV2-S & $+$ & $-$ & $+/-$ & $-$ \\
+\hline
+SegFormer + RegNetY-080 & $+$ & $-$ & $-$ & $+/-$ \\
+\hline
+\end{tabularx}
+\caption{Tableau comparatif des performances des 6 modèles sur la zone \acrshort{hepia}}
+\label{tab:quartier_hepia_comparatif_modeles}
+\end{table}
+
+Légende du Tableau \ref{tab:quartier_hepia_comparatif_modeles} :
+\begin{itemize}[label={}]
+\item $++$ : Très bonne performance
+\item $+$ : Bonne performance
+\item $+/-$ : Performance mitigée
+\item $-$ : Performance insuffisante
+\item $--$ : Très mauvaise performance
+\end{itemize}
+
+Pour conclure cette section, il est important de noter que ces images n'ont pas de vérité terrain associée. L'évaluation reste donc subjective. L'objectif est d'observer comment les modèles se comportent sur des données qu'ils n'ont jamais vues. Cette capacité de généralisation est cruciale pour juger de leur robustesse en conditions réelles.
+
+Cette évaluation qualitative permet aussi de révéler les biais présents dans le dataset d'entraînement. Malgré le soin apporté à sa création, ce dataset reste imparfait et les modèles reproduisent ses limites dans leurs prédictions.
+
+Un problème récurrent concerne les toitures praticables. Ces surfaces, bien que classées comme toitures par \acrshort{sitg} (ce qui est techniquement correct puisqu'elles correspondent au dernier étage d'un bâtiment), posent problème aux modèles. La distinction entre surfaces praticables et non praticables reste difficile. L'ajout d'exemples supplémentaires dans le dataset pourrait améliorer les performances sur ce point.
+
+Les balcons montrent aussi des résultats variables. Ceux avec du mobilier sont correctement identifiés par tous les modèles, mais les balcons vides sont souvent confondus avec des toitures. Cela confirme le besoin de diversifier les exemples dans le dataset.
+
+La détection des petits obstacles donne des résultats encourageants. Les modèles identifient correctement la plupart des éléments comme les verrières, panneaux solaires, gaines, cheminées, lucarnes et acrotères. LinkNet + EfficientNet-B5 se démarque avec une précision supérieure sur ces petits éléments.
+
+Les performances sur les zones ombragées dépassent les attentes, particulièrement pour SegFormer + MambaOutBase et LinkNet + EfficientNet-B5. Ces modèles détectent les espaces libres même sous ombrage marqué, ce qui est essentiel pour traiter des images aériennes. Le choix de la combinaison encodeur-décodeur s'avère déterminant : EfficientNet-B5 avec UPerNet gère mal les ombrages, alors qu'avec LinkNet les résultats sont excellents.
+
+Au final, LinkNet + EfficientNet-B5 semble être le modèle le plus performant. Il excelle dans la détection des petits obstacles et la gestion des ombrages, tout en maintenant de bonnes performances sur les autres éléments.
+
 
 % -----------------------------------------------------------------------------
 \section{Synthèse}
-\todo[inline]{Exemple de todo}
+
+Ce chapitre a évalué 93 configurations de modèles de segmentation pour identifier les espaces libres sur les toitures du canton de Genève. L'analyse comparative montre des performances globalement homogènes entre les architectures, avec plusieurs enseignements utiles pour un déploiement pratique.
+
+\subsection{Performances générales et robustesse des modèles}
+
+L'évaluation quantitative utilise un dataset de test indépendant de 89 images. Les modèles obtiennent des performances élevées et stables. Les valeurs d'IoU vont de 0,619 à 0,741, avec une moyenne de 0,708 et un écart-type de 0,024. Cette faible dispersion indique que les architectures sont bien adaptées à cette tâche.
+
+Les modèles de Segmentation Models PyTorch (SMP) surpassent les variantes YOLOv12, notamment sur les métriques F1-score et mAP@0.95. Les modèles SMP gèrent mieux les faux positifs et faux négatifs, ce qui est essentiel pour une segmentation précise des contours.
+
+\subsection{Architectures optimales et compromis performance-complexité}
+
+L'analyse du front de Pareto montre que les gains deviennent marginaux au-delà de 25 millions de paramètres. L'ajout de complexité n'apporte plus grand-chose. Trois configurations ressortent comme solutions optimales :
+
+\begin{itemize}
+    \item LinkNet + EfficientNet-B5 : IoU de 0,741 avec 28,75M paramètres, les meilleures performances absolues
+    \item SegFormer + RegNetY-032 : IoU de 0,735 avec 18,87M paramètres, un bon équilibre performance-efficacité
+    \item UNet++ + EfficientNet-B3 : IoU de 0,735 avec 13,63M paramètres, privilégiant la compacité
+\end{itemize}
+
+La stratégie d'ensemble k-fold améliore ces modèles de 0,9\% à 2,0\% en moyenne par rapport à la moyenne des folds. Cette approche renforce la robustesse pour une utilisation opérationnelle.
+
+\subsection{Analyse qualitative et limites identifiées}
+
+Les tests sur la zone \acrshort{hepia} montrent une bonne capacité de généralisation mais aussi des limites. Les modèles détectent bien les obstacles classiques (panneaux solaires, cheminées, verrières, végétation) et fonctionnent correctement sur les zones avec ombrage léger à modéré.
+
+Deux défis principaux subsistent :
+
+\begin{itemize}
+    \item Surfaces praticables : Les toitures végétalisées et terrasses praticables sont mal classées, probablement par manque d'exemples dans le dataset d'entraînement
+    \item Ombrages intenses : Les performances chutent sous ombrage marqué, avec des variations selon la combinaison encodeur-décodeur
+\end{itemize}
+
+\subsection{Recommandations pour le déploiement opérationnel}
+
+Cette évaluation permet de formuler plusieurs recommandations pratiques :
+
+\paragraph{Choix du modèle}
+LinkNet + EfficientNet-B5 est la configuration optimale. Elle combine les meilleures performances IoU (0,741), une excellente gestion des ombrages et une détection précise des petits obstacles. L'utilisation d'un ensemble k-fold maximise la robustesse.
+
+\paragraph{Améliorations du dataset}
+Le dataset devrait être enrichi avec plus d'exemples de toitures végétalisées, terrasses praticables et zones fortement ombragées. Augmenter le nombre d'exemples négatifs réduirait aussi les faux positifs. Les images contenant très peu d'informations pertinentes posent également problème - les modèles ont du mal à apprendre dans ces conditions et ces cas devraient être mieux équilibrés dans le dataset.
+
+\paragraph{Stratégie de déploiement}
+L'ensemble k-fold multiplie le temps de calcul par cinq mais reste justifié pour les applications critiques nécessitant une haute fiabilité. Pour les applications avec contraintes temporelles, on peut utiliser le meilleur modèle individuel de chaque configuration.
+
+\paragraph{Perspectives d'amélioration}
+L'augmentation de données ciblée sur les cas difficiles (surfaces praticables, ombrages intenses) et le pré-traitement pour normaliser l'éclairage sont des pistes prometteuses.
+
+Cette évaluation confirme que la segmentation des espaces libres sur toitures est suffisamment mature pour un déploiement opérationnel. Les axes d'amélioration identifiés permettront d'optimiser la robustesse du système en conditions réelles.
