@@ -1,0 +1,20 @@
+% 00-settings/settings_custom.tex
+% ========================
+% = Custom settings for thesis template
+% ========================
+
+% Font stack
+\usepackage{cmbright}       % Sans serif
+\usepackage{sourcecodepro}  % Monospace
+\renewcommand{\familydefault}{\sfdefault}
+
+% Fix for missing font variants in cmbright
+\DeclareFontShape{T1}{cmbr}{b}{it}{<->ssub*cmbr/m/it}{}  % Missing bold italic
+\DeclareFontShape{T1}{cmbr}{m}{sc}{<->ssub*cmbr/m/n}{}   % Missing small caps
+
+% Make warnings more verbose to help identify the issue
+\usepackage{silence}
+\WarningFilter{hyperref}{Suppressing empty link}
+
+\hbadness=10000  % Ignore all underfull hbox warnings
+\vbadness=10000  % Ignore all underfull vbox warnings

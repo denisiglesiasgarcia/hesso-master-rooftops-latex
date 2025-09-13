@@ -1,0 +1,1191 @@
+\chapter{Principes fondamentaux de machine learning}
+\label{chap:fondamentaux_ml}
+
+\par{Ce chapitre va permettre d’avoir les bases nécessaires pour comprendre ce qu’est le machine learning, ses limites et ses applications.}
+
+% --------------------------------------------------------------------------------------------
+
+\section{Introduction au machine learning}
+
+\par{L'apprentissage automatique (machine learning) est une branche de l'intelligence artificielle qui permet à un programme d'automatiser l'apprentissage à partir d'exemples, sans être explicitement programmé pour accomplir une tâche.}
+
+\par{Les principaux algorithmes de machine learning peuvent se diviser en 2 catégories :
+\begin{itemize}
+    \item Apprentissage supervisé : le modèle est entraîné avec des données étiquetées et il doit apprendre à reconnaître les patrons pour prédire les résultats futurs. Quelques exemples :
+    \begin{itemize}
+        \item Réseaux de neurones : est comme une équipe de détectives qui examinent ensemble une image pour décider si elle représente un chien, un chat ou un arbre, en se basant sur les caractéristiques qu'ils ont appris à reconnaître.
+        \item Régression linéaire : vise à prédire une valeur continue (par exemple, la température) en fonction de variables explicites.
+        \item Les arbres de décision : un algorithme qui utilise des règles pour prendre des décisions en fonction de caractéristiques des données.
+    \end{itemize}
+    \item Apprentissage non supervisé : le modèle est entraîné avec des données non étiquetées et il doit apprendre à identifier les groupes ou les tendances dans les données. Quelques exemples :
+    \begin{itemize}
+        \item L'agrégation (cluster) : un algorithme qui vise à grouper les données en fonction de leurs similarités.
+        \item Autoencodeurs : réseau de neurones qui permettent la compression (encodeur) et décompression (décodeur) de données
+        \item Analyse en composantes principales (PCA) : permet de réduire une grande base de données de caractéristiques par exemple de vins (degré d'alcool, la couleur, l'acidité, etc.) à seulement deux ou trois caractéristiques les plus importantes qui expliquent le plus de variabilité dans les vins, pour faciliter leur comparaison et leur classification.
+    \end{itemize}
+\end{itemize}}
+
+\par{La figure~\ref{fig:A1_01_resume_machine_learning_supervise} permet d'avoir un aperçu des phases de création d'un modèle de machine learning à partir d'un algorithme supervisé.}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{03-tail/A1_fondamentaux_ML/A1_figures/A1_01_resume_machine_learning_supervise.png}
+    \caption{Résumé du machine learning supervisé}
+    \label{fig:A1_01_resume_machine_learning_supervise}
+\end{figure}
+
+
+\par{Un détail important pour la compréhension de la Figure~\ref{fig:A1_01_resume_machine_learning_supervise} est la différence entre modèle et algorithme :
+\begin{itemize}
+    \item Un modèle est une implémentation spécifique d'un algorithme, adaptée à un jeu de données ou un problème particulier.
+    \item Un algorithme est un ensemble d'instructions ou une procédure utilisée pour entraîner un modèle.
+\end{itemize}
+}
+
+\par{Une bonne manière de faire la différence est de voir l'algorithme comme la recette de cuisine et le modèle comme le gâteau. La recette (algorithme) fournit les instructions pour combiner les ingrédients, mais le gâteau (modèle) est le résultat physique de la mise en œuvre de la recette.}
+
+\par{La Figure~\ref{fig:A1_01_resume_machine_learning_supervise} va servir de fil conducteur pour expliquer les principales phases :}
+
+\begin{enumerate}
+    \item Tâche : Le machine learning n'a pas de sens s'il n'y avait pas un problème à résoudre. Par exemple classer des images de chat et chien
+    
+    \item Choix algorithme : une fois la tâche déterminée, il faut choisir l'algorithme adéquat pour résoudre le problème. Par exemple choisir un algorithme de classification d'image
+    
+    \item Sélection des données adaptées à l'algorithme : la création du modèle nécessite des données appropriées à l'algorithme utilisé. Par exemple, des images de chats ou de chiens pour un algorithme de classification d'images.
+    
+    \item Ces données sont des exemples qui serviront à entraîner le modèle à effectuer des tâches spécifiques. Si les données ne sont pas étiquetées (également appelées annotées), il sera nécessaire de le faire. Dans le cas présent, il faudra rechercher des données déjà annotées de chats et de chiens, ou bien procéder à cette annotation soi-même. Ces données annotées constituent un ensemble de données (dataset ou jeu de données).
+    
+    \item Ces données doivent être divisée en plusieurs parties :
+    \begin{enumerate}
+        \item Données d'entraînement : elles serviront à l'entraînement du modèle et représentent environ 60\% du dataset.
+        \item Données de validation : lors de l’entraînement ces données servent à valider que le modèle apprend correctement et qu'il ne mémorise pas les données d’entraînement. Les données de validation représentent environ 20\% du dataset
+        \item Données de test : ces données ne sont pas utilisées lors de l'entraînement et servent à vérifier les performances finales du modèle sur des données qu'il n'a jamais vues auparavant. Les données de test représentent environ 20\% du dataset.
+    \end{enumerate}
+    
+    \item Entraînement du modèle : on va appliquer l'algorithme sur les données \\ d’entraînement pour développer le modèle spécifique pour résoudre le problème de la première phase. Dans l'exemple, le modèle va apprendre les différentes caractéristiques d'un chien (museau, poil, etc.) et d'un chat.
+    
+    \item Validation des performances du modèle : le modèle est utilisé pour vérifier ses performances sur les données de validation. S'il arrive à bien classifier les chats ou les chiens, l’entraînement peut se terminer. Dans le cas où il n'arrive pas encore à bien les classifier, l’entraînement doit continuer.
+    
+    \item Test des performances du modèle : l'objectif de cette phase est d'évaluer les performances du modèle sur des données qu'il n'a jamais vues lors de l'entraînement. Les données utilisées sont les données de test. Si le modèle parvient à bien classifier les images de chats et de chiens (par exemple dans 85\% des cas), le modèle est considéré comme ``OK'' et peut passer en production. Cependant, si les performances ne sont pas satisfaisantes (cas ``KO''), il faut vérifier que les données sont adéquates, bien annotées et qu'il n'y a pas de problème de répartition entre les différentes classes. Une deuxième cause de mauvais résultats peut être le choix de variables (hyperparamètres) inadéquates pour l’entraînement.
+    
+    \item Mise en production : cette phase implique que le modèle fonctionne correctement et il peut maintenant réaliser la tâche pour laquelle il a été créé sur des données qu'il n'a jamais vues. Par exemple, classifier des images de chats et de chiens. La mise en production est complexe et souvent réalisée par des professionnels du DevOps qui ont d'excellentes connaissances des systèmes informatiques (``Ops'') ainsi que du développement informatique (``Dev''). Dans notre exemple, un site web pourrait accueillir l'interface dans laquelle l'utilisateur ou l'utilisatrice va soumettre une photo et le modèle va classifier l'image en chat ou en chien.
+\end{enumerate}
+
+\par{Le développement de modèles de machine learning supervisé est assez complexe et il se peut que cela ne fonctionne pas du premier coup (cas ``KO'' sur Figure~\ref{fig:A1_01_resume_machine_learning_supervise}). Les causes les plus habituelles sont les suivantes :}
+
+\begin{itemize}
+    \item Pas assez de données pour apprendre. Possible solution :
+    \begin{itemize}
+        \item Collecter plus de données
+    \end{itemize}
+    
+    \item Équilibre des classes entre les données. Est-ce qu'une classe représente la majorité des données ? Est-ce que les chiens représentent par exemple plus de 80\% du dataset ? Si les données ne sont pas équilibrées, le modèle ne va pas bien apprendre les spécificités de chaque classe. Plusieurs solutions :
+    \begin{itemize}
+        \item Collecter plus de données de la ou les classe(s) moins représentée(s)
+        \item S'il y a suffisamment de données, c'est possible d'enlever une partie des donnes jusqu'à ce que les classes soient équilibrées
+    \end{itemize}
+    
+    \item Mauvais choix de modèle : c'est possible qu'un modèle soit trop complexe (réseau de neurones avec des milliards de paramètres) ou trop simple (régression linéaire). Possibles solutions :
+    \begin{itemize}
+        \item Vérifier que l'algorithme choisi est adapté à la tâche qu'il doit réaliser, il ne doit pas être trop simple ni trop complexe
+        \item Si l'algorithme est complexe, c'est possible de le faire fonctionner avec plus de données mais ce n'est pas intelligent ni efficient d'un point de vue énergétique. Un gros modèle (beaucoup de paramètres) aura un entraînement plus long et va utiliser plus d'énergie lors de son utilisation
+    \end{itemize}
+\end{itemize}
+
+\par{La réponse dans beaucoup de cas semble être d'acquérir plus de données. Cette démarche exige tout de même une certaine réflexion et dans certains cas ce n'est pas la meilleure :}
+
+\begin{itemize}
+    \item Coût de l'acquisition : l'acquisition de données supplémentaires peut être très coûteuse. Avoir plus de données va probablement impliquer la labellisation de celles-ci, ce qui peut engendrer des coûts non négligeables
+    \item Rareté de la donnée : dans le domaine médical c'est difficile d'avoir plus de données sur des maladies rares par exemple
+    \item Contraintes légales : des lois peuvent ne pas permettre l'accès à certaines données privées
+    
+    \item Qualité des données : la qualité de données collectées va avoir un impact sur le modèle, avoir des données de bonne qualité doit être une priorité par rapport à la quantité
+\end{itemize}
+
+% --------------------------------------------------------------------------------------------
+
+\subsection{Applications}
+
+\par{Le machine learning a des applications très variées et il est utilisé dans de nombreux domaines tels que :}
+
+\begin{itemize}
+    \item Vision par ordinateur (``computer vision'')
+    \begin{itemize}
+        \item Reconnaissance de caractères dans une image
+        \item Générer automatiquement une description d'une image
+        \item Conduite autonome d'un véhicule
+        \item Aide au diagnostic de maladies dans le cadre de l'imagerie médicale
+    \end{itemize}
+    
+    \item Traitement automatique du langage (``natural language processing'')
+    \begin{itemize}
+        \item Reconnaissance de voix automatique et transcription de ce qui est dit
+        \item Traduction automatique de texte
+        \item Classification de texte, par exemple classifier un courriel en ``spam'' ou un message dans un réseau social en ``language inapproprié''
+        \item Modèles de language tel que GPT3.5 (ChatGPT) qui permettent de saisir des questions en texte et le modèle va générer une réponse dans le même format
+    \end{itemize}
+    
+    \item Séries temporelles
+    \begin{itemize}
+        \item Planification prédictive du nombre de travailleurs nécessaires pour une entreprise
+        \item Maintenance préventive de machines pour optimiser le nombre d'heures de fonctionnement
+        \item Prédiction de météo et d'événements extrêmes tel que ouragans ou tremblements de terre
+        \item Applications au domaine financier (ventes prévues d'une entreprise, aide à la décision dans les transactions boursières, etc.)
+        \item Prédiction des embouteillages et aide à la gestion du trafic routier
+        \item Aide à la gestion du réseau électrique en prédisant les pics de consommation
+    \end{itemize}
+\end{itemize}
+
+% --------------------------------------------------------------------------------------------
+\clearpage
+\subsection{Neurones artificiels}
+
+\par{Les réseaux de neurones sont très souvent utilisés en machine learning car ils permettent de résoudre des problèmes complexes et ils été une révolution dans le domaine.}
+
+\par{Un réseau de neurones est un modèle mathématique inspiré de la structure et du fonctionnement du cerveau humain.}
+
+\par{L'idée a été inspirée par le fonctionnement des neurones biologiques. C'est-à-dire que chaque neurone (voir Figure~\ref{fig:A1_02_neurone_humaine}) reçoit des signaux d'entrée de ses dendrites et produit des signaux de sortie le long de son axone. L'axone se ramifie ensuite et se connecte via des synapses aux dendrites d'autres neurones, formant ainsi un réseau neuronal.}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\linewidth]{03-tail//A1_fondamentaux_ML//A1_figures/A1_02_neurone_humaine.png}
+    \caption{Neurone humaine \cite{noauthor_neurone_2025}}
+    \label{fig:A1_02_neurone_humaine}
+\end{figure}
+
+\par{Le premier neurone artificiel \cite{mcculloch_logical_1943} a été créée en 1943 par Warren Sturgis McCulloch et Walter Pitts. La Figure~\ref{fig:A1_03_neurone_artificielle_mcculloch} permet de voir les similarités avec une neurone biologique. Le neurone de McCulloch-Pitts est une unité binaire avec un seuil d'activation qui reçoit une ou plusieurs entrées, effectue un calcul et produit une sortie.}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1\linewidth]{03-tail//A1_fondamentaux_ML//A1_figures/A1_03_neurone_artificielle_mcculloch.png}
+    \caption{Neurone artificielle proposée par McCulloch-Pitts \cite{zahn_cours_2024}}
+    \label{fig:A1_03_neurone_artificielle_mcculloch}
+\end{figure}
+
+\par{Le neurone est constitué des parties suivantes :}
+\begin{itemize}
+    \item $x_1$, $x_2$, sont les entrées du neurone (signal), ce sont des signaux binaire qui prennent les valeurs de 0 ou 1
+    \item $w_1$, $w_2$ sont les poids (``weights'') qui vont donner de l'importance au signal. Ils prennent les valeurs -1 (réduire le signal) ou +1 (augmenter le signal)
+    \item $\theta$ est le seuil d'activation, c'est-à-dire la valeur minimum pour produire une sortie $y$
+    \item $y$ est la valeur de sortie du neurone, c'est une valeur binaire
+    \item $H$ est la formule d'activation
+\end{itemize}
+
+\par{L'activation utilise la fonction de Heaviside :}
+
+\begin{equation}
+    H(z) = 
+    \begin{cases}
+        0, & z < 0 \\
+        1, & z \geq 0
+    \end{cases}
+    \label{eq:heaviside}
+\end{equation}
+
+\par{L'utilité de ce neurone est remarquable car il permet de créer des opérateurs logiques.}
+
+\begin{equation}
+    \begin{aligned}
+        ET: \quad & y = H(x_1 + x_2 - 2) \\
+        OU: \quad & y = H(x_1 + x_2 - 1) \\
+        XOR: \quad & y = H(H(x_1 + x_2 - 1) + H(1 - x_1 - x_2))
+    \end{aligned}
+    \label{eq:operateurs_logiques}
+\end{equation}
+
+\par{Un exemple d'application de l'opérateur ``ET'' de l'Équation~\ref{eq:operateurs_logiques} permet de vérifier qu'il fonctionne correctement :}
+
+\begin{equation}
+    \begin{aligned}
+        ET \quad \quad \quad & y = H(x_1 + x_2 - 2) \\
+        \begin{cases}
+            x_1 = 0 \\
+            x_2 = 1
+        \end{cases} \quad & y = H(0 + 1 - 2) \quad y = H(-1) = 0 \\
+        \begin{cases}
+            x_1 = 1 \\
+            x_2 = 1
+        \end{cases} \quad & y = H(1 + 1 - 2) \quad y = H(0) = 1
+    \end{aligned}
+    \label{eq:exemple_ET}
+\end{equation}
+
+\par{Ce modèle a certaines limitations :}
+\begin{itemize}
+    \item Ses poids ($w$) et seuil ($\theta$) sont fixes
+    \item Sa sortie binaire ne permet pas de nuance, elle indique juste ``vrai'' (1) ou ``faux'' (0)
+    \item Pas d'actualisations des poids selon les besoins
+    \item Une seule couche ne permet pas de réaliser des calculs complexes
+\end{itemize}
+
+\par{En 1958, Frank Rosenblatt \cite{rosenblatt_perceptron_1958} publie un article ou il propose le perceptron, un nouveau type
+de neurone artificiel.}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{03-tail//A1_fondamentaux_ML//A1_figures//A1_04_perceptron.png}
+    \caption{Schéma du perceptron \cite{zahn_cours_2024}, neurone artificielle proposée par Frank Rosenblatt.}
+    \label{fig:enter-label}
+\end{figure}
+
+\par{Celui-ci se distingue du neurone de McCulloch-Pitts car elle permet d'utiliser des nombres réels pour les entrées, poids et biais. L'équation \ref{eq:perceptron} \cite{rosenblatt_perceptron_1958} du perceptron est la suivante:}
+\vspace{20pt}
+\begin{equation}
+    y = H\left(\sum_{k=1}^{n} w_k \cdot x_k + b\right) \quad \text{pour } x_k, w_k, b \in \mathbb{R}
+    \label{eq:perceptron}
+\end{equation}
+\par{Dans l'équation \ref{eq:perceptron}, $H$ représente la fonction d'activation de Heaviside, $w_k$ les poids, $x_k$ les entrées, $b$ le biais, et $n$ le nombre d'entrées.}
+
+\par{L'évolution la plus remarquable par rapport au neurone de McCulloch-Pitts, est que le perceptron peut ``apprendre'' des données et actualiser les poids et biais.}
+\par{On dispose d'un ensemble de données étiquetées $\{(\bm{x}^{(i)}, y^{(i)})| i = 1, ... N\}$, où $\bm{x}^{(i)}$ sont des vecteurs $n$-dimensionnels. Pour la mise à jour des poids et du biais il faut suivre les étapes suivantes :}
+\begin{enumerate}
+    \item Initialiser le vecteur des poids $\bm{x}^{(i)}$ et le biais b avec des valeurs nulles (ou des valeurs aléatoires proches de 0)
+    \item Itérer en mettant à jour le vecteur de poids $\bm{w}$ le biais b selon les règles suivantes :
+    \begin{enumerate}
+        \item Choisir un échantillon arbitraire : $(\bm{x}^{(i)}, y^{(i)})$
+        \item Calculer la valeur prédite $\hat{y}^{(i)} = H(\bm{w} \cdot \bm{x}^{(i)} + b)$
+        \item Utiliser la mise à jour des paramètres (équation \ref{eq:perceptron_maj1} et \ref{eq:perceptron_maj2} ci-dessous) :
+        \vspace{20pt}
+        \begin{align}
+            \bm{w} &\leftarrow \bm{w} - \alpha \cdot (\hat{y}^{(i)} - y^{(i)}) \cdot \bm{x}^{(i)}
+            \label{eq:perceptron_maj1}\\
+            b &\leftarrow b - \alpha \cdot (\hat{y}^{(i)} - y^{(i)})
+            \label{eq:perceptron_maj2}
+        \end{align}
+    \end{enumerate}
+\end{enumerate}
+
+Le taux d'apprentissage $\alpha$ (``learning rate'') est un paramètre de l'algorithme, cette valeur doit être positive. Une valeur de départ tel que $\alpha = 0.1$ semble judicieuse pour démarrer.
+
+L'actualisation du vecteur de poids et le biais a lieu seulement si la valeur prédite et celle connues sont différentes $\hat{y}^{(i)} = H(\bm{w} \cdot x^{(i)} + b) \neq y^{(i)}$.
+
+En résumé, les neurones artificielles sont des modèles mathématiques inspirés du cerveau humain. Le neurone de McCulloch-Pitts (1943) est une unité binaire avec un seuil d'activation, mais il présente des limitations. Le perceptron de Rosenblatt (1958) améliore ce modèle en utilisant des nombres réels et en permettant l'apprentissage et la mise à jour des poids et biais.
+
+\subsection{Réseau de neurones}
+
+La combinaison de plusieurs perceptrons va créer un réseau de neurones. Cela va créer un réseau de neurones d'une seule couche où les perceptrons sont tous connectés à l'entrée (Figure \ref{fig:A1_05_reseau_neurones_simple}).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{03-tail//A1_fondamentaux_ML//A1_figures/A1_05_reseau_neurones_simple.png}
+    \caption{Réseau de neurones avec plusieurs perceptrons interconnectés \cite{zahn_cours_2024}}
+    \label{fig:A1_05_reseau_neurones_simple}
+\end{figure}
+
+C'est aussi possible de connecter plusieurs couches de perceptron entre eux, tel qu'illustré dans la Figure \ref{fig:A1_06_perceptron_multicouche}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\linewidth]{03-tail//A1_fondamentaux_ML//A1_figures/A1_06_perceptron_multicouche.png}
+    \caption{Perceptron multicouche \cite{zahn_cours_2024}}
+    \label{fig:A1_06_perceptron_multicouche}
+\end{figure}
+
+Pour améliorer les performances du perceptron, la fonction d'activation de Heaviside (Équation~\ref{eq:heaviside}) est remplacée par la fonction d'activation de sigmoid (Equation \ref{eq:sigmoid}).
+
+\begin{equation}
+\sigma(z) = \frac{1}{1 + e^{-z}}
+\label{eq:sigmoid}
+\end{equation}
+
+Cette fonction (Figure \ref{fig:A1_07_fonction_activation_sigmoid}) va permettre au perceptron de retourner des valeurs entre 0 et 1, ce qui va augmenter considérablement les capacités du perceptron.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\linewidth]{03-tail//A1_fondamentaux_ML//A1_figures/A1_07_fonction_activation_sigmoid.png}
+    \caption{Fonction d'activation sigmoid}
+    \label{fig:A1_07_fonction_activation_sigmoid}
+\end{figure}
+
+Le perceptron multicouche est suffisamment sophistiqué pour réaliser de la reconnaissance de caractères sur le dataset MNIST \cite{lecun_gradient-based_1998}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\linewidth]{03-tail//A1_fondamentaux_ML//A1_figures/A1_08_dataset_mnist.png}
+    \caption{Dataset MNIST \cite{lecun_gradient-based_1998}}
+    \label{fig:A1_08_dataset_mnist}
+\end{figure}
+
+Ce dataset (Figure \ref{fig:A1_08_dataset_mnist}) consiste en 70'000 images de chiffres écrits à la main (60k entraînement et 10k test) labellisés. Chaque image a une taille de 28x28 pixels en noir et blanc.
+
+Ces évolutions posent la fondation pour les réseaux de neurones modernes qui sont l'état de l'art dans le domaine.
+
+\subsection{Évaluation de la performance d'un modèle}
+\label{subsec:evaluation_performance_modele}
+
+L'évaluation des performances d'un modèle est primordiale pour savoir si le modèle fonctionne comme il devrait. Cela est réalisé sur la base de données déjà annotées.
+
+Le Tableau \ref{tab:metriques_ml} résume les principales métriques. L'exemple est la détection de pirates qui pourraient essayer de dévier un avion de sa trajectoire.
+\renewcommand{\arraystretch}{1.8}
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|p{2cm}|p{4cm}|p{4cm}|c|}
+    \hline
+    \textbf{Terme} & \textbf{Définition} & \textbf{Exemple} & \textbf{Formule} \\
+    \hline
+    True Positive (TP) & La classe prédite spécifiquement recherchée (positive) est identique à la classe annotée. & Le modèle a détecté un pirate. C'est un pirate. & \\
+    \hline
+    True Negative (TN) & La classe prédite non souhaitée (négative) est identique à la classe annotée. & Le modèle a détecté qu'il ne s'agit pas d'un pirate. Ce n'est pas un pirate. & \\
+    \hline
+    False Positive (FP) & La classe prédite spécifiquement recherchée (positive) est différente à la classe annotée. & Le modèle a détecté un pirate. Ce n'est pas un pirate. La personne n'est pas contente d'être fouillée. & \\
+    \hline
+    False Negative (FN) & La classe prédite non souhaitée (négative) est différente à la classe annotée. & Le modèle a détecté qu'il ne s'agit pas d'un pirate. C'est un pirate. & \\
+    \hline
+    Accuracy (ACC) & L'accuracy mesure la proportion d'images correctement classées parmi toutes les images de l'ensemble de test. & & {\small$\displaystyle\frac{TP + TN}{TP + TN + FP + FN}$} \\
+    \hline
+    Precision (P) & La précision mesure la proportion de vrais positifs (TP) parmi toutes les prédictions positives faites par l'algorithme. & & {\small$\displaystyle\frac{TP}{TP + FP}$} \\
+    \hline
+    Recall (R) & Le recall mesure la proportion de vrais positifs parmi toutes les instances positives réelles. & & {\small$\displaystyle\frac{TP}{TP + FN}$} \\
+    \hline
+    F1-score & Le F1-score est la moyenne harmonique de la précision (P) et du recall (R). Il fournit une mesure équilibrée de ces deux éléments. & & {\small$\displaystyle\frac{2 \cdot P \cdot R}{P + R}$} \\
+    \hline
+    \end{tabular}
+    \caption{Résumé des principales métriques utilisées en machine learning pour évaluer la performance}
+    \label{tab:metriques_ml}
+\end{table}
+
+La matrice de confusion est un outil qui permet d'évaluer les performances d'un modèle.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|}
+    \cline{3-4}
+    \multicolumn{1}{c}{} & \multicolumn{1}{c|}{} & \multicolumn{2}{c|}{\textbf{Prédiction}} & \multicolumn{1}{c}{} \\
+    \cline{3-5}
+    \multicolumn{1}{c}{} & \multicolumn{1}{c|}{} & \textbf{Positif} & \textbf{Négatif} & \textbf{Total} \\
+    \hline
+    \multirow{2}{*}{\textbf{Réalité}} & \textbf{Positif} & \textbf{TP} & FN & FN + TP \\
+    \cline{2-5}
+    & \textbf{Négatif} & FP & \textbf{TN} & FP + TN \\
+    \hline
+    \multicolumn{1}{c|}{} & \textbf{Total} & TP + FP & FN + TN & N \\
+    \cline{2-5}
+    \end{tabular}
+    \caption{Matrice de confusion}
+    \label{tab:matrice_confusion}
+\end{table}
+
+Le Tableau \ref{tab:matrice_confusion_exemple} illustre un exemple pratique de toutes les métriques pour la détection d'un chat (positif) sur une image.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|}
+    \cline{3-4}
+    \multicolumn{1}{c}{} & \multicolumn{1}{c|}{} & \multicolumn{2}{c|}{\textbf{Prédiction}} & \multicolumn{1}{c}{} \\
+    \cline{3-5}
+    \multicolumn{1}{c}{} & \multicolumn{1}{c|}{} & \textbf{Positif} & \textbf{Négatif} & \textbf{Total} \\
+    \hline
+    \multirow{2}{*}{\textbf{Réalité}} & \textbf{Positif} & \textbf{TP}=5 & FN=3 & FN+TP=3+5=8 \\
+    \cline{2-5}
+    & \textbf{Négatif} & FP=2 & \textbf{TN}=17 & FP+TN=2+17=19 \\
+    \hline
+    \multicolumn{1}{c|}{} & \textbf{Total} & TP+FP=5+2=7 & FN+TN=3+17=20 & N=7+20=8+19=27 \\
+    \cline{2-5}
+    \end{tabular}
+    \caption{Matrice de confusion}
+    \label{tab:matrice_confusion_exemple}
+\end{table}
+
+\begin{align}
+    ACC &= \frac{TP + TN}{TP + TN + FP + FN} = \frac{23}{27} = 0.85 \\
+    P &= \frac{TP}{TP + FP} = \frac{5}{7} = 0.71 \\
+    R &= \frac{TP}{TP + FN} = \frac{5}{8} = 0.63 \\
+    F1 &= \frac{2 \cdot P \cdot R}{P + R} = \frac{2 \cdot 0.71 \cdot 0.63}{0.71 + 0.63} = 0.67
+    \label{eq:metriques_exemple}
+\end{align}
+
+Dans ce cas on voit que l'accuracy est de 85\%, le modèle classifie correctement (TP + TN) 85\% de toutes les images (TP + TN + FP + FN).
+
+Sa précision est de 71\%, le modèle classifie correctement (TP) 71\% des images de chat qu'il a détecté en tant que chat (TP + FP).
+
+Son recall est de 63\%, le modèle classifie correctement (TP) 63\% des images parmi toutes les images de chat (FN + TP).
+
+Le F1-score est de 67\% ce qui indique un modèle qui n'est pas très performant. Les différentes métriques doivent être prise en compte car c'est possible qu'un modèle ait une bonne accuracy mais un recall mauvais. Le F1-score représente un bon indicateur de performance globale du modèle.
+
+Ces métriques peuvent être appliquées à des modèles avec plusieurs classes, l'idée est que l'on compare la classe qui nous intéresse (positive) par rapport au reste qui devient la classe négative. Le Tableau \ref{tab:matrice_confusion_multiclasse} représente un exemple avec 3 classes.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|c|}
+    \cline{3-5}
+    \multicolumn{1}{c}{} & \multicolumn{1}{c|}{} & \multicolumn{3}{c|}{\textbf{Prédiction}} & \multicolumn{1}{c}{} \\
+    \cline{3-6}
+    \multicolumn{1}{c}{} & \multicolumn{1}{c|}{} & \textbf{Chat} & \textbf{Chien} & \textbf{Lapin} & \textbf{Total} \\
+    \hline
+    \multirow{3}{*}{\textbf{Réalité}} & \textbf{Chat} & 5 & 3 & 0 & 8 \\
+    \cline{2-6}
+    & \textbf{Chien} & 2 & 3 & 1 & 6 \\
+    \cline{2-6}
+    & \textbf{Lapin} & 0 & 2 & 11 & 13 \\
+    \hline
+    \multicolumn{1}{c|}{} & \textbf{Total} & 7 & 8 & 12 & 27 \\
+    \cline{2-6}
+    \end{tabular}
+    \caption{Matrice de confusion avec un exemple de plusieurs classes}
+    \label{tab:matrice_confusion_multiclasse}
+\end{table}
+
+Si l'on souhaite connaître les métriques de la classe chat, on peut de manière intuitive prendre les données des chats et les considérer comme positives. Les autres classes seront quant à elles, considérées comme négatives.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|}
+    \cline{3-4}
+    \multicolumn{1}{c}{} & \multicolumn{1}{c|}{} & \multicolumn{2}{c|}{\textbf{Prédiction}} & \multicolumn{1}{c}{} \\
+    \cline{3-5}
+    \multicolumn{1}{c}{} & \multicolumn{1}{c|}{} & \textbf{Positif} & \textbf{Négatif} & \textbf{Total} \\
+    \hline
+    \multirow{2}{*}{\textbf{Réalité}} & \textbf{Positif} & \textbf{TP}=5 & FN=3 & FN+TP=3+5=8 \\
+    \cline{2-5}
+    & \textbf{Négatif} & FP=2 & \textbf{TN}=17 & FP+TN=2+17=19 \\
+    \hline
+    \multicolumn{1}{c|}{} & \textbf{Total} & TP+FP=5+2=7 & FN+TN=3+17=20 & N=7+20=8+19=27 \\
+    \cline{2-5}
+    \end{tabular}
+    \caption{Matrice de confusion}
+    \label{tab:matrice_confusion_multiclasse_reduction}
+\end{table}
+
+Dans le Tableau \ref{tab:matrice_confusion_multiclasse_reduction} on observe que la somme des colonnes chien et lapin correspond bien à la colonne négative. Ainsi les mêmes formules qu'avant peuvent être utilisées.
+
+\newpage
+\section{Données}
+
+Les données sont très importantes pour élaborer des modèles performants. Dans le contexte du machine learning, les données sont généralement stockées dans un dataset ou jeu de données contenant des exemples étiquetés. Ce chapitre va explorer les principaux types de données que l'on retrouve fréquemment en machine learning ainsi que dans le domaine de la géomatique.
+
+Il y a une grande variété de données qui peuvent être utilisées en machine learning :
+\begin{itemize}
+    \item Texte
+    \item Images
+    \item Audio
+    \item Vidéo
+    \item Données qui évoluent en fonction du temps (séries temporelles) tel que la température, cotation en bourse, etc.
+\end{itemize}
+
+Le type de données qui sont en lien avec la géomatique et qui seront traités dans ce chapitre sont :
+\begin{itemize}
+    \item Images
+    \item Orthophotos
+    \item Nuage de points \gls{lidar}
+    \item Données vectorielles
+\end{itemize}
+
+\newpage
+\subsection{Images}
+
+Les images sont des données très utilisées dans la ``computer vision'' qui est une des disciplines du machine learning.
+
+Un exemple de dataset d'images est le ``CIFAR-10'' \cite{krizhevsky_learning_2009}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{03-tail//A1_fondamentaux_ML//A1_figures/A1_09_cifar.png}
+    \caption{Dataset d'images CIFAR-10 \cite{krizhevsky_cifar-10_nodate}}
+    \label{fig:A1_09_cifar}
+\end{figure}
+
+Ce dataset a les caractéristiques suivantes :
+\begin{itemize}
+    \item 60000 images en couleur (partagées en 50000 d'entraînement et 10000 de test)
+    \item 10 classes
+    \item 6000 images par classe
+    \item Images de taille 32x32 pixels en RVB (rouge, vert, bleu)
+\end{itemize}
+
+Ce dataset est très utilisé pour apprendre à créer des réseaux de neurones simples, efficients qui arrivent à obtenir d'excellentes performances.
+
+\newpage
+\subsection{Orthophotos}
+\label{subsec:annexe_ortophotos}
+
+En géomatique, une orthophoto est un type de photographie aérienne qui offre une représentation rectifiée d'une zone géographique.
+
+Les orthophotos sont créées en utilisant des images satellitales ou aériennes de haute résolution, souvent acquises par des systèmes tels que les caméras embarquées sur des avions ou des drones. Pour obtenir une orthophoto de qualité, il est nécessaire de suivre un processus complexe comprenant plusieurs étapes :
+\begin{itemize}
+    \item Acquisition des images : Les images sont prises à partir d'un appareil photo aérien ou satellitaire, généralement à partir d'une altitude élevée.
+    \item Rectification géométrique : Les images sont rectifiées pour corriger les distorsions liées à la perspective et aux mouvements de l'appareil photo pendant la prise de vue.
+    \item Mosaïque des images : Les images sont assemblées (mises en mosaïque) pour former une image unique et continue, qui couvre la zone géographique souhaitée.
+    \item Correction de la topographie : La surface du terrain est corrigée pour prendre en compte les élévations et les dénivellations, ce qui permet d'obtenir une représentation tridimensionnelle exacte.
+    \item Traitement des données : Les images sont traitées pour éliminer les bruits, les artefacts et les imperfections, ce qui améliore la qualité de l'image finale.
+\end{itemize}
+
+Il existe 3 types différents d'orthophotos \cite{barrette_different_2022} :
+\begin{itemize}
+    \item Orthophoto dynamique
+    \item Orthomosaïque
+    \item ``True orthophoto''
+\end{itemize}
+
+\subsubsection{Orthophoto dynamique}
+
+Les orthophotos dynamiques sont générés de manière dynamique à partir d'images sources, en utilisant un modèle numérique de terrain comme référence.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{03-tail//A1_fondamentaux_ML//A1_figures/A1_10_ortophoto_dynamique1.png}
+    \caption{Exemple d’orthophoto dynamique \cite{barrette_different_2022}}
+    \label{fig:A1_10_ortophoto_dynamique1}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{03-tail//A1_fondamentaux_ML//A1_figures/A1_11_orthophoto_dynamique2.png}
+    \caption{Deuxième exemple d’orthophoto dynamique \cite{barrette_different_2022}}
+    \label{fig:A1_11_orthophoto_dynamique2}
+\end{figure}
+
+\newpage
+Les avantages sont :
+\begin{itemize}
+    \item Génération rapide des orthophotos
+    \item Permet de visualiser une zone avec plusieurs perspectives différentes
+\end{itemize}
+
+Le principal inconvénient est que les objets non-terrain (bâtiments par exemple), peuvent apparaître inclinés (voir Figures \ref{fig:A1_10_ortophoto_dynamique1} et \ref{fig:A1_11_orthophoto_dynamique2}). Les caractéristiques aériennes peuvent sembler se déplacer lorsque l'image est déplacée en raison de la visualisation des objets depuis différentes directions.
+
+\subsubsection{Orthomosaïque}
+
+Les orthomosaïques sont créés en fusionnant plusieurs images en une seule image cohérente. La Figure \ref{fig:A1_12_orthomosaique}  de la page suivante représente un exemple d'orthomosaïque.
+
+Les principaux avantages des orthomosaïques sont :
+\begin{itemize}
+    \item Image plus compacte, ce qui permet un affichage plus rapide
+    \item Génération rapide, en particulier si un modèle numérique de terrain est disponible
+    \item Peuvent être créés à partir d'images avec moins de recouvrement, ce qui peut réduire les exigences de capture de données
+\end{itemize}
+
+Les principaux inconvénients des orthomosaïques sont :
+\begin{itemize}
+    \item Pas précis pour les objets hors sol qui peuvent sembler inclinés loin de la caméra.
+    \item Peuvent avoir des artefacts visuels causés par les angles de caméra.
+    \item Les lignes de séparation utilisées lors de la génération de l'image peuvent être visibles (voir Figure~\ref{fig:A1_13_orthomosaique_lignes} de la page suivante)
+\end{itemize}
+
+\newpage
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{03-tail//A1_fondamentaux_ML//A1_figures/A1_12_orthomosaique.png}
+    \caption{Exemple d’orthomosaïque \cite{barrette_different_2022}}
+    \label{fig:A1_12_orthomosaique}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{03-tail//A1_fondamentaux_ML//A1_figures/A1_13_orthomosaique_lignes.png}
+    \caption{Exemple d'orthomosaïque avec lignes de séparation \cite{barrette_different_2022}}
+    \label{fig:A1_13_orthomosaique_lignes}
+\end{figure}
+
+\newpage
+\subsubsection{``True orthophoto''}
+
+Les true orthophotos sont créés en utilisant un modèle numérique de surface très détaillé pour générer une orthophoto de sortie précise pour tous les pixels (Figure \ref{fig:A1_14_true_orthophoto}).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{03-tail//A1_fondamentaux_ML//A1_figures/A1_14_true_orthophoto.png}
+    \caption{Exemple de true orthophoto \cite{barrette_different_2022}}
+    \label{fig:A1_14_true_orthophoto}
+\end{figure}
+
+Les avantages des true orthophotos sont les suivants :
+\begin{itemize}
+    \item Fournissent des images cohérentes de haute qualité qui sont idéales pour la digitalisation de la localisation et de la taille des empreintes de bâtiment.
+    \item Peuvent être générés de manière entièrement automatique, sans nécessiter de lignes de soudure ou de lignes de rupture manuelles.
+    \item Peuvent éliminer automatiquement les objets en mouvement, les reflets ou les couleurs incohérentes.
+    \item Peuvent améliorer la radiométrie et la résolution en utilisant la redondance de plusieurs images.
+    \item Sont idéaux pour la détection de changement, car les images sont cohérentes d'une année à une autre.
+\end{itemize}
+
+Les principaux inconvénients des true orthophotos sont :
+\begin{itemize}
+    \item Plus coûteux en termes de calcul.
+    \item Nécessitent un recouvrement suffisant entre les images pour extraire un modèle numérique de surface détaillé.
+\end{itemize}
+
+Dans le cadre du machine learning, le type d'orthophoto la plus intéressante est la true orthophoto.
+
+Le Tableau \ref{tab:comparatif_orthophotos} ci-dessous synthétise les avantages et inconvénients de chacun des types d'orthophotos.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|p{2.5cm}|p{3cm}|p{1.5cm}|p{1.5cm}|p{1.5cm}|p{2cm}|}
+    \hline
+    \textbf{Type d'orthophoto} & \textbf{Génération} & \textbf{Précision objets hors sol} & \textbf{Données} & \textbf{Espace de stockage} & \textbf{Complexité de traitement} \\
+    \hline
+    Orthophoto dynamique & Généré en temps réel, moins précis pour les objets non-terrain. & + & + & + & + \\
+    \hline
+    Orthomosaïque & Créé en fusionnant plusieurs images ortho & ++ & ++ & ++ & ++ \\
+    \hline
+    True orthophoto & Créé en utilisant un modèle numérique de surface très détaillé & +++ & +++ & +++ & +++ \\
+    \hline
+    \end{tabular}
+    \caption{Comparatif des 3 types d'orthophotos}
+    \label{tab:comparatif_orthophotos}
+\end{table}
+
+\subsubsection{Fournisseurs d'orthophotos}
+
+Au niveau mondial, il y a plusieurs fournisseurs d'orthophotos \cite{stdl_recherche_2024}, voici quelques exemples :
+
+\begin{table}[htbp]
+    \centering
+    \begin{tabular}{|p{3cm}|p{3cm}|p{3cm}|p{3cm}|}
+    \cline{2-4}
+    \multicolumn{1}{c|}{} & \textbf{Sentinel-2} & \textbf{Pléiades Neo} & \textbf{WorldView Legion} \\
+    \hline
+    Entreprise/entité & Agence spatiale européenne & Airbus & Maxar \\
+    \hline
+    Prix & Gratuit & Payant & Payant \\
+    \hline
+    Fréquence de renouvellement & 5 jours & Plusieurs fois par jour & Jusqu'à 15x par jour \\
+    \hline
+    Résolution & 10m/pixel (RGB/IR) & 30cm/pixel (RGB) 1.2m/pixel (IR) & 30cm/pixel (RGB) 1.2m/pixel (IR) \\
+    \hline
+    Couleur/infrarouge & RGB/IR & RGB/IR & RGB/IR \\
+    \hline
+    \end{tabular}
+    \caption{Comparatif de 3 fournisseurs d'orthophoto mondiaux}
+    \label{tab:fournisseurs_orthophotos}
+\end{table}
+
+En ce qui concerne la Suisse, Swisstopo \cite{swisstopo_swissimage_nodate} met librement à disposition des orthophotos de tout le pays. Les détails techniques sont les suivants :
+\begin{itemize}
+    \item Systèmes de coordonnées : CH1903+/MN95 (EPSG:2056)
+    \item Résolution au sol : 0.1 m ou 0.25 m selon la région
+    \item Écart type pour la précision de la position : +/- 0.15 m pour la résolution au sol de 0.1 m.
+    \item Spécifications pour le téléchargement gratuit :
+    \begin{itemize}
+        \item Format: Cloud Optimized Geotiff (COG), RGB (3 x 8 bit), compression JPEG 95.
+        \item Découpage : $\sim$ 42 700 tuiles de 1 km sur 1 km.
+        \item Résolutions disponibles et taille des fichiers
+        \begin{itemize}
+            \item 0.1m : $\sim$ 55 Mo / tuile, 2.4 To / une couverture complète
+            \item 2m : $\sim$ 2.8 Mo / tuile, 120 Go / une couverture complète
+        \end{itemize}
+    \end{itemize}
+\end{itemize}
+
+Selon les zones géographiques, les orthophotos ont été réalisées entre 2019 et 2023. La fréquence d'actualisation est de 3 ans.
+
+Swisstopo dispose d'autres produits tel que :
+\begin{itemize}
+    \item Orthophotos ``RGB'' avec Infrarouge (4 canaux)
+    \item Orthophotos historiques
+\end{itemize}
+
+Dans le Canton de Genève, \acrshort{sitg} \cite{sitg_chiffre-cle_2025} dispose d'une grande quantité de données. En ce qui concerne les orthophotos du Canton de Genève disponibles librement :
+\begin{itemize}
+    \item Orthophotos historiques (1932-2021)
+    \item Orthophoto avec infrarouge (2021)
+    \item Orthophotos réalisées par Swisstopo (2023)
+    \begin{itemize}
+        \item Résolution de 10 cm par pixel
+    \end{itemize}
+    \item Orthophoto haute résolution (2019)
+    \begin{itemize}
+        \item Résolution de 5 cm par pixel
+        \item True orthophotos
+    \end{itemize}
+\end{itemize}
+
+\newpage
+\subsection{Nuage de points \gls{lidar}}
+
+Laser Imaging Detection And Ranging (\gls{lidar}) \cite{esri_quoi_2025} est une technique de télédétection optique qui utilise la lumière laser pour échantillonner la surface de la Terre et produire des mesures ``x, y, z'' d'une grande précision.
+
+Les données \gls{lidar} sont principalement utilisées dans des applications de cartographie laser aéroportées et commencent à s'imposer en tant qu'alternative rentable face aux techniques d'arpentage traditionnelles, telles que la photogrammétrie.
+
+Les données \gls{lidar} produisent des jeux de données de nuages de points cotés qui peuvent être gérés, visualisés, analysés à l'aide d'outils GIS (Qgis, ArcGIS, etc.).
+
+La Figure \ref{fig:A1_15_lidar_exemple} représente des objets d'exemple et la Figure \ref{fig:A1_16_lidar_exemple2} permet de voir comment ces objets sont vus par le \gls{lidar}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{03-tail//A1_fondamentaux_ML//A1_figures/A1_15_lidar_exemple1.png}
+    \caption{Objets pour le nuage de points LIDAR \cite{cadden_lidar_2021}}
+    \label{fig:A1_15_lidar_exemple}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{03-tail//A1_fondamentaux_ML//A1_figures/A1_16_lidar_exemple2.png}
+    \caption{Nuage de points LIDAR sur des objets \cite{cadden_lidar_2021}}
+    \label{fig:A1_16_lidar_exemple2}
+\end{figure}
+
+\subsubsection{Composants matériels d'un système \gls{lidar}}
+
+Les composants matériels principaux d'un système \gls{lidar} incluent un véhicule de collecte (avion, hélicoptère, véhicule et trépied), un système de scanner laser, un système de positionnement par satellite (GPS) et un système de navigation à inertie (INS). Un système INS mesure le roulis, le tangage et la direction du système \gls{lidar}.
+
+\subsubsection{Le capteur \gls{lidar}}
+
+Le \gls{lidar} est un capteur optique actif qui transmet des faisceaux laser vers une cible tout en parcourant des itinéraires d'étude spécifiques. La réflexion du laser à partir de la cible est détectée et analysée par des récepteurs dans le capteur \gls{lidar}.
+
+Ces récepteurs enregistrent la période précise qui s'écoule entre le moment où l'impulsion laser quitte le système et celui où elle est renvoyée pour calculer la distance entre le capteur et la cible.
+
+Alliées aux informations de positionnement (GPS et INS), ces mesures de distance sont transformées en mesures de points tridimensionnels réels de la cible réflectrice dans l'espace objet.
+
+\subsubsection{Post-traitement des données ponctuelles}
+
+Les données ponctuelles sont post-traitées après l'étude de la collecte des données \gls{lidar} en coordonnées x, y, z très précises en analysant la plage de temps du laser, l'angle de balayage laser, la position GPS et les informations INS.
+
+\subsubsection{Retours \gls{lidar}}
+
+Les impulsions laser émises par un système \gls{lidar} se reflètent sur des objets placés à la fois sur la surface du sol et au-dessus : végétation, bâtiments, ponts et ainsi de suite. Une impulsion laser émise peut revenir au capteur \gls{lidar} sous forme d'un ou plusieurs retours. Les impulsions laser émises qui rencontrent plusieurs surfaces de réflexion lors de leur voyage vers le sol sont fractionnées en autant de retours qu'il existe de surfaces réfléchissantes.
+
+\subsubsection{Attributs de point \gls{lidar}}
+
+Des informations complémentaires sont stockées avec chaque valeur de position x, y et z. Les attributs de point \gls{lidar} suivants sont conservés pour chaque impulsion laser enregistrée : intensité, numéro de retour, nombre de retours, valeurs de classification des points, points situés à la limite de la ligne de vol, valeurs RVB (rouge, vert et bleu), heure GPS, angle de balayage et direction du balayage.
+
+\subsubsection{Données de nuages de points}
+
+Les données \gls{lidar} spatiales post-traitées sont connues comme des données de nuages de points. Les nuages de points initiaux sont des ensembles volumineux de points d'altitude 3D qui incluent des valeurs x, y et z, ainsi que des attributs supplémentaires, tels que des horodatages GPS. Les entités de surface spécifiques que le laser rencontre sont classées après le post-traitement du nuage de points \gls{lidar} initial. Les altitudes du sol, des bâtiments, du couvert forestier, des ponts au-dessus des autoroutes et de tout ce que le faisceau laser peut rencontrer au cours de l'étude constituent des données de nuages de points.
+
+La rugosité et l'intensité sont deux informations différentes mais complémentaires fournies par les nuages de points \gls{lidar}.
+
+La rugosité mesure la variation locale de l'altitude des points dans un voisinage donné. Elle est calculée à partir des coordonnées 3D (X, Y, Z) des points et reflète la texture et l'irrégularité de la surface. Une rugosité élevée indique la présence d'obstacles ou de variations d'altitude. Cette mesure est indépendante des propriétés de réflectance des matériaux et est utilisée pour distinguer les surfaces planes des surfaces encombrées.
+
+L'intensité, quant à elle, mesure la quantité d'énergie réfléchie par la surface et enregistrée par le capteur \gls{lidar}. C'est une valeur scalaire associée à chaque point, en plus des coordonnées 3D. L'intensité dépend des propriétés de réflectance des matériaux à la longueur d'onde du laser. Elle varie selon le type de surface : elle est forte pour les surfaces réfléchissantes et faible pour les surfaces absorbantes. L'intensité peut aider à distinguer différents matériaux ou objets, mais elle est sensible aux conditions d'acquisition, telles que la distance et l'angle d'incidence.
+
+\subsubsection{Fournisseur de données \gls{lidar}}
+
+Au niveau mondial, il n'y a pas de données \gls{lidar} disponibles qui couvrent le globe entier. C'est probablement dû à des raisons de coût.
+
+En ce qui concerne la Suisse, Swisstopo \cite{swisstopo_acquisition_2024} met à disposition des données qui couvrent l'intégralité du territoire. Dans la Figure \ref{fig:A1_17_swisstopo_lidar}, on peut voir les 6 campagnes d'acquisition de données qui ont été menées. Les données sont disponibles en moyenne environ 12 mois après le survol.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{03-tail//A1_fondamentaux_ML//A1_figures/A1_17_swisstopo_lidar.png}
+    \caption{Données LIDAR disponibles en Suisse \cite{swisstopo_acquisition_2024}}
+    \label{fig:A1_17_swisstopo_lidar}
+\end{figure}
+
+Les caractéristiques des données \gls{lidar} disponibles sont les suivantes :
+\begin{itemize}
+    \item Densité de points : minimum 5 pts/m², moyenne autour de 15-20 pts/m²
+    \item Classification :
+    \begin{itemize}
+        \item Non classifiés
+        \item Sol
+        \item Végétation
+        \item Bâtiments
+        \item Eau
+        \item Ponts
+    \end{itemize}
+    \item Précision planimétrique : 20 cm
+    \item Précision altimétrique : 10 cm
+\end{itemize}
+
+Swisstopo va continuer à mettre à jour ses données dans les années suivantes (Figure \ref{fig:A1_18_swisstopo_prevision_lidar}). La prévision est que la mise à jour de ces données sera finalisée en 2030.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{03-tail//A1_fondamentaux_ML//A1_figures/A1_18_swisstopo_prevision_lidar.png}
+    \caption{Prévision d’acquisition de données LIDAR en Suisse \cite{swisstopo_acquisition_2024}}
+    \label{fig:A1_18_swisstopo_prevision_lidar}
+\end{figure}
+
+\newpage
+En ce qui concerne le canton de Genève, les dernières données \gls{lidar} \cite{sitg_nuages_2021} \cite{sitg_nuages_2023} disponibles sont:
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|p{2.5cm}|p{5.25cm}|p{5.25cm}|}
+    \cline{2-3}
+    \multicolumn{1}{c|}{} & \textbf{2021} & \textbf{2023} \\
+    \hline
+    Densité de points & 175-220 pts/m² & 100 pts/m² \\
+    \hline
+    Classification & \begin{itemize}[leftmargin=*, topsep=0pt, itemsep=0pt, parsep=0pt]
+        \item Non classifié
+        \item Sol
+        \item Basse végétation (<50cm)
+        \item Haute végétation (>50cm)
+        \item Bâtiments
+        \item Points bas ou isolés
+        \item Eau
+        \item Ponts, passerelles
+        \item Sol (points complémentaires)
+        \item Bruit
+        \item Points mesurés hors périmètre
+    \end{itemize} & \begin{itemize}[leftmargin=*, topsep=0pt, itemsep=0pt, parsep=0pt]
+        \item Non classifié
+        \item Sol
+        \item Basse végétation (<50cm)
+        \item Moyenne végétation (0.5-3m)
+        \item Haute végétation (>3m)
+        \item Bâtiments
+        \item Points bas ou isolés/erreurs
+        \item Eau
+        \item Piles de matériel naturelle
+        \item Ponts, passerelles
+        \item Câbles
+        \item Mâts, antennes
+        \item Ponts, passerelles
+        \item Bruit
+        \item Voitures
+        \item Façades
+        \item Grues, objets temporaires
+        \item Objets sur les toits
+        \item Murs
+        \item Points de sol additionnels
+    \end{itemize} \\
+    \hline
+    Précision planimétrique & 8 cm & 20 cm \\
+    \hline
+    Précision altimétrique & 4 cm & 10 cm \\
+    \hline
+    \end{tabular}
+    \caption{Données \gls{lidar} disponibles dans le canton de Genève}
+    \label{tab:lidar_geneve_compact}
+\end{table}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\linewidth]{03-tail//A1_fondamentaux_ML//A1_figures/A1_19_geneve_lidar.png}
+    \caption{Représentation à partir des données LIDAR d’une partie du canton de Genève \cite{sitg_nuages_2023}}
+    \label{fig:A1_19_geneve_lidar}
+\end{figure}
+La représentation ci-dessus (Figure~\ref{fig:A1_19_geneve_lidar}) permet d'avoir une idée à quoi ressemble le nuage de points \gls{lidar}.
+
+\subsection{Données vectorielles}
+\label{subsec:annexe_donnees_vectorielles}
+Les données vectorielles sont un moyen de représenter des informations géométriques à l'aide de valeurs numériques. Contrairement aux données matricielles, qui représentent les informations sous la forme d'une grille de valeurs de pixels, les données vectorielles utilisent des points, des lignes et des polygones pour définir les formes et les limites. Chaque point, ligne ou polygone est représenté par un ensemble de coordonnées (x, y et parfois z) qui définissent son emplacement dans l'espace.
+
+Il existe plusieurs types de données vectorielles :
+\begin{itemize}
+    \item Les points : Représentés par un seul jeu de coordonnées (x, y, z), les points sont souvent utilisés pour représenter des emplacements spécifiques, tels que des adresses ou des points de repère.
+    \item Les lignes : Représentées par une série de points connectés, les lignes sont souvent utilisées pour représenter des frontières, des routes ou d'autres caractéristiques linéaires.
+    \item Polygones : Représentés par une série de points connectés qui forment une forme fermée, les polygones sont souvent utilisés pour représenter des zones, telles que des bâtiments, des parcelles ou des limites de zonage.
+\end{itemize}
+
+Les données vectorielles sont largement utilisées en géomatique pour diverses applications, notamment :
+\begin{itemize}
+    \item SIG : Les données vectorielles sont utilisées pour créer, éditer et analyser des données géospatiales dans les logiciels SIG.
+    \item Analyse spatiale : Les données vectorielles sont utilisées pour effectuer des analyses spatiales, telles que le calcul de distances, de zones tampons et d'intersections.
+    \item Cartographie : Les données vectorielles sont utilisées pour créer des cartes et visualiser des données géospatiales.
+    \item L'urbanisme : Les données vectorielles sont utilisées pour planifier et concevoir des infrastructures urbaines, telles que des routes, des bâtiments et des parcs.
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{03-tail//A1_fondamentaux_ML//A1_figures/A1_20_donnees_vectorielles_exemple.png}
+    \caption{Exemple de données vectorielles de \acrshort{sitg}. Rue de la Prairie 8 à Genève}
+    \label{fig:A1_20_donnees_vectorielles_exemple}
+\end{figure}
+
+La Figure~\ref{fig:A1_20_donnees_vectorielles_exemple} montre un exemple de données vectorielles extraites de \acrshort{sitg}, le portail de géodonnées du canton de Genève. En plus des points, lignes et polygones il est possible d'associer des données en forme de tableau (Figure~\ref{fig:A1_21_donnees_vectorielles_tableau}).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\linewidth]{03-tail//A1_fondamentaux_ML//A1_figures/A1_21_donnees_vectorielles_tableau.png}
+    \caption{Exemple de données tabulaires associées a un polygone. Rue de la Prairie 8 à Genève. Données de \acrshort{sitg}}
+    \label{fig:A1_21_donnees_vectorielles_tableau}
+\end{figure}
+
+Les données sont organisées en couches vectorielles. Dans ces deux figures d'exemple, la couche des bâtiments hors sol est représentée. Chaque couche regroupe en général une thématique comme les bâtiments, les arbres, etc.
+
+Il existe une très grande quantité de données vectorielles tant au niveau Suisse et genevois.
+
+\acrshort{sitg} dispose de plus de 1575 couches de données \cite{sitg_chiffre-cle_2025}, dont environ 200 couches raster et plus de 1375 couches vectorielles, ce qui représente une très grande quantité de données.
+
+Les données de l'administration publique suisse sont regroupées sur un site web\footnote{\url{https://opendata.swiss/fr}} pour simplifier l'accès à ces données publiques. Le site compte plus de 10000 couches (vectorielles, raster, etc.) qui sont produites par les communes, cantons, confédération et autres entités publiques. Les thématiques traitées sont très diverses par exemple, l'environnement, l'économie, la santé, etc.
+
+Swisstopo met à disposition du publique un site\footnote{\url{https://map.geo.admin.ch/}} pour visualiser toutes les données disponibles dans une interface conviviale.
+
+\newpage
+\section{Machine learning appliqué aux images}
+
+L'analyse d'images est un domaine important du machine learning, qui permet aux machines d'analyser, de comprendre et de déduire des informations à partir d'images. La Figure \ref{fig:A1_22_schema_ml} ci-dessous illustre les principales applications.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{03-tail//A1_fondamentaux_ML//A1_figures/A1_22_schema_ml.png}
+    \caption{Exemple de classification, détection, segmentation, suivi et analyse de pose \cite{ultralytics_classer_nodate}}
+    \label{fig:A1_22_schema_ml}
+\end{figure}
+
+Les principales applications sont :
+\begin{itemize}
+    \item Classification d'images
+    \item Détection d'objets
+    \item Segmentation d'images
+\end{itemize}
+
+Il existe d'autres applications tel que le suivi (compter des objets dans une vidéo) et l'estimation de pose (évaluer la position du corps), mais ils ne seront pas traités dans ce rapport car leur application à la géomatique est très limitée.
+
+\newpage
+La Figure~\ref{fig:A1_23_image_exemple} ci-dessous va permettre d'illustrer les différentes applications.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{03-tail//A1_fondamentaux_ML//A1_figures/A1_23_image_exemple.png}
+    \caption{Orthophoto de la haute école du paysage, d’ingénierie et architecture de Genève (hepia), situé à la rue de la Prairie 4}
+    \label{fig:A1_23_image_exemple}
+\end{figure}
+
+\subsection{Classification d'images}
+
+Cette tâche consiste à classer une image dans l'une des catégories prédéfinies. Par exemple, classer une image en fonction de son contenu (par exemple, chat, chien, voiture, etc.). Les modèles utilisés pour la classification d'images sont généralement entraînés sur des données étiquetées où chaque image est associée à une seule catégorie.
+
+Dans la Figure~\ref{fig:A1_23_image_exemple} d'exemple, la classification va identifier dans l'image les deux classes soit ``rooftop'' et ``solar-panel''. L'image en soi n'aura pas d'annotation particulière, car la classification identifie ce qu'il y a sur l'image mais pas la position exacte. Le modèle va retourner les classes et la probabilité qu'estime le modèle que la classe soit présente. La classe sélectionnée sera celle qui a la probabilité la plus élevée.
+
+La Figure \ref{fig:A1_24_classification} représente un deuxième exemple de classification d'images.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{03-tail//A1_fondamentaux_ML//A1_figures/A1_24_classification.png}
+    \caption{Exemple de classification d'image \cite{ultralytics_classer_nodate}}
+    \label{fig:A1_24_classification}
+\end{figure}
+
+\subsection{Détection d'objets}
+La détection va identifier les différentes classes sur l'image, ainsi que leur position. Les modèles utilisés pour la détection d'objets sont généralement entraînés sur des données étiquetées où chaque objet est associé à une boîte englobante et une étiquette de classe.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{03-tail//A1_fondamentaux_ML//A1_figures/A1_25_detection_hepia.png}
+    \caption{Orthophoto d'exemple de détection}
+    \label{fig:A1_25_detection_hepia}
+\end{figure}
+
+Dans la Figure \ref{fig:A1_25_detection_hepia} on observe que la détection permet de savoir quelle classe est présente sur l'image, sa position mais pas le contour exact de l'objet. Le chiffre indiqué après la classe indique la probabilité estimée par le modèle que l'objet détecté appartienne à une certaine classe.
+
+\subsection{Segmentation d'image}
+\label{subsec:segmentation_image}
+
+Il y a principalement 3 types de segmentation d'image qui sont couramment utilisés :
+\begin{itemize}
+    \item Segmentation sémantique
+    \item Segmentation instance
+    \item Segmentation panoptique
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    
+    % Première ligne
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{03-tail//A1_fondamentaux_ML//A1_figures/A1_26_segmentation_image_exemple.png}
+        \caption{Image d'exemple}
+        \label{fig:A1_26_segmentation_image_exemple}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{03-tail//A1_fondamentaux_ML//A1_figures/A1_27_segmentation_semantique.png}
+        \caption{Segmentation sémantique}
+        \label{fig:A1_27_segmentation_semantique}
+    \end{subfigure}
+    
+    \vspace{0.5cm} % Espace entre les lignes
+    
+    % Deuxième ligne
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{03-tail//A1_fondamentaux_ML//A1_figures/A1_28_segmentation_instance.png}
+        \caption{Segmentation instance}
+        \label{fig:A1_28_segmentation_instance}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{03-tail//A1_fondamentaux_ML//A1_figures/A1_29_segmentation_panoptique.png}
+        \caption{Segmentation panoptique}
+        \label{fig:A1_29_segmentation_panoptique}
+    \end{subfigure}
+    
+    \caption{Comparaison des différents types de segmentation d'image \cite{jung_benchmarking_2022}}
+    \label{fig:types_segmentation}
+\end{figure}
+
+La segmentation sémantique (Figure \ref{fig:A1_27_segmentation_semantique}) va assigner une classe à chaque pixel de l'image. Ce genre de segmentation est utile pour distinguer par exemple les routes des immeubles, mais ce n'est pas assez sophistiqué pour distinguer les routes entre elles.
+
+La segmentation instance (Figure~\ref{fig:A1_28_segmentation_instance}) va permettre d'identifier les différents éléments d'une image, mais ne va pas lui assigner une classe.
+
+La segmentation panoptique (Figure~\ref{fig:A1_29_segmentation_panoptique}) est la combinaison des segmentations sémantique et instance. C'est la plus sophistiquée car elle permet d'assigner une classe à chaque pixel de l'image et en plus, fait la différence entre les différents objets appartenant à une même classe.
+
+Le Tableau~\ref{tab:comparatif_segmentation} ci-dessous résume les différences.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|p{2cm}|p{3.75cm}|p{3.75cm}|p{3.75cm}|}
+    \cline{2-4}
+    \multicolumn{1}{c|}{} & \textbf{Segm. sémantique} & \textbf{Segm. instance} & \textbf{Segm. panoptique} \\
+    \hline
+    Définition & Chaque pixel est assigné à une classe connue & Détecte les contours des objets, lui assigne un identifiant unique (``objet\_1'') à chaque objet. Ne lui attribue pas de classe. & Mélange de segmentation sémantique et instance. Chaque pixel a une classe et il peut différencier entre plusieurs objets de la même classe. \\
+    \hline
+    Sortie & Contours avec une classe attribuée & Contour par objet segmenté & Contour par objet segmenté avec un label \\
+    \hline
+    Sépare les objets de la même classe & Non & Oui, mais ne distingue pas les classes & Oui \\
+    \hline
+    \end{tabular}
+    \caption{Comparatif des différents types de segmentation d'image}
+    \label{tab:comparatif_segmentation}
+\end{table}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{03-tail//A1_fondamentaux_ML//A1_figures/A1_30_segmentation_semantique_hepia.png}
+    \caption{Orthophoto d'exemple de segmentation}
+    \label{fig:A1_30_segmentation_semantique_hepia}
+\end{figure}
+
+La Figure~\ref{fig:A1_30_segmentation_semantique_hepia} est un exemple de segmentation sémantique, en plus de connaître la classe présente dans l'image, on connaît aussi le contour exact de l'objet. Comme pour la détection, le chiffre indiqué après la classe indique la probabilité estimée par le modèle que l'objet segmenté appartient à une certaine classe. Les chiffres sont identiques dans la Figure~\ref{fig:A1_25_detection_hepia} et la Figure~\ref{fig:A1_30_segmentation_semantique_hepia}.
+
+\subsection{Évaluation des performances}
+\label{subsec:evaluation_des_performances}
+
+L'évaluation des performances dans le domaine de la vision par ordinateur (« computer vision ») a nécessité de développer des métriques spécifiques :
+\begin{itemize}
+    \item Intersection sur l'union (IoU) et moyenne de l'intersection sur l'union (mIoU)
+    \item Average precision (AP)
+    \item Mean average precision (mAP)
+    \item Pixel accuracy (PA)
+\end{itemize}
+
+\subsubsection{Intersection sur l'union (IoU) et moyenne de l'intersection sur l'union (mIoU)}
+
+L'intersection sur l'Union (IoU) mesure le chevauchement entre le masque de segmentation prédit et le masque de vérité terrain. Elle est calculée comme la zone d'intersection divisée par la zone d'union entre les deux masques. La Figure~\ref{fig:A1_31_iou_concept} illustre ce concept. Plus le masque prédit par le modèle est proche de la valeur annotée (vérité terrain), plus le IoU sera élevé. Un IoU élevé indique que le modèle prédit bien.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.50\linewidth]{03-tail//A1_fondamentaux_ML//A1_figures/A1_31_iou_concept.png}
+    \caption{Intersection sur l’union \cite{rosebrock_intersection_2016}}
+    \label{fig:A1_31_iou_concept}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.39\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{03-tail//A1_fondamentaux_ML//A1_figures/A1_32_iou_exemple1.png}
+        \caption{Exemple de bon IoU \cite{mechea_panoptic_2019}}
+        \label{fig:A1_32_iou_exemple1}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{03-tail//A1_fondamentaux_ML//A1_figures/A1_33_iou_exemple2.png}
+        \caption{Exemple de mauvais IoU \cite{mechea_panoptic_2019}}
+        \label{fig:A1_33_iou_exemple2}
+    \end{subfigure}
+    \caption{Exemples de IoU \cite{mechea_panoptic_2019}}
+    \label{fig:iou_exemples}
+\end{figure}
+
+Dans la Figure~\ref{fig:iou_exemples}, on peut voir deux exemples de IoU. La Figure \ref{fig:A1_32_iou_exemple1} représente un IoU de 0.8, ce qui indique que le modèle a détecté un chat (cadre magenta) proche de la vérité terrain (cadre noir), cette détection devient un true positive (TP).
+
+Dans la Figure \ref{fig:A1_33_iou_exemple2}, on observe que le modèle a détecté un chat (cadre magenta) là où il n'y en avait pas, cette détection devient un false positive (FP). Le modèle n'a pas vu le chat (cadre noir), cela comptera comme un false negative (FN).
+
+L'intersection moyenne sur l'union (mIoU) est la moyenne de l'IoU pour toutes les classes.
+
+\subsubsection{Average precision (AP)}
+
+L'average precision (AP) se base sur le graphique precision-recall (Figure~\ref{fig:A1_34_precision_recall}), ce graphique a dans l'axe des abscisses (x) le recall et dans l'axe des ordonnées (y) la precision. C'est un graphique qui va permettre de visualiser le lien entre la precision et le recall.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{03-tail//A1_fondamentaux_ML//A1_figures/A1_34_precision_recall.png}
+    \caption{Exemple de courbe precision-recall. Average precision (AP) et mean average precision (mAP) calculés dans la légende.}
+    \label{fig:A1_34_precision_recall}
+\end{figure}
+
+Le choix du seuil de classification permet d'ajuster le compromis entre la precision et le recall. Un seuil bas maximise le recall au détriment de la precision, tandis qu'un seuil élevé maximise la precision au détriment du recall.
+
+La courbe precision-recall visualise ce compromis. Une courbe proche du coin supérieur droit (precision = 1, recall = 1) indique de meilleures performances globales.
+
+L'aire sous la courbe precision-recall, appelée Average Precision (AP), est une métrique résumée pour comparer les modèles.
+
+Les étapes pour calculer l'average precision (AP) sont les suivantes :
+\begin{enumerate}
+    \item Prendre les seuils de classification générés par le modèle. Ceux-ci indiquent à quel point le modèle est sûr qu'un pixel appartient bien à une certaine classe. Ce sont des chiffres entre 0 et 1. Plus le chiffre est proche de 1, plus le modèle estime que la probabilité que le pixel appartient à une classe est élevée
+    \item Calculer la precision et le recall pour les différents seuils de classification
+    \item Tracer la courbe precision-recall
+    \item L'average precision s'obtient en calculant l'aire sous la courbe (intégration ou approximation numérique via des trapèzes par exemple)
+\end{enumerate}
+
+\subsubsection{Mean average precision (mAP)}
+
+Dans les cas multi-classes, on calcule la moyenne des AP de l'ensemble des classes et on obtient le mean average precision (mAP). Sur la légende de la Figure~\ref{fig:A1_34_precision_recall}, on peut voir un exemple de calcul de mAP, si l'on prend le AP des deux classes « rooftop » et « solar-panel », la moyenne est égale à 0.513.
+
+Le mAP peut aussi être utilisé avec un seuil minimum de IoU, ce qui va indiquer la capacité du modèle à localiser de manière précise un objet. Les plus communs sont :
+\begin{itemize}
+    \item mAP@0.5 (IoU supérieur ou égal à 0.5)
+    \item mAP@0.95 (IoU supérieur ou égal à 0.95)
+    \item mAP@[0.5:0.95] (mAP sur plusieurs seuils de l'IoU entre 0.5 et 0.95)
+\end{itemize}
+
+\subsubsection{Pixel accuracy (PA)}
+
+Le Pixel Accuracy (PA) mesure le pourcentage de pixels correctement classés sur l'ensemble de l'image.
+
+\subsubsection{Panoptic Quality (PQ)}
+
+La panoptic quality (PQ) \cite{kirillov_panoptic_2019} est utilisée dans la segmentation panoptique.
+
+Le PQ permet d'avoir une métrique unique pour la détection du contour des objets (segmentation instance), mais aussi pour assigner une classe aux différents pixels (segmentation sémantique). L'équation se divise en deux parties :
+\begin{itemize}
+    \item Segmentation quality (SQ)
+    \item Recognition quality (RQ)
+\end{itemize}
+
+La segmentation quality (SQ) \cite{kirillov_panoptic_2019} évalue la qualité des masques de segmentation produits par un modèle de segmentation panoptique (Équation \ref{eq:segmentation_quality}). Elle est calculée comme la moyenne de l'intersection sur l'union (mIoU) entre les segments prédits et les segments de la vérité de terrain qui ont été mis en correspondance.
+
+\begin{equation}
+SQ = \frac{\sum_{(p,g) \in TP} IoU(p,g)}{|TP|}
+\label{eq:segmentation_quality}
+\end{equation}
+
+La recognition quality (RQ) \cite{kirillov_panoptic_2019} évalue l'accuracy des classes attribuées aux régions segmentées par un modèle de segmentation panoptique (Équation \ref{eq:recognition_quality}). Elle est basée sur le score F1, qui est une moyenne harmonique de la precision et du recall.
+
+\begin{equation}
+RQ = \frac{|TP|}{|TP| + \frac{1}{2}|FP| + \frac{1}{2}|FN|}
+\label{eq:recognition_quality}
+\end{equation}
+
+Finalement, la panoptic quality (PQ) \cite{kirillov_panoptic_2019} (Équation \ref{eq:panoptic_quality}) est la multiplication de SQ (Équation~\ref{eq:segmentation_quality}) et RQ (Équation~\ref{eq:recognition_quality})
+
+\begin{equation}
+PQ = SQ \cdot RQ = \frac{\sum_{(p,g) \in TP} IoU(p,g)}{|TP|} \cdot \frac{|TP|}{|TP| + \frac{1}{2}|FP| + \frac{1}{2}|FN|}
+\label{eq:panoptic_quality}
+\end{equation}
+
+\subsubsection{Métriques par application}
+
+Le Tableau \ref{tab:metrics_by_application} ci-dessous met en lien les métriques et les différentes applications.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|p{1.8cm}|p{2.1cm}|p{2.4cm}|p{2.5cm}|p{2.2cm}|p{2.2cm}|}
+    \cline{2-6}
+    \multicolumn{1}{c|}{} & \textbf{Classification} & \textbf{Détection} & \textbf{Segmentation sémantique} & \textbf{Segmentation instance} & \textbf{Segmentation panoptique} \\
+    \hline
+    \textbf{Principales métriques} & 
+    \begin{itemize}[leftmargin=*, topsep=0pt, itemsep=0pt, parsep=0pt, before=\vspace{-\baselineskip}, after=\vspace{-\baselineskip}]
+        \item Accuracy
+        \item Precision
+        \item Recall
+        \item F1-Score
+        \item Matrice de confusion
+    \end{itemize} & 
+    \begin{itemize}[leftmargin=*, topsep=0pt, itemsep=0pt, parsep=0pt, before=\vspace{-\baselineskip}, after=\vspace{-\baselineskip}]
+        \item Intersection sur Union (IoU)
+        \item Average Precision (AP)
+        \item Mean average precision (mAP)
+    \end{itemize} & 
+    \begin{itemize}[leftmargin=*, topsep=0pt, itemsep=0pt, parsep=0pt, before=\vspace{-\baselineskip}, after=\vspace{-\baselineskip}]
+        \item Pixel accuracy (PA)
+        \item Moyenne intersection sur Union (mIoU)
+    \end{itemize} & 
+    \begin{itemize}[leftmargin=*, topsep=0pt, itemsep=0pt, parsep=0pt, before=\vspace{-\baselineskip}, after=\vspace{-\baselineskip}]
+        \item Average Precision (AP)
+        \item Mean average precision (mAP)
+    \end{itemize} & 
+    \begin{itemize}[leftmargin=*, topsep=0pt, itemsep=0pt, parsep=0pt, before=\vspace{-\baselineskip}, after=\vspace{-\baselineskip}]
+        \item Panoptic quality (PQ)
+    \end{itemize} \\
+    \hline
+    \end{tabular}
+    \caption{Métriques par application}
+    \label{tab:metrics_by_application}
+\end{table}

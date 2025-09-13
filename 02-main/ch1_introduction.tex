@@ -1,0 +1,90 @@
+% 02-main/ch1_introduction.tex
+
+\chapter{Introduction}
+\label{chap:introduction}
+
+% -----------------------------------------------------------------------------
+\section{Contexte}
+
+\par{La crise climatique \cite{lee_ipcc_2023} et la crise énergétique poussent à une gestion plus efficace de l'espace territorial. L'utilisation des toits pour des installations solaires et des espaces verts est une solution prometteuse pour la production d'énergie locale et la biodiversité urbaine, sans compromettre d'autres fonctions du territoire. Cependant, un défi majeur est le manque de données sur les surfaces disponibles des toits. Il n'y a pas de recensement fédéral des toits végétalisés et les installations solaires sont partiellement renseignées. La diversité des objets présents sur les toits comme par exemple gaines de ventilation, monoblocs ou antennes rend difficile l'établissement d'un inventaire précis.}
+
+\par{L'Office cantonal de l'énergie de Genève (\acrshort{ocen}) a réalisé plusieurs projets pour mieux évaluer le potentiel d’utilisation des toitures.}
+
+\par{Un de ces projets \cite{herny_detection_2024} est mené par le \gls{stdl}, son objectif vise à détecter automatiquement les objets présents sur les toits pour identifier les surfaces disponibles pour des installations solaires ou des toitures végétalisées. Trois approches sont comparées. La première est une classification des pans de toit par algorithme random forest, la deuxième est une segmentation de nuages de points \gls{lidar} , et la troisième est une segmentation d'orthophotos par deep learning (Segment Anything Model). La classification ressort comme la méthode la plus performante et applicable à grande échelle.}
+
+\par{Le cadastre solaire du Grand Genève \cite{desthieux_solar_2018} est un autre projet important qui s'inscrit dans la même optique de valorisation des toitures pour la production d'énergie renouvelable. Ce cadastre est conçu pour évaluer le potentiel de production d'énergie solaire des toitures. Il prend en compte des paramètres cruciaux comme les ombrages proches et lointains, qui influencent significativement la quantité d'énergie qu'une installation solaire peut générer. Ce cadastre permet d’identifier les toitures propices à l’installation de panneaux solaires.}
+
+\par{Les projets d'identification des toitures disponibles et le cadastre solaire du Grand Genève se complètent. L'identification des toits fournit une base pour repérer où installer des panneaux solaires. Ensuite, le cadastre solaire évalue le potentiel de production d'énergie de ces toitures. Ensemble, ils maximisent l'efficacité de la production d'énergie renouvelable locale, jouant un rôle clé dans la planification énergétique et environnementale d'un territoire.}
+
+% -----------------------------------------------------------------------------
+\newpage
+\section{Objectifs}
+Cette section présente les objectifs du travail de master (\acrshort{tm}) :
+
+\begin{itemize}
+    \item Analyse comparative des méthodologies existantes :
+    \begin{itemize}
+        \item Examiner les techniques utilisées par le \acrshort{stdl} pour l'identification des toitures.
+        \item Étudier les méthodes employées par le cadastre solaire du Grand Genève pour évaluer le potentiel de production d'énergie solaire.
+        \item Rechercher et analyser des projets similaires au niveau international.
+    \end{itemize}
+    
+    \item État de l'art :
+    \begin{itemize}
+        \item Réaliser une revue de littérature approfondie pour identifier les méthodes et technologies récentes dans les domaines de la cartographie du potentiel solaire et de l'analyse de toitures.
+    \end{itemize}
+    
+    \item Développement d'un modèle personnalisé :
+    \begin{itemize}
+        \item Finaliser le développement d'un modèle propre, en explorant des techniques telles que les réseaux de neurones convolutifs (CNN).
+        \item Collecter et étiqueter les données nécessaires à l'entraînement du modèle.
+    \end{itemize}
+
+    \item Calcul du potentiel solaire :
+    \begin{itemize}
+        \item Estimer le potentiel de production d'énergie solaire des toitures disponibles détectées par le modèle développé et celui de \acrshort{stdl}.
+    \end{itemize}
+
+    \item Implémentation et comparaison des modèles :
+    \begin{itemize}
+        \item Appliquer les différents modèles à l'échelle du Canton de Genève.
+        \item Comparer les méthodologies utilisées et les résultats obtenus.
+    \end{itemize}
+
+    \item Exploration de méthodes alternatives :
+    \begin{itemize}
+        \item Étudier l'utilisation d'autres méthodes ou outils de traitement d'images et de segmentation pour améliorer l'exactitude et la vitesse d'identification des surfaces utiles sur les toits.
+    \end{itemize}
+
+    \item Comparaison avec des outils existants :
+    \begin{itemize}
+        \item Comparer les performances de la méthodologie utilisée pour le Cadastre Solaire du Grand Genève avec d'autres outils de cartographie solaire existants.
+        \item Identifier les forces et les faiblesses de chaque approche.
+    \end{itemize}
+
+    \item Visualisation interactive des résultats :
+    \begin{itemize}
+        \item Créer une visualisation interactive pour illustrer l'influence des différents facteurs sur le potentiel de production d'énergie solaire des toitures.
+        \item Faciliter la compréhension et l'interprétation des résultats par les décideurs et les professionnels de la planification territoriale.
+    \end{itemize}
+
+    \item Documentation et partage des connaissances :
+    \begin{itemize}
+        \item Documenter les connaissances acquises lors du développement du nouveau modèle.
+        \item Fournir des instructions détaillées et un code réutilisable pour permettre à d'autres personnes d'utiliser le modèle développé.
+    \end{itemize}
+\end{itemize}
+
+% -----------------------------------------------------------------------------
+\section{Organisation de ce rapport}
+Ce rapport est organisé en cinq chapitres principaux et deux annexes techniques. La structure suit une progression logique depuis la présentation du problème jusqu'aux résultats obtenus.
+
+Le Chapitre 2 présente l'état de l'art en trois parties. Il commence par analyser les méthodes existantes pour évaluer le potentiel solaire des toitures, notamment les approches basées sur les données \gls{lidar} et cadastrales. Il examine ensuite les avancées en machine learning appliqué aux images, en particulier les modèles de segmentation. Pour finir, il détaille les travaux combinant machine learning et évaluation du potentiel solaire, incluant ceux du \gls{stdl}, et liste les datasets disponibles.
+
+Le Chapitre 3 décrit la méthodologie développée pour créer un modèle de segmentation sémantique. Il couvre tout le processus : sélection et préparation des données du \gls{sitg}, création du dataset annoté et développement des modèles. Le processus de labellisation, qui a demandé 180 heures de travail manuel, est décrit en détail. Le chapitre présente aussi les pistes explorées mais abandonnées pour montrer le cheminement complet.
+
+Le Chapitre 4 présente l'évaluation des 93 configurations de modèles testées. L'analyse quantitative sur le dataset de test identifie les meilleures architectures selon plusieurs métriques (IoU, mAP, F1-score). L'étude du rapport performance-complexité aide à choisir les modèles pour une utilisation pratique. La validation qualitative sur la zone de \gls{hepia}, non utilisée pour l'entraînement, montre que les modèles généralisent bien mais révèle aussi leurs limites.
+
+Le Chapitre 5 résume les contributions principales et les compare à l'état de l'art. Il identifie les limites actuelles, notamment pour les toitures végétalisées et les zones très ombragées, et propose des améliorations. Les possibilités d'application et d'extension à d'autres territoires sont discutées.
+
+Deux annexes complètent le document. L'Annexe A présente les bases du machine learning et de la segmentation d'images. L'Annexe B explique les concepts d'énergie solaire et leur utilisation dans les cadastres solaires.

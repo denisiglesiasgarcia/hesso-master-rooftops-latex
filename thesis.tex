@@ -1,0 +1,144 @@
+% thesis.tex
+
+% Licensed under the Apache License, Version 2.0 (the "License");
+% you may not use this file except in compliance with the License.
+% You may obtain a copy of the License at
+%
+% http://www.apache.org/licenses/LICENSE-2.0
+%
+% Unless required by applicable law or agreed to in writing, software
+% distributed under the License is distributed on an "AS IS" BASIS,
+% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+% See the License for the specific language governing permissions and
+% limitations under the License.
+
+% =============================================================================
+% | HES-SO//Master - Thesis project report template                           |
+% |                                                                           |
+% | Based on Marc Demierre and the EPFL template, with many adjustements for  |
+% | Overleaf                                                                  |
+% =============================================================================
+
+
+% Document settings
+\documentclass[a4paper,11pt,fleqn]{book}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french,english]{babel}
+
+% -----------------------------------------------------------------------------
+% Preamble
+% -----------------------------------------------------------------------------
+\input{00-settings/metadata.tex}         % your project data
+\input{00-settings/settings_base.tex}    % template settings
+\input{00-settings/codestyles.tex}       % code styles for minted
+\input{00-settings/settings_custom.tex}  % your custom packages etc
+
+\begin{document}
+\selectlanguage{french}
+% -----------------------------------------------------------------------------
+% Front matter
+% -----------------------------------------------------------------------------
+\frontmatter
+
+
+\input{01-head/01_titlepage.tex}
+
+% Page for student info and signatures
+\cleardoublepage
+\input{01-head/02_reportinfo}
+
+% Preface (to be written by someone else)
+\cleardoublepage
+\input{01-head/03_preface}
+
+% Table of contents
+\cleardoublepage
+\phantomsection
+\addcontentsline{toc}{chapter}{Table des matières}
+\tableofcontents
+
+% Remerciements
+\cleardoublepage
+\input{01-head/04_remerciements}
+
+% Nomenclature
+\cleardoublepage
+\printglossary[type=main,title=Nomenclature]
+
+% Acronymes
+\cleardoublepage
+\printglossary[type=\acronymtype,title=Acronymes]
+
+% Résumé EN + FR
+\cleardoublepage
+\input{01-head/05_abstracts}
+
+% Restore paragraphs
+\setlength{\parskip}{1em}
+
+% Bold fonts for sections in minitoc
+\renewcommand{\cftsecfont}{\sffamily\bfseries}
+\renewcommand{\cftsecleader}{\sffamily\bfseries\cftdotfill{\cftdotsep}}
+\renewcommand{\cftsecpagefont}{\sffamily\bfseries}
+
+
+% -----------------------------------------------------------------------------
+% Main matter
+% -----------------------------------------------------------------------------
+\mainmatter
+
+% Chapters
+\include{02-main/ch1_introduction}
+\include{02-main/ch2_analysis}
+\include{02-main/ch3_modele}
+\include{02-main/ch4_implementation}
+\include{02-main/ch5_conclusions}
+
+% Bibliography
+\cleardoublepage
+\phantomsection
+\chapter{Bibliographie}
+\printbibliography[heading=none]
+
+% List of figures
+\cleardoublepage
+\phantomsection
+\chapter{Liste des Figures}
+\listoffigures
+
+% List of tables
+\cleardoublepage
+\phantomsection
+\chapter{Liste des Tableaux}
+\listoftables
+
+
+% List of code blocks
+\cleardoublepage
+\phantomsection
+\chapter{Liste de blocs de code}
+\listofcode
+
+% List of listings
+% \cleardoublepage
+% \phantomsection
+% \chapter{Liste of Listings}
+% \todo{Changer le nom du chapitre}
+% \listoflistings
+
+% Appendices
+\appendix
+\include{03-tail/A1_fondamentaux_ML/A1_fondamentaux_ml}
+\include{03-tail/A2_fondamentaux_energie/A2_fondamentaux_en}
+
+% TODO
+%\listoftodos
+
+% -----------------------------------------------------------------------------
+% Back matter
+% -----------------------------------------------------------------------------
+\backmatter
+
+\end{document}
+

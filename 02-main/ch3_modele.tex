@@ -1,0 +1,2626 @@
+\chapter{Méthodologie}
+\label{chap:proposition_modele}
+
+Ce chapitre va explorer la création d'un modèle de machine learning de A à Z.
+
+\localtableofcontents
+
+\newpage
+
+% -----------------------------------------------------------------------------
+% -----------------------------------------------------------------------------
+
+\section{Introduction}
+La création d'un modèle de machine learning consiste en plusieurs phases distinctes. La Figure \ref{fig:ch3_resume_machine_learning_supervise} résume les principales étapes et servira de fil conducteur pour ce chapitre.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{03-tail/A1_fondamentaux_ML/A1_figures/A1_01_resume_machine_learning_supervise.png}
+    \caption{Résumé de machine learning supervisé}
+    \label{fig:ch3_resume_machine_learning_supervise}
+\end{figure}
+
+La première étape consiste à définir la tâche et à sélectionner l'algorithme approprié. La deuxième phase porte sur la création d'un dataset d'entraînement adapté aux besoins spécifiques du modèle. Enfin, une fois les performances du modèle validées, celui-ci peut être déployé en production. L'Annexe \ref{chap:fondamentaux_ml} présente l'ensemble des termes et concepts de machine learning utilisés dans ce chapitre.
+
+Une section dédiée expose ensuite les différentes pistes explorées mais non retenues. Cette démarche, essentielle dans tout projet de recherche, mérite d'être valorisée car elle permet de comprendre le cheminement vers une solution viable. Le chapitre se conclut par une synthèse des points-clés développés.
+
+La création d'un dataset dédié à la segmentation sémantique représente un défi considérable en termes de temps et de ressources. L'examen des datasets disponibles (Section \ref{sec:dataset_disponible}) révèle une carence majeure, seul le dataset RID propose des annotations pour l'identification des espaces libres sur toitures. Ce dataset présente toutefois des limitations importantes, avec des images concentrées sur un contexte architectural spécifique (rural allemand) et des performances dégradées lors des tests sur d'autres typologies bâties, comme le démontrent les essais menés en milieu urbain bruxellois.
+
+% -----------------------------------------------------------------------------
+% -----------------------------------------------------------------------------
+\section{Tâche}
+La tâche à accomplir consiste à identifier les espaces disponibles sur les toitures. La segmentation des différents obstacles en classes distinctes telles que cheminées, gaines, velux n'a pas été retenue car cela aurait significativement complexifié la création du dataset pour finalement présenter une utilité limitée.
+
+Cette tâche est identique à celle de \acrshort{stdl} présentée à la sous-section \textit{\nameref{subsec:stdl_analyse}} (voir page~\pageref{subsec:stdl_analyse}), mais l'approche utilisée sera différente.
+
+\section{Algorithme}
+Une fois la tâche définie, il faut déterminer une approche. \acrshort{stdl} a exploré 3 approches différentes:
+\begin{itemize}
+    \item La classification des pans de toit
+    \item La segmentation des données \gls{lidar}
+    \item La segmentation d'images
+\end{itemize}
+
+Leur segmentation d'images est réalisée avec Segment Anything Model (\acrshort{sam}). \acrshort{sam} effectue de la segmentation instance et divise l'image en polygones mais n'assigne pas de classe aux objets. Les résultats doivent être post-traités pour identifier les espaces disponibles. Un autre point délicat est le temps de traitement important (12 minutes pour 25 bâtiments).
+
+La segmentation sémantique est une autre option explorée par \citeauthor{castello_quantification_2021} dans la sous-section \textit{\nameref{subsec:castello_quantification_2021}} (voir page~\pageref{subsec:castello_quantification_2021}). Ils l'ont utilisée pour exactement la même tâche avec un dataset limité au centre-ville de Genève. Les résultats obtenus avec un IoU supérieur à 0,60 sur leur dataset de test sont très encourageants.
+
+La segmentation sémantique est le type d'algorithme retenu. Les autres pistes explorées mais qui n'ont pas été retenues sont détaillées dans la section \textit{\nameref{sec:pistes_explorees}} (voir page~\pageref{sec:pistes_explorees}).
+
+\section{Sélection des données}
+La sélection des données va dépendre de l'algorithme utilisé. Dans ce cas, la segmentation sémantique d'image va principalement utiliser des orthophotos et des données vectorielles. Les données utilisées proviennent de \acrshort{sitg}:
+\begin{itemize}
+    \item Données vectorielles
+    \begin{itemize}
+        \item Bâtiments hors-sol ``CAD\_BATIMENT\_HORSOL'' \cite{sitg_batiments_nodate}
+        \item Toits des bâtiments ``CAD\_BATIMENTS\_HORSOL\_TOIT'' \cite{sitg_toits_nodate}
+        \item Superstructures des toits des bâtiments ``CAD\_BATIMENT\_HORSOL\_TOIT\_SP'' \cite{sitg_superstructures_nodate}
+        \item Communes genevoises ``CAD\_COMMUNE'' \cite{sitg_communes_nodate}
+    \end{itemize}
+    \item Données raster (images)
+    \begin{itemize}
+        \item Orthophotos 2019 \cite{sitg_orthophotos_nodate}
+    \end{itemize}
+\end{itemize}
+
+\subsection{Orthophotos}
+Les orthophotos de 2019 (Figure \ref{fig:ch3_dataset_methodo_01_orthophoto_2019}) ont été sélectionnées car ce sont les seules true-orthophotos disponibles sur \acrshort{sitg} avec une résolution de 7 \si{\unit{cm}} par pixel. Selon un document de \acrshort{sitg} \cite{etat_de_geneve_inventaire_2025}, ils ont réalisé plusieurs survols du canton en 2024 pour acquérir de nouvelles true-orthophotos avec une résolution de 3.6 \si{\unit{cm}} par pixel, ces orthophotos ne sont pas encore disponibles sur \acrshort{sitg}.
+
+La sous-section \textit{\nameref{subsec:annexe_ortophotos}} (voir page~\pageref{subsec:annexe_ortophotos}) parcourt en détail les types d'orthophotos les plus utilisées dans la géomatique.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{02-main//figures/ch3/ch3_dataset_methodo_01_orthophoto_2019.png}
+    \caption{Orthophotos 2019}
+    \label{fig:ch3_dataset_methodo_01_orthophoto_2019}
+\end{figure}
+
+\subsubsection{Obtention des données}
+Les orthophotos peuvent être commandées gratuitement via leur service pour données volumineuses \cite{sitg_commande_nodate}. Une autre option est de télécharger tuile à tuile sur leur site dédié (Figure \ref{fig:ch3_donnees_sitg_orthophotos_telechargement_web}).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{02-main//figures//ch3/ch3_donnees_sitg_orthophotos_telechargement_web.png}
+    \caption{Site dédié au téléchargement des orthophotos et données \gls{lidar} \cite{sitg_commande_nodate}}
+    \label{fig:ch3_donnees_sitg_orthophotos_telechargement_web}
+\end{figure}
+
+Chacune des 436 tuiles couvre une superficie de \SI{1}{\square\kilo\meter}. L'ensemble de ces données représente environ 700 GB et est stocké au format GeoTIFF. Ce format présente l'avantage de conserver les informations géographiques associées à chaque image, notamment la géolocalisation des quatre coins et le système de coordonnées de référence (\acrshort{crs}) utilisé. Le Tableau \ref{tab:chiffre_cle_orthophoto_2019} présente un résumé de ces caractéristiques techniques.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{@{}lr@{}}
+    \toprule
+    \textbf{Paramètre} & \textbf{Valeur} \\
+    \midrule
+    \multicolumn{2}{@{}l@{}}{\textit{Couverture}} \\
+    Surface totale & \SI{436.00}{\square\kilo\meter} \\
+    Nombre de tuiles & 436 \\
+    Taille tuile & \SI{1000.00}{\meter} $\times$ \SI{1000.00}{\meter} \\
+    \addlinespace
+    \multicolumn{2}{@{}l@{}}{\textit{Stockage}} \\
+    Taille totale & \SI{682.92}{\giga\byte} \\
+    Taille par tuile & \SI{1603.91}{\mega\byte} \\
+    \bottomrule
+    \end{tabular}
+    \caption{Chiffres-clés orthophotos 2019}
+    \label{tab:chiffre_cle_orthophoto_2019}
+\end{table}
+
+\newpage
+\subsection{Données vectorielles}
+Les données vectorielles choisies sont régulièrement mises à jour, il n'y a pas de version par année comme pour les orthophotos. La sous-section \textit{\nameref{subsec:annexe_donnees_vectorielles}} (voir page~\pageref{subsec:annexe_donnees_vectorielles}) permet d'avoir un aperçu de ce que sont les données vectorielles.
+\subsubsection{Bâtiments hors-sol}
+La couche vectorielle ``CAD\_BATIMENTS\_HORSOL'' \cite{sitg_batiments_nodate} recense tous les bâtiments du Canton de Genève qui sont bien ancrés au sol. Cette couche n'inclus pas les bâtiments qui sont sous-terrains. La Figure \ref{fig:ch3_dataset_methodo_02_batiment_horsol} permet d'observer ces polygones qui représentent les bâtiments en jaune.
+
+Cette couche vectorielle est enrichie de données tabulaires associées à chacun des polygones. Les données utilisées sont l'``\gls{egid}'' et ``NOMEN\_CLASSE''. L'\gls{egid} est un identifiant unique pour tous les bâtiments en Suisse. ``NOMEN\_CLASSE'' identifie l'usage du bâtiment et va permettre de définir une classe \gls{sia}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{02-main//figures/ch3/ch3_dataset_methodo_02_batiment_horsol.png}
+    \caption{Couche vectorielle bâtiments hors-sol}
+    \label{fig:ch3_dataset_methodo_02_batiment_horsol}
+\end{figure}
+
+
+\newpage
+\subsubsection{Toits des bâtiments}
+La couche vectorielle ``CAD\_BATIMENTS\_HORSOL\_TOIT'' \cite{sitg_toits_nodate} regroupe toutes les toitures des bâtiments hors-sol du Canton de Genève (Figure \ref{fig:ch3_dataset_methodo_03_batiment_horsol_toiture}). Un \gls{egid} est associé à chacun des polygones des toitures.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{02-main//figures/ch3/ch3_dataset_methodo_03_batiment_horsol_toiture.png}
+    \caption{Couche vectorielle toits des bâtiments}
+    \label{fig:ch3_dataset_methodo_03_batiment_horsol_toiture}
+\end{figure}
+
+\newpage
+\subsubsection{Superstructures des toits des bâtiments}
+La couche vectorielle ``CAD\_BATIMENT\_HORSOL\_TOIT\_SP'' \cite{sitg_toits_nodate} recense les éléments de toiture (superstructures) d'une surface inférieure à 9 \si{\unit{\square\meter}} présents sur les toitures des bâtiments hors-sol du Canton de Genève (Figure \ref{fig:ch3_dataset_methodo_04_batiment_horsol_toiture_sp}). Un \gls{egid} est associé à chacun des polygones de ces superstructures.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{02-main//figures/ch3/ch3_dataset_methodo_04_batiment_horsol_toiture_sp.png}
+    \caption{Couche vectorielle superstructures des toits des bâtiments}
+    \label{fig:ch3_dataset_methodo_04_batiment_horsol_toiture_sp}
+\end{figure}
+
+Cette couche est présentée ici car c'est ce qu'il y a de plus proche à un recueil systématique des obstacles sur les toitures. Elle ne sera pas utilisée. Son utilisation a été explorée dans la section \textit{\nameref{sec:pistes_explorees}} (voir page~\pageref{sec:pistes_explorees}).
+
+\subsubsection{Obtention des données}
+Les données vectorielles sont disponibles directement sur \acrshort{sitg} dans plusieurs formats (GDB, GML, KML ou SHP). Il est également possible d'y accéder via l'\acrshort{api} REST d'ArcGIS.
+
+Pour faciliter le traitement, toutes les données sont converties au format GPKG \cite{noauthor_ogc_nodate}. Ce format, très utilisé en géomatique, a l'avantage d'être robuste et de regrouper toutes les données dans un seul fichier.
+\newpage
+
+\section{Labellisation}
+Une fois que les données sont sélectionnées, l'étape suivante est la labellisation. Cette étape se divise en plusieurs parties:
+\begin{itemize}
+    \item Préparation des données
+    \item Sélection des données pour le dataset
+    \item Labellisation (annotations)
+    \item Post-traitement des données annotées
+\end{itemize}
+
+\subsection{Préparation des données}
+Les données sélectionnées nécessitent d'être analysées, transformées et validées avant de pouvoir les annoter.
+
+\subsubsection{Données vectorielles}
+La Figure \ref{fig:ch3_preparation_donnees_01_etl} résume les principales étapes pour les données vectorielles.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\linewidth]{02-main/figures/ch3/ch3_preparation_donnees_01_etl.png}
+    \caption{Principales étapes de la préparation des données vectorielles}
+    \label{fig:ch3_preparation_donnees_01_etl}
+\end{figure}
+
+\paragraph{Nettoyage des données}
+Les deux principales librairies Python utilisées pour la manipulation des données vectorielles sont Pandas \cite{mckinney_pandas_nodate} et GeoPandas \cite{noauthor_geopandas_nodate}. Pandas est la librairie la plus populaire pour la manipulation des données tabulaires. GeoPandas étend ces fonctionnalités aux données géospatiales en intégrant la gestion des géométries et l'ensemble des opérations spatiales telles que les jointures spatiales.
+
+Le but de cette étape est de vérifier la qualité des données de base. Les géométries (polygones) constituent une donnée essentielle en géomatique. Elles doivent être valides (polygones fermés) et utiliser le bon système de coordonnées de référence (\acrshort{crs}).
+
+Le type des différentes colonnes est également important. Le schéma des données définit les types attendus pour chaque colonne de chaque couche (voir Tableau \ref{tab:exemple_types_couche_toitures}).
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{@{}lr@{}}
+    \toprule
+    \textbf{Colonne} & \textbf{Type} \\
+    \midrule
+    objectid & int64 \\
+    egid & float64 \\
+    altitude\_min & float64 \\
+    altitude\_max & float64 \\
+    date\_leve & datetime64[ms] \\
+    SHAPE\_\_Length & float64 \\
+    SHAPE\_\_Area & float64 \\
+    globalid & object \\
+    geometry & geometry \\
+    \bottomrule
+    \end{tabular}
+    \caption{Exemple de types pour la couche des toitures}
+    \label{tab:exemple_types_couche_toitures}
+\end{table}
+
+Cette étape de vérification est essentielle pour les opérations de jointure entre les différentes couches de données. Les colonnes servant de clés de jointure doivent avoir des types compatibles. Par exemple, une colonne de type int64 (nombres entiers) ne peut pas être directement jointe avec une colonne de type float64 (nombres à virgule flottante) sans conversion préalable. Toutes les colonnes doivent être vérifiées et converties si nécessaire au bon type.
+
+\newpage
+La visualisation des données permet de détecter certains problèmes difficilement visibles dans les données tabulaires. Par exemple, la couche des communes téléchargée via l'\acrshort{api} REST d'ArcGIS (Figure \ref{fig:ch3_preparation_donnees_02_bug_celigny}) présentait des géométries invalides (commune de Céligny), c'est-à-dire que les polygones n'étaient pas fermés et étaient donc systématiquement supprimés.
+
+Pour résoudre ce problème et par cohérence, toutes les données ont été téléchargées à nouveau directement depuis \acrshort{sitg}. Ces nouvelles données ne présentaient pas ce problème, ce qui suggère que l'erreur vient du processus de téléchargement via QGIS.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{02-main//figures//ch3/ch3_preparation_donnees_02_bug_celigny.png}
+    \caption{Problème avec la commune de Céligny}
+    \label{fig:ch3_preparation_donnees_02_bug_celigny}
+\end{figure}
+
+\newpage
+\paragraph{Filtrer polygones hors canton}
+Certains polygones se trouvent en dehors du canton de Genève. Le filtre est assez simple, tout ce qui n'est pas à l'intérieur d'une commune genevoise est considéré comme hors canton.
+
+La Figure \ref{fig:ch3_preparation_donnees_03_hors_canton} illustre les toitures situées hors canton. Au total, 1436 polygones ont été supprimés, principalement des bâtiments du CERN \cite{cern_home_nodate}.
+
+\begin{figure}[H]
+    \makebox[\textwidth][c]{\includegraphics[width=1.15\textwidth]{02-main//figures//ch3/ch3_preparation_donnees_03_hors_canton.png}}
+    \caption{Visualisation des toitures hors canton de Genève}
+    \label{fig:ch3_preparation_donnees_03_hors_canton}
+\end{figure}
+
+\newpage
+\paragraph{Filtrer les \gls{egid}}
+Le filtre appliqué précédemment a éliminé une grande partie des \gls{egid} invalides, mais il est important de bien vérifier car l'\gls{egid} est la clé de jointure entre toutes les couches.
+
+L'\gls{egid} minimum de la couche des bâtiments hors-sol est utilisé comme filtre (Code \ref{code:filtre_egid}) pour identifier les \gls{egid} invalides. Cette vérification détecte un total de 24 \gls{egid} invalides dans la couche des toitures.
+
+\begin{code}[H]
+    \begin{pythoncode}
+    # EGID bizarre
+    egid_bizarre = gdf_cad_batiment_horsol["egid"].min()
+    
+    print("EGID min de gdf_cad_batiment_horsol:", egid_bizarre)
+    print("Nombre de toitures avec un EGID en dessous (invalide):")
+    
+    print(f"\t{gdf_toiture[gdf_toiture['egid'] < egid_bizarre].shape[0]} \
+    dans gdf_toiture_1_filtre_canton")
+    
+    print(f"\t{gdf_toiture_sp[gdf_toiture_sp['egid'] < egid_bizarre].shape[0]} \
+    dans gdf_toiture_sp_1_filtre_canton")
+    \end{pythoncode}
+    \vspace{0.35cm}
+    \begin{textcode}
+    EGID min de gdf_cad_batiment_horsol: 295074
+    Nombre de toitures avec un EGID en dessous (invalide):
+        22 dans gdf_toiture_1_filtre_canton
+        2 dans gdf_toiture_sp_1_filtre_canton
+        0 dans gdf_cad_batiment_horsol
+    \end{textcode}
+    \caption{Filtre \gls{egid}}
+    \label{code:filtre_egid}
+\end{code}
+
+\paragraph{Classification \gls{sia}}
+En Suisse, chaque bâtiment peut être classé selon son utilisation en 12 catégories définies par la norme SIA 380/1 \cite{sia_sia-shop_nodate} (Tableau \ref{tab:categories_batiments_sia_380_1}). Cette classification est importante pour l'analyse des caractéristiques des toitures, une toiture de logement collectif ne ressemblera pas à celle d'une usine ou d'une piscine.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{@{}clp{0.65\textwidth}@{}}
+    \toprule
+    \textbf{N°} & \textbf{Catégories de bâtiment} & \textbf{Affectations (exemples)} \\
+    \midrule
+    I & Habitat collectif & Immeubles locatifs et en propriété par appartement, résidences et logements pour personnes âgées, hôtels, immeubles et résidences de vacances, homes pour enfants ou adolescents, centres d'hébergement diurne, homes pour handicapés, centres d'accueil pour toxicomanes, casernes, établissements pénitentiaires \\
+    II & Habitat individuel & Villas individuelles ou jumelées, maisons de vacances, villas en chaînettes \\
+    III & Administration & Bâtiments administratifs privés et publics, locaux avec guichets, cabinets médicaux, bibliothèques, musées, centres culturels, centres informatiques, centres de télécommunication, studios de radio/télévision \\
+    IV & Écoles & Bâtiments scolaires de tous niveaux, jardins d'enfants et crèches, locaux d'enseignement, centres de formation, palais des congrès, laboratoires, instituts de recherche, locaux communautaires, centres de loisirs \\
+    V & Commerce & Locaux commerciaux de tous genres, y compris centres commerciaux, halles pour foires commerciales \\
+    VI & Restauration & Restaurants (y compris cuisines), cafétérias, cantines, dancings, discothèques \\
+    VII & Lieux de rassemblement & Théâtres, salles de concerts, salles de cinéma, églises, salles funéraires, salles des fêtes, halles sportives avec tribunes \\
+    VIII & Hôpitaux & Hôpitaux, cliniques psychiatriques, homes médicalisés, homes pour personnes âgées, centres de réhabilitation, locaux de soins \\
+    IX & Industrie & Fabriques, usines, centres artisanaux, ateliers, centres d'entretien, gares, caserne de pompiers \\
+    X & Dépôts & Entrepôts, centre de distribution \\
+    XI & Installations sportives & Halles de gymnastique et de sport, salles de gymnastique, halles de tennis, bowlings, centres de fitness, vestiaires (pour installations sportives) \\
+    XII & Piscines couvertes & Piscines couvertes, bassins de natation, saunas, bains thermaux \\
+    \bottomrule
+    \end{tabular}
+    \caption{Catégories de bâtiments \gls{sia} selon la norme \gls{sia} 380/1:2016 \cite{sia_sia-shop_nodate}}
+    \label{tab:categories_batiments_sia_380_1}
+\end{table}
+
+\newpage
+Cette information n'est pas incluse directement dans la couche des bâtiments hors-sol, par contre la destination est renseignée pour chaque \gls{egid}. Le Code \ref{code:assigner_categorie_sia} montre un exemple de conversion pour la première catégorie \gls{sia}.
+
+\begin{code}[H]
+    \begin{pythoncode}
+    def assign_sia_category(destination):
+        """
+        Attribue une catégorie SIA 380/1:2016 en fonction de la destination du bâtiment.
+        """
+        # Conversion en minuscules pour la comparaison
+        dest = str(destination).lower()
+    
+        # ===== CATÉGORIE I - HABITAT COLLECTIF =====
+        habitat_collectif = [
+            "hab plusieurs logements",
+            "résidence meublée",
+            "foyer",
+            "hôtel",
+            "autre héberg. collectif",
+            "etab. pénitenciaire",
+            "internat",
+            "hab. - rez activités",
+            "habitation - activités",
+        ]
+        if any(term in dest for term in habitat_collectif):
+            return "I habitat collectif"
+    
+    gdf_cad_batiment_horsol['sia_cat'] = gdf_cad_batiment_horsol['destination'].apply(assign_sia_category)
+    \end{pythoncode}
+    \captionof{code}{Exemple de conversion entre la destination et la première catégorie \gls{sia}}
+    \label{code:assigner_categorie_sia}
+\end{code}
+
+La première vérification consiste à s'assurer que tous les \gls{egid} possèdent une catégorie \gls{sia} et à analyser la distribution de ces catégories. Le Code \ref{code:categorie_sia_distribution_verification} inclut une instruction ``assert'' qui interrompt le script si tous les \gls{egid} ne disposent pas d'une catégorie assignée.
+
+\begin{code}[H]
+    \begin{pythoncode}
+    print(gdf_cad_batiment_horsol["sia_cat"].value_counts())
+    print(f"Nombre de valeurs manquantes dans sia_cat: {gdf_cad_batiment_horsol["sia_cat"].isna().sum()}")
+    assert gdf_cad_batiment_horsol["sia_cat"].isna().sum() == 0
+    \end{pythoncode}
+    \vspace{0.35cm}
+    \begin{textcode}
+    sia_cat
+    II habitat individuel         29420
+    IX industrie                  16947
+    X dépôts                      16575
+    I habitat collectif           15337
+    III administration             1836
+    IV écoles                       746
+    VII lieux de rassemblement      520
+    V commerce                      415
+    XI installations sportives      257
+    VIII hôpitaux                   233
+    VI restauration                 205
+    XII piscines couvertes           11
+    Name: count, dtype: int64
+    Nombre de valeurs manquantes dans sia_cat: 0
+    \end{textcode}
+    \captionof{code}{Distribution des catégories \gls{sia} et vérification des données.}
+    \label{code:categorie_sia_distribution_verification}
+\end{code}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{02-main//figures//ch3/ch3_preparation_donnees_categorie_sia_01_barplot.png}
+    \caption{Distribution des catégories \gls{sia} pour la couche des bâtiments hors-sol}
+    \label{fig:ch3_preparation_donnees_categorie_sia_01_barplot}
+\end{figure}
+
+La Figure \ref{fig:ch3_preparation_donnees_categorie_sia_01_barplot} illustre la distribution des bâtiments par catégorie \gls{sia}. Cette distribution est assez déséquilibrée. Le canton de Genève est très urbain et densément peuplé, ce qui explique la prédominance des logements collectifs et individuels.
+
+Certaines catégories comme les piscines couvertes sont peu représentées. Cette rareté peut s'expliquer par une incertitude sur la qualité des données renseignées dans la destination du bâtiment. Par exemple, un complexe sportif avec une piscine couverte pourrait avoir seulement la destination ``complexe sportif''.
+
+Les catégories \gls{sia} (Tableau \ref{tab:categories_batiments_sia_380_1}) indiquent des exemples de bâtiments pour chacune des catégories mais il n'y a pas de liste complète. Certains cas sont entre deux catégories, un centre de massage peut être classé comme commerce ou comme hôpital (locaux de soins).
+
+\paragraph{Données finales}
+Les données finales (Tableau \ref{tab:gdf_toiture_ajout_cat_sia_parquet_head}) comprennent plusieurs colonnes essentielles; L'``EGID'' permet d'associer chaque toiture à un bâtiment, la colonne ``geometry'' contient la géométrie du polygone dans le système de coordonnées suisse, et ``sia\_cat'' indique la catégorie \gls{sia} du bâtiment. 
+
+Les colonnes d'identification ``objectid'' et ``globalid'' permettent respectivement d'identifier chaque polygone de manière unique au sein de la couche et à travers l'ensemble des couches de \acrshort{sitg}.
+
+\begin{table}[H]
+\renewcommand{\arraystretch}{2}
+\begin{tabular}{@{}rlp{3cm}p{3cm}l@{}}
+\toprule
+objectid & egid & globalid & geometry & sia\_cat \\
+\midrule
+204857 & 295010023 & \parbox{3cm}{96076844-3ED9-464...} & \parbox{3cm}{MULTIPOLYGON (((2...} & II habitat individuel \\
+204873 & 295010485 & \parbox{3cm}{987C8B52-793B-4BB...} & \parbox{3cm}{MULTIPOLYGON (((2...} & II habitat individuel \\
+7630 & 295510865 & \parbox{3cm}{E3C6375D-ECCC-4A0...} & \parbox{3cm}{MULTIPOLYGON (((2...} & X dépôts \\
+\bottomrule
+\end{tabular}
+\caption{Principales colonnes de gdf\_toiture\_ajout\_cat\_sia.parquet}
+\label{tab:gdf_toiture_ajout_cat_sia_parquet_head}
+\end{table}
+
+Le format choisi pour le stockage du fichier est le geoparquet \cite{noauthor_geoparquet_nodate}. Ce format étend le standard open source parquet \cite{noauthor_parquet_nodate} en y intégrant toutes les spécificités nécessaires à la gestion des données géospatiales. Il combine ainsi les avantages de performance du format parquet (compression efficace, lecture rapide) avec la gestion native des géométries.
+
+\newpage
+\subsubsection{Orthophotos}
+\label{subsubsec:decoupe_orthophoto_tuile}
+
+\paragraph{Dimensions des orthophotos et contraintes}
+Les 416 orthophotos sont des fichiers au format GeoTIFF de dimensions \si{\numproduct{20000x20000}} pixels. Cependant, la plupart des réseaux de neurones convolutifs sont entraînés sur des images de tailles comprises entre \si{\numproduct{224x224}} et \si{\numproduct{1024x1024}} pixels, correspondant aux standards des architectures classiques. Le découpage de ces orthophotos est nécessaire pour adapter les données aux contraintes des modèles.
+
+\paragraph{Processus de découpage}
+La Figure \ref{fig:ch3_preparation_donnees_orthophotos_01_etl} décrit les étapes de ce processus de découpage. Chaque tuile générée mesure \si{\numproduct{1280x1280}} pixels (\si{\numproduct{64x64}} mètres) avec un recouvrement de 256 pixels (12,80 mètres) avec les tuiles adjacentes. Ce recouvrement garantit qu'aucun bâtiment ne soit coupé aux bordures des tuiles.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{02-main/figures/ch3/ch3_preparation_donnees_orthophotos_01_etl.png}
+    \caption{Découpe des orthophotos en tuiles 1280x1280 pixels avec recouvrement}
+    \label{fig:ch3_preparation_donnees_orthophotos_01_etl}
+\end{figure}
+
+\newpage
+\paragraph{Zone urbaine}
+La Figure \ref{fig:ch3_preparation_donnees_orthophotos_02_exemple_decoupe_orthophoto1} illustre la démarche adoptée. Pour chaque orthophoto, l'algorithme charge d'abord l'image et identifie toutes les toitures situées dans son périmètre. 
+
+Un quadrillage de tuiles de \si{\numproduct{1280x1280}} pixels avec un recouvrement de 256 pixels est ensuite créé. Le processus parcourt le quadrillage de manière itérative, du coin supérieur gauche vers le coin inférieur droit. Seules les tuiles contenant au moins une toiture sont conservées et sauvegardées; les tuiles vides sont rejetées. Dans ce cas, 388 tuiles ont été retenues sur les 400 tuiles possibles par orthophoto.
+
+Dans les zones urbaines caractérisées par une forte densité de bâtiments, chaque orthophoto génère un nombre élevé de tuiles. Cette concentration de données est particulièrement intéressante pour l'entraînement du modèle, car elle offre une grande variété d'exemples architecturaux dans un espace géographique restreint.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{02-main/figures/ch3/ch3_preparation_donnees_orthophotos_02_exemple_decoupe_orthophoto1.png}
+    \caption{Exemple de découpage d'une orthophoto en tuiles pour une zone urbaine}
+    \label{fig:ch3_preparation_donnees_orthophotos_02_exemple_decoupe_orthophoto1}
+\end{figure}
+
+\newpage
+La Figure \ref{fig:ch3_preparation_donnees_orthophotos_03_exemple_decoupe_orthophoto2} présente le calepinage des tuiles conservées. Cette représentation illustre plus clairement le principe de recouvrement que la Figure \ref{fig:ch3_preparation_donnees_orthophotos_02_exemple_decoupe_orthophoto1}, une tuile peut être entièrement entourée par d'autres tuiles qui se chevauchent avec elle.
+
+Il convient de noter que toutes les tuiles générées ne présentent pas des dimensions de \si{\numproduct{1280x1280}} pixels. Les tuiles situées en bordure droite de la Figure \ref{fig:ch3_preparation_donnees_orthophotos_03_exemple_decoupe_orthophoto2} sont plus étroites (tuile 18), de même que celles situées en partie basse (tuile 371).
+
+Ces cas particuliers seront traités après la finalisation de l'annotation. La priorité a été donnée à l'obtention de distributions de tuiles identiques pour l'ensemble des orthophotos, afin d'avoir une cohérence dans le processus de découpage et post-traitement.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{02-main/figures/ch3/ch3_preparation_donnees_orthophotos_03_exemple_decoupe_orthophoto2.png}
+    \caption{Calepinage des tuiles découpées pour la zone urbaine}
+    \label{fig:ch3_preparation_donnees_orthophotos_03_exemple_decoupe_orthophoto2}
+\end{figure}
+
+\newpage
+La tuile 258 (Figure \ref{fig:ch3_preparation_donnees_orthophotos_04a_exemple_decoupe_orthophoto3}), située à proximité de \acrshort{hepia}, illustre bien cette complexité. Chaque tuile peut avoir jusqu'à 8 zones de recouvrement avec ses voisines (Figure \ref{fig:ch3_preparation_donnees_orthophotos_04_exemple_decoupe_orthophoto3}) au nord (238), nord-est (239), est (259), sud-est (279), sud (278), sud-ouest (277), ouest (257) et nord-ouest (237). Seule la zone centrale de \si{\numproduct{1024x1024}}  pixels n'a aucun recouvrement et constitue la partie unique de chaque tuile.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.40\linewidth]{02-main/figures/ch3/ch3_preparation_donnees_orthophotos_04a_exemple_decoupe_orthophoto3.png}
+    \caption{Tuile 258}
+    \label{fig:ch3_preparation_donnees_orthophotos_04a_exemple_decoupe_orthophoto3}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.90\linewidth]{02-main/figures/ch3/ch3_preparation_donnees_orthophotos_04_exemple_decoupe_orthophoto3.png}
+    \caption{Recouvrement pour la tuile 258}
+    \label{fig:ch3_preparation_donnees_orthophotos_04_exemple_decoupe_orthophoto3}
+\end{figure}
+
+
+\newpage
+\paragraph{Zone rurale}
+La Figure \ref{fig:ch3_preparation_donnees_orthophotos_05_exemple_decoupe_orthophoto4} illustre le découpage dans une zone plus rurale. Ces zones présentent des caractéristiques architecturales très différentes des zones urbaines, avec notamment des villas individuelles, des bâtiments agricoles et des constructions plus dispersées sur le territoire. Cette diversité typologique est nécessaire pour constituer un dataset riche et varié.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{02-main/figures/ch3/ch3_preparation_donnees_orthophotos_05_exemple_decoupe_orthophoto4.png}
+    \caption{Exemple de découpage d'une orthophoto en tuiles pour une zone rurale}
+    \label{fig:ch3_preparation_donnees_orthophotos_05_exemple_decoupe_orthophoto4}
+\end{figure}
+
+Comme observé précédemment, cette figure révèle également quelques bugs dans le script de traitement des tuiles, avec des tuiles manquantes par endroits (nord 41-42). Cependant, l'analyse à l'échelle du canton (Figure \ref{fig:ch3_preparation_donnees_orthophotos_07_exemple_decoupe_orthophoto6}) confirme que ces erreurs ponctuelles ne compromettent pas la qualité globale du découpage.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{02-main/figures/ch3/ch3_preparation_donnees_orthophotos_07_exemple_decoupe_orthophoto6.png}
+    \caption{Tuiles découpées pour toutes les orthophotos}
+    \label{fig:ch3_preparation_donnees_orthophotos_07_exemple_decoupe_orthophoto6}
+\end{figure}
+
+\newpage
+\paragraph{Implémentation}
+Le Code \ref{code:pseudo_code_decoupe_orthophotos_tuiles_1280_1280} utilise du pseudo-code pour expliquer les étapes de découpage. Les principales librairies employées sont rasterio \cite{noauthor_rasterio_nodate} et shapely \cite{noauthor_shapely_nodate}. Rasterio permet la manipulation des données raster (orthophotos), tandis que shapely offre une boîte à outils complète pour le traitement des géométries et données géospatiales.
+
+\begin{code}[H]
+    \begin{textcode}
+    DÉBUT process_geotiff_with_buildings(geotiff, gdf_batiments, output)
+        
+        // Chargement des données
+        CHARGER les géométries des bâtiments depuis le gdf_batiments
+        OUVRIR le fichier GeoTIFF source
+        
+        // Préparation spatiale
+        REPROJETER les bâtiments dans le même système de coordonnées que le GeoTIFF
+        CRÉER un index spatial pour optimiser les requêtes géométriques
+        FILTRER les bâtiments qui intersectent avec le GeoTIFF sélectionné
+        
+        // Découpage en tuiles
+        CALCULER le nombre de tuiles nécessaires (largeur x hauteur / taille_tuile)
+        
+        POUR chaque position de tuile (i, j) FAIRE
+            DÉFINIR la fenêtre de la tuile courante (1024x1024 pixels)
+            CALCULER l'emprise géographique de la tuile
+            CRÉER la zone de recouvrement autour de la tuile (1280x1280 pixels)
+            
+            // Détection des bâtiments
+            RECHERCHER les bâtiments qui intersectent la zone tamponnée
+            
+            SI aucun bâtiment trouvé ALORS
+                PASSER à la tuile suivante
+            SINON
+                EXTRAIRE les données raster de la zone tamponnée
+                SAUVEGARDER la tuile au format GeoTIFF
+                ENREGISTRER les métadonnées (géométries, identifiants, coordonnées)
+            FIN SI
+        FIN POUR
+        
+        SAUVEGARDER toutes les métadonnées dans un fichier Parquet
+        RETOURNER le chemin du fichier de métadonnées
+        
+    FIN process_geotiff_with_buildings
+    \end{textcode}
+    \captionof{code}{Pseudo-code pour la découpe des orthophotos 20000x20000 pixels en tuiles de 1280x1280 pixels}
+    \label{code:pseudo_code_decoupe_orthophotos_tuiles_1280_1280}
+\end{code}
+
+La gestion de la mémoire peut devenir critique, chaque orthophoto occupant 1,4 Go. Il est possible de paralléliser la tâche, mais cela nécessite une machine disposant de suffisamment de mémoire RAM. 
+
+Lors de l'exécution, le principal goulot d'étranglement est l'accès aux images plutôt que le traitement. Si plusieurs images sont ouvertes simultanément, le système de stockage n'est pas toujours suffisamment rapide et constitue le facteur limitant. Avec une configuration de 4 cœurs et 64 Go de RAM, le processus complet a pris environ 2 heures.
+
+\paragraph{Métadonnées}
+Le fichier parquet résultant (Tableau \ref{tab:ch3_preparation_donnees_orthophotos_parquet_resultat}) va être essentiel pour la sélection des données du dataset, il inclut tous les éléments nécessaires pour clairement identifier les toitures ainsi que les tuiles associées.
+\begin{table}[H]
+    \centering
+    \begin{tabular}{@{}llp{0.55\textwidth}@{}}
+    \toprule
+    \textbf{Nom de la colonne} & \textbf{Type} & \textbf{Description} \\
+    \midrule
+    geotiff\_path & object & Chemin vers le fichier GeoTIFF source \\
+    tile\_path & object & Chemin vers le fichier de tuile généré \\
+    tile\_id & object & Identifiant unique de la tuile \\
+    tile\_row & int64 & Numéro de ligne de la tuile dans la grille \\
+    tile\_col & int64 & Numéro de colonne de la tuile dans la grille \\
+    tile\_bounds & object & Limites géographiques de la tuile \\
+    buffered\_bounds & object & Limites géographiques avec zone tampon \\
+    tile\_size & int64 & Taille de la tuile en pixels \\
+    buffer\_size & int64 & Taille de la zone tampon en pixels \\
+    tile\_pixel\_size & object & Résolution spatiale du pixel de la tuile \\
+    objectid & int64 & Identifiant dans la couche des toitures \\
+    egid & int64 & \gls{egid} \\
+    altitude\_min & float64 & Altitude minimale de la toiture \\
+    altitude\_max & float64 & Altitude maximale de la toiture\\
+    date\_leve & datetime64[ns] & Date de levé de la toiture \\
+    SHAPE\_\_Length & float64 & Périmètre de la géométrie en mètres \\
+    SHAPE\_\_Area & float64 & Surface de la géométrie en mètres carrés \\
+    globalid & object & Identifiant global unique dans \acrshort{sitg} \\
+    geometry & geometry & Géométrie du polygone de toiture géoréférencé \\
+    \bottomrule
+    \end{tabular}
+    \caption{Description des colonnes du fichier parquet résultat}
+    \label{tab:ch3_preparation_donnees_orthophotos_parquet_resultat}
+\end{table}
+
+\paragraph{Résultats}
+Au final, le processus génère 38294 tuiles pour 77993 \gls{egid} uniques à l'échelle du canton. Étant donné qu'un bâtiment peut fréquemment se retrouver sur plusieurs tuiles en raison du recouvrement, cela représente 672253 associations toiture-tuile. Les orthophotos situées près de la zone aéroportuaire, qui incluent une partie du territoire français, ne sont pas incluses dans le périmètre d'étude.
+
+Ces plus de 38000 tuiles constituent une base suffisante pour sélectionner les images nécessaires à la constitution d'un dataset représentatif et équilibré.
+
+\newpage
+
+\subsubsection{Sélection des données pour le dataset}
+La sélection des données nécessite une analyse des tuiles afin d'identifier les caractéristiques des toitures présentes. Les critères retenus pour cette sélection sont la classe \gls{sia} et la surface des toitures.
+
+\paragraph{Classe \gls{sia}}
+Ce critère repose sur l'hypothèse que les classes \gls{sia} regroupent des bâtiments aux caractéristiques architecturales similaires. Par exemple, les toitures industrielles sont généralement plates avec une construction légère, tandis que de nombreuses écoles ont été construites par les mêmes architectes avec des plans similaires.
+
+Pour analyser la distribution des tuiles par classe \gls{sia}, chaque tuile peut contenir plusieurs classes représentées. La classe dite dominante correspond à celle qui est majoritaire dans une tuile donnée.
+
+La Figure \ref{fig:ch3_selection_donnees_01_distribution_sia} illustre la distribution des classes \gls{sia} dominantes par tuile. Cette distribution présente une forte similarité avec celle des classes \gls{sia} pour les bâtiments hors-sol (Figure \ref{fig:ch3_preparation_donnees_categorie_sia_01_barplot}). Cette cohérence est nécessaire pour préserver la représentativité de l'échantillon lors de la sélection du dataset.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{02-main/figures/ch3/ch3_selection_donnees_01_distribution_sia.png}
+    \caption{Distribution des classes \gls{sia} dominantes par tuile}
+    \label{fig:ch3_selection_donnees_01_distribution_sia}
+\end{figure}
+
+\newpage
+\paragraph{Surface des toitures}
+Le deuxième critère retenu est la surface des toitures. Pour chaque tuile, la somme des surfaces de toiture est calculée, permettant ainsi de classifier les tuiles selon leur densité de couverture bâtie. Cette métrique distingue les tuiles avec une forte concentration de toitures, typiques des zones urbaines denses, de celles présentant une couverture plus éparse, caractéristiques des zones rurales ou de périphérie.
+
+La Figure \ref{fig:ch3_selection_donnees_02_taille_bin} représente cette distribution par intervalles de surface. Les intervalles ont été choisis de manière empirique dans le but de refléter les ordres de grandeur caractéristiques des différents types de bâtiments. 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{02-main/figures/ch3/ch3_selection_donnees_02_taille_bin.png}
+    \caption{Distribution des surfaces de toitures par intervalles}
+    \label{fig:ch3_selection_donnees_02_taille_bin}
+\end{figure}
+
+Chaque intervalle correspond à une typologie architecturale spécifique. Le plus petit intervalle (0-200 \si{\unit{\square\meter}}) inclut les petits bâtiments individuels et les villas. Le deuxième (200-500 \si{\unit{\square\meter}}) regroupe les petits bâtiments de logement collectif. Les intervalles suivants (500-1000 \si{\unit{\square\meter}}, 1000-2000 \si{\unit{\square\meter}}, 2000-5000 \si{\unit{\square\meter}}) correspondent respectivement aux logements collectifs de taille moyenne, aux grands ensembles résidentiels et aux bâtiments industriels ou commerciaux. Enfin, l'intervalle supérieur (plus de 5000 \si{\unit{\square\meter}}) regroupe les grandes infrastructures industrielles, commerciales ou publiques.
+
+\newpage
+\paragraph{Échantillonnage stratifié}
+L'échantillonnage des tuiles s'effectue selon une approche stratifiée pour garantir une représentation équilibrée de chaque catégorie. Cette méthode repose sur deux critères de stratification, la classe dominante (\texttt{dominant\_class}) et la catégorie de surface (\texttt{area\_bin}). 
+
+La fonction \texttt{sample\_tiles} (Code \ref{code:echantillonnage_tuiles}) implémente cette logique d'échantillonnage avec un paramètre \texttt{random\_state=42} qui permet la reproductibilité des résultats en fixant la graine du générateur de nombres aléatoires.
+
+\begin{code}[H]
+    \begin{pythoncode}
+    def sample_tiles(group, n_samples):
+        """
+        Échantillonne aléatoirement n_samples éléments d'un groupe.
+        Si le groupe contient moins d'éléments que demandé, retourne tous les éléments.
+        """
+        if len(group) > n_samples:
+            return group.sample(n=n_samples, random_state=42)
+        else:
+            return group
+    \end{pythoncode}
+    \captionof{code}{Fonction d'échantillonnage stratifié par groupe}
+    \label{code:echantillonnage_tuiles}
+\end{code}
+
+Cette stratégie utilise la méthode \texttt{groupby} pour créer des sous-groupes homogènes selon chaque combinaison des critères de stratification. La constante \texttt{SAMPLES\_PER\_CAT} (fixée à 8) définit le nombre maximum d'échantillons à extraire par catégorie, permettant ainsi de définir précisément la taille du dataset souhaité.
+
+\begin{code}[H]
+    \begin{pythoncode}
+    # Application de l'échantillonnage stratifié
+    sampled_df = tile_groups.groupby(['dominant_class', 'area_bin']).apply(
+        sample_tiles, n_samples=SAMPLES_PER_CAT
+    ).reset_index(drop=True)
+    \end{pythoncode}
+    \captionof{code}{Application de l'échantillonnage stratifié}
+    \label{code:application_echantillonnage}
+\end{code}
+
+L'objectif est d'obtenir un sous-groupe homogène de 8 individus pour chaque combinaison classe \gls{sia} dominante / intervalle de surface. Avec 6 intervalles de surface définis par classe \gls{sia}, cela représente 48 individus par classe. Pour l'ensemble des 12 classes \gls{sia} considérées dans l'étude, le dataset cible comprend au total 576 individus stratifiés.
+
+\paragraph{Résultats}
+L'échantillon obtenu (Figure \ref{fig:ch3_selection_donnees_03_selection_stacked}) contient 539 échantillons au lieu de l'objectif fixé à 576. Cette différence s'explique par la rareté de certaines combinaisons classe \gls{sia} / intervalle de surface, particulièrement pour la restauration et les piscines couvertes.
+
+Pour la restauration, seuls 2 \gls{egid} ont une surface supérieure à 5000 \si{\unit{\square\meter}} à l'échelle du canton. Ces deux individus sont donc automatiquement inclus dans la sélection pour cette combinaison spécifique, sans pouvoir atteindre l'objectif de 8 individus.
+
+Les piscines couvertes constituent également un cas particulier avec seulement 11 \gls{egid} sur l'ensemble du canton (Figure \ref{fig:ch3_preparation_donnees_categorie_sia_01_barplot}). Ces bâtiments, généralement de taille conséquente avec des surfaces supérieures à 2000 \si{\unit{\square\meter}} dans la plupart des cas, ne permettent pas d'atteindre la représentation souhaitée dans tous les intervalles de surface.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{02-main/figures/ch3/ch3_selection_donnees_03_selection_stacked.png}
+    \caption{Sélection de l'échantillon pour le dataset}
+    \label{fig:ch3_selection_donnees_03_selection_stacked}
+\end{figure}
+
+L'échantillonnage stratifié permet de sélectionner de manière aléatoire les individus qui formeront les différents sous-groupes selon chaque combinaison classe \gls{sia} / intervalle de surface. La Figure \ref{fig:ch3_selection_donnees_04_selection_map_sia} confirme que l'échantillon inclut des tuiles réparties sur l'ensemble du canton, garantissant une bonne représentation de toutes les spécificités architecturales.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{02-main/figures/ch3/ch3_selection_donnees_04_selection_map_sia.png}
+    \caption{Échantillon sélectionné de 539 tuiles par catégorie \gls{sia}}
+    \label{fig:ch3_selection_donnees_04_selection_map_sia}
+\end{figure}
+
+\subsubsection{Labellisation}
+La labellisation (ou annotation) des données consiste à délimiter et classifier les zones d'intérêt sur chaque image. Ce processus permet à l'algorithme d'apprentissage supervisé d'identifier les caractéristiques visuelles spécifiques de chaque classe, lui permettant ensuite de reconnaître et segmenter ces mêmes éléments sur de nouvelles images.
+
+Dans le cadre de cette étude, une seule classe sera définie pour identifier les espaces libres sur les toitures.
+
+\paragraph{Outils d'annotation}
+La labellisation exige des outils spécialisés pour optimiser le processus, particulièrement pour la segmentation sémantique. Ce type d'annotation nécessite la création de polygones délimitant précisément les zones d'intérêt, ce qui implique souvent des formes géométriques complexes et irrégulières. L'intégration d'algorithmes de segmentation d'instance tels que \acrshort{sam} constitue une aide précieuse pour automatiser la sélection et la délimitation des zones à annoter.
+
+Le choix d'un outil approprié représente un défi important, gagner du temps dans chaque annotation devient critique quand il y a 539 images à annoter. Plusieurs solutions ont été évaluées :
+\begin{itemize}
+    \item Label Studio \cite{label_studio_open_nodate}
+    \item Roboflow \cite{roboflow_roboflow_nodate}
+    \item Supervisely \cite{supervisely_supervisely_nodate}
+\end{itemize}
+
+Label Studio \cite{label_studio_open_nodate}, disponible depuis 2019, offre la possibilité d'intégrer des algorithmes de machine learning pour assister le processus d'annotation. Il s'agit d'une librairie Python permettant de gérer les annotations dans une base de données locale via une interface web. Cet outil n'a pas été retenu car l'utilisation d'aides à l'annotation tels que \acrshort{sam} \cite{label_studio_label_nodate} est complexe à configurer dans la version gratuite, cette fonctionnalité étant principalement accessible via leur offre commerciale.
+
+Le deuxième outil évalué est Roboflow \cite{roboflow_roboflow_nodate}, une plateforme web qui propose gratuitement l'annotation assistée par \acrshort{sam}. L'un de ses principaux avantages est la possibilité d'entraîner un modèle de machine learning sur les premières images annotées, pour ensuite annoter automatiquement le reste du dataset. La version gratuite inclut l'accès à la plupart des fonctionnalités et offre quelques crédits pour l'annotation automatique.
+
+Cet outil a été utilisé pour créer un dataset de 45 images dans le cadre d'une des pistes explorées dans la sous-section \textit{\nameref{subsubsec:fine_tuning_sam}} (voir page~\pageref{subsubsec:fine_tuning_sam}). L'interface utilisateur est assez intuitive et ergonomique.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{02-main//figures//ch3/ch3_labellisation_01_outils_01_robolfow.png}
+    \caption{Interface Roboflow}
+    \label{fig:ch3_labellisation_01_outils_01_robolfow}
+\end{figure}
+
+Malgré que Roboflow a tous les outils nécessaires pour effectuer des annotations rapides, \acrshort{sam} (Figure \ref{fig:ch3_labellisation_01_outils_02_robolfow_sam}) présente certaines limitations et ne permet qu'une sélection simplifiée des zones à annoter. Dans le contexte spécifique des toitures, cette approche nécessite de nombreux clics pour obtenir une annotation correspondant précisément à la zone souhaitée. 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{02-main/figures/ch3/ch3_labellisation_01_outils_02_robolfow_sam.png}
+    \caption{Exemple d'annotation avec \acrshort{sam} dans Roboflow}
+    \label{fig:ch3_labellisation_01_outils_02_robolfow_sam}
+\end{figure}
+
+Si l'objectif porte sur une zone clairement délimitée, \acrshort{sam} est suffisant. En revanche, dans des situations complexes présentant des zones d'ombrage ou des variations de contraste importantes, le processus d'annotation devient considérablement plus laborieux et chronophage.
+
+Le troisième outil évalué, Supervisely, propose d'intégrer, en complément de SAM2, l'algorithme ClickSEG \cite{chen_conditional_2021} \cite{chen_focalclick_2022} (Figure \ref{fig:ch3_labellisation_01_outils_03_supervisely_modeles}). Supervisely offre la possibilité d'encadrer la zone d'intérêt (Figure \ref{fig:ch3_labellisation_01_outils_04_supervisely_segmentation}) pour ensuite la segmenter automatiquement. Cette approche permet de sélectionner une toiture dans son ensemble puis de retirer les parties occupées.
+
+En pratique, les propositions de segmentation générées par ClickSEG se sont révélées significativement plus précises et pertinentes que celles produites par SAM2.
+
+Supervisely a été retenu comme outil de labellisation car il permet d'annoter les images avec plus de précision et rapidité que avec Roboflow. Cependant, après avoir annoté quelques images, certaines limitations sont apparues, chaque annotation génère des requêtes à leurs serveurs, et le nombre de requêtes autorisé dans la version gratuite limite l'annotation à quelques images par heure.
+
+La version payante ne présente pas cette restriction et a été jugée pertinente à cause du gain de temps considérable qu'elle apporte. Le processus complet de labellisation s'est étalé sur environ un mois et demi, représentant environ 30 heures par semaine.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.97\linewidth]{02-main/figures/ch3/ch3_labellisation_01_outils_03_supervisely_modeles.png}
+    \caption{Modèles de segmentation disponibles dans Supervisely}
+    \label{fig:ch3_labellisation_01_outils_03_supervisely_modeles}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.97\linewidth]{02-main/figures/ch3/ch3_labellisation_01_outils_04_supervisely_segmentation.png}
+    \caption{Labellisation avec segmentation dans Supervisely}
+    \label{fig:ch3_labellisation_01_outils_04_supervisely_segmentation}
+\end{figure}
+
+\paragraph{Critères d'annotation}
+L'annotation d'images exige de fixer certains critères pour garantir la qualité. Les éléments suivants sont considérés comme des obstacles sur les toitures:
+\begin{itemize}
+    \item Balcons et terrasses praticables
+    \item Toitures végétalisées
+    \item Fenêtres (Velux), verrières et puits de lumière
+    \item Lucarnes
+    \item Cheminées, turbinettes, monoblocs, gaines
+    \item Antennes (TV, satellite, téléphonie, ...)
+    \item Acrotères
+    \item Panneaux solaires (photovoltaïque et thermique)
+    \item Constructions métalliques (support de publicité)
+\end{itemize}
+
+Le premier exemple est une toiture plate (Figure \ref{fig:labellisation_acrotere_exemple}). Les éléments considérés comme obstacles sont les gaines de ventilation, les acrotères ainsi que la structure métallique. Le reste est labellisé comme toiture libre (couleur violette sur la Figure \ref{fig:ch3_labellisation_02_exemples_01_acrotere2}). Cette zone correspond à l'espace effectivement disponible sur la toiture, une fois tous les obstacles identifiés et délimités.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch3/ch3_labellisation_02_exemples_01_acrotere1.png}
+        \caption{Original}
+        \label{fig:ch3_labellisation_02_exemples_01_acrotere1}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.485\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch3/ch3_labellisation_02_exemples_01_acrotere2.png}
+        \caption{Labellisation}
+        \label{fig:ch3_labellisation_02_exemples_01_acrotere2}
+    \end{subfigure}
+    \caption{Exemple de labellisation 1}
+    \label{fig:labellisation_acrotere_exemple}
+\end{figure}
+
+Le deuxième exemple (Figure \ref{fig:labellisation_lucarne_exemple}) représente une toiture comportant des lucarnes. La zone considérée comme libre est représentée en vert sur la Figure \ref{fig:ch3_labellisation_02_exemples_02_lucarne2}. Cette délimitation exclut les lucarnes, la zone périphérique proche du bord de toiture, les équipements techniques (antennes, éléments de ventilation) ainsi que la partie arrondie visible côté nord de la toiture.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch3/ch3_labellisation_02_exemples_02_lucarne1.png}
+        \caption{Original}
+        \label{fig:ch3_labellisation_02_exemples_02_lucarne1}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch3/ch3_labellisation_02_exemples_02_lucarne2.png}
+        \caption{Labellisation}
+        \label{fig:ch3_labellisation_02_exemples_02_lucarne2}
+    \end{subfigure}
+    \caption{Exemple de labellisation 2}
+    \label{fig:labellisation_lucarne_exemple}
+\end{figure}
+
+L'exemple suivant (Figure \ref{fig:labellisation_solaire_exemple}) représente une toiture avec des panneaux solaires existants. Les panneaux solaires, les espaces entre panneaux et les puits de lumière sont considérés comme des obstacles. Cependant, s'il y a de grands espaces entre les puits de lumière et les panneaux, ceux-ci sont considérés comme libres (couleur violette dans la Figure \ref{fig:ch3_labellisation_02_exemples_03_solaire2}).
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch3/ch3_labellisation_02_exemples_03_solaire1.png}
+        \caption{Original}
+        \label{fig:ch3_labellisation_02_exemples_03_solaire1}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch3/ch3_labellisation_02_exemples_03_solaire2.png}
+        \caption{Labellisation}
+        \label{fig:ch3_labellisation_02_exemples_03_solaire2}
+    \end{subfigure}
+    \caption{Exemple de labellisation 3}
+    \label{fig:labellisation_solaire_exemple}
+\end{figure}
+
+Le dataset inclut également des images qui contiennent une toiture selon la couche \acrshort{sitg} des toitures mais où il n'y a pas de surface libre. Dans la Figure \ref{fig:ch3_labellisation_02_exemples_04_image_non_annotee}, un bâtiment est bien présent dans la zone nord-est de l'image, mais celui-ci semble être une serre vitrée. Bien qu'il soit possible d'installer des panneaux solaires semi-translucides sur ce type de toiture, celle-ci a été exclue pour éviter la confusion avec les puits de lumière, car il y a beaucoup plus de puits de lumière vitrés que de serres translucides.
+
+L'ajout de ce type d'exemples sans toiture exploitable devrait permettre à l'algorithme de mieux comprendre les caractéristiques recherchées dans un espace libre. Cette approche pourrait également éviter que l'algorithme considère automatiquement toutes les surfaces comme libres, ce qui l'aiderait à développer une capacité de discrimination plus fine entre les espaces réellement disponibles et ceux qui ne le sont pas.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{02-main/figures/ch3/ch3_labellisation_02_exemples_04_image_non_annotee.png}
+    \caption{Exemple d'image sans aucune surface libre disponible}
+    \label{fig:ch3_labellisation_02_exemples_04_image_non_annotee}
+\end{figure}
+
+\paragraph{Résultat}
+Le dataset obtenu consiste en 539 images accompagnées de leur masque d'annotation binaire. Le masque correspond à une image de la même taille que l'image originale, où chaque pixel prend une valeur de 1 si la toiture est libre à cet endroit, ou une valeur de 0 si cette zone correspond à un obstacle ou une surface non exploitable. Cette représentation binaire permet à l'algorithme d'apprentissage de distinguer clairement les espaces disponibles des zones occupées.
+
+Pour des raisons de taille d'image, les images utilisées lors de l'annotation dans Supervisely sont des PNG comprimés (environ 2 Mo chacune). Une fois l'annotation finalisée, ces images sont remplacées par les fichiers originaux en format GeoTIFF (environ 5 Mo chacun) afin de préserver toutes les informations géographiques nécessaires ainsi que la qualité originale des images. Le dataset complet occupe ainsi un espace d'environ 4,4 Go en incluant tous les fichiers auxiliaires.
+
+Supervisely propose également d'autres formats d'annotation que les masques binaires. L'outil offre notamment les formats YOLOv8, COCO, PASCAL VOC ainsi que leur propre format propriétaire.
+
+\subsubsection{Post-traitement des données annotées}
+Les données annotées doivent être traitées puis réparties en datasets d'entraînement, de validation et de test. Cette étape constitue une phase cruciale qui détermine la qualité de l'apprentissage du modèle et sa capacité de généralisation. La Figure \ref{fig:ch3_postprocessing_dataset_03_overview} décrit les principales phases.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{02-main/figures/ch3/ch3_postprocessing_dataset_03_overview.png}
+    \caption{Principales étapes du post-traitement}
+    \label{fig:ch3_postprocessing_dataset_03_overview}
+\end{figure}
+
+\paragraph{Rognage des images}
+Les données ont été annotées sur l'intégralité de l'image pour des raisons pratiques (Figure \ref{fig:ch3_postprocessing_dataset_01_exemple_dataset}), mais il semble pertinent de retirer les zones situées en dehors des toitures (Figure \ref{fig:ch3_postprocessing_dataset_02_exemple_postraitement}). Cette approche permettra au modèle de se centrer spécifiquement sur les toitures, plutôt que d'apprendre à distinguer des éléments comme des voitures ou d'autres objets présents dans l'environnement urbain.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch3/ch3_postprocessing_dataset_01_exemple_dataset.png}
+        \caption{Tuile d'exemple}
+        \label{fig:ch3_postprocessing_dataset_01_exemple_dataset}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch3/ch3_postprocessing_dataset_02_exemple_postraitement.png}
+        \caption{Tuile d'exemple après post-traitement}
+        \label{fig:ch3_postprocessing_dataset_02_exemple_postraitement}
+    \end{subfigure}
+    \caption{Exemple de post-traitement}
+    \label{fig:exemple_post_traitement_dataset}
+\end{figure}
+
+Les images étant au format GeoTIFF, il suffit de définir à 0 (noir) toutes les zones qui n'intersectent pas avec la couche \acrshort{sitg} des toitures ``CAD\_BATIMENTS\_HORSOL\_TOIT''. Lors de l'annotation, il n'est pas toujours évident de distinguer une toiture d'un couvert, ce qui peut conduire à identifier des zones libres en dehors de la couche des toitures. L'opération de rognage est donc également appliquée aux annotations correspondantes, évitant ainsi que le modèle considère à tort qu'une zone masquée (pixels à 0) puisse correspondre à une toiture libre.
+
+\paragraph{Fuite de données entre datasets}
+Les tuiles présentent un recouvrement de 256 pixels qui peut causer des problèmes s'il n'est pas géré correctement. La Figure \ref{fig:ch3_postprocessing_dataset_04_data_leakage} illustre cette problématique avec 3 datasets destinés à l'entraînement d'un modèle. Si les tuiles sont assignées de manière aléatoire aux différents datasets, il existe un risque que le dataset d'entraînement contienne une partie de toiture également présente dans le dataset de test. Cette situation compromet l'évaluation des performances du modèle, puisque celui-ci aura déjà été exposé à certaines zones lors de la phase d'apprentissage, faussant ainsi les résultats obtenus sur des données supposées inconnues.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{02-main/figures/ch3/ch3_postprocessing_dataset_04_data_leakage.png}
+    \caption{Fuite de données entre datasets}
+    \label{fig:ch3_postprocessing_dataset_04_data_leakage}
+\end{figure}
+
+Cette fuite de données entre datasets peut également se produire entre le dataset d'entraînement et celui de validation, ce qui conduirait le modèle à apprendre par cœur l'emplacement des toitures libres au lieu de comprendre les caractéristiques visuelles nécessaires pour identifier une toiture libre. Le modèle développerait alors une capacité de mémorisation plutôt qu'une réelle capacité de généralisation, compromettant ses performances sur de nouvelles données.
+
+\paragraph{Traitement des chevauchements entre tuiles}
+Une des manières de résoudre le problème des fuites de données consiste en un masquage sélectif d'une des tuiles en cas de recouvrement. La Figure \ref{fig:ch3_postprocessing_dataset_05_traitement_chevauchement} illustre ce processus en trois phases distinctes.
+
+\begin{figure}[H]
+    \centering
+    \makebox[\textwidth][c]{\includegraphics[width=1.15\textwidth]{02-main//figures/ch3/ch3_postprocessing_dataset_05_traitement_chevauchement.png}}
+    \caption{Traitement des chevauchements entre tuiles}
+    \label{fig:ch3_postprocessing_dataset_05_traitement_chevauchement}
+\end{figure}
+
+La première étape consiste à identifier les paires de tuiles qui se chevauchent géographiquement. La deuxième phase calcule leur position relative pour déterminer précisément les zones de recouvrement. Enfin, la troisième étape procède au masquage d'une partie spécifique dans l'une des tuiles concernées, éliminant ainsi la redondance d'information entre les datasets.
+
+La première étape est réalisée par la fonction \texttt{find\_overlapping\_tiles} (Code \ref{code:post_traitement_detection_tuile_chevauchement}) qui permet d'identifier les paires de tuiles se chevauchent.
+
+\begin{code}[H]
+    \begin{pythoncode}
+    def find_overlapping_tiles(gdf, min_overlap_area=1.0):
+        """
+        Simple function to find overlapping tiles using spatial index.
+        Returns a list of overlapping tile pairs.
+        """
+        overlaps = []
+        n = len(gdf)
+        
+        # Create spatial index for fast lookups
+        sindex = gdf.sindex
+        
+        # Check each tile against potential neighbors
+        for i in range(n):
+            geom1 = gdf.iloc[i]['geometry']
+            tile_id1 = gdf.iloc[i]['tile_id']
+            
+            # Find potential overlapping tiles using bounding box
+            bbox = geom1.bounds  # Get bounding box coordinates
+            potential_matches = list(sindex.intersection(bbox))
+            
+            # Remove self-match and only check tiles with higher index
+            potential_matches = [j for j in potential_matches if j > i]
+            
+            # Check each potential match
+            for j in potential_matches:
+                geom2 = gdf.iloc[j]['geometry']
+                tile_id2 = gdf.iloc[j]['tile_id']
+                
+                # Check if geometries actually intersect
+                if geom1.intersects(geom2):
+                    
+                    # Calculate overlap area
+                    intersection = geom1.intersection(geom2)
+                    overlap_area = intersection.area
+                    
+                    # Only keep overlaps above minimum threshold
+                    if overlap_area > min_overlap_area:
+                        
+                        # Calculate overlap percentages
+                        overlap_pct1 = (overlap_area / geom1.area) * 100
+                        overlap_pct2 = (overlap_area / geom2.area) * 100
+                        
+                        # Store overlap information
+                        overlaps.append({
+                            'tile_id1': tile_id1,
+                            'tile_id2': tile_id2,
+                            'overlap_area': overlap_area,
+                            'overlap_percentage_1': overlap_pct1,
+                            'overlap_percentage_2': overlap_pct2
+                        })
+        
+        return overlaps
+    \end{pythoncode}
+    \captionof{code}{Détection des tuiles qui se chevauchent}
+    \label{code:post_traitement_detection_tuile_chevauchement}
+\end{code}
+
+La fonction commence par créer un index spatial pour optimiser les performances de recherche. Elle divise l'espace géographique en zones hiérarchiques (rectangles englobants) et référence les géométries présentes dans chaque zone. Cette structure permet d'éviter de comparer chaque géométrie avec l'ensemble des autres lors d'opérations spatiales, réduisant considérablement le nombre de calculs nécessaires et améliorant ainsi les performances de l'algorithme.
+
+Pour chaque tuile, la fonction identifie ensuite les candidates potentielles en utilisant les boîtes englobantes, puis vérifie si une intersection géométrique réelle existe entre elles. Lorsqu'un recouvrement est détecté et dépasse le seuil minimal défini, elle calcule la surface d'intersection ainsi que les pourcentages de recouvrement pour chacune des deux tuiles concernées. Ces informations sont finalement stockées dans un dictionnaire Python.
+
+La deuxième étape est réalisée par la fonction \texttt{determine\_relative\_position} (Code \ref{code:post_traitement_position_relative_tuiles}) qui traite les paires de tuiles identifiées lors de l'étape précédente. Cette fonction calcule les centroïdes des deux tuiles concernées et détermine leur position relative l'une par rapport à l'autre. Cette information de positionnement sera ensuite utilisée pour décider quelle zone masquer lors du traitement des recouvrements.
+
+\begin{code}[H]
+    \begin{pythoncode}
+    def determine_relative_position(geom1, geom2):
+        """
+        Determine where geom1 is located relative to geom2.
+        Returns: 'top', 'bottom', 'left', 'right', 'top-left', etc.
+        """
+        
+        # Get the center points of both geometries
+        center_x1, center_y1 = geom1.centroid.x, geom1.centroid.y
+        center_x2, center_y2 = geom2.centroid.x, geom2.centroid.y
+        
+        # Compare vertical positions
+        if center_y1 > center_y2:
+            vertical = "top"
+        elif center_y1 < center_y2:
+            vertical = "bottom"
+        else:
+            vertical = None
+        
+        # Compare horizontal positions
+        if center_x1 > center_x2:
+            horizontal = "right"
+        elif center_x1 < center_x2:
+            horizontal = "left"
+        else:
+            horizontal = None
+        
+        # Combine results
+        if vertical and horizontal:
+            return f"{vertical}-{horizontal}"
+        elif vertical:
+            return vertical
+        elif horizontal:
+            return horizontal
+        else:
+            return "center"
+    
+    \end{pythoncode}
+    \captionof{code}{Position relative des tuiles}
+    \label{code:post_traitement_position_relative_tuiles}
+\end{code}
+
+Finalement, la fonction \texttt{remove\_overlaps} (Code \ref{code:post_traitement_masquage_selectif}) applique un masquage sélectif aux tuiles qui se chevauchent, en ciblant spécifiquement celles situées à droite ou en bas selon leur position relative déterminée à l'étape précédente. Cette approche systématique garantit l'élimination des redondances tout en conservant l'intégrité des données dans chaque dataset.
+
+\begin{code}[H]
+    \begin{pythoncode}
+    def remove_overlaps(overlap_df, gdf_dataset, remove_positions=['right', 'bottom']):
+        """
+        Remove overlaps by setting overlapping pixels to 0.
+        
+        Args:
+            overlap_df: DataFrame with overlap information
+            gdf_dataset: GeoDataFrame with file paths and geometries
+            remove_positions: List of positions to remove (e.g., ['right', 'bottom'])
+                             Default removes right and bottom tiles
+        """
+        
+        for idx, row in overlap_df.iterrows():
+            
+            # Get the two overlapping files and geometries
+            file1 = gdf_dataset.iloc[row['index1']]['processed_img_path_tif']
+            file2 = gdf_dataset.iloc[row['index2']]['processed_img_path_tif'] 
+            geom1 = gdf_dataset.iloc[row['index1']]['geometry']
+            geom2 = gdf_dataset.iloc[row['index2']]['geometry']
+            
+            # Decide which file to modify based on position and preferences
+            position = row['relative_position']
+            
+            # Check if any component of the position should be removed
+            should_remove_geom1 = any(pos in position for pos in remove_positions)
+            
+            if should_remove_geom1:
+                file_to_modify = file1    # Remove from geom1 (the positioned tile)
+                modify_geom = geom1
+            else:
+                file_to_modify = file2    # Remove from geom2 (the reference tile)
+                modify_geom = geom2
+                
+            intersection = geom1.intersection(geom2)
+            
+            # Open GeoTIFF and set overlapping pixels to 0
+            with rasterio.open(file_to_modify, 'r+') as src:
+                
+                # Convert geographic intersection to pixel coordinates
+                minx, miny, maxx, maxy = intersection.bounds
+                window = from_bounds(minx, miny, maxx, maxy, src.transform)
+                
+                # Get pixel indices
+                col_start = int(window.col_off)
+                row_start = int(window.row_off) 
+                col_end = col_start + int(window.width)
+                row_end = row_start + int(window.height)
+                
+                # Set pixels to 0 for all bands
+                for band in range(1, src.count + 1):
+                    data = src.read(band)
+                    data[row_start:row_end, col_start:col_end] = 0
+                    src.write(data, band)
+    \end{pythoncode}
+    \captionof{code}{Masquage sélectif}
+    \label{code:post_traitement_masquage_selectif}
+\end{code}
+
+\paragraph{Distribution stratifiées pour validation croisée}
+La segmentation sémantique nécessite de grandes quantités de données annotées. Pour exploiter au mieux celles qui sont disponibles, il convient d'aller au-delà de la répartition classique entre entraînement, validation et test. L'approche traditionnelle implique que seul le dataset d'entraînement est utilisé pour former le modèle, le dataset de validation servant à évaluer les performances pendant l'entraînement, tandis que le dataset de test n'est jamais exploité durant cette phase et reste réservé à l'évaluation finale une fois l'entraînement terminé.
+
+Une alternative plus complexe à mettre en place consiste à utiliser une validation croisée (Figure \ref{fig:ch3_postprocessing_dataset_06_kfold}). Cette méthode permet de diviser les données annotées en une partie d'entraînement constituée de 5 ensembles de données (``folds'') et un dataset de test distinct. L'avantage de cette approche réside dans le fait que chaque fold sert alternativement de dataset de validation. Ainsi, lors du premier entraînement, les folds 0, 1, 2 et 3 constituent l'ensemble d'entraînement tandis que le fold 4 sert de validation. Lors de l'entraînement suivant, les folds 0, 1, 2 et 4 sont utilisés pour l'entraînement et le fold 3 devient le dataset de validation. Cette rotation se poursuit jusqu'à ce que chaque fold ait servi de validation. Le dataset de test demeure quant à lui exclusivement réservé à l'évaluation finale, une fois l'ensemble du processus d'entraînement terminé.
+
+\begin{figure}[H]
+    \centering
+    \makebox[\textwidth][c]{\includegraphics[width=1.15\textwidth]{02-main//figures/ch3/ch3_postprocessing_dataset_06_kfold.png}}
+    \caption{Répartition datasets}
+    \label{fig:ch3_postprocessing_dataset_06_kfold}
+\end{figure}
+
+Pour répartir les données annotées, il est nécessaire d'effectuer une stratification similaire à celle utilisée lors de la phase de sélection des données à annoter. Cette stratification analyse les combinaisons de classes \gls{sia} et d'intervalles de surface présentes dans le dataset. Les combinaisons les plus rares sont distribuées en priorité dans les différents ensembles, puis les combinaisons plus fréquentes sont réparties selon le même principe. L'objectif est de garantir que tous les datasets conservent une représentation équilibrée et représentative du dataset original annoté.
+
+La fonction \texttt{create\_stratified\_dataset\_splits} (Code \ref{code:post_traitement_stratification}) permet de réaliser cette stratification.
+
+\newpage
+\begin{code}[H]
+    \begin{pythoncode}
+    def create_stratified_dataset_splits(df, test_size=0.2, n_folds=5, max_attempts=100):
+        """Generate stratified dataset splits using dominant class and area bin."""
+        from sklearn.preprocessing import LabelEncoder
+        from iterstrat.ml_stratifiers import IterativeStratification
+        
+        best_result, best_score = None, float('inf')
+        
+        for attempt in range(max_attempts):
+            # Encode categorical variables for stratification
+            encoded_classes = LabelEncoder().fit_transform(df['dominant_class'])
+            encoded_areas = LabelEncoder().fit_transform(df['area_bin'])
+            stratification_labels = np.column_stack([encoded_classes, encoded_areas])
+            # Create train/test split
+            test_splitter = IterativeStratification(n_splits=int(1/test_size), order=2)
+            train_indices, test_indices = list(test_splitter.split(df.values, stratification_labels))[0]
+            # Initialize dataset assignments
+            df_result = df.copy()
+            df_result['dataset'] = n_folds  # Test set assignment
+            # Create cross-validation splits from training data
+            cv_splitter = IterativeStratification(n_splits=n_folds, order=2)
+            cv_splits = list(cv_splitter.split(
+                df_result.iloc[train_indices].values, 
+                stratification_labels[train_indices]))
+            # Assign CV fold numbers
+            for fold_id, (_, validation_indices) in enumerate(cv_splits):
+                original_indices = train_indices[validation_indices]
+                df_result.loc[original_indices, 'dataset'] = fold_id
+            # Calculate stratification quality metrics
+            class_cv_scores = []
+            for class_name in df_result['dominant_class'].unique():
+                class_subset = df_result[df_result['dominant_class'] == class_name]
+                fold_counts = class_subset['dataset'].value_counts()
+                fold_percentages = fold_counts / len(class_subset)
+                cv_score = fold_percentages.std() / fold_percentages.mean()
+                class_cv_scores.append(cv_score)
+            area_cv_scores = []
+            for area_name in df_result['area_bin'].unique():
+                area_subset = df_result[df_result['area_bin'] == area_name]
+                fold_counts = area_subset['dataset'].value_counts()
+                fold_percentages = fold_counts / len(area_subset)
+                cv_score = fold_percentages.std() / fold_percentages.mean()
+                area_cv_scores.append(cv_score)
+            # Combined quality score (lower is better)
+            combined_score = np.mean(class_cv_scores) + np.mean(area_cv_scores)
+            # Update best result if current attempt is better
+            if combined_score < best_score:
+                best_score = combined_score
+                best_result = df_result.copy()
+        return best_result
+    \end{pythoncode}
+    \captionof{code}{Stratification pour la répartition des données annotées}
+    \label{code:post_traitement_stratification}
+\end{code}
+
+Cette fonction utilise une approche itérative pour optimiser la qualité de la stratification multicritères. L'algorithme \texttt{IterativeStratification} a l'avantage de pouvoir traiter simultanément plusieurs variables de stratification, contrairement aux méthodes classiques limitées à une seule variable catégorielle.
+
+L'algorithme procède par allocation séquentielle des échantillons aux différents folds. À chaque itération, il sélectionne l'échantillon dont l'affectation permettra de minimiser le déséquilibre global entre les folds pour l'ensemble des variables de stratification. Cette approche garantit une distribution homogène des combinaisons de caractéristiques, même lorsque certaines combinaisons sont rares dans le dataset.
+
+La fonction évalue la qualité de chaque tentative de stratification en calculant un score composite basé sur le coefficient de variation (CV) des distributions. Pour chaque classe dominante et chaque intervalle de surface, le coefficient de variation est défini comme :
+
+\vspace{0.35cm}
+\begin{equation}
+    CV = \frac{\sigma(\text{pourcentages par fold})}{\mu(\text{pourcentages par fold})}
+\end{equation}
+\vspace{0.05cm}
+
+où $\sigma$ représente l'écart-type et $\mu$ la moyenne des pourcentages de répartition entre les folds.
+
+Un coefficient proche de zéro indique une distribution parfaitement équilibrée, tandis qu'une valeur élevée révèle des déséquilibres importants. Le score de qualité global combine les coefficients de variation moyens pour les classes dominantes et les intervalles de surface, permettant d'identifier objectivement la répartition optimale parmi les multiples tentatives générées.
+
+Le meilleur résultat (Code \ref{code:post_traitement_stratification_resultats}) est obtenu à l'itération 84, malgré des essais avec plus de 10000 itérations.
+
+\begin{code}[H]
+    \begin{textcode}
+    Target: Class CV ≤ 0.050, Area CV ≤ 0.050
+      Attempt 1: Class CV: 0.106, Area CV: 0.147
+      Attempt 2: Class CV: 0.099, Area CV: 0.140
+      Attempt 4: Class CV: 0.102, Area CV: 0.136
+      Attempt 6: Class CV: 0.113, Area CV: 0.116
+      Attempt 7: Class CV: 0.117, Area CV: 0.106
+      Attempt 10: Class CV: 0.109, Area CV: 0.107
+      Attempt 20: Class CV: 0.124, Area CV: 0.112
+      Attempt 26: Class CV: 0.111, Area CV: 0.098
+      Attempt 40: Class CV: 0.127, Area CV: 0.139
+      Attempt 45: Class CV: 0.122, Area CV: 0.072
+      Attempt 60: Class CV: 0.119, Area CV: 0.121
+      Attempt 65: Class CV: 0.090, Area CV: 0.092
+      Attempt 80: Class CV: 0.121, Area CV: 0.120
+      Attempt 84: Class CV: 0.086, Area CV: 0.088
+      Attempt 100: Class CV: 0.136, Area CV: 0.114
+    Best result: Class CV: 0.086, Area CV: 0.088
+    Final distribution:
+    dataset
+    0    88
+    1    89
+    2    89
+    3    88
+    4    87
+    5    89
+    \end{textcode}
+    \captionof{code}{Résultats fonction \texttt{create\_stratified\_dataset\_splits}}
+    \label{code:post_traitement_stratification_resultats}
+\end{code}
+    
+\newpage
+\paragraph{Validation de la distribution des datasets}
+
+La validation de la distribution des datasets (Figure \ref{fig:ch3_postprocessing_dataset_07_validation}) comprend trois étapes distinctes. La première consiste à vérifier les chevauchements entre tuiles pour s'assurer de l'absence de fuites de données. La deuxième étape consiste à vérifier que les images respectent le format attendu et sont correctement structurées pour l'entraînement du modèle. Enfin, la troisième vise à déterminer la répartition optimale des datasets selon les critères de stratification définis.
+
+\begin{figure}[H]
+    \centering
+    \makebox[\textwidth][c]{\includegraphics[width=1.05\textwidth]{02-main//figures/ch3/ch3_postprocessing_dataset_07_validation.png}}
+    \caption{Validation de la distribution des datasets}
+    \label{fig:ch3_postprocessing_dataset_07_validation}
+\end{figure}
+
+Le chevauchement des tuiles est vérifié après leur traitement. La Figure \ref{fig:exemple_post_traitement_validation_tuile_droite} représente un cas où il y a un chevauchement à droite (Figure \ref{fig:ch3_postprocessing_dataset_08_validation_chevauchement_droite1}) avec une autre tuile (Figure \ref{fig:ch3_postprocessing_dataset_09_validation_chevauchement_droite2}). La première vérification consiste à compter le nombre de pixels non-nuls dans la zone de chevauchement à droite : ce pourcentage devrait être de 0\%, indiquant que le masquage des images a été correctement appliqué. La deuxième vérification porte sur les annotations qui doivent être masquées exactement de la même manière que les images correspondantes. Les Figures \ref{fig:ch3_postprocessing_dataset_10_validation_chevauchement_droite3} et \ref{fig:ch3_postprocessing_dataset_11_validation_chevauchement_droite4} permettent de vérifier cette cohérence entre le masquage des images et celui des annotations.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch3/ch3_postprocessing_dataset_08_validation_chevauchement_droite1.png}
+        \caption{Tuile avec chevauchement à droite (rouge)}
+        \label{fig:ch3_postprocessing_dataset_08_validation_chevauchement_droite1}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch3/ch3_postprocessing_dataset_09_validation_chevauchement_droite2.png}
+        \caption{Tuile avec chevauchement à gauche (bleu)}
+        \label{fig:ch3_postprocessing_dataset_09_validation_chevauchement_droite2}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch3/ch3_postprocessing_dataset_10_validation_chevauchement_droite3.png}
+        \caption{Tuile avec chevauchement à droite avec annotations (rouge)}
+        \label{fig:ch3_postprocessing_dataset_10_validation_chevauchement_droite3}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch3/ch3_postprocessing_dataset_11_validation_chevauchement_droite4.png}
+        \caption{Tuile avec chevauchement à gauche avec annotations (bleu)}
+        \label{fig:ch3_postprocessing_dataset_11_validation_chevauchement_droite4}
+    \end{subfigure}    
+    
+    \caption{Cas chevauchement tuile à droite}
+    \label{fig:exemple_post_traitement_validation_tuile_droite}
+\end{figure}
+
+La Figure \ref{fig:exemple_post_traitement_validation_tuile_bas} illustre un cas où il y a un chevauchement dans la partie basse (Figure \ref{fig:ch3_postprocessing_dataset_12_validation_chevauchement_bas1}) avec une autre tuile (Figure \ref{fig:ch3_postprocessing_dataset_13_validation_chevauchement_bas2}). Le même processus de validation s'applique, c'est-à-dire vérification que la zone de chevauchement inférieure a été correctement masquée et que les annotations correspondantes ont subi le même traitement de masquage que les images.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch3/ch3_postprocessing_dataset_12_validation_chevauchement_bas1.png}
+        \caption{Tuile avec chevauchement en bas (rouge)}
+        \label{fig:ch3_postprocessing_dataset_12_validation_chevauchement_bas1}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch3/ch3_postprocessing_dataset_13_validation_chevauchement_bas2.png}
+        \caption{Tuile avec chevauchement en haut (bleu)}
+        \label{fig:ch3_postprocessing_dataset_13_validation_chevauchement_bas2}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch3/ch3_postprocessing_dataset_14_validation_chevauchement_bas3.png}
+        \caption{Tuile avec chevauchement en bas avec annotations (rouge)}
+        \label{fig:ch3_postprocessing_dataset_14_validation_chevauchement_bas3}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch3/ch3_postprocessing_dataset_15_validation_chevauchement_bas4.png}
+        \caption{Tuile avec chevauchement en haut avec annotations (bleu)}
+        \label{fig:ch3_postprocessing_dataset_15_validation_chevauchement_bas4}
+    \end{subfigure}
+    
+    \caption{Cas chevauchement tuile en bas}
+    \label{fig:exemple_post_traitement_validation_tuile_bas}
+\end{figure}
+
+Suite aux vérifications de la correction des chevauchements, des vérifications supplémentaires sont nécessaires. Certaines des images qui ont été rognées ont tous leurs pixels à 0, ce qui produit des images complètement noires. Le même phénomène affecte aussi leurs annotations. Dans ce cas, l'image est supprimée du dataset car elle n'apporte aucune information utile pour l'entraînement. Au total, 9 cas sur les 539 images annotées initiales sont concernés, ce qui réduit le nombre d'images annotées à distribuer en datasets à 530.
+
+La vérification suivante concerne la taille des images qui doivent toutes avoir des dimensions de si{\numproduct{1280x1280}} pixels. Cependant, comme indiqué précédemment dans la sous-section \textit{\nameref{subsubsec:decoupe_orthophoto_tuile}} (voir page~\pageref{subsubsec:decoupe_orthophoto_tuile}), certaines tuiles situées aux extrémités droites et inférieures de l'orthophoto ne respectent pas ce prérequis en raison des contraintes géométriques liées au découpage de la zone d'étude. Un découpage uniforme des orthophotos a été privilégié plutôt que d'avoir des tuiles s'étendant sur plusieurs orthophotos adjacentes.
+
+La solution adoptée (Figure \ref{fig:ch3_postprocessing_dataset_verification_taille}) pour gérer ces tuiles consiste à ajouter des bandes noires (pixels à 0) afin d'atteindre les dimensions requises. La ligne pointillée délimite la tuile et les annotations originales au format si{\numproduct{672x1280}} pixels. L'ajout de bandes noires des deux côtés permet de conserver les coordonnées géographiques correctes dans le fichier GeoTIFF.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch3/ch3_postprocessing_dataset_16_verification_taille1.png}
+        \caption{Tuile (ligne pointillée jaune) avec bandes noires}
+        \label{fig:ch3_postprocessing_dataset_16_verification_taille1}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch3/ch3_postprocessing_dataset_17_verification_taille2.png}
+        \caption{Annotations (ligne pointillée jaune) avec bandes noires}
+        \label{fig:ch3_postprocessing_dataset_17_verification_taille2}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch3/ch3_postprocessing_dataset_18_verification_taille3.png}
+        \caption{Tuile et annotations (ligne pointillée jaune) avec bandes noires}
+        \label{fig:ch3_postprocessing_dataset_18_verification_taille3}
+    \end{subfigure}
+    \caption{Ajout de bandes noires pour convertir les tuiles et annotations (ligne pointillée jaune) au format 1280x1280 pixels}
+    \label{fig:ch3_postprocessing_dataset_verification_taille}
+\end{figure}
+
+Les coordonnées valides et les doublons d'images ont déjà été vérifiés lors de la sélection des images à annoter, il n'y a donc pas eu de corrections à apporter à cette étape.
+
+Finalement, l'algorithme utilisé pour la distribution des données annotées en datasets vise une répartition optimale malgré la difficulté de réaliser une stratification avec double critère. Le coefficient de variation obtenu se situe à 8.8\% pour la surface et 8.6\% pour la classe, soit en dessous de l'objectif de 10\% (Code \ref{code:post_traitement_stratification_resultats}).
+
+Les Figures \ref{fig:ch3_postprocessing_dataset_19_distribution_barchart_surface} et \ref{fig:ch3_postprocessing_dataset_20_distribution_barchart_classe} représentent respectivement la distribution des intervalles de surface et des classes \gls{sia} par dataset. La ligne pointillée en bleu indique le seuil théorique équilibré : les datasets situés au-dessus de cette ligne ont reçu plus d'images que l'objectif fixé. L'algorithme de stratification optimise au mieux la distribution, mais des compromis demeurent nécessaires pour maintenir l'équilibre global entre les différents critères de stratification.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{02-main/figures/ch3/ch3_postprocessing_dataset_19_distribution_barchart_surface.png}
+    \caption{Distribution des intervalles de surface par dataset}
+    \label{fig:ch3_postprocessing_dataset_19_distribution_barchart_surface}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \makebox[\textwidth][c]{\includegraphics[width=1.05\textwidth]{02-main//figures/ch3/ch3_postprocessing_dataset_20_distribution_barchart_classe.png}}
+    \caption{Distribution des classes \gls{sia} par dataset}
+    \label{fig:ch3_postprocessing_dataset_20_distribution_barchart_classe}
+\end{figure}
+
+Toutes ces vérifications permettent de garantir la qualité tant des données annotées que de la distribution de celles-ci en datasets équilibrés.
+
+\section{Développement du modèle}
+Cette section traite du développement d'un modèle de machine learning sur mesure pour la tâche de segmentation sémantique des espaces libres sur les toitures.
+
+\subsection{Architecture des modèles} % unet et compagnie, yolo?
+\subsubsection{Segmentation models pytorch}
+Segmentation models pytorch (SMP) \cite{noauthor_welcome_nodate} est une librairie Python spécialisée dans les modèles de segmentation.
+\paragraph{Introduction aux encodeurs et décodeurs}
+Une des architectures les plus populaires est U-Net \cite{ronneberger_u-net_2015} qui permet d'expliquer le fonctionnement des modèles dans SMP. U-Net est un réseau de neurones convolutionnel en forme de ``U'' (Figure \ref{fig:ch36_architecture_01_architecture_unet}) qui se divise en trois parties : l'encodeur, le décodeur et les connexions de saut (skip connections).
+
+\begin{figure}[H]
+    \centering
+    \makebox[\textwidth][c]{\includegraphics[width=1.05\textwidth]{02-main//figures/ch3/ch36_architecture_01_architecture_unet.png}}
+    \caption{Architecture U-Net \cite{ronneberger_u-net_2015}}
+    \label{fig:ch36_architecture_01_architecture_unet}
+\end{figure}
+
+L'encodeur capture les caractéristiques de l'image en appliquant successivement plusieurs couches convolutionnelles et des opérations de max pooling. Ce processus permet d'extraire les caractéristiques sémantiques à plusieurs échelles tout en réduisant progressivement la résolution spatiale, comme illustré dans la partie descendante de l'architecture U-Net.
+
+Il correspond au côté gauche de la forme en ``U'' (Figure \ref{fig:ch36_architecture_01_architecture_unet}), suivant un parcours descendant. Il commence avec l'image d'entrée (\si{\numproduct{572x572x1}}) située en haut à gauche et procède par des opérations successives de max pooling (représentées par les flèches rouges). Au fur et à mesure de la descente, les dimensions spatiales diminuent progressivement $572 \rightarrow 284 \rightarrow 140 \rightarrow 68 \rightarrow 32$ pixels, alors que le nombre de canaux augmente $1 \rightarrow 64 \rightarrow 128 \rightarrow 256 \rightarrow 512 \rightarrow 1024$. L'encodeur se termine avec un format de \si{\numproduct{30x30}} pixels et 1024 canaux, au centre du ``U''.
+
+Le décodeur effectue le processus inverse de l'encodeur en sur-échantillonnant les cartes de caractéristiques pour retrouver la résolution originale. Il utilise des convolutions transposées (représentées par les flèches vertes) pour récupérer progressivement les détails spatiaux nécessaires aux prédictions au niveau des pixels. Ce processus correspond à la partie droite du ``U'' (Figure \ref{fig:ch36_architecture_01_architecture_unet}) et permet de reconstruire une carte de segmentation de même dimension que l'image d'entrée.
+
+Les connexions de saut (skip connections) permettent d'établir des ponts entre l'encodeur et le décodeur pour préserver les informations spatiales à une résolution identique. Ces connexions sont représentées par des flèches grises dans la Figure \ref{fig:ch36_architecture_01_architecture_unet}. Sans ces connexions, les informations spatiales seraient perdues lors de la phase d'encodage.
+
+\paragraph{Architectures testées}
+SMP propose plusieurs architectures qui sont déjà prêtes à l'utilisation. Le Code \ref{code:smp_quick_start_model} permet de créer un modèle U-Net de manière simplifiée.
+
+\begin{code}[H]
+    \begin{pythoncode}
+    import segmentation_models_pytorch as smp
+    
+    model = smp.Unet(
+        encoder_name="resnet34",        # choose encoder, e.g. mobilenet_v2 or efficientnet-b7
+        encoder_weights="imagenet",     # use `imagenet` pre-trained weights for encoder initialization
+        in_channels=1,                  # model input channels (1 for gray-scale images, 3 for RGB, etc.)
+        classes=3,                      # model output channels (number of classes in your dataset)
+    )
+    \end{pythoncode}
+    \captionof{code}{Utilisation d'un modèle SMP \cite{noauthor_quick_nodate}}
+    \label{code:smp_quick_start_model}
+\end{code}
+
+En synthèse, le Tableau \ref{tab:ch36_architecture_smp_avantage_inconvenient} présente les avantages et inconvénients de chacune des architectures. L'architecture DeepLabV3 est disponible dans SMP mais n'est pas incluse car DeepLabV3+ est sa nouvelle version.
+
+\begin{longtblr}[
+  caption = {Avantages et inconvénients des architectures proposées dans SMP},
+  label = {tab:ch36_architecture_smp_avantage_inconvenient},
+]{
+  colspec = {|Q[l,wd=2.2cm]|Q[l,wd=6cm]|Q[l,wd=6cm]|},
+  hlines,
+  vlines,
+  rowhead = 1,
+  rows = {valign=t},
+  stretch = -1,
+}
+\textbf{Architecture} & \textbf{Avantages} & \textbf{Inconvénients} \\
+
+\textbf{U-Net}  (\citeyear{ronneberger_u-net_2015}) \cite{ronneberger_u-net_2015} & 
+\begin{itemize}[leftmargin=0.4cm]
+    \item Architecture simple et efficace
+    \item Skip connections préservant les détails fins
+    \item Excellent pour données limitées
+    \item Référence standard en segmentation médicale
+\end{itemize} & 
+\begin{itemize}[leftmargin=0.4cm]
+    \item Capacité limitée pour scènes complexes
+    \item Pas d'agrégation multi-échelle sophistiquée
+    \item Performance moindre sur objets de tailles très variées
+\end{itemize} \\
+
+\textbf{FPN} (\citeyear{lin_feature_2017}) \cite{lin_feature_2017} &
+\begin{itemize}[leftmargin=0.4cm]
+    \item Fusion multi-échelle efficace
+    \item Bonne gestion des objets de tailles variées
+    \item Architecture modulaire et flexible
+    \item Bon compromis précision/vitesse
+\end{itemize} & 
+\begin{itemize}[leftmargin=0.4cm]
+    \item Moins performant sur détails très fins
+    \item Complexité de réglage des hyperparamètres
+    \item Peut nécessiter plus de mémoire GPU
+\end{itemize} \\
+
+\textbf{PSPNet} (\citeyear{zhao_pyramid_2017}) \cite{zhao_pyramid_2017} & 
+\begin{itemize}[leftmargin=0.4cm]
+    \item Excellent pour contexte global
+    \item Pyramid pooling efficace
+    \item Robuste aux variations d'échelle
+    \item Performant sur scènes complexes
+\end{itemize} & 
+\begin{itemize}[leftmargin=0.4cm]
+    \item Lourdeur computationnelle
+    \item Perte potentielle de détails fins
+    \item Consommation mémoire élevée
+\end{itemize} \\
+
+\textbf{LinkNet} (\citeyear{chaurasia_linknet_2017}) \cite{chaurasia_linknet_2017} & 
+\begin{itemize}[leftmargin=0.4cm]
+    \item Architecture légère et rapide
+    \item Moins de paramètres que UNet
+    \item Inférence efficace
+    \item Bon pour applications temps réel
+\end{itemize} & 
+\begin{itemize}[leftmargin=0.4cm]
+    \item Précision limitée sur tâches complexes
+    \item Skip connections simplifiées
+    \item Moins de capacité représentationnelle
+\end{itemize} \\
+
+\textbf{U-Net++} (\citeyear{zhou_unet_2018}) \cite{zhou_unet_2018} & 
+\begin{itemize}[leftmargin=0.4cm]
+    \item Skip connections denses améliorées
+    \item Meilleure propagation des gradients
+    \item Segmentation plus précise des contours
+    \item Pruning possible pour l'inférence
+\end{itemize} & 
+\begin{itemize}[leftmargin=0.4cm]
+    \item Complexité computationnelle accrue
+    \item Plus de paramètres que U-Net
+    \item Temps d'entraînement plus long
+\end{itemize} \\
+
+\textbf{DeepLabV3+} (\citeyear{chen_encoder-decoder_2018}) \cite{chen_encoder-decoder_2018} & 
+\begin{itemize}[leftmargin=0.4cm]
+    \item Convolutions dilatées (atrous) efficaces
+    \item ASPP pour multi-échelle
+    \item Bon équilibre détails fins/contexte global
+    \item Performance SOTA sur plusieurs benchmarks
+\end{itemize} & 
+\begin{itemize}[leftmargin=0.4cm]
+    \item Architecture complexe
+    \item Hyperparamètres nombreux à ajuster
+    \item Temps d'entraînement conséquent
+\end{itemize} \\
+
+\textbf{PAN}  (\citeyear{liu_path_2018}) \cite{liu_path_2018} & 
+\begin{itemize}[leftmargin=0.4cm]
+    \item Agrégation de chemins efficace
+    \item Propagation d'information améliorée
+    \item Bonne fusion des caractéristiques
+    \item Performance solide sur objets complexes
+\end{itemize} & 
+\begin{itemize}[leftmargin=0.4cm]
+    \item Architecture relativement complexe
+    \item Paramètres additionnels
+    \item Optimisation délicate
+\end{itemize} \\
+
+\textbf{UperNet} (\citeyear{xiao_unified_2018}) \cite{xiao_unified_2018} & 
+\begin{itemize}[leftmargin=0.4cm]
+    \item Pyramid pooling unifié
+    \item Excellent pour segmentation de scènes
+    \item Gestion efficace du contexte multi-échelle
+    \item Performance élevée sur datasets complexes
+\end{itemize} & 
+\begin{itemize}[leftmargin=0.4cm]
+    \item Consommation mémoire importante
+    \item Complexité d'implémentation
+    \item Temps d'entraînement long
+\end{itemize} \\
+
+\textbf{MANet} (\citeyear{fan_ma-net_2020}) \cite{fan_ma-net_2020} & 
+\begin{itemize}[leftmargin=0.4cm]
+    \item Mécanismes d'attention sophistiqués
+    \item Focus adaptatif sur régions importantes
+    \item Bonne gestion des occultations
+    \item Amélioration de la cohérence spatiale
+\end{itemize} & 
+\begin{itemize}[leftmargin=0.4cm]
+    \item Complexité computationnelle élevée
+    \item Modules d'attention coûteux
+    \item Risque de surapprentissage
+\end{itemize} \\
+
+\textbf{SegFormer} (\citeyear{xie_segformer_2021}) \cite{xie_segformer_2021} & 
+\begin{itemize}[leftmargin=0.4cm]
+    \item Architecture Transformer moderne
+    \item Attention globale efficace
+    \item Performance SOTA récente
+    \item Scalabilité excellente
+\end{itemize} & 
+\begin{itemize}[leftmargin=0.4cm]
+    \item Besoin de larges datasets
+    \item Coût computationnel élevé
+    \item Complexité de fine-tuning
+    \item Interprétabilité limitée
+\end{itemize} \\
+
+\textbf{DPT} (\citeyear{ranftl_vision_2021}) \cite{ranftl_vision_2021} & 
+\begin{itemize}[leftmargin=0.4cm]
+    \item Transformer pour prédiction dense
+    \item Capacité de modélisation globale
+    \item Performance sur tâches variées
+    \item Architecture unifiée
+\end{itemize} & 
+\begin{itemize}[leftmargin=0.4cm]
+    \item Très coûteux en ressources
+    \item Nécessite données abondantes
+    \item Complexité d'optimisation
+    \item Inférence lente
+\end{itemize} \\
+\end{longtblr}
+
+
+Afin d'améliorer les performances des architectures de base, il est possible d'intégrer des encodeurs plus modernes tout en conservant le décodeur d'origine. La Figure \ref{fig:ch36_architecture_02_architecture_taille_decodeur} présente la taille des décodeurs des différentes architectures SMP. La taille du décodeur s'étend de 0,1M de paramètres pour PAN à 29,6M pour DPT, ce qui aura une influence sur les performances et le temps d'entraînement des modèles.
+
+\begin{figure}[H]
+    \centering
+    \makebox[\textwidth][c]{\includegraphics[width=1\textwidth]{02-main//figures/ch3/ch36_architecture_02_architecture_taille_decodeur.png}}
+    \caption{Taille des décodeurs des architectures SMP}
+    \label{fig:ch36_architecture_02_architecture_taille_decodeur}
+\end{figure}
+
+\paragraph{Encodeurs testés}
+Le choix des encodeurs est crucial pour la performance du modèle de segmentation. Les encodeurs sont des modèles pré-entraînés sur tel que le dataset ImageNet \cite{noauthor_imagenet_nodate}, permettant d'extraire des caractéristiques pertinentes des images d'entrée. Dans SMP, une vingtaine d'encodeurs sont disponibles. En complément, Pytorch-Image-Models (timm) \cite{wightman_pytorch_2025} propose plus de 800 encodeurs, bien que la compatibilité entre SMP et timm ne soit pas garantie.
+
+Les encodeurs sélectionnés sont les plus populaires et les plus performants, indépendamment de leur taille, et ont tous été pré-entraînés sur ImageNet. Cette approche permet d'accélérer l'entraînement du modèle en exploitant les caractéristiques que le modèle de base a déjà apprises. Le Tableau \ref{tab:ch36_encodeurs_smp_avantage_inconvenient} présente les avantages et inconvénients des encodeurs testés dans SMP.
+
+\begin{longtblr}[
+  caption = {Avantages et inconvénients des architectures des encodeurs testés},
+  label = {tab:ch36_encodeurs_smp_avantage_inconvenient},
+]{
+  colspec = {|Q[l,wd=2.6cm]|Q[l,wd=6cm]|Q[l,wd=6cm]|},
+  hlines,
+  vlines,
+  rowhead = 1,
+  rows = {valign=t},
+  stretch = -1,
+}
+\textbf{Encodeur} & \textbf{Avantages} & \textbf{Inconvénients} \\
+
+\textbf{ResNeXt50/101} (\citeyear{xie_aggregated_2017}) \cite{xie_aggregated_2017} & 
+\begin{itemize}[leftmargin=0.4cm,nosep]
+    \item Cardinalité : nouvelle dimension de mise à l'échelle
+    \item Convolutions groupées réduisant la complexité
+    \item Architecture modulaire facile à comprendre
+    \item Équilibre efficacité/performance prouvé
+\end{itemize} & 
+\begin{itemize}[leftmargin=0.4cm,nosep]
+    \item Paramètre cardinalité à optimiser manuellement
+    \item Plus complexe qu'un ResNet standard
+    \item Consommation mémoire élevée
+    \item Nécessite optimisations hardware spécifiques
+\end{itemize} \\
+
+\textbf{EfficientNet B3/B5} (\citeyear{tan_efficientnet_2020}) \cite{tan_efficientnet_2020} & 
+\begin{itemize}[leftmargin=0.4cm,nosep]
+    \item Scaling uniforme profondeur/largeur/résolution
+    \item Rapport performances/paramètres exceptionnel
+    \item Architecture mature et bien documentée
+    \item Transfert d'apprentissage très efficace
+    \item Famille complète de modèles (B0 à B7)
+\end{itemize} & 
+\begin{itemize}[leftmargin=0.4cm,nosep]
+    \item Entraînement long pour les grandes variantes
+    \item Nombreux hyperparamètres à ajuster
+    \item B5+ très gourmand en mémoire GPU
+\end{itemize} \\
+
+\textbf{RegNetY} (\citeyear{radosavovic_designing_2020}) \cite{radosavovic_designing_2020} & 
+\begin{itemize}[leftmargin=0.4cm,nosep]
+    \item Design space méthodique et reproductible
+    \item Mise à l'échelle efficace et prévisible
+    \item Excellente vitesse d'inférence
+\end{itemize} & 
+\begin{itemize}[leftmargin=0.4cm,nosep]
+    \item Capacité d'expression limitée
+    \item Performance insuffisante sur tâches complexes
+    \item Nécessite recherche d'architecture préalable
+\end{itemize} \\
+
+\textbf{ResNeSt200e} (\citeyear{zhang_resnest_2020}) \cite{zhang_resnest_2020} & 
+\begin{itemize}[leftmargin=0.4cm,nosep]
+    \item Mécanisme d'attention split-attention innovant
+    \item Gestion efficace des dépendances inter-canaux
+    \item Améliore significativement ResNet classique
+\end{itemize} & 
+\begin{itemize}[leftmargin=0.4cm,nosep]
+    \item Très profond (200 couches) = difficile à entraîner
+    \item Coût computationnel prohibitif
+    \item Temps d'entraînement longs
+    \item Risque de surapprentissage élevé
+\end{itemize} \\
+
+\textbf{EfficientNetV2} (\citeyear{tan_efficientnetv2_2021}) \cite{tan_efficientnetv2_2021} & 
+\begin{itemize}[leftmargin=0.4cm,nosep]
+    \item Entraînement progressif accélérant la convergence
+    \item Blocs Fused-MBConv plus efficaces
+    \item Vitesse d'entraînement nettement supérieure
+    \item Régularisation adaptative intelligente
+    \item Optimisé pour images haute résolution
+\end{itemize} & 
+\begin{itemize}[leftmargin=0.4cm,nosep]
+    \item Configuration d'hyperparamètres complexe
+    \item Forte consommation mémoire GPU
+    \item Coût computationnel élevé à l'entraînement
+\end{itemize} \\
+
+\textbf{Res2Net101} (\citeyear{gao_res2net_2021}) \cite{gao_res2net_2021} & 
+\begin{itemize}[leftmargin=0.4cm,nosep]
+    \item Multi-échelle granulaire dans chaque bloc
+    \item Connexions hiérarchiques sophistiquées
+    \item Amélioration claire par rapport à ResNet
+    \item Champ récepteur plus riche et varié
+\end{itemize} & 
+\begin{itemize}[leftmargin=0.4cm,nosep]
+    \item Architecture plus complexe à comprendre
+    \item Surcoût computationnel notable
+    \item Paramètres d'échelle supplémentaires
+    \item Optimisation plus délicate que ResNet
+\end{itemize} \\
+
+\textbf{FastViT T8} (\citeyear{vasu_fastvit_2023}) \cite{vasu_fastvit_2023} & 
+\begin{itemize}[leftmargin=0.4cm,nosep]
+    \item Hybride CNN-Transformer très efficace
+    \item Reparamétérisation structurelle novatrice
+    \item Accès mémoire optimisés pour la vitesse
+    \item Idéal pour applications temps réel
+    \item Performances élevées avec latence minimale
+\end{itemize} & 
+\begin{itemize}[leftmargin=0.4cm,nosep]
+    \item Implémentation hybride complexe
+    \item Dépendance aux optimisations hardware
+    \item Documentation et exemples limités
+\end{itemize} \\
+
+\textbf{RepViT M1} (\citeyear{wang_repvit_2024}) \cite{wang_repvit_2024} &
+\begin{itemize}[leftmargin=0.4cm,nosep]
+    \item CNN mobile inspiré des Transformers
+    \item Équilibre optimal précision/rapidité
+    \item Spécialement conçu pour appareils mobiles
+\end{itemize} & 
+\begin{itemize}[leftmargin=0.4cm,nosep]
+    \item Capacité limitée pour tâches très complexes
+    \item Performance réduite en détection/segmentation
+    \item Fortement dépendant du hardware mobile
+\end{itemize} \\
+
+\textbf{MambaOut} (\citeyear{yu_mambaout_2024}) \cite{yu_mambaout_2024} & 
+\begin{itemize}[leftmargin=0.4cm,nosep]
+    \item CNN avec portes, sans complexité SSM (Mamba)
+    \item Surpasse les Transformers visuels
+    \item Efficacité computationnelle remarquable
+    \item Prouve l'inutilité de Mamba en vision
+\end{itemize} & 
+\begin{itemize}[leftmargin=0.4cm,nosep]
+    \item Très récent (2024), peu de recul
+    \item Validation limitée sur diverses tâches
+    \item Écosystème et support limités
+\end{itemize} \\
+
+\textbf{EfficientViT B2} (\citeyear{cai_efficientvit_2024}) \cite{cai_efficientvit_2024} & 
+\begin{itemize}[leftmargin=0.4cm,nosep]
+    \item Attention linéaire multi-échelle efficace
+    \item Spécialisé pour traitement haute résolution
+    \item Architecture sandwich réduisant la complexité
+    \item Attention en cascade progressive
+\end{itemize} & 
+\begin{itemize}[leftmargin=0.4cm,nosep]
+    \item Implémentation très complexe
+    \item Optimisations hardware indispensables
+\end{itemize} \\
+
+\end{longtblr}
+
+
+La Figure \ref{fig:ch36_architecture_03_backbone_taille_encodeur_famille} présente les encodeurs (backbone) séléctionnés groupés par architecture. Certains encodeurs sont disponibles dans plusieurs tailles pour une même architecture, par exemple EfficientNet-B3 et EfficientNet-B5.
+
+\begin{figure}[H]
+    \centering
+    \makebox[\textwidth][c]{\includegraphics[width=1\textwidth]{02-main//figures/ch3/ch36_architecture_03_backbone_taille_encodeur_famille.png}}
+    \caption{Encodeurs groupés par type d'architecture}
+    \label{fig:ch36_architecture_03_backbone_taille_encodeur_famille}
+\end{figure}
+
+La Figure \ref{fig:ch36_architecture_04_backbone_taille_encodeur_ordonnee} présente les encodeurs par ordre croissant de taille, mesurée en nombre de paramètres. Cette représentation permet de visualiser rapidement la complexité relative des différents encodeurs. Le plus petit encodeur est FastViT T8 avec 3.2 millions de paramètres, tandis que le plus grand est EfficientNetV2-XL avec 206.0 millions de paramètres.
+
+\begin{figure}[H]
+    \centering
+    \makebox[\textwidth][c]{\includegraphics[width=1\textwidth]{02-main//figures/ch3/ch36_architecture_04_backbone_taille_encodeur_ordonnee.png}}
+    \caption{Encodeurs par ordre croissant de paramètres}
+    \label{fig:ch36_architecture_04_backbone_taille_encodeur_ordonnee}
+\end{figure}
+
+Cette sélection d'encodeurs représente une bonne variété tant en termes de taille que de complexité, les modèles plus récents ou avec plus de paramètres n'auront pas forcément de meilleures performances sur une tâche concrète.
+
+\subsubsection{YOLO}
+YOLO (You Only Look Once) est un algorithme de détection et segmentation instance d'images qui a révolutionné le domaine de la vision par ordinateur. Sa dernière version YOLOv12 est décrite en détail dans \textit{\nameref{subsec:yolov12_attention_centric}} (voir page~\pageref{subsec:yolov12_attention_centric}). YOLOv12 dispose de plusieurs modèles pré-entraînés de différentes tailles selon la complexité des images à segmenter. Le Tableau \ref{tab:yolov12_modeles_testes} présente les modèles YOLOv12-seg testés.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{@{}lr@{}}
+    \toprule
+    \textbf{Modèle} & \textbf{Paramètres} \\
+    \midrule
+    YOLOv12n-seg & 2.8M \\
+    YOLOv12s-seg & 9.8M \\
+    YOLOv12m-seg & 21.9M \\
+    YOLOv12l-seg & 28.8M \\
+    YOLOv12x-seg & 64.5M \\
+    \bottomrule
+    \end{tabular}
+    \caption{YOLOv12-seg modèles testés}
+    \label{tab:yolov12_modeles_testes}
+\end{table}
+
+\subsection{Préparation des données}
+Cette sous-section traite de la préparation des données avant de débuter l'entraînement du modèle.
+
+\subsubsection{Dataset}
+Le dataset compte en tout 530 images, réparties de la manière suivante:
+\begin{itemize}
+    \item 441 images pour l'entraînement et la validation (réparties en 5 folds)
+    \item 89 images pour l'évaluation finale (dataset de test)
+    \item 530 masques qui comptent une seule classe (toiture libre) avec l'arrière-plan comme classe négative
+\end{itemize}
+
+Chaque fold dispose d'un fichier de texte où sont indiquées les tuiles incluses, en tout 5 fichiers de texte. Tour à tour, chacun des folds est utilisé comme dataset de validation et les folds restants comme dataset d'entraînement. Par exemple, la première combinaison utilise le fold 0 comme dataset de validation et les folds restants (1, 2, 3, 4) comme dataset d'entraînement.
+
+\subsubsection{Augmentation des données}
+\label{subsubsec:augmentation_donnees}
+L'augmentation des données permet de créer plusieurs versions d'une même image, ce qui améliore les performances du modèle en augmentant artificiellement la variété des images présentes dans le dataset d'entraînement.
+
+\paragraph{Stratégie d'augmentation de données}
+La librairie Albumentations \cite{albumentations_albumentations_nodate} permet de faire de l'augmentation de données directement sur les images avant qu'elles soient utilisées pour l'entraînement du modèle. Le Code \ref{code:pipeline_augmentation_donnees} présente la combinaison de transformations utilisées pour réaliser l'augmentation de données.
+
+\begin{code}[H]
+    \begin{pythoncode}
+    import albumentations as A
+    def get_transforms(is_training=True):
+        """
+        Get data augmentation transforms.
+        """
+        if is_training:
+            return A.Compose(
+                [
+                    # Basic Geometric
+                    A.SquareSymmetry(p=0.5),
+                    # Affine and Perspective
+                    A.Affine(
+                        scale=(0.95, 1.05), translate_percent=0.1, rotate=(-45, 45), p=0.6
+                    ),
+                    # Blur
+                    A.OneOf([A.GaussianBlur(blur_limit=(3, 7), p=0.5),
+                            A.MedianBlur(blur_limit=5, p=0.5),
+                            A.MotionBlur(blur_limit=(3, 7), p=0.5),
+                        ],p=0.2,),
+                    # Noise
+                    A.OneOf([A.GaussNoise(p=0.5),
+                            A.ISONoise(color_shift=(0.01, 0.05), intensity=(0.1, 0.5), p=0.5),
+                            A.MultiplicativeNoise(multiplier=(0.9, 1.1), per_channel=True, p=0.5),
+                            A.SaltAndPepper(p=0.5),
+                        ],p=0.2,),
+                    # Weather effects
+                    A.RandomSunFlare(p=0.2),
+                    A.RandomFog(p=0.2),
+                ]
+            )
+        else:
+            return None
+    \end{pythoncode}
+    \captionof{code}{Pipeline augmentation des données}
+    \label{code:pipeline_augmentation_donnees}
+\end{code}
+
+SMP réalise les transformations en mémoire avant qu'elles soient utilisées lors de l'entraînement. L'avantage est qu'il n'y a pas d'images supplémentaires à stocker, mais cela peut en revanche prolonger le temps d'entraînement avec l'ajout de ce processus.
+
+YOLO dispose de stratégies d'augmentation de données propres dans sa librairie Python qui sont utilisées automatiquement. La pertinence de ces transformations est discutable dans le cas d'images aériennes. Par exemple, la transformation \texttt{mosaic} assemble plusieurs images en provenance du dataset d'entraînement (Figure \ref{fig:ch36_augmentation_donnees_yolo_mosaic}).
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.42\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch3/ch36_augmentations_00a_yolo_exemple1_original.png}
+        \caption{Image originale}
+        \label{fig:ch36_augmentations_00a_yolo_exemple1_original}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch3/ch36_augmentations_00b_yolo_exemple1_mosaic.png}
+        \caption{Image transformée avec \texttt{mosaic}}
+        \label{fig:ch36_augmentations_00b_yolo_exemple1_mosaic}
+    \end{subfigure}
+    \caption{Transformation \texttt{mosaic} de YOLO}
+    \label{fig:ch36_augmentation_donnees_yolo_mosaic}
+\end{figure}
+
+YOLO applique aussi des transformations qui affectent le contraste et les couleurs, ce qui n'est pas adapté aux images aériennes. Les premiers tests avec ces réglages automatiques ont donné des résultats relativement mauvais. YOLO dispose en théorie d'une compatibilité totale avec Albumentations; dans la pratique, ils ne permettent d'utiliser qu'une partie des transformations d'Albumentations.
+
+La solution adoptée consiste à inclure exactement les mêmes transformations que pour SMP (Code \ref{code:pipeline_augmentation_donnees}), mais en les intégrant directement au sein du dataset d'entraînement pour chacun des folds. Chaque image est augmentée 10 fois, portant ainsi le dataset d'entraînement pour YOLO à 353 images originales et 3530 images augmentées, soit un total de 3880 images. Les annotations subissent les mêmes transformations que les images correspondantes. Les datasets de test et de validation ne subissent pas d'augmentation de données. L'augmentation de données automatique est désactivée lors de l'entraînement des modèles YOLO, permettant ainsi d'obtenir des résultats comparables entre SMP et YOLO.
+
+Cette méthode d'augmentation de données pour YOLO implique un temps d'entraînement plus long, car il faut traiter dix fois plus d'images durant le processus d'apprentissage. Cependant, les résultats obtenus s'avèrent supérieurs à ceux des transformations automatiques natives de YOLO.
+
+Les explications des transformations utilisées sont faites à partir de la documentation \cite{albumentations_documentation_nodate} d'Albumentations. 
+
+\texttt{Compose} permet d'appliquer de manière séquentielle des transformations. La documentation suggère d'utiliser certaines transformations pour les images aériennes, comme par exemple, l'occlusion d'une partie de l'image. Cette transformation peut aider le modèle à mieux généraliser dans des images complètes, mais ce n'est pas utile lorsque la zone d'intérêt est clairement indiquée. Le reste des transformations est une adaptation de leurs recommandations.
+
+La première transformation \texttt{SquareSymmetry} applique une symétrie à l'image avec une probabilité \texttt{p=0.5}. Les possibilités sont :
+\begin{itemize}
+    \item Aucune transformation n'est appliquée
+    \item Rotation de 90°, 180°, 270°
+    \item Miroir sur l'axe vertical ou horizontal
+    \item Miroir sur l'une des diagonales
+\end{itemize}
+
+La Figure \ref{fig:ch36_augmentations_01_squaresymmetry} montre deux exemples de cet effet. Dans l'exemple de gauche (colonne du centre), la symétrie est un miroir vertical, cette même symétrie est bien entendu aussi appliquée à son masque correspondant. L'exemple de droite n'applique aucun effet.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{02-main/figures/ch3/ch36_augmentations_01_squaresymmetry.png}
+    \caption{Augmentation de données - exemples de symétrie}
+    \label{fig:ch36_augmentations_01_squaresymmetry}
+\end{figure}
+
+\newpage
+Le deuxième effet \texttt{Affine} applique plusieurs opérations sur l'image. L'effet d'échelle (Figure \ref{fig:ch36_augmentations_02_scale}) réalise un léger zoom entre ± 5\%. Les essais avec un zoom plus important ont montré que le modèle avait des difficultés à apprendre. Certaines images ayant un grand pourcentage d'arrière-plan noir, un zoom trop important peut rapidement réduire drastiquement la partie utile à l'apprentissage du modèle.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{02-main/figures/ch3/ch36_augmentations_02_scale.png}
+    \caption{Augmentation de données - exemples de échelle}
+    \label{fig:ch36_augmentations_02_scale}
+\end{figure}
+
+\newpage
+\texttt{Affine} dispose d'un effet de translation (Figure \ref{fig:ch36_augmentations_02_scale}) dans lequel l'image est déplacée vers la droite de 10\%. Cet effet implique une perte d'information utile à l'apprentissage et doit être utilisé avec parcimonie.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{02-main/figures/ch3/ch36_augmentations_03_translation.png}
+    \caption{Augmentation de données - exemples de translation}
+    \label{fig:ch36_augmentations_03_translation}
+\end{figure}
+
+\newpage
+La dernière option utilisée de \texttt{Affine} est la rotation (Figure \ref{fig:ch36_augmentations_04_rotation}. Pour éviter que cela ne soit une symétrie mais tout de même apporter une variété à l'image et améliorer l'apprentissage, la rotation est comprise entre ± 45°.
+Tous les effets combinés de \texttt{Affine} ont une probabilité \texttt{p=0.6}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{02-main/figures/ch3/ch36_augmentations_04_rotation.png}
+    \caption{Augmentation de données - exemples de rotation}
+    \label{fig:ch36_augmentations_04_rotation}
+\end{figure}
+
+\newpage
+\texttt{OneOf} permet de sélectionner entre plusieurs options au sein de la séquence \texttt{Compose}. Dans ce cas, il s'agit des effets de floutage, qui ont pour but de réduire le bruit et les détails afin de créer un certain lissage de l'image. Il semble pertinent de n'en appliquer qu'un seul à la fois pour ne pas trop dénaturer l'image.
+
+\texttt{GaussianBlur} floute l'image d'entrée (Figure \ref{fig:ch36_augmentations_05_flou_gaussien}) à l'aide d'un filtre gaussien dont la taille du noyau et la valeur $\sigma$ sont aléatoires. Les valeurs par défaut sont utilisées sauf pour \texttt{blur\_limit} qui augmente la taille des noyaux et le floutage, sinon le flou est à peine visible. \texttt{blur\_limit=(3, 7)} implique un flou plus fort mais encore raisonnable.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{02-main/figures/ch3/ch36_augmentations_05_flou_gaussien.png}
+    \caption{Augmentation de données - exemples de flou gaussien}
+    \label{fig:ch36_augmentations_05_flou_gaussien}
+\end{figure}
+
+\newpage
+
+\texttt{MedianBlur} utilise un filtre médian pour flouter l'image d'entrée (Figure \ref{fig:ch36_augmentations_06_flou_median}). Le filtrage médian est particulièrement efficace pour supprimer les bruits de type « poivre et sel » tout en préservant les contours. La valeur par défaut est \texttt{blur\_limit=(3, 7)}, mais avec \texttt{blur\_limit=5} le rendu est plus uniforme.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{02-main/figures/ch3/ch36_augmentations_06_flou_median.png}
+    \caption{Augmentation de données - exemples de flou médian}
+    \label{fig:ch36_augmentations_06_flou_median}
+\end{figure}
+
+\newpage
+\texttt{MotionBlur} simule les effets de flou de mouvement qui se produisent lors de la capture d'images, tels que le tremblement de l'appareil photo ou le mouvement d'un objet. Les valeurs par défaut créent un effet très léger de mouvement.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{02-main/figures/ch3/ch36_augmentations_07_flou_motion.png}
+    \caption{Augmentation de données - exemples de flou ``mouvement''}
+    \label{fig:ch36_augmentations_07_flou_motion}
+\end{figure}
+
+\newpage
+Le deuxième \texttt{OneOf} permet de sélectionner une des transformations disponibles pour ajouter du bruit dans l'image. Le bruit dans une image correspond aux variations aléatoires indésirables des valeurs de pixels (points parasites, grain, distorsions). Exposer le modèle à des données bruitées permet de le rendre plus robuste et de mieux apprendre à généraliser.
+
+Le bruit gaussien est un bruit dont la densité de probabilité suit la loi normale. \texttt{GaussNoise} permet d'ajouter du bruit gaussien à l'image (Figure \ref{fig:ch36_augmentations_08_bruit_gaussien}).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{02-main/figures/ch3/ch36_augmentations_08_bruit_gaussien.png}
+    \caption{Augmentation de données - exemples de bruit gaussien}
+    \label{fig:ch36_augmentations_08_bruit_gaussien}
+\end{figure}
+
+\newpage
+\texttt{ISONoise} ajoute un bruit aléatoire à l'image (Figure \ref{fig:ch36_augmentations_09_bruit_iso}), imitant l'effet de l'utilisation de paramètres ISO élevés en photographie numérique. Les deux composantes principales du bruit ISO sont:
+\begin{enumerate}
+    \item Les changements aléatoires de la teinte des couleurs
+    \item Les variations aléatoires de l'intensité des pixels
+\end{enumerate}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{02-main/figures/ch3/ch36_augmentations_09_bruit_iso.png}
+    \caption{Augmentation de données - exemples de bruit ISO}
+    \label{fig:ch36_augmentations_09_bruit_iso}
+\end{figure}
+
+\newpage
+\texttt{MultiplicativeNoise} multiplie chaque pixel de l'image par une valeur aléatoire ou un ensemble de valeurs, créant ainsi un bruit qui varie selon l'intensité de l'image (Figure \ref{fig:ch36_augmentations_10_bruit_multiplicatif}).
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{02-main/figures/ch3/ch36_augmentations_10_bruit_multiplicatif.png}
+    \caption{Augmentation de données - exemples de bruit ``multiplicatif''}
+    \label{fig:ch36_augmentations_10_bruit_multiplicatif}
+\end{figure}
+
+\newpage
+\texttt{SaltAndPepper} est une forme de bruit impulsionnel qui place aléatoirement les pixels à une valeur maximale (sel) ou à une valeur minimale (poivre).
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{02-main/figures/ch3/ch36_augmentations_11_bruit_poivre_et_sel.png}
+    \caption{Augmentation de données - exemples de bruit ``poivre et sel''}
+    \label{fig:ch36_augmentations_11_bruit_poivre_et_sel}
+\end{figure}
+
+\newpage
+Les deux dernières transformations sont des simulations d'effets météo sur les images. Leur impact est significatif sur le résultat final, ce qui explique qu'elles soient utilisées avec une probabilité de \texttt{p=0.2}. Les tests effectués montrent que le modèle obtient de meilleurs résultats avec ces transformations activées occasionnellement, en revanche, si elles sont trop fréquentes, le modèle peine à apprendre.
+
+\texttt{RandomSunFlare} simule un effet de lumière solaire sur l'image en ajoutant des cercles semi-transparents de différentes tailles (Figure \ref{fig:ch36_augmentations_12_effets_meteo_eblouissement}).
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{02-main/figures/ch3/ch36_augmentations_12_effets_meteo_eblouissement.png}
+    \caption{Augmentation de données - exemples d'effet météo éblouissement}
+    \label{fig:ch36_augmentations_12_effets_meteo_eblouissement}
+\end{figure}
+
+\newpage
+\texttt{RandomFog} simule un effet de brouillard sur l'image (Figure \ref{fig:ch36_augmentations_13_effets_meteo_brouillard}).
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{02-main/figures/ch3/ch36_augmentations_13_effets_meteo_brouillard.png}
+    \caption{Augmentation de données - exemples d'effet météo brouillard}
+    \label{fig:ch36_augmentations_13_effets_meteo_brouillard}
+\end{figure}
+
+\paragraph{Résultats}
+Les résultats obtenus avec la combinaison séquentielle de transformations de \texttt{Compose} permettent d'obtenir des images variées pour augmenter la quantité de données d'entraînement disponibles. Tout est fait en mémoire sans avoir à sauvegarder des données supplémentaires.
+
+La Figure \ref{fig:ch36_augmentations_14_exemples_complets1} et \ref{fig:ch36_augmentations_15_exemples_complets2} représentent chacune deux exemples d'augmentations à partir de la même image. Avec les probabilités d'application de chaque transformation, chaque image augmentée est différente et cela sans que l'image de base soit trop dénaturée.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{02-main/figures/ch3/ch36_augmentations_14_exemples_complets1.png}
+    \caption{Augmentation de données - exemples complets 1}
+    \label{fig:ch36_augmentations_14_exemples_complets1}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{02-main/figures/ch3/ch36_augmentations_15_exemples_complets2.png}
+    \caption{Augmentation de données - exemples complets 2}
+    \label{fig:ch36_augmentations_15_exemples_complets2}
+\end{figure}
+
+% --------------------------------
+
+\subsection{Processus d'entraînement}
+Cette sous-section décrit le processus d'entraînement des modèles SMP et YOLO, en précisant les étapes clés et les configurations utilisées.
+
+\subsubsection{SMP}
+Le processus d'entraînement des modèles SMP suit une approche structurée organisée en plusieurs phases distinctes.
+
+\paragraph{Configuration modèles}
+La configuration des hyperparamètres est réalisée dans le fichier \texttt{training\_configs.py}, qui est ensuite importé dans le script d'entraînement. Le Code \ref{code:ch36_entrainement_config_smp} présente un exemple de fichier de configuration pour SMP. Dans cet exemple, la configuration correspond à un modèle U-Net avec un encodeur EfficientNet-B3 pré-entraîné sur ImageNet.
+
+\begin{code}[H]
+    \begin{pythoncode}
+    # training_configs.py
+    IMG_SIZE = (1280, 1280)
+    NUM_CLASSES = 1
+    EPOCHS = 1000
+    PATIENCE = 50
+    LEARNING_RATE = 0.001
+    ACCUMULATION_STEPS = 4
+
+    BATCH_SIZE_SMALL = 4
+    BATCH_SIZE_MEDIUM = 2
+    BATCH_SIZE_LARGE = 1
+    BATCH_SIZE_HUGE = 2
+
+    BATCH_SIZE_MIN = 1
+    BATCH_SIZE_MAX = 128
+    BATCH_SIZE_NB_TESTS = 2
+
+    CONFIGS = {
+        "unet_efficientnet_b3_imagenet": {
+            "architecture": "unet",
+            "backbone": "timm-efficientnet-b3",
+            "encoder_weights": "imagenet",
+            "img_size": IMG_SIZE,
+            "num_classes": NUM_CLASSES,
+            "learning_rate": LEARNING_RATE,
+            "epochs": EPOCHS,
+            "patience": PATIENCE,
+            "accumulation_steps": ACCUMULATION_STEPS,
+            "auto_batch_size": False,
+            "batch_size": BATCH_SIZE_SMALL,
+            "min_batch_size_search": BATCH_SIZE_MIN,
+            "max_batch_size_search": BATCH_SIZE_MAX,
+            "batch_size_test_steps": BATCH_SIZE_NB_TESTS,
+        },
+    }
+    \end{pythoncode}
+    \caption{Exemple de fichier de configuration d'entraînement pour SMP}
+    \label{code:ch36_entrainement_config_smp}
+\end{code}
+
+\texttt{architecture}, ici U-Net, définit le type de modèle utilisé. \texttt{backbone} spécifie l'encodeur utilisé, ici EfficientNet-B3 pré-entraîné sur ImageNet (\texttt{encoder\_weights}). \texttt{img\_size} correspond à la taille des images d'entrée, \texttt{num\_classes} au nombre de classes à prédire (1 pour la toiture libre). \texttt{learning\_rate} définit le taux d'apprentissage, \texttt{epochs} le nombre d'époques d'entraînement, et \texttt{patience} le nombre d'époques sans amélioration avant d'arrêter l'entraînement. \texttt{accumulation\_steps} permet l'accumulation de gradients pour simuler une taille de batch plus importante.
+
+\texttt{batch\_size} définit la taille du batch pour l'entraînement. Selon la taille de l'encodeur et du décodeur sélectionnés, ce paramètre doit être ajusté. Pour améliorer la gestion des ressources, il est possible de laisser le script déterminer automatiquement la taille du batch en fonction de la mémoire disponible. Les paramètres \texttt{auto\_batch\_size}, \texttt{min\_batch\_size\_search}, \texttt{max\_batch\_size\_search} et \texttt{batch\_size\_test\_steps} permettent de configurer cette fonctionnalité. Cette option pose des problèmes lors de l'entraînement sur l'un des clusters de l'Université de Genève et reste désactivée par défaut.
+
+La taille des images exige un ajustement précis du paramètre \texttt{batch\_size} pour éviter les erreurs de mémoire. Cette valeur est généralement évaluée manuellement à travers un entraînement de 5 itérations avec validation. Un modèle qualifié de \texttt{small} compte moins de 25 millions de paramètres, un modèle \texttt{medium} entre 25 et 50 millions de paramètres, un modèle \texttt{large} entre 50 et 100 millions de paramètres, et un modèle \texttt{huge} au-delà de 100 millions de paramètres. Le Tableau \ref{tab:ch36_batch_size} présente les tailles de batch utilisées pour chaque catégorie de modèle.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{@{}lccc@{}}
+    \toprule
+    \textbf{Type de modèle} & \textbf{Taille du batch} & \textbf{Taille du batch (accumulation)} & \textbf{VRAM GPU} \\
+    \midrule
+    Small & 4 & 16 & 24Gb \\
+    Medium & 2 & 8 & 24Gb \\
+    Large & 1 & 4 & 24Gb \\
+    Huge & 2 & 2 & 40Gb \\
+    \bottomrule
+    \end{tabular}
+    \caption{Taille du batch pour chaque type de modèle}
+    \label{tab:ch36_batch_size}
+\end{table}
+
+L'utilisation d'un batch size plus important pour les gros modèles (huge) s'explique par le fait que ces derniers sont entraînés sur des GPU disposant de 40 ou 80 GB de mémoire, permettant ainsi d'exploiter des batches plus volumineux et d'accélérer l'entraînement. Cependant, l'accumulation de gradients est désactivée (\texttt{accumulation\_steps}) car cette fonctionnalité génère des problèmes de mémoire. 
+
+Tous les autres modèles sont entraînés sur des GPU dotés de 24 GB de mémoire. Ce choix revêt également un aspect stratégique car les GPU de 24 GB sont plus disponibles dans les clusters de l'Université de Genève que ceux de 40 ou 80 GB.
+
+Ces paramètres sont utilisés pour la majorité des modèles. MambaOut constitue la seule exception, exigeant un taux d'apprentissage plus faible de 0,0001. Le script d'entraînement comprend d'autres paramètres qui sont identiques pour tous les modèles entraînés.
+
+\paragraph{Initialisation du modèle}
+La deuxième étape consiste à créer le modèle en combinant l'architecture sélectionnée (U-Net, FPN, etc.) avec l'encodeur choisi. Le Code \ref{code:ch36_creation_modele_smp} illustre cette initialisation.
+
+\begin{code}[H]
+    \begin{pythoncode}
+        import segmentation_models_pytorch as smp
+
+        # Création du modèle
+        model = smp.Unet(
+            encoder_name="timm-efficientnet-b3",
+            encoder_weights="imagenet",  # Poids pré-entraînés
+            in_channels=3,               # Images RGB
+            classes=1,                   # Une seule classe (toiture libre)
+            activation=None              # Activation appliquée après
+        )
+        
+        # Optimisation pour GPU
+        model = model.to(device)
+        model = model.to(memory_format=torch.channels_last)
+    \end{pythoncode}
+    \caption{Création et initialisation d'un modèle SMP}
+    \label{code:ch36_creation_modele_smp}
+\end{code}
+
+L'utilisation de poids pré-entraînés (\texttt{encoder\_weights="imagenet"}) permet de bénéficier des caractéristiques apprises sur ImageNet, accélérant ainsi la convergence et améliorant les performances finales. Le paramètre \texttt{memory\_format=torch.channels\_last} \cite{noauthor_beta_nodate} optimise le format des images pour une utilisation plus efficiente de la mémoire GPU, ce qui s'avère crucial dans le cas d'images haute résolution.
+
+\paragraph{Configuration de l'optimisation}
+L'optimiseur AdamW est utilisé avec une stratégie de réduction adaptative du taux d'apprentissage. Le Code \ref{code:ch36_optimiseur_smp} présente cette configuration.
+
+\begin{code}[H]
+    \begin{pythoncode}
+    # Optimiseur AdamW avec régularisation
+    optimizer = optim.AdamW(
+        model.parameters(),
+        lr=0.001,                    # Taux d'apprentissage initial
+        weight_decay=0.01,           # Régularisation L2
+        betas=(0.9, 0.999),
+        eps=1e-8,
+        fused=True                   # Optimisation GPU
+    )
+    
+    # Planificateur adaptatif
+    scheduler = ReduceLROnPlateau(
+        optimizer,
+        mode="max",                  # Maximiser l'IoU
+        factor=0.75,                 # Réduction de 25%
+        patience=10,                 # Attendre 10 epochs
+        min_lr=0.000001             # Taux minimum 1/1000 du lr initial
+    )
+    
+    # Fonction de perte
+    criterion = nn.BCEWithLogitsLoss()
+    \end{pythoncode}
+    \caption{Configuration de l'optimiseur et planificateur}
+    \label{code:ch36_optimiseur_smp}
+\end{code}
+
+L'optimiseur AdamW \cite{noauthor_adamw_nodate} est choisi pour sa capacité à gérer efficacement les gradients et à réduire le surapprentissage grâce à la régularisation L2 (\texttt{weight\_decay=0.01}). Cette régularisation constitue une technique courante pour éviter le surapprentissage en ajoutant une pénalité sur la taille des poids du modèle. Le paramètre \texttt{betas} contrôle les moments du gradient, et \texttt{eps} représente un petit nombre pour éviter la division par zéro. Le paramètre \texttt{fused=True} optimise les calculs sur GPU, réduisant ainsi la consommation de mémoire et accélérant l'entraînement. Les paramètres choisis correspondent aux valeurs par défaut d'AdamW qui conviennent dans la plupart des cas.
+
+La fonction de perte \texttt{BCEWithLogitsLoss} combine une activation sigmoïde avec la perte d'entropie croisée binaire, optimisée pour la segmentation binaire.
+
+\texttt{ReduceLROnPlateau} permet de réduire progressivement le taux d'apprentissage pour affiner l'entraînement lorsque les performances stagnent. Le taux d'apprentissage sera réduit en fonction de l'IoU : si celui-ci n'évolue pas après 10 epochs (\texttt{patience=10}), il est réduit de 25\% (\texttt{factor=0.75}). Le taux d'apprentissage minimum est fixé à 0,000001 (\texttt{min\_lr}).
+
+\paragraph{Entraînement avec précision mixte}
+La précision mixte \cite{noauthor_automatic_nodate} permet d'accélérer l'entraînement en utilisant des types de données à virgule flottante 16 bits (FP16) pour les calculs, tout en conservant la précision des poids en 32 bits (FP32). Cette technique réduit la consommation de mémoire et accélère les calculs sur les GPU modernes. L'entraînement peut être accéléré d'un facteur de 2 à 3. Le Code \ref{code:ch36_boucle_entrainement} illustre la boucle d'entraînement principale avec précision mixte.
+
+\begin{code}[H]
+    \begin{pythoncode}
+    from torch.amp import GradScaler, autocast
+
+    scaler = GradScaler()
+    accumulation_steps = 4  # Simule un batch 4x plus grand
+    
+    for epoch in range(epochs):
+        model.train()
+        total_loss = 0
+        
+        # Réinitialisation des gradients au début de l'époque
+        optimizer.zero_grad(set_to_none=True)
+        
+        for batch_idx, (images, masks) in enumerate(train_loader):
+            # Transfert vers GPU avec format optimisé des images
+            images = images.to(device, memory_format=torch.channels_last)
+            masks = masks.to(device)
+            
+            # Forward pass avec précision mixte
+            with autocast(device_type="cuda"):
+                outputs = model(images)
+                loss = criterion(outputs.squeeze(1), masks)
+                # Division par accumulation_steps pour normaliser
+                loss = loss / accumulation_steps
+            
+            # Backward pass avec mise à l'échelle des gradients
+            scaler.scale(loss).backward()
+            
+            # Mise à jour des poids seulement tous les accumulation_steps
+            if (batch_idx + 1) % accumulation_steps == 0:
+                # Dé-mise à l'échelle avant écrêtage des gradients
+                scaler.unscale_(optimizer)
+                
+                # Gradient cliping pour stabilité
+                torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
+                
+                # Mise à jour des paramètres
+                scaler.step(optimizer)
+                scaler.update()
+                
+                # Réinitialisation pour le prochain cycle d'accumulation
+                optimizer.zero_grad(set_to_none=True)
+            
+            total_loss += loss.item() * accumulation_steps
+        
+        # Validation et mise à jour du planificateur
+        val_loss, val_metrics = validate_model(model, val_loader)
+        scheduler.step(val_metrics["iou"])
+    \end{pythoncode}
+    \caption{Boucle d'entraînement avec précision mixte et accumulation de gradients}
+    \label{code:ch36_boucle_entrainement}
+\end{code}
+
+La boucle d'entraînement du Code \ref{code:ch36_boucle_entrainement} fonctionne selon le processus suivant :
+\begin{itemize}
+    \item Un \texttt{GradScaler} est créé pour gérer la précision mixte (FP16/FP32) et le paramètre \texttt{accumulation\_steps} définit le nombre de mini-batches à accumuler avant la mise à jour des poids.
+    \item Pour chaque époque \texttt{for epoch in range(epochs)}, le modèle est mis en mode entraînement et les gradients sont réinitialisés au début de l'epoch.
+    \item Pour chaque batch de données \texttt{for batch\_idx, (images, masks) in enumerate(train\_loader)} :
+    \begin{itemize}
+        \item Les données sont transférées sur le GPU avec un format mémoire optimisé (\texttt{memory\_format=torch.channels\_last}) pour améliorer les performances des Tensor Cores des GPU Ampere.
+        \item Le passage avant (forward pass) s'effectue avec précision mixte (\texttt{with autocast(device\_type="cuda")}) pour réduire la consommation mémoire.
+        \item La perte (\texttt{loss}) est calculée entre la sortie du modèle (\texttt{outputs}) et le masque cible (\texttt{masks}), puis divisée par \texttt{accumulation\_steps} pour normaliser l'accumulation des gradients.
+        \item Le passage arrière (backward pass) accumule les gradients avec mise à l'échelle (\texttt{scaler.scale(loss).backward()}).
+        \item La mise à jour des poids n'intervient que tous les \texttt{accumulation\_steps} batches. À ce moment, les gradients sont d'abord dé-mis à l'échelle \\ (\texttt{scaler.unscale\_(optimizer)}), puis écrêtés (\texttt{clip\_grad\_norm\_}) pour éviter l'explosion des gradients, avant que l'optimiseur ne mette à jour les paramètres.
+        \item Les gradients sont réinitialisés seulement après chaque cycle d'accumulation complet, permettant ainsi de simuler un batch plus important.
+    \end{itemize}
+    \item Après chaque époque, le modèle est évalué sur le dataset de validation et le planificateur de taux d'apprentissage (\texttt{ReduceLROnPlateau}) ajuste automatiquement le taux d'apprentissage selon l'évolution de la métrique d'IoU de validation.
+\end{itemize}
+
+Cette boucle permet d'entraîner efficacement un modèle de segmentation sémantique sur GPU, en optimisant la mémoire et la vitesse grâce à la précision mixte.
+
+\paragraph{Validation croisée}
+L'entraînement utilise une validation croisée à 5 folds pour maximiser l'utilisation des données annotées. Chaque fold sert alternativement de dataset de validation, permettant d'obtenir une évaluation robuste des performances. Le Code \ref{code:ch36_validation_croisee} illustre cette approche.
+
+\begin{code}[H]
+    \begin{pythoncode}
+    for fold in range(5):
+        # Préparation des datasets
+        val_paths = data_paths[fold]
+        train_paths = {"images": [], "masks": []}
+        
+        for i, fold_data in enumerate(data_paths):
+            if i != fold:
+                train_paths["images"].extend(fold_data["images"])
+                train_paths["masks"].extend(fold_data["masks"])
+        
+        # Entraînement du modèle pour ce fold
+        fold_result = train_single_fold(
+            fold=fold,
+            train_paths=train_paths,
+            val_paths=val_paths,
+            test_paths=test_paths,
+            config=config
+        )
+        
+        # Sauvegarde des résultats
+        all_results.append(fold_result)
+    \end{pythoncode}
+    \caption{Validation croisée à 5 folds}
+    \label{code:ch36_validation_croisee}
+\end{code}
+
+La validation croisée du Code \ref{code:ch36_validation_croisee} fonctionne ainsi:
+\begin{itemize}
+    \item Pour chaque fold de 0 à 4 (\texttt{for fold in range(5)}), une configuration différente des datasets d'entraînement et de validation est créée.
+    \item Préparation des datasets pour le fold courant :
+    \begin{itemize}
+        \item Le fold actuel (\texttt{data\_paths[fold]}) est assigné comme dataset de validation (\texttt{val\_paths}).
+        \item Un dictionnaire \texttt{train\_paths} est initialisé pour regrouper les chemins des images et masques d'entraînement.
+        \item Tous les autres folds (\texttt{if i != fold}) sont combinés pour former le dataset d'entraînement, leurs chemins d'images et de masques étant ajoutés aux listes \texttt{train\_paths["images"]} et \texttt{train\_paths["masks"]}.
+    \end{itemize}
+    \item Entraînement du modèle : La fonction \texttt{train\_single\_fold} lance l'entraînement complet pour ce fold spécifique, en utilisant les datasets préparés ainsi que le dataset de test fixe (\texttt{test\_paths}) qui reste identique pour tous les folds.
+    \item Sauvegarde des résultats : Les métriques de performance, le modèle entraîné et les statistiques d'entraînement (\texttt{fold\_result}) sont stockés dans la liste \texttt{all\_results} pour analyse ultérieure.
+    \item Répétition : Ce processus garantit que chaque échantillon du dataset sera utilisé exactement une fois pour la validation et quatre fois pour l'entraînement, maximisant ainsi l'exploitation des données annotées disponibles.
+\end{itemize}
+
+\paragraph{Calcul des métriques}
+Les métriques constituent un élément essentiel pour évaluer les performances des modèles de segmentation d'instances. Elles permettent de quantifier la précision des prédictions du modèle par rapport aux annotations de référence. La sous-section \textit{\nameref{subsec:evaluation_performance_modele}} (voir page~\pageref{subsec:evaluation_performance_modele}) présente en détail les principales métriques utilisées en machine learning (accuracy, precision, recall, F1-score). La sous-section \textit{\nameref{subsec:evaluation_des_performances}} (voir page~\pageref{subsec:evaluation_des_performances}) présente les métriques spécifiques à la segmentation d'images (IoU, AP, mAP, PA).
+
+L'évaluation des performances s'effectue à l'aide des métriques IoU, F1-score, accuracy, precision et recall. Ces métriques sont calculées à l'aide de SMP, ce qui permet de faire tous les calculs sur GPU et éviter les échanges CPU-GPU si on le fait avec numpy. Le Code \ref{code:ch36_calcul_metriques} présente le calcul de ces métriques.
+
+\begin{code}[H]
+    \begin{pythoncode}
+    def calculate_metrics_smp(pred_logits, target):
+        # Application de la sigmoïde aux logits
+        pred_probs = torch.sigmoid(pred_logits)
+        target_binary = (target > 0.5).long()
+        
+        # Ajout de la dimension canal pour SMP
+        pred_probs = pred_probs.unsqueeze(1)
+        target_binary = target_binary.unsqueeze(1)
+        
+        # Calcul des statistiques de base
+        tp, fp, fn, tn = smp.metrics.get_stats(
+            pred_probs, target_binary,
+            mode="binary", threshold=0.5
+        )
+        
+        # Calcul des métriques finales
+        metrics = {
+            "iou": smp.metrics.iou_score(tp, fp, fn, tn, reduction="micro"),
+            "f1_score": smp.metrics.f1_score(tp, fp, fn, tn, reduction="micro"),
+            "accuracy": smp.metrics.accuracy(tp, fp, fn, tn, reduction="micro"),
+            "recall": smp.metrics.recall(tp, fp, fn, tn, reduction="micro"),
+            "precision": smp.metrics.precision(tp, fp, fn, tn, reduction="micro")
+        }
+        
+        return metrics
+    \end{pythoncode}
+    \caption{Calcul des métriques d'évaluation}
+    \label{code:ch36_calcul_metriques}
+\end{code}
+
+Les étapes pour le calcul des métriques du Code \ref{code:ch36_calcul_metriques} sont les suivantes:
+\begin{itemize}
+    \item Préparation des données d'entrée :
+    \begin{itemize}
+        \item Les logits bruts du modèle (\texttt{pred\_logits}) sont convertis en probabilités par application de la fonction sigmoïde (\texttt{torch.sigmoid}).
+        \item Les masques cibles (\texttt{target}) sont binarisés en appliquant un seuil de 0,5 et convertis en entiers longs (\texttt{.long()}) pour assurer la compatibilité avec SMP.
+    \end{itemize}
+    \item Formatage pour SMP : Les tenseurs de prédictions et de cibles sont redimensionnés en ajoutant une dimension canal (\texttt{.unsqueeze(1)}) car SMP attend un format \texttt{[batch, channels, height, width]}.
+    \item Calcul des statistiques fondamentales : La fonction \texttt{smp.metrics.get\_stats} calcule les valeurs de base de la matrice de confusion :
+    \begin{itemize}
+        \item \texttt{tp} (vrais positifs) : pixels correctement prédits comme toiture libre
+        \item \texttt{fp} (faux positifs) : pixels incorrectement prédits comme toiture libre
+        \item \texttt{fn} (faux négatifs) : pixels de toiture libre manqués par le modèle
+        \item \texttt{tn} (vrais négatifs) : pixels correctement prédits comme non-toiture libre
+    \end{itemize}
+    \item Calcul des métriques dérivées : À partir des statistiques de base, les métriques finales sont calculées avec une réduction \texttt{"micro"} qui agrège les résultats sur tous les pixels avant le calcul des ratios.
+    \item Retour des résultats : Un dictionnaire contenant les cinq métriques principales est retourné, permettant une évaluation complète des performances de segmentation du modèle.
+\end{itemize}
+
+\paragraph{Stratégies d'optimisation}
+Plusieurs stratégies d'optimisation sont mises en place pour améliorer les performances d'entraînement et la stabilité du processus d'apprentissage :
+
+\begin{itemize}
+    \item Arrêt précoce (early stopping) : L'entraînement s'arrête automatiquement si l'IoU de validation ne s'améliore pas pendant 50 epochs consécutifs, évitant ainsi le surapprentissage et réduisant le temps de calcul inutile.
+    \item Sauvegarde sélective : Seul le modèle ayant obtenu la meilleure IoU de validation est conservé, garantissant que le modèle final correspond aux meilleures performances observées durant l'entraînement.
+    \item Gestion optimisée de la mémoire GPU : Des nettoyages périodiques \\ (\texttt{torch.cuda.empty\_cache()}) libèrent la mémoire non utilisée, tandis que le format \texttt{channels\_last} optimise l'utilisation des Tensor Cores et réduit la fragmentation mémoire.
+    \item Accumulation de gradients : Cette technique permet de simuler des tailles de batch plus importantes en accumulant les gradients sur plusieurs mini-batches avant la mise à jour des paramètres, particulièrement utile pour les modèles volumineux avec des contraintes mémoire.
+    \item Écrêtage des gradients (gradient clipping) : L'application d'une norme maximale (\texttt{max\_norm=1.0}) prévient l'explosion des gradients et stabilise l'entraînement, notamment lors de l'accumulation de gradients.
+    \item Précision mixte adaptative : L'utilisation automatique de FP16 et FP32 selon les opérations accélère l'entraînement tout en préservant la stabilité numérique grâce au \texttt{GradScaler}.
+    \item Planification adaptative du taux d'apprentissage : Le \texttt{ReduceLROnPlateau} réduit automatiquement le taux d'apprentissage de 25\% lorsque l'IoU de validation stagne, permettant une convergence plus fine.
+    \item Régularisation L2 : Intégrée dans l'optimiseur AdamW (\texttt{weight\_decay=0.01}), elle limite la complexité du modèle et améliore la généralisation sur de nouvelles données.
+    \item Optimisations de Pytorch spécifiques au GPU Ampere
+\end{itemize}
+
+\paragraph{Monitoring et visualisation}
+Le processus génère automatiquement des graphiques de suivi des métriques d'entraînement et de validation (Figure \ref{fig:ch36_entrainement_01_suivi_metriques}), ainsi que des visualisations des prédictions pour évaluer qualitativement les performances du modèle. Ces éléments permettent de diagnostiquer d'éventuels problèmes.
+
+\begin{figure}[H]
+    \centering
+    \makebox[\textwidth]{\includegraphics[width=1.2\linewidth]{02-main//figures/ch3/ch36_entrainement_01_suivi_metriques.png}}
+    \caption{Suivi des métriques d'entraînement et de validation}
+    \label{fig:ch36_entrainement_01_suivi_metriques}
+\end{figure}
+
+Le processus complet, de l'initialisation à l'évaluation finale, prend généralement entre 2 et 12 heures par fold selon la complexité du modèle et la taille de l'encodeur utilisé.
+
+\paragraph{Stratégies testées mais abandonnées}
+L'entraînement des modèles sur le cluster de l'Université de Genève a révélé des problèmes qui étaient passés inaperçus lors des tests sur un ou deux GPU. Ce cluster met à disposition des GPU avec 24, 40 ou 80 GB de mémoire de la génération Ampere.
+
+Le calcul automatique du batch size permet en principe de mieux utiliser la mémoire du GPU assigné et par conséquent de réduire le temps d'entraînement. Cette fonctionnalité a cependant causé des problèmes de mémoire et des arrêts inopinés d'entraînements. Le temps gagné par cette fonctionnalité ne compense pas le temps consacré à surveiller les entraînements.
+
+Les modèles pré-entraînés sont stockés dans un cache commun (dossier invisible), ce qui permet d'éviter des téléchargements répétés. Lors d'entraînements du même modèle mais sur des folds différents, des problèmes d'accès surviennent car plusieurs processus tentent de télécharger simultanément le même fichier. La stratégie initialement testée consiste à faire réessayer le modèle d'accéder au fichier selon des délais progressifs en cas de conflit : 30 secondes, puis 60 secondes, puis 120 secondes, puis 240 secondes. Cette approche devrait a priori laisser suffisamment de temps pour compléter le téléchargement. Cependant, cette stratégie n'a pas réussi car des conflits d'accès persistaient malgré ces délais. La solution finalement adoptée consiste à faire créer par chaque entraînement son propre dossier où il télécharge individuellement le modèle pré-entraîné, évitant ainsi tout conflit d'accès concurrent.
+
+Le chargement des données représente un processus potentiellement long et bloquant car le GPU reste en attente du batch à traiter. \texttt{torch.utils.data.DataLoader} peut utiliser plusieurs processus en parallèle et d'autres fonctionnalités pour accélérer significativement le chargement des données. Cependant, le cluster de l'Université de Genève ne supporte pas bien cette fonctionnalité, bien que le nombre de cœurs CPU (8) et la mémoire RAM assignés soient suffisants (64Gb), cette approche fait planter l'entraînement. Un autre responsable peut être aussi les nombres accès au stockage pour la lecture des données. La stratégie adoptée consiste à utiliser un traitement séquentiel sans pré-chargement en mémoire.
+
+La mémoire GPU est rapidement devenue un problème majeur lors des entraînements, même avec des petits modèles. La compilation du modèle avec \texttt{torch.compile} permet d'optimiser les performances d'entraînement en réduisant la consommation mémoire et en accélérant les calculs. Cette fonctionnalité n'est cependant pas compatible avec tous les modèles et n'a pas offert de gains significatifs en temps d'entraînement. Il est donc préférable de ne pas utiliser cette fonctionnalité pour le moment.
+
+\subsection{Traitement des résultats}
+Une fois tous les entraînements terminés, les résultats sont traités selon la procédure suivante :
+\begin{itemize}
+    \item Les configurations encodeur-décodeur (modèle) avec un IoU inférieur à 0,2 sont éliminées
+    \item Vérification que chaque modèle dispose bien d'au moins un entraînement par fold
+    \item Si le modèle dispose de plusieurs entraînements pour un même fold, conserver celui qui présente le meilleur IoU
+\end{itemize}
+
+Pour SMP, 89 modèles sont retenus sur les 160 modèles testés, avec un IoU moyen sur les 5 folds compris entre 0,62 et 0,74. Pour YOLO, 4 modèles sur les 5 testés sont conservés, avec des IoU variant entre 0,70 et 0,73.
+
+% -----------------------------------------------------------------------------
+% -----------------------------------------------------------------------------
+\newpage
+\section{Autres pistes explorées}
+\label{sec:pistes_explorees}
+Plusieurs autres approches ont été explorées, le but initial étant d'éviter de devoir créer un dataset. La génération d'un dataset pour une tâche tel que la segmentation sémantique est assez chronophage et laborieux. La première approche est d'essayer de classifier les données géomatiques, la deuxième approche implique l'utilisation de segment-anything-model.
+
+\subsection{Classification}
+La classification des toitures est une approche naïve pour déterminer quelles toitures sont disponibles en utilisant les couches des toitures et superstructures de \acrshort{sitg}.
+
+\subsubsection{Méthodologie}
+La Figure \ref{fig:ch3_piste_exploree_classification_01_workflow} résume les principales étapes. 
+
+\begin{figure}[H]
+    \centering
+    \makebox[\textwidth]{\includegraphics[width=1.3\linewidth]{02-main//figures/ch3/ch3_piste_exploree_classification_01_workflow.png}}
+    \caption{Schéma classification des toitures}
+    \label{fig:ch3_piste_exploree_classification_01_workflow}
+\end{figure}
+
+L'objectif est de créer 3 classes en utilisant la couche des toitures et celle des superstructures:
+\begin{itemize}
+    \item Classe 1: Toiture totalement occupée
+    \item Classe 2: Toiture partiellement occupée
+    \item Classe 3: Toiture libre
+\end{itemize}
+Premièrement, les toitures de moins de 2 \si{\unit{\square\meter}} sont éliminées car jugées trop petites.
+
+L'étape suivante (Figure \ref{fig:piste_exploree_classification_image_exemple}) est de déterminer si la toiture est un polygone complètement fermé ou s'il y a un autre polygone à l'intérieur. La Figure \ref{fig:ch3_piste_exploree_classification_02_image_originale} représente une image d'exemple pour illustrer cette étape, la toiture est un toit à deux pans inclinés avec des lucarnes. La Figure \ref{fig:ch3_piste_exploree_classification_03_couche_toiture} superpose la couche des toitures sur la Figure \ref{fig:ch3_piste_exploree_classification_02_image_originale}, on observe que la couche des toitures a bien un polygone assigné à chacune des lucarnes. La Figure \ref{fig:ch3_piste_exploree_classification_04_image_resultante} représente le résultat pour la partie nord de la toiture, la partie intérieur (lucarne) a été éliminée et tout ce qui est hors polygone a été enlevé.
+
+A continuation, il faut vérifier la présence d'une superstructure (couche superstructure) sur la toiture. Dans le cas de la Figure \ref{fig:piste_exploree_classification_image_exemple}, il n'y a pas de superstructure dans la toiture.
+
+Les deux étapes précédentes vont déterminer l'action à réaliser sur l'image, ainsi que sa classification. Si l'on reprend le schéma de la Figure \ref{fig:ch3_piste_exploree_classification_01_workflow} pour l'exemple étape par étape:
+\begin{enumerate}
+    \item Surface > 2 \si{\unit{\square\meter}} : Oui
+    \item Polygone totalement inclus à l'intérieur de celui de la toiture : Oui
+    \item Superstructure sur la toiture : Non
+    \item Classe 3b: Supprimer "trou" de l'image
+    \item Toiture finalement classée comme "libre"
+\end{enumerate}
+
+\begin{figure}[H]
+    \centering
+    
+    % Première ligne
+    \begin{subfigure}[b]{0.475\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch3/ch3_piste_exploree_classification_02_image_originale.png}
+        \caption{Image d'exemple}
+        \label{fig:ch3_piste_exploree_classification_02_image_originale}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch3/ch3_piste_exploree_classification_03_couche_toiture.png}
+        \caption{Couche toiture superposée}
+        \label{fig:ch3_piste_exploree_classification_03_couche_toiture}
+    \end{subfigure}
+    
+    \vspace{0.35cm} % Espace entre les lignes
+    
+    % Deuxième ligne
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch3/ch3_piste_exploree_classification_04_image_resultante.png}
+        \caption{Résultat final}
+        \label{fig:ch3_piste_exploree_classification_04_image_resultante}
+    \end{subfigure}
+
+    \caption{Exemple de toiture avec un "trou" et sans superstructure}
+    \label{fig:piste_exploree_classification_image_exemple}
+\end{figure}
+
+\subsubsection{Résultats}
+
+La Figure \ref{fig:ch3_piste_exploree_classification_05_classification_simplified} représente la classification intermédiaire selon la présence d'un polygone à l'intérieur de la toiture et de la présence de superstructure (voir Figure \ref{fig:ch3_piste_exploree_classification_01_workflow}). La grande majorité des toitures sont classées comme "3a", c'est à dire des toitures qui n'ont pas de superstructure ni d'autre polygone à l'intérieur. Ce sont des toitures à priori libres.
+
+La Figure \ref{fig:ch3_piste_exploree_classification_06_classification_finale} montre la classification finale en 3 classes. Les résultats indiquent que quasiment toutes les toitures sont libres, ce qui est loin d'être le cas. Le problème est la couche des superstructures, celle-ci n'est pas complète et pas tous les éléments en dessous de 9 \si{\unit{\square\meter}} sont représentés. La classification ne tient pas en compte de la réalité terrain et sa précision et pertinence va dépendre de la qualité des données géomatiques utilisées.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{02-main//figures/ch3/ch3_piste_exploree_classification_05_classification_intermediaire.png}
+    \caption{Classification intermédiaire}
+    \label{fig:ch3_piste_exploree_classification_05_classification_simplified}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{02-main//figures/ch3/ch3_piste_exploree_classification_06_classification_finale.png}
+    \caption{Classification finale}
+    \label{fig:ch3_piste_exploree_classification_06_classification_finale}
+\end{figure}
+
+La Figure \ref{fig:piste_exploree_classification_resultats_explications} représente un exemple de la problématique, les superstructures présentes sur le toit (Figure \ref{fig:ch3_piste_exploree_classification_10_resultats_image_sp}) ne sont pas toutes représentées (Figure \ref{fig:ch3_piste_exploree_classification_07_resultats_image_exemple}). La couche des toitures (Figure \ref{fig:ch3_piste_exploree_classification_08_resultats_image_toiture}) inclus aussi des balcons et terrasses, ce qui complique significativement la tâche de classification. Il n'y a pas le découpage pour cette toiture (similaire Figure \ref{fig:ch3_piste_exploree_classification_04_image_resultante}), car il y a un bug dans le script qui classifie et découpe les toitures. Finalement, il y a aussi des problèmes d’alignement entre les orthophotos et les superstructures qui rendent peu fiables les découpes nécessaires pour enlever les superstructures des toitures dans la dernière phase de la classification.
+
+\begin{figure}[H]
+    \centering
+    
+    % Première ligne
+    \begin{subfigure}[b]{0.475\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch3/ch3_piste_exploree_classification_07_resultats_image_exemple.png}
+        \caption{Image d'exemple}
+        \label{fig:ch3_piste_exploree_classification_07_resultats_image_exemple}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch3/ch3_piste_exploree_classification_08_resultats_image_toiture.png}
+        \caption{Couche des toitures}
+        \label{fig:ch3_piste_exploree_classification_08_resultats_image_toiture}
+    \end{subfigure}
+    
+    \vspace{0.35cm} % Espace entre les lignes
+    
+    % Deuxième ligne
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch3/ch3_piste_exploree_classification_10_resultats_image_sp.png}
+        \caption{Couche des superstructures}
+        \label{fig:ch3_piste_exploree_classification_10_resultats_image_sp}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.475\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch3/ch3_piste_exploree_classification_09_resultats_image__toiture_sp.png}
+        \caption{Couche des toitures et superstructures}
+        \label{fig:ch3_piste_exploree_classification_09_resultats_image__toiture_sp}
+    \end{subfigure}
+
+    \caption{Exemple de toiture problématique pour la classification}
+    \label{fig:piste_exploree_classification_resultats_explications}
+\end{figure}
+
+Pour conclure, les différents problèmes rencontrés et le manque de fiabilité du résultat final ont fait que la piste de la classification n'a pas été retenue.
+
+
+\newpage
+\subsection{\acrshort{sam}}
+Une autre piste explorée est l'utilisation du segment-anything-model (\acrshort{sam}). Cet algorithme présente l'avantage de permettre une segmentation efficace sur des images sur lesquelles \acrshort{sam} n'a pas été spécifiquement entraîné. \acrshort{stdl} avait déjà exploré cette piste dans la sous-section \textit{\nameref{subsec:stdl_analyse}} (voir page~\pageref{subsec:stdl_analyse}) avec quelques différences entre les méthodologies utilisées.
+
+\subsubsection{Méthodologie}
+La Figure \ref{fig:essai_algo_sam} résume les différentes étapes:
+\begin{enumerate}
+    \item Mettre en noir tout ce qui est hors toiture (Figure \ref{fig:ch3_essai_sam_01_image_original})
+    \item Détermination zone d'intêret (Figure \ref{fig:ch3_essai_sam_02_ROI})
+    \item \acrshort{sam} va segmenter toute l'image (Figure \ref{fig:ch3_essai_sam_03_200_masks})
+    \item Filtrer les masques (polygones segmentés) (Figure \ref{fig:ch3_essai_sam_04_194_filtered_masks})
+    \item Visualisation des masques filtrés avec des couleurs plus vives pour vérification visuelle (Figure \ref{fig:ch3_essai_sam_05_filtered_masks_overlay})
+    \item Détermination de l'espace libre (Figure \ref{fig:ch3_essai_sam_06_une_zone_libre})
+\end{enumerate}
+
+La première étape (Figure \ref{fig:ch3_essai_sam_01_image_original}) est de fusionner tous les polygones qui délimitent la toiture. Ce grand polygone de toiture va permettre de centrer l'attention de \acrshort{sam} sur la toiture, les zones hors toitures peuvent être considérées comme du bruit et mises en noir. Un avantage notable de cette démarche est d'éviter du temps de calcul à \acrshort{sam}.
+
+La deuxième étape (Figure \ref{fig:ch3_essai_sam_02_ROI}) est de déterminer la zone d'intérêt (ROI). Cette étape utilise la librairie python pillow et permet de mettre en évidence les zones sombres à l'intérieur de la toiture.
+
+La troisième étape (Figure \ref{fig:ch3_essai_sam_03_200_masks}) utilise l'algorithme \acrshort{sam} pour réaliser la segmentation complète de l'image de la Figure \ref{fig:ch3_essai_sam_01_image_original}. Dans ce cas, un total de 200 masques sont segmentés. Le temps de calcul est de 7 minutes pour une image de toiture. \acrshort{sam} dispose de plusieurs paramètres qui peuvent augmenter significativement le temps de calcul; \acrshort{sam} peut par exemple diviser l'image en plusieurs parties pour améliorer la segmentation, plus cette partition est fine, meilleurs seront les résultats. La documentation de \acrshort{sam} est assez rudimentaire et n'explique pas clairement toutes les options disponibles.
+
+La quatrième étape (Figure \ref{fig:ch3_essai_sam_04_194_filtered_masks}) consiste à filtrer les polygones segmentés selon trois critères principaux :
+\begin{itemize}
+    \item Recouvrement avec la ROI : les masques doivent avoir un recouvrement supérieur à 50\% avec la zone d'intérêt
+    \item Taille minimale : élimination des polygones de moins de 50 pixels (paramètre \acrshort{sam}) et suppression additionnelle des masques avec moins de 100 pixels
+    \item Qualité de segmentation : utilisation des seuils \acrshort{sam} avec un IoU prédit > 0.85 et un score de stabilité > 0.85
+\end{itemize}
+Cette étape réduit le nombre de masques de 200 à 194, éliminant principalement les artefacts de segmentation hors toiture et les zones trop petites.
+
+La cinquième étape (Figure \ref{fig:ch3_essai_sam_05_filtered_masks_overlay}) propose une visualisation colorée des masques filtrés pour faciliter la vérification visuelle des résultats de segmentation.
+
+La sixième étape (Figure \ref{fig:ch3_essai_sam_06_une_zone_libre}) détermine l'espace libre en combinant plusieurs critères :
+
+\begin{itemize}
+    \item Critères géométriques:
+    \begin{itemize}
+        \item Zone tampon de 0.5 m autour des obstacles détectés
+        \item Ratio de largeur/hauteur pour éliminer les masques long mais pas suffisament larges pour être intéressants pour la pose de panneaux solaires
+        \item Taille du masque minimum de 10 m² par défaut (soit 4000 pixels à 5 cm/pixel)
+    \end{itemize}
+    \item Critère de luminosité:
+        \begin{itemize}
+            \item Filtre sur les zone sombres qui ont une luminosité de moins de 60\% de la moyenne globale de l'image
+        \end{itemize}
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    
+    % Première ligne
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch3/ch3_essai_sam_01_image_original.png}
+        \caption{Image d'exemple}
+        \label{fig:ch3_essai_sam_01_image_original}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch3/ch3_essai_sam_02_ROI.png}
+        \caption{Zone d’intérêt (ROI)}
+        \label{fig:ch3_essai_sam_02_ROI}
+    \end{subfigure}
+    
+    \vspace{0.35cm} % Espace entre les lignes
+    
+    % Deuxième ligne
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch3/ch3_essai_sam_03_200_masks.png}
+        \caption{Polygones segmentés (200)}
+        \label{fig:ch3_essai_sam_03_200_masks}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch3/ch3_essai_sam_04_194_filtered_masks.png}
+        \caption{Polygone segmentés filtrés (194)}
+        \label{fig:ch3_essai_sam_04_194_filtered_masks}
+    \end{subfigure}
+
+    \vspace{0.35cm} % Espace entre les lignes
+    
+    % Troisième ligne
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch3/ch3_essai_sam_05_filtered_masks_overlay.png}
+        \caption{Mise en évidence des polygones filtrés}
+        \label{fig:ch3_essai_sam_05_filtered_masks_overlay}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{02-main/figures/ch3/ch3_essai_sam_06_une_zone_libre.png}
+        \caption{Espace libre}
+        \label{fig:ch3_essai_sam_06_une_zone_libre}
+    \end{subfigure}
+
+    \caption{Essai d'utilisation de \acrshort{sam}}
+    \label{fig:essai_algo_sam}
+\end{figure}
+
+\subsubsection{Fine-tuning de \acrshort{sam}}
+\label{subsubsec:fine_tuning_sam}
+La piste d'un fine-tuning de \acrshort{sam} pour mieux l'adapter à la tâche d'identification des espaces libres a été explorée. Un dataset de 45 images (Figure \ref{fig:ch3_piste_exploree_classification_11_fine_tuning_dataset}) n'a pas permis d'améliorer significativement les performances du modèle. Une des problématiques rencontrées lors de la création de ce dataset est qu'il faut identifier tous les obstacles présents sur la toiture, ce qui prend énormément de temps et nécessite une grande quantité de classes différentes.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{02-main/figures/ch3/ch3_piste_exploree_classification_11_fine_tuning_dataset.png}
+    \caption{Image du dataset pour le fine-tuning \acrshort{sam}}
+    \label{fig:ch3_piste_exploree_classification_11_fine_tuning_dataset}
+\end{figure}
+
+\subsubsection{Résultats}
+
+\acrshort{sam} segmente correctement les toitures bien éclairées avec un contraste suffisant entre obstacles et surface. Les résultats se dégradent significativement en présence d'ombrages ou de faible contraste.
+
+Les principales limitations sont:
+\begin{itemize}
+    \item Principal problème rencontré sont les ombrages. \acrshort{sam} confond les zones ombragées avec l'arrière-plan noir, même avec les filtres de luminosité implémentés. Cela génère des faux négatifs dans les zones ombragées.
+    \item Le temps de calcul par image est de 7 minutes (sur \acrshort{gpu}), ce qui confirme les résultats de \acrshort{stdl}. La mise à l'échelle du canton est problématique.
+    \item Les performances de segmentation sont directement corrélées à la résolution et au contraste de l'image d'entrée.
+\end{itemize}
+
+Le fine-tuning avec 45 images annotées n'améliore pas les performances. Le dataset reste trop petit pour un modèle de cette complexité, et l'annotation manuelle de tous les obstacles de toiture est très chronophage.
+
+Pour conclure, \acrshort{sam} fonctionne bien sur des images de qualité avec un bon éclairage, par contre son utilité reste limitée à cause des ombrages et du temps de calcul nécessaire.
+
+% -----------------------------------------------------------------------------
+% -----------------------------------------------------------------------------
+\section{Synthèse}
+
+Ce chapitre a présenté la méthodologie complète pour développer un modèle de segmentation sémantique capable d'identifier les espaces libres sur les toitures du canton de Genève. La démarche s'articule autour de trois phases principales : la définition de la tâche et sélection de l'algorithme, la création d'un dataset d'entraînement adapté, et le développement du modèle.
+
+\paragraph{Approche retenue}
+La segmentation sémantique a été choisie comme algorithme principal après l'analyse réalisée dans le chapitre précédent. Cette approche permet d'identifier pixel par pixel les zones libres sur les toitures, offrant une précision supérieure aux méthodes de classification ou de segmentation d'instance.
+
+\paragraph{Dataset créé}
+La constitution du dataset représente l'effort principal de ce travail :
+\begin{itemize}
+    \item Données sources : orthophotos 2019 de \acrshort{sitg} (436 tuiles, 700 GB) et données vectorielles des bâtiments, enrichies d'une classification \gls{sia}
+    \item Préparation : découpage de 38294 tuiles de \si{\numproduct{1280x1280}} pixels avec recouvrement de 256 pixels, couvrant 77993 \gls{egid} uniques
+    \item Sélection : échantillonnage stratifié basé sur la classe \gls{sia} dominante et la surface des toitures, résultant en 539 tuiles représentatives
+    \item Annotation : processus manuel assisté par Supervisely durant 6 semaines (environ 180 heures), produisant 530 masques binaires après post-traitement
+    \item Distribution : répartition en 5 folds pour validation croisée (441 images) et un dataset de test indépendant (89 images)
+\end{itemize}
+
+\paragraph{Modèles développés}
+Deux approches complémentaires ont été implémentées :
+\begin{itemize}
+    \item Segmentation Models PyTorch (SMP) : 160 combinaisons encodeur-décodeur testées, dont 89 retenues avec des IoU moyens entre 0,62 et 0,74
+    \item YOLOv12 : 5 modèles de tailles différentes, dont 4 retenus avec des IoU entre 0,70 et 0,73
+\end{itemize}
+
+L'entraînement a exploité plusieurs optimisations techniques : précision mixte\\(FP16/FP32), accumulation de gradients, augmentation de données via Albumentations, et planification adaptative du taux d'apprentissage. Ces stratégies ont permis d'optimiser l'utilisation des ressources GPU tout en maintenant la qualité des modèles.
+
+\paragraph{Enseignements tirés}
+Les pistes explorées mais non retenues ont fourni des enseignements précieux :
+\begin{itemize}
+    \item La classification basée uniquement sur les données géomatiques s'est révélée inadéquate en raison de l'incomplétude de la couche des superstructures
+    \item \acrshort{sam}, malgré ses capacités de segmentation généraliste, présente des limitations majeures : sensibilité aux ombrages, temps de calcul prohibitif (7 minutes par image), et nécessité d'un dataset conséquent pour le fine-tuning
+\end{itemize}
+
+\paragraph{Contribution principale}
+La création d'un dataset annoté de haute qualité pour la segmentation des espaces libres sur toitures constitue la contribution majeure de ce travail. Ce dataset, stratifié selon les catégories \gls{sia} et les surfaces de toitures, offre une représentation équilibrée de la diversité architecturale du canton. Les modèles entraînés atteignent des performances prometteuses avec des IoU supérieurs à 0,70 pour les meilleurs d'entre eux, validant l'approche méthodologique adoptée.
+
+L'investissement temporel considérable dans l'annotation manuelle (environ 20 minutes par image) souligne l'importance de développer des approches semi-automatiques pour étendre cette méthodologie à d'autres régions. Les résultats obtenus justifient néanmoins cet effort, offrant une base solide pour l'évaluation automatisée du potentiel solaire à l'échelle cantonale.

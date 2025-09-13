@@ -1,0 +1,19 @@
+\contentsline {code}{\numberline {1}{\ignorespaces Filtre \gls {egid}}}{94}{code.1}%
+\contentsline {code}{\numberline {2}{\ignorespaces Exemple de conversion entre la destination et la première catégorie \gls {sia}}}{96}{code.2}%
+\contentsline {code}{\numberline {3}{\ignorespaces Distribution des catégories \gls {sia} et vérification des données.}}{96}{code.3}%
+\contentsline {code}{\numberline {4}{\ignorespaces Pseudo-code pour la découpe des orthophotos 20000x20000 pixels en tuiles de 1280x1280 pixels}}{105}{code.4}%
+\contentsline {code}{\numberline {5}{\ignorespaces Fonction d'échantillonnage stratifié par groupe}}{109}{code.5}%
+\contentsline {code}{\numberline {6}{\ignorespaces Application de l'échantillonnage stratifié}}{109}{code.6}%
+\contentsline {code}{\numberline {7}{\ignorespaces Détection des tuiles qui se chevauchent}}{122}{code.7}%
+\contentsline {code}{\numberline {8}{\ignorespaces Position relative des tuiles}}{123}{code.8}%
+\contentsline {code}{\numberline {9}{\ignorespaces Masquage sélectif}}{124}{code.9}%
+\contentsline {code}{\numberline {10}{\ignorespaces Stratification pour la répartition des données annotées}}{126}{code.10}%
+\contentsline {code}{\numberline {11}{\ignorespaces Résultats fonction \texttt {create\_stratified\_dataset\_splits}}}{127}{code.11}%
+\contentsline {code}{\numberline {12}{\ignorespaces Utilisation d'un modèle SMP \blx@tocontentsinit {0}\cite {noauthor_quick_nodate}}}{136}{code.12}%
+\contentsline {code}{\numberline {13}{\ignorespaces Pipeline augmentation des données}}{144}{code.13}%
+\contentsline {code}{\numberline {14}{\ignorespaces Exemple de fichier de configuration d'entraînement pour SMP}}{161}{code.14}%
+\contentsline {code}{\numberline {15}{\ignorespaces Création et initialisation d'un modèle SMP}}{162}{code.15}%
+\contentsline {code}{\numberline {16}{\ignorespaces Configuration de l'optimiseur et planificateur}}{163}{code.16}%
+\contentsline {code}{\numberline {17}{\ignorespaces Boucle d'entraînement avec précision mixte et accumulation de gradients}}{164}{code.17}%
+\contentsline {code}{\numberline {18}{\ignorespaces Validation croisée à 5 folds}}{166}{code.18}%
+\contentsline {code}{\numberline {19}{\ignorespaces Calcul des métriques d'évaluation}}{167}{code.19}%
