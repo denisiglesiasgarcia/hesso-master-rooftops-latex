@@ -604,7 +604,7 @@ Le type de données qui sont en lien avec la géomatique et qui seront traités 
 
 - Orthophotos
 
-- Nuage de points <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">lidar</span></a>
+- Nuage de points <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">LiDAR</span></a>
 
 - Données vectorielles
 
@@ -790,7 +790,7 @@ Swisstopo dispose d’autres produits tel que :
 
 - Orthophotos historiques
 
-Dans le Canton de Genève, <a href="../glossary.html#gloss-sitg"><span data-acronym-label="sitg" data-acronym-form="singular+abbrv">sitg</span></a> &#91;[105](../bibliography.md#ref-sitg_chiffre-cle_2025)&#93; dispose d’une grande quantité de données. En ce qui concerne les orthophotos du Canton de Genève disponibles librement :
+Dans le Canton de Genève, <a href="../glossary.html#gloss-sitg"><span data-acronym-label="sitg" data-acronym-form="singular+abbrv">SITG</span></a> &#91;[105](../bibliography.md#ref-sitg_chiffre-cle_2025)&#93; dispose d’une grande quantité de données. En ce qui concerne les orthophotos du Canton de Genève disponibles librement :
 
 - Orthophotos historiques (1932-2021)
 
@@ -806,15 +806,15 @@ Dans le Canton de Genève, <a href="../glossary.html#gloss-sitg"><span data-acro
 
   - True orthophotos
 
-### Nuage de points <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">lidar</span></a> {#nuage-de-points-lidar}
+### Nuage de points <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">LiDAR</span></a> {#nuage-de-points-lidar}
 
-Laser Imaging Detection And Ranging (<a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">lidar</span></a>) &#91;[106](../bibliography.md#ref-esri_quoi_2025)&#93; est une technique de télédétection optique qui utilise la lumière laser pour échantillonner la surface de la Terre et produire des mesures “x, y, z” d’une grande précision.
+Laser Imaging Detection And Ranging (<a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">LiDAR</span></a>) &#91;[106](../bibliography.md#ref-esri_quoi_2025)&#93; est une technique de télédétection optique qui utilise la lumière laser pour échantillonner la surface de la Terre et produire des mesures “x, y, z” d’une grande précision.
 
-Les données <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">lidar</span></a> sont principalement utilisées dans des applications de cartographie laser aéroportées et commencent à s’imposer en tant qu’alternative rentable face aux techniques d’arpentage traditionnelles, telles que la photogrammétrie.
+Les données <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">LiDAR</span></a> sont principalement utilisées dans des applications de cartographie laser aéroportées et commencent à s’imposer en tant qu’alternative rentable face aux techniques d’arpentage traditionnelles, telles que la photogrammétrie.
 
-Les données <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">lidar</span></a> produisent des jeux de données de nuages de points cotés qui peuvent être gérés, visualisés, analysés à l’aide d’outils GIS (Qgis, ArcGIS, etc.).
+Les données <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">LiDAR</span></a> produisent des jeux de données de nuages de points cotés qui peuvent être gérés, visualisés, analysés à l’aide d’outils GIS (Qgis, ArcGIS, etc.).
 
-La Figure [6.15](#fig:A1_15_lidar_exemple){reference-type="ref" reference="fig:A1_15_lidar_exemple"} représente des objets d’exemple et la Figure [6.16](#fig:A1_16_lidar_exemple2){reference-type="ref" reference="fig:A1_16_lidar_exemple2"} permet de voir comment ces objets sont vus par le <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">lidar</span></a>
+La Figure [6.15](#fig:A1_15_lidar_exemple){reference-type="ref" reference="fig:A1_15_lidar_exemple"} représente des objets d’exemple et la Figure [6.16](#fig:A1_16_lidar_exemple2){reference-type="ref" reference="fig:A1_16_lidar_exemple2"} permet de voir comment ces objets sont vus par le <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">LiDAR</span></a>
 
 <figure id="fig:A1_15_lidar_exemple" data-latex-placement="H">
 <img src="../assets/figures/A1/A1_15_lidar_exemple1.webp" style="width:100.0%"  alt="Objets pour le nuage de points LIDAR [107]" />
@@ -826,13 +826,13 @@ La Figure [6.15](#fig:A1_15_lidar_exemple){reference-type="ref" reference="fig:A
 <figcaption>Nuage de points LIDAR sur des objets <span class="citation" data-cites="cadden_lidar_2021">[<a href="../bibliography.html#ref-cadden_lidar_2021" role="doc-biblioref">107</a>]</span></figcaption>
 </figure>
 
-#### Composants matériels d’un système <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">lidar</span></a> {#composants-matériels-dun-système-lidar}
+#### Composants matériels d’un système <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">LiDAR</span></a> {#composants-matériels-dun-système-lidar}
 
-Les composants matériels principaux d’un système <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">lidar</span></a> incluent un véhicule de collecte (avion, hélicoptère, véhicule et trépied), un système de scanner laser, un système de positionnement par satellite (GPS) et un système de navigation à inertie (INS). Un système INS mesure le roulis, le tangage et la direction du système <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">lidar</span></a>.
+Les composants matériels principaux d’un système <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">LiDAR</span></a> incluent un véhicule de collecte (avion, hélicoptère, véhicule et trépied), un système de scanner laser, un système de positionnement par satellite (GPS) et un système de navigation à inertie (INS). Un système INS mesure le roulis, le tangage et la direction du système <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">LiDAR</span></a>.
 
-#### Le capteur <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">lidar</span></a> {#le-capteur-lidar}
+#### Le capteur <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">LiDAR</span></a> {#le-capteur-lidar}
 
-Le <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">lidar</span></a> est un capteur optique actif qui transmet des faisceaux laser vers une cible tout en parcourant des itinéraires d’étude spécifiques. La réflexion du laser à partir de la cible est détectée et analysée par des récepteurs dans le capteur <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">lidar</span></a>.
+Le <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">LiDAR</span></a> est un capteur optique actif qui transmet des faisceaux laser vers une cible tout en parcourant des itinéraires d’étude spécifiques. La réflexion du laser à partir de la cible est détectée et analysée par des récepteurs dans le capteur <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">LiDAR</span></a>.
 
 Ces récepteurs enregistrent la période précise qui s’écoule entre le moment où l’impulsion laser quitte le système et celui où elle est renvoyée pour calculer la distance entre le capteur et la cible.
 
@@ -840,29 +840,29 @@ Alliées aux informations de positionnement (GPS et INS), ces mesures de distanc
 
 #### Post-traitement des données ponctuelles {#post-traitement-des-données-ponctuelles}
 
-Les données ponctuelles sont post-traitées après l’étude de la collecte des données <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">lidar</span></a> en coordonnées x, y, z très précises en analysant la plage de temps du laser, l’angle de balayage laser, la position GPS et les informations INS.
+Les données ponctuelles sont post-traitées après l’étude de la collecte des données <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">LiDAR</span></a> en coordonnées x, y, z très précises en analysant la plage de temps du laser, l’angle de balayage laser, la position GPS et les informations INS.
 
-#### Retours <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">lidar</span></a> {#retours-lidar}
+#### Retours <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">LiDAR</span></a> {#retours-lidar}
 
-Les impulsions laser émises par un système <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">lidar</span></a> se reflètent sur des objets placés à la fois sur la surface du sol et au-dessus : végétation, bâtiments, ponts et ainsi de suite. Une impulsion laser émise peut revenir au capteur <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">lidar</span></a> sous forme d’un ou plusieurs retours. Les impulsions laser émises qui rencontrent plusieurs surfaces de réflexion lors de leur voyage vers le sol sont fractionnées en autant de retours qu’il existe de surfaces réfléchissantes.
+Les impulsions laser émises par un système <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">LiDAR</span></a> se reflètent sur des objets placés à la fois sur la surface du sol et au-dessus : végétation, bâtiments, ponts et ainsi de suite. Une impulsion laser émise peut revenir au capteur <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">LiDAR</span></a> sous forme d’un ou plusieurs retours. Les impulsions laser émises qui rencontrent plusieurs surfaces de réflexion lors de leur voyage vers le sol sont fractionnées en autant de retours qu’il existe de surfaces réfléchissantes.
 
-#### Attributs de point <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">lidar</span></a> {#attributs-de-point-lidar}
+#### Attributs de point <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">LiDAR</span></a> {#attributs-de-point-lidar}
 
-Des informations complémentaires sont stockées avec chaque valeur de position x, y et z. Les attributs de point <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">lidar</span></a> suivants sont conservés pour chaque impulsion laser enregistrée : intensité, numéro de retour, nombre de retours, valeurs de classification des points, points situés à la limite de la ligne de vol, valeurs RVB (rouge, vert et bleu), heure GPS, angle de balayage et direction du balayage.
+Des informations complémentaires sont stockées avec chaque valeur de position x, y et z. Les attributs de point <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">LiDAR</span></a> suivants sont conservés pour chaque impulsion laser enregistrée : intensité, numéro de retour, nombre de retours, valeurs de classification des points, points situés à la limite de la ligne de vol, valeurs RVB (rouge, vert et bleu), heure GPS, angle de balayage et direction du balayage.
 
 #### Données de nuages de points {#données-de-nuages-de-points}
 
-Les données <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">lidar</span></a> spatiales post-traitées sont connues comme des données de nuages de points. Les nuages de points initiaux sont des ensembles volumineux de points d’altitude 3D qui incluent des valeurs x, y et z, ainsi que des attributs supplémentaires, tels que des horodatages GPS. Les entités de surface spécifiques que le laser rencontre sont classées après le post-traitement du nuage de points <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">lidar</span></a> initial. Les altitudes du sol, des bâtiments, du couvert forestier, des ponts au-dessus des autoroutes et de tout ce que le faisceau laser peut rencontrer au cours de l’étude constituent des données de nuages de points.
+Les données <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">LiDAR</span></a> spatiales post-traitées sont connues comme des données de nuages de points. Les nuages de points initiaux sont des ensembles volumineux de points d’altitude 3D qui incluent des valeurs x, y et z, ainsi que des attributs supplémentaires, tels que des horodatages GPS. Les entités de surface spécifiques que le laser rencontre sont classées après le post-traitement du nuage de points <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">LiDAR</span></a> initial. Les altitudes du sol, des bâtiments, du couvert forestier, des ponts au-dessus des autoroutes et de tout ce que le faisceau laser peut rencontrer au cours de l’étude constituent des données de nuages de points.
 
-La rugosité et l’intensité sont deux informations différentes mais complémentaires fournies par les nuages de points <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">lidar</span></a>.
+La rugosité et l’intensité sont deux informations différentes mais complémentaires fournies par les nuages de points <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">LiDAR</span></a>.
 
 La rugosité mesure la variation locale de l’altitude des points dans un voisinage donné. Elle est calculée à partir des coordonnées 3D (X, Y, Z) des points et reflète la texture et l’irrégularité de la surface. Une rugosité élevée indique la présence d’obstacles ou de variations d’altitude. Cette mesure est indépendante des propriétés de réflectance des matériaux et est utilisée pour distinguer les surfaces planes des surfaces encombrées.
 
-L’intensité, quant à elle, mesure la quantité d’énergie réfléchie par la surface et enregistrée par le capteur <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">lidar</span></a>. C’est une valeur scalaire associée à chaque point, en plus des coordonnées 3D. L’intensité dépend des propriétés de réflectance des matériaux à la longueur d’onde du laser. Elle varie selon le type de surface : elle est forte pour les surfaces réfléchissantes et faible pour les surfaces absorbantes. L’intensité peut aider à distinguer différents matériaux ou objets, mais elle est sensible aux conditions d’acquisition, telles que la distance et l’angle d’incidence.
+L’intensité, quant à elle, mesure la quantité d’énergie réfléchie par la surface et enregistrée par le capteur <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">LiDAR</span></a>. C’est une valeur scalaire associée à chaque point, en plus des coordonnées 3D. L’intensité dépend des propriétés de réflectance des matériaux à la longueur d’onde du laser. Elle varie selon le type de surface : elle est forte pour les surfaces réfléchissantes et faible pour les surfaces absorbantes. L’intensité peut aider à distinguer différents matériaux ou objets, mais elle est sensible aux conditions d’acquisition, telles que la distance et l’angle d’incidence.
 
-#### Fournisseur de données <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">lidar</span></a> {#fournisseur-de-données-lidar}
+#### Fournisseur de données <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">LiDAR</span></a> {#fournisseur-de-données-lidar}
 
-Au niveau mondial, il n’y a pas de données <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">lidar</span></a> disponibles qui couvrent le globe entier. C’est probablement dû à des raisons de coût.
+Au niveau mondial, il n’y a pas de données <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">LiDAR</span></a> disponibles qui couvrent le globe entier. C’est probablement dû à des raisons de coût.
 
 En ce qui concerne la Suisse, Swisstopo &#91;[108](../bibliography.md#ref-swisstopo_acquisition_2024)&#93; met à disposition des données qui couvrent l’intégralité du territoire. Dans la Figure [6.17](#fig:A1_17_swisstopo_lidar){reference-type="ref" reference="fig:A1_17_swisstopo_lidar"}, on peut voir les 6 campagnes d’acquisition de données qui ont été menées. Les données sont disponibles en moyenne environ 12 mois après le survol.
 
@@ -871,7 +871,7 @@ En ce qui concerne la Suisse, Swisstopo &#91;[108](../bibliography.md#ref-swisst
 <figcaption>Données LIDAR disponibles en Suisse <span class="citation" data-cites="swisstopo_acquisition_2024">[<a href="../bibliography.html#ref-swisstopo_acquisition_2024" role="doc-biblioref">108</a>]</span></figcaption>
 </figure>
 
-Les caractéristiques des données <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">lidar</span></a> disponibles sont les suivantes :
+Les caractéristiques des données <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">LiDAR</span></a> disponibles sont les suivantes :
 
 - Densité de points : minimum 5 pts/m², moyenne autour de 15-20 pts/m²
 
@@ -900,10 +900,10 @@ Swisstopo va continuer à mettre à jour ses données dans les années suivantes
 <figcaption>Prévision d’acquisition de données LIDAR en Suisse <span class="citation" data-cites="swisstopo_acquisition_2024">[<a href="../bibliography.html#ref-swisstopo_acquisition_2024" role="doc-biblioref">108</a>]</span></figcaption>
 </figure>
 
-En ce qui concerne le canton de Genève, les dernières données <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">lidar</span></a> &#91;[109](../bibliography.md#ref-sitg_nuages_2021)&#93; &#91;[110](../bibliography.md#ref-sitg_nuages_2023)&#93; disponibles sont:
+En ce qui concerne le canton de Genève, les dernières données <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">LiDAR</span></a> &#91;[109](../bibliography.md#ref-sitg_nuages_2021)&#93; &#91;[110](../bibliography.md#ref-sitg_nuages_2023)&#93; disponibles sont:
 
 <table id="tab:lidar_geneve_compact">
-<caption>Données <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">lidar</span></a> disponibles dans le canton de Genève</caption>
+<caption>Données <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">LiDAR</span></a> disponibles dans le canton de Genève</caption>
 <thead>
 <tr>
 <th style="text-align: left;"><span>2-3</span></th>
@@ -973,7 +973,7 @@ En ce qui concerne le canton de Genève, les dernières données <a href="../glo
 <figcaption>Représentation à partir des données LIDAR d’une partie du canton de Genève <span class="citation" data-cites="sitg_nuages_2023">[<a href="../bibliography.html#ref-sitg_nuages_2023" role="doc-biblioref">110</a>]</span></figcaption>
 </figure>
 
-La représentation ci-dessus (Figure [6.19](#fig:A1_19_geneve_lidar){reference-type="ref" reference="fig:A1_19_geneve_lidar"}) permet d’avoir une idée à quoi ressemble le nuage de points <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">lidar</span></a>.
+La représentation ci-dessus (Figure [6.19](#fig:A1_19_geneve_lidar){reference-type="ref" reference="fig:A1_19_geneve_lidar"}) permet d’avoir une idée à quoi ressemble le nuage de points <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">LiDAR</span></a>.
 
 ### Données vectorielles {#subsec:annexe_donnees_vectorielles}
 
@@ -999,21 +999,21 @@ Les données vectorielles sont largement utilisées en géomatique pour diverses
 
 <figure id="fig:A1_20_donnees_vectorielles_exemple" data-latex-placement="H">
 <img src="../assets/figures/A1/A1_20_donnees_vectorielles_exemple.webp" style="width:100.0%"  alt="Exemple de données vectorielles de sitg. Rue de la Prairie 8 à Genève" />
-<figcaption>Exemple de données vectorielles de <a href="../glossary.html#gloss-sitg"><span data-acronym-label="sitg" data-acronym-form="singular+abbrv">sitg</span></a>. Rue de la Prairie 8 à Genève</figcaption>
+<figcaption>Exemple de données vectorielles de <a href="../glossary.html#gloss-sitg"><span data-acronym-label="sitg" data-acronym-form="singular+abbrv">SITG</span></a>. Rue de la Prairie 8 à Genève</figcaption>
 </figure>
 
-La Figure [6.20](#fig:A1_20_donnees_vectorielles_exemple){reference-type="ref" reference="fig:A1_20_donnees_vectorielles_exemple"} montre un exemple de données vectorielles extraites de <a href="../glossary.html#gloss-sitg"><span data-acronym-label="sitg" data-acronym-form="singular+abbrv">sitg</span></a>, le portail de géodonnées du canton de Genève. En plus des points, lignes et polygones il est possible d’associer des données en forme de tableau (Figure [6.21](#fig:A1_21_donnees_vectorielles_tableau){reference-type="ref" reference="fig:A1_21_donnees_vectorielles_tableau"}).
+La Figure [6.20](#fig:A1_20_donnees_vectorielles_exemple){reference-type="ref" reference="fig:A1_20_donnees_vectorielles_exemple"} montre un exemple de données vectorielles extraites de <a href="../glossary.html#gloss-sitg"><span data-acronym-label="sitg" data-acronym-form="singular+abbrv">SITG</span></a>, le portail de géodonnées du canton de Genève. En plus des points, lignes et polygones il est possible d’associer des données en forme de tableau (Figure [6.21](#fig:A1_21_donnees_vectorielles_tableau){reference-type="ref" reference="fig:A1_21_donnees_vectorielles_tableau"}).
 
 <figure id="fig:A1_21_donnees_vectorielles_tableau" data-latex-placement="H">
 <img src="../assets/figures/A1/A1_21_donnees_vectorielles_tableau.webp" style="width:75.0%"  alt="Exemple de données tabulaires associées a un polygone. Rue de la Prairie 8 à Genève. Données de sitg" />
-<figcaption>Exemple de données tabulaires associées a un polygone. Rue de la Prairie 8 à Genève. Données de <a href="../glossary.html#gloss-sitg"><span data-acronym-label="sitg" data-acronym-form="singular+abbrv">sitg</span></a></figcaption>
+<figcaption>Exemple de données tabulaires associées a un polygone. Rue de la Prairie 8 à Genève. Données de <a href="../glossary.html#gloss-sitg"><span data-acronym-label="sitg" data-acronym-form="singular+abbrv">SITG</span></a></figcaption>
 </figure>
 
 Les données sont organisées en couches vectorielles. Dans ces deux figures d’exemple, la couche des bâtiments hors sol est représentée. Chaque couche regroupe en général une thématique comme les bâtiments, les arbres, etc.
 
 Il existe une très grande quantité de données vectorielles tant au niveau Suisse et genevois.
 
-<a href="../glossary.html#gloss-sitg"><span data-acronym-label="sitg" data-acronym-form="singular+abbrv">sitg</span></a> dispose de plus de 1575 couches de données &#91;[105](../bibliography.md#ref-sitg_chiffre-cle_2025)&#93;, dont environ 200 couches raster et plus de 1375 couches vectorielles, ce qui représente une très grande quantité de données.
+<a href="../glossary.html#gloss-sitg"><span data-acronym-label="sitg" data-acronym-form="singular+abbrv">SITG</span></a> dispose de plus de 1575 couches de données &#91;[105](../bibliography.md#ref-sitg_chiffre-cle_2025)&#93;, dont environ 200 couches raster et plus de 1375 couches vectorielles, ce qui représente une très grande quantité de données.
 
 Les données de l’administration publique suisse sont regroupées sur un site web[^1] pour simplifier l’accès à ces données publiques. Le site compte plus de 10000 couches (vectorielles, raster, etc.) qui sont produites par les communes, cantons, confédération et autres entités publiques. Les thématiques traitées sont très diverses par exemple, l’environnement, l’économie, la santé, etc.
 

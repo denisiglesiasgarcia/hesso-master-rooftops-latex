@@ -28,7 +28,7 @@ Grâce aux technologies modernes de cartographie et de modélisation 3D, les cad
 
 ### Méthodologie {#méthodologie-14}
 
-La création d’un cadastre solaire repose sur plusieurs éléments clés. Tout d’abord, un modèle numérique de terrain (<a href="../glossary.html#gloss-mnt"><span data-acronym-label="mnt" data-acronym-form="singular+abbrv">mnt</span></a>) et un modèle numérique de surface (<a href="../glossary.html#gloss-mns"><span data-acronym-label="mns" data-acronym-form="singular+abbrv">mns</span></a>) sont utilisés pour créer une représentation 3D précise du territoire. Ces données sont ensuite combinées avec :
+La création d’un cadastre solaire repose sur plusieurs éléments clés. Tout d’abord, un modèle numérique de terrain (<a href="../glossary.html#gloss-mnt"><span data-acronym-label="mnt" data-acronym-form="singular+abbrv">MNT</span></a>) et un modèle numérique de surface (<a href="../glossary.html#gloss-mns"><span data-acronym-label="mns" data-acronym-form="singular+abbrv">MNS</span></a>) sont utilisés pour créer une représentation 3D précise du territoire. Ces données sont ensuite combinées avec :
 
 - Des données climatiques locales sur plusieurs années
 

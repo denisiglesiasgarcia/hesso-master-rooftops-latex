@@ -46,6 +46,32 @@ def unwrap_makebox_centering(text: str) -> str:
     return "".join(out)
 
 
+def unwrap_makecell(text: str) -> str:
+    """\\makecell[l]{Linknet +\\\\EfficientNet-B5} forces a two-line table cell
+    in LaTeX. Pandoc's pipe-table writer can't represent a multi-line cell,
+    so it silently drops everything up to the internal line break and turns
+    the break itself into a spurious blank table row — every model name in
+    this thesis's results tables loses its architecture half (only the
+    encoder name like "EfficientNet-B5" survives) and gains a blank row
+    after it. Unwrap the macro and join the two lines with a space instead."""
+    marker = r"\makecell"
+    out = []
+    i = 0
+    while True:
+        idx = text.find(marker, i)
+        if idx == -1:
+            out.append(text[i:])
+            break
+        out.append(text[i:idx])
+        j = idx + len(marker)
+        if j < len(text) and text[j] == "[":
+            _opt, j = _read_bracket_group(text, j)
+        inner, after = _read_balanced_group(text, j)
+        out.append(inner.replace("\\\\", " "))
+        i = after
+    return "".join(out)
+
+
 def expand_multicolumn_dividers(text: str) -> str:
     marker = r"\multicolumn{"
     out = []
@@ -247,6 +273,7 @@ def convert_longtblr_tables(text: str) -> str:
 
 def preprocess(text: str) -> str:
     text = unwrap_makebox_centering(text)
+    text = unwrap_makecell(text)
     text = expand_multicolumn_dividers(text)
     text = strip_addlinespace(text)
     text = convert_code_listings(text)

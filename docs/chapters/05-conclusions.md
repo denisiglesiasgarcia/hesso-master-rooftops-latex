@@ -14,7 +14,7 @@ Ce travail apporte plusieurs contributions à l’analyse automatisée des toitu
 
 La contribution principale est la création d’un dataset annoté pour segmenter les espaces libres sur les toitures. Ce dataset comprend :
 
-- 530 images géoréférencées de pixels provenant des orthophotos 2019 de <a href="../glossary.html#gloss-sitg"><span data-acronym-label="sitg" data-acronym-form="singular+abbrv">sitg</span></a>
+- 530 images géoréférencées de pixels provenant des orthophotos 2019 de <a href="../glossary.html#gloss-sitg"><span data-acronym-label="sitg" data-acronym-form="singular+abbrv">SITG</span></a>
 
 - Un échantillonnage stratifié par catégorie SIA et surface de toiture pour représenter la diversité architecturale du canton
 
@@ -42,7 +42,7 @@ L’analyse du front de Pareto montre que les gains deviennent négligeables au-
 
 ### Validation sur des données réelles {#validation-sur-des-données-réelles}
 
-Les tests sur la zone de <a href="../glossary.html#gloss-hepia"><span data-acronym-label="hepia" data-acronym-form="singular+abbrv">hepia</span></a>, qui n’était pas dans les données d’entraînement, confirment la capacité de généralisation des modèles. Les résultats révèlent aussi les limites actuelles, notamment pour les toitures praticables, végétalisées ainsi que les zones très ombragées.
+Les tests sur la zone de <a href="../glossary.html#gloss-hepia"><span data-acronym-label="hepia" data-acronym-form="singular+abbrv">HEPIA</span></a>, qui n’était pas dans les données d’entraînement, confirment la capacité de généralisation des modèles. Les résultats révèlent aussi les limites actuelles, notamment pour les toitures praticables, végétalisées ainsi que les zones très ombragées.
 
 ## Analyse comparative avec l’état de l’art {#analyse-comparative-avec-létat-de-lart}
 
@@ -50,9 +50,9 @@ Les tests sur la zone de <a href="../glossary.html#gloss-hepia"><span data-acron
 
 Ce travail se distingue des approches existantes par plusieurs aspects :
 
-Par rapport aux travaux du Swiss Territorial Data Lab (<a href="../glossary.html#gloss-stdl"><span data-acronym-label="stdl" data-acronym-form="singular+abbrv">stdl</span></a>), cette approche de segmentation sémantique surpasse les méthodes testées par <a href="../glossary.html#gloss-stdl"><span data-acronym-label="stdl" data-acronym-form="singular+abbrv">stdl</span></a> :
+Par rapport aux travaux du Swiss Territorial Data Lab (<a href="../glossary.html#gloss-stdl"><span data-acronym-label="stdl" data-acronym-form="singular+abbrv">STDL</span></a>), cette approche de segmentation sémantique surpasse les méthodes testées par <a href="../glossary.html#gloss-stdl"><span data-acronym-label="stdl" data-acronym-form="singular+abbrv">STDL</span></a> :
 
-- IoU de 0,741 contre 0,38-0,40 pour les segmentations <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">lidar</span></a> et d’images de <a href="../glossary.html#gloss-stdl"><span data-acronym-label="stdl" data-acronym-form="singular+abbrv">stdl</span></a>
+- IoU de 0,741 contre 0,38-0,40 pour les segmentations <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">LiDAR</span></a> et d’images de <a href="../glossary.html#gloss-stdl"><span data-acronym-label="stdl" data-acronym-form="singular+abbrv">STDL</span></a>
 
 - Temps de traitement significativement réduit comparé aux 12 minutes par 25 bâtiments de leur segmentation d’images
 
@@ -128,7 +128,7 @@ Le dataset pourrait être amélioré sur plusieurs points :
 
 - Développer un pré-traitement adaptatif pour normaliser l’éclairage
 
-- Intégrer des données complémentaires (<a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">lidar</span></a>, modèles 3D) pour mieux discriminer les surfaces
+- Intégrer des données complémentaires (<a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">LiDAR</span></a>, modèles 3D) pour mieux discriminer les surfaces
 
 - Créer des architectures d’ensemble combinant plusieurs modèles aux forces complémentaires
 

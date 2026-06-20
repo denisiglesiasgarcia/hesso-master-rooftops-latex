@@ -110,28 +110,18 @@ Les Figures [4.4](#fig:ch4_02_top_models_performance_02_eval_test_map_50_mean){r
 
 En résumé, le Tableau [4.2](#tab:top10_modeles){reference-type="ref" reference="tab:top10_modeles"} présente les 10 meilleurs modèles selon l’IoU moyen sur les 5 fold :
 
-| Modèle           |  IoU  | F1-Score | mAP@50 | mAP@75 | mAP@95 | Params (M) | Temps (h) |
-|:-----------------|:-----:|:--------:|:------:|:------:|:------:|:----------:|:---------:|
-|                  |       |          |        |        |        |            |           |
-| EfficientNet-B5  | 0.741 |  0.810   | 0.854  | 0.667  | 0.151  |   28.75    |   18.11   |
-|                  |       |          |        |        |        |            |           |
-| RegNetY-080      | 0.738 |  0.805   | 0.852  | 0.672  | 0.155  |   38.41    |   9.29    |
-|                  |       |          |        |        |        |            |           |
-| RegNetY-032      | 0.735 |  0.801   | 0.831  | 0.672  | 0.157  |   18.87    |   30.62   |
-|                  |       |          |        |        |        |            |           |
-| EfficientNetV2-S | 0.735 |  0.802   | 0.834  | 0.674  | 0.153  |   23.42    |   19.56   |
-|                  |       |          |        |        |        |            |           |
-| EfficientNetV2-S | 0.735 |  0.800   | 0.840  | 0.667  | 0.184  |   29.13    |   27.75   |
-|                  |       |          |        |        |        |            |           |
-| EfficientNet-B5  | 0.735 |  0.801   | 0.843  | 0.661  | 0.162  |   13.63    |   31.28   |
-|                  |       |          |        |        |        |            |           |
-| mambaout\_base   | 0.734 |  0.797   | 0.820  | 0.694  | 0.153  |   80.06    |   5.93    |
-|                  |       |          |        |        |        |            |           |
-| mambaout\_small  | 0.734 |  0.796   | 0.827  | 0.690  | 0.191  |   48.52    |   8.95    |
-|                  |       |          |        |        |        |            |           |
-| EfficientNetV2-S | 0.734 |  0.801   | 0.845  | 0.647  | 0.160  |   23.94    |   23.45   |
-|                  |       |          |        |        |        |            |           |
-| mambaout\_small  | 0.732 |  0.801   | 0.845  | 0.656  | 0.175  |   100.61   |   9.94    |
+| Modèle | IoU | F1-Score | mAP@50 | mAP@75 | mAP@95 | Params (M) | Temps (h) |
+|:---|:--:|:--:|:--:|:--:|:--:|:--:|:--:|
+| Linknet + EfficientNet-B5 | 0.741 | 0.810 | 0.854 | 0.667 | 0.151 | 28.75 | 18.11 |
+| Segformer + RegNetY-080 | 0.738 | 0.805 | 0.852 | 0.672 | 0.155 | 38.41 | 9.29 |
+| Segformer + RegNetY-032 | 0.735 | 0.801 | 0.831 | 0.672 | 0.157 | 18.87 | 30.62 |
+| FPN + EfficientNetV2-S | 0.735 | 0.802 | 0.834 | 0.674 | 0.153 | 23.42 | 19.56 |
+| Upernet + EfficientNetV2-S | 0.735 | 0.800 | 0.840 | 0.667 | 0.184 | 29.13 | 27.75 |
+| Unetplusplus + EfficientNet-B5 | 0.735 | 0.801 | 0.843 | 0.661 | 0.162 | 13.63 | 31.28 |
+| Segformer + mambaout\_base | 0.734 | 0.797 | 0.820 | 0.694 | 0.153 | 80.06 | 5.93 |
+| Unet + mambaout\_small | 0.734 | 0.796 | 0.827 | 0.690 | 0.191 | 48.52 | 8.95 |
+| Unet + EfficientNetV2-S | 0.734 | 0.801 | 0.845 | 0.647 | 0.160 | 23.94 | 23.45 |
+| Manet + mambaout\_small | 0.732 | 0.801 | 0.845 | 0.656 | 0.175 | 100.61 | 9.94 |
 
 <span id="tab:top10_modeles"></span>
 
@@ -1146,25 +1136,25 @@ L’analyse révèle cependant plusieurs limites dans le dataset. Premièrement,
 
 ## Application sur un quartier {#application-sur-un-quartier}
 
-La zone de <a href="../glossary.html#gloss-hepia"><span data-acronym-label="hepia" data-acronym-form="singular+abbrv">hepia</span></a> a été choisie pour tester les modèles sur un secteur qui n’a pas servi à l’entraînement.
+La zone de <a href="../glossary.html#gloss-hepia"><span data-acronym-label="hepia" data-acronym-form="singular+abbrv">HEPIA</span></a> a été choisie pour tester les modèles sur un secteur qui n’a pas servi à l’entraînement.
 
 ### Analyse qualitative {#analyse-qualitative-1}
 
-La Figure [4.29](#fig:quartier_hepia_original){reference-type="ref" reference="fig:quartier_hepia_original"} montre les images originales de la zone <a href="../glossary.html#gloss-hepia"><span data-acronym-label="hepia" data-acronym-form="singular+abbrv">hepia</span></a>. La Figure [4.30](#fig:quartier_hepia_masque_toitures){reference-type="ref" reference="fig:quartier_hepia_masque_toitures"} présente les mêmes images avec un masque appliqué sur les toitures (couche toitures <a href="../glossary.html#gloss-sitg"><span data-acronym-label="sitg" data-acronym-form="singular+abbrv">sitg</span></a>). Cette étape permet au modèle de traiter uniquement les surfaces de toitures en ignorant le reste du paysage urbain.
+La Figure [4.29](#fig:quartier_hepia_original){reference-type="ref" reference="fig:quartier_hepia_original"} montre les images originales de la zone <a href="../glossary.html#gloss-hepia"><span data-acronym-label="hepia" data-acronym-form="singular+abbrv">HEPIA</span></a>. La Figure [4.30](#fig:quartier_hepia_masque_toitures){reference-type="ref" reference="fig:quartier_hepia_masque_toitures"} présente les mêmes images avec un masque appliqué sur les toitures (couche toitures <a href="../glossary.html#gloss-sitg"><span data-acronym-label="sitg" data-acronym-form="singular+abbrv">SITG</span></a>). Cette étape permet au modèle de traiter uniquement les surfaces de toitures en ignorant le reste du paysage urbain.
 
 Les zones identifiées comme toitures (Figure [4.30](#fig:quartier_hepia_masque_toitures){reference-type="ref" reference="fig:quartier_hepia_masque_toitures"}) ne sont pas toutes évidentes. En bas à gauche, une cour intérieure est identifiée comme toiture. En bas à droite, une terrasse praticable est aussi classée comme toiture, ce qui techniquement est correct car il y a bien un bâtiment dessous, mais cela complique la tâche de segmentation. L’image contient également des balcons et terrasses qui permettront d’évaluer le comportement des modèles sur ce type de surface.
 
 <figure id="fig:quartier_hepia_original" data-latex-placement="H">
 
-<figcaption>Zone <a href="../glossary.html#gloss-hepia"><span data-acronym-label="hepia" data-acronym-form="singular+abbrv">hepia</span></a> - Original</figcaption>
+<figcaption>Zone <a href="../glossary.html#gloss-hepia"><span data-acronym-label="hepia" data-acronym-form="singular+abbrv">HEPIA</span></a> - Original</figcaption>
 </figure>
 
 <figure id="fig:quartier_hepia_masque_toitures" data-latex-placement="H">
 
-<figcaption>Zone <a href="../glossary.html#gloss-hepia"><span data-acronym-label="hepia" data-acronym-form="singular+abbrv">hepia</span></a> - Masque couche toitures</figcaption>
+<figcaption>Zone <a href="../glossary.html#gloss-hepia"><span data-acronym-label="hepia" data-acronym-form="singular+abbrv">HEPIA</span></a> - Masque couche toitures</figcaption>
 </figure>
 
-La Figure [4.31](#fig:quartier_hepia_modele_unet_mambaoutsmall){reference-type="ref" reference="fig:quartier_hepia_modele_unet_mambaoutsmall"} présente les résultats obtenus avec le modèle UNet + MambaOutSmall sur la zone <a href="../glossary.html#gloss-hepia"><span data-acronym-label="hepia" data-acronym-form="singular+abbrv">hepia</span></a>.
+La Figure [4.31](#fig:quartier_hepia_modele_unet_mambaoutsmall){reference-type="ref" reference="fig:quartier_hepia_modele_unet_mambaoutsmall"} présente les résultats obtenus avec le modèle UNet + MambaOutSmall sur la zone <a href="../glossary.html#gloss-hepia"><span data-acronym-label="hepia" data-acronym-form="singular+abbrv">HEPIA</span></a>.
 
 Le modèle identifie correctement les balcons et terrases lorsqu’ils ont des éléments tel que des chaises, table ou autre mobilier typique des balcons. En revanche, les toitures praticables (zone à droite) et cours intérieures (en bas à gauche) sont mal interprétées - le modèle les classe comme surfaces libres alors qu’elles ne le sont pas.
 
@@ -1174,10 +1164,10 @@ La gestion des ombrages reste variable. Dans la partie gauche de l’image, les 
 
 <figure id="fig:quartier_hepia_modele_unet_mambaoutsmall" data-latex-placement="H">
 
-<figcaption>Zone <a href="../glossary.html#gloss-hepia"><span data-acronym-label="hepia" data-acronym-form="singular+abbrv">hepia</span></a> - Unet avec MambaOutSmall</figcaption>
+<figcaption>Zone <a href="../glossary.html#gloss-hepia"><span data-acronym-label="hepia" data-acronym-form="singular+abbrv">HEPIA</span></a> - Unet avec MambaOutSmall</figcaption>
 </figure>
 
-La Figure [4.32](#fig:quartier_hepia_modele_upernet_efficientnetv2_s){reference-type="ref" reference="fig:quartier_hepia_modele_upernet_efficientnetv2_s"} montre les résultats du modèle UPerNet + EfficientNetV2-S sur la zone <a href="../glossary.html#gloss-hepia"><span data-acronym-label="hepia" data-acronym-form="singular+abbrv">hepia</span></a>.
+La Figure [4.32](#fig:quartier_hepia_modele_upernet_efficientnetv2_s){reference-type="ref" reference="fig:quartier_hepia_modele_upernet_efficientnetv2_s"} montre les résultats du modèle UPerNet + EfficientNetV2-S sur la zone <a href="../glossary.html#gloss-hepia"><span data-acronym-label="hepia" data-acronym-form="singular+abbrv">HEPIA</span></a>.
 
 Les observations sont similaires au modèle précédent concernant les terrasses et cours intérieures.
 
@@ -1187,10 +1177,10 @@ La gestion des ombrages est moins performante qu’avec UNet + MambaOutSmall. UP
 
 <figure id="fig:quartier_hepia_modele_upernet_efficientnetv2_s" data-latex-placement="H">
 
-<figcaption>Zone <a href="../glossary.html#gloss-hepia"><span data-acronym-label="hepia" data-acronym-form="singular+abbrv">hepia</span></a> - UPerNet avec EfficientNetV2-S</figcaption>
+<figcaption>Zone <a href="../glossary.html#gloss-hepia"><span data-acronym-label="hepia" data-acronym-form="singular+abbrv">HEPIA</span></a> - UPerNet avec EfficientNetV2-S</figcaption>
 </figure>
 
-La Figure [4.33](#fig:quartier_hepia_modele_segformer_mambaoutbase){reference-type="ref" reference="fig:quartier_hepia_modele_segformer_mambaoutbase"} montre les résultats du modèle SegFormer + MambaOutBase sur la zone <a href="../glossary.html#gloss-hepia"><span data-acronym-label="hepia" data-acronym-form="singular+abbrv">hepia</span></a>.
+La Figure [4.33](#fig:quartier_hepia_modele_segformer_mambaoutbase){reference-type="ref" reference="fig:quartier_hepia_modele_segformer_mambaoutbase"} montre les résultats du modèle SegFormer + MambaOutBase sur la zone <a href="../glossary.html#gloss-hepia"><span data-acronym-label="hepia" data-acronym-form="singular+abbrv">HEPIA</span></a>.
 
 Les observations sont similaires aux modèles précédent concernant les terrasses et cours intérieures.
 
@@ -1200,12 +1190,12 @@ La gestion des ombrages est bien meilleure que pour les deux modèles précéden
 
 <figure id="fig:quartier_hepia_modele_segformer_mambaoutbase" data-latex-placement="H">
 
-<figcaption>Zone <a href="../glossary.html#gloss-hepia"><span data-acronym-label="hepia" data-acronym-form="singular+abbrv">hepia</span></a> - SegFormer avec MambaOutBase</figcaption>
+<figcaption>Zone <a href="../glossary.html#gloss-hepia"><span data-acronym-label="hepia" data-acronym-form="singular+abbrv">HEPIA</span></a> - SegFormer avec MambaOutBase</figcaption>
 </figure>
 
-La Figure [4.34](#fig:quartier_hepia_modele_linknet_efficientnet_b5){reference-type="ref" reference="fig:quartier_hepia_modele_linknet_efficientnet_b5"} illustre les résultats obtenus avec LinkNet + EfficientNet-B5 sur la zone <a href="../glossary.html#gloss-hepia"><span data-acronym-label="hepia" data-acronym-form="singular+abbrv">hepia</span></a>.
+La Figure [4.34](#fig:quartier_hepia_modele_linknet_efficientnet_b5){reference-type="ref" reference="fig:quartier_hepia_modele_linknet_efficientnet_b5"} illustre les résultats obtenus avec LinkNet + EfficientNet-B5 sur la zone <a href="../glossary.html#gloss-hepia"><span data-acronym-label="hepia" data-acronym-form="singular+abbrv">HEPIA</span></a>.
 
-La cour intérieure de <a href="../glossary.html#gloss-hepia"><span data-acronym-label="hepia" data-acronym-form="singular+abbrv">hepia</span></a> (en bas à droite) est partiellement segmentée. Le modèle semble capable de distinguer en partie les surfaces praticables des autres toitures. Toutefois, la cour intérieure située en bas à gauche est incorrectement identifiée comme surface libre.
+La cour intérieure de <a href="../glossary.html#gloss-hepia"><span data-acronym-label="hepia" data-acronym-form="singular+abbrv">HEPIA</span></a> (en bas à droite) est partiellement segmentée. Le modèle semble capable de distinguer en partie les surfaces praticables des autres toitures. Toutefois, la cour intérieure située en bas à gauche est incorrectement identifiée comme surface libre.
 
 Les obstacles comme les verrières, panneaux solaires, gaines, cheminées, lucarnes, acrotères, bords de toiture, arbres et végétation sont correctement détectés et exclus de la segmentation. La précision de détection paraît supérieure aux modèles précédents.
 
@@ -1213,10 +1203,10 @@ Le traitement des ombrages est efficace. Le modèle identifie correctement les e
 
 <figure id="fig:quartier_hepia_modele_linknet_efficientnet_b5" data-latex-placement="H">
 
-<figcaption>Zone <a href="../glossary.html#gloss-hepia"><span data-acronym-label="hepia" data-acronym-form="singular+abbrv">hepia</span></a> - LinkNet avec EfficientNet-B5</figcaption>
+<figcaption>Zone <a href="../glossary.html#gloss-hepia"><span data-acronym-label="hepia" data-acronym-form="singular+abbrv">HEPIA</span></a> - LinkNet avec EfficientNet-B5</figcaption>
 </figure>
 
-La Figure [4.35](#fig:quartier_hepia_modele_unetplusplus_efficientnetv2_s){reference-type="ref" reference="fig:quartier_hepia_modele_unetplusplus_efficientnetv2_s"} montre les résultats du modèle UNet++ + EfficientNetV2-S sur la zone <a href="../glossary.html#gloss-hepia"><span data-acronym-label="hepia" data-acronym-form="singular+abbrv">hepia</span></a>.
+La Figure [4.35](#fig:quartier_hepia_modele_unetplusplus_efficientnetv2_s){reference-type="ref" reference="fig:quartier_hepia_modele_unetplusplus_efficientnetv2_s"} montre les résultats du modèle UNet++ + EfficientNetV2-S sur la zone <a href="../glossary.html#gloss-hepia"><span data-acronym-label="hepia" data-acronym-form="singular+abbrv">HEPIA</span></a>.
 
 Les observations restent identiques pour les terrasses et cours intérieures. Les obstacles présents sur les toitures sont généralement bien identifiés.
 
@@ -1224,24 +1214,24 @@ Le modèle gère correctement les ombres légères. En revanche, quand l’ombra
 
 <figure id="fig:quartier_hepia_modele_unetplusplus_efficientnetv2_s" data-latex-placement="H">
 
-<figcaption>Zone <a href="../glossary.html#gloss-hepia"><span data-acronym-label="hepia" data-acronym-form="singular+abbrv">hepia</span></a> - UNet++ avec EfficientNetV2-S</figcaption>
+<figcaption>Zone <a href="../glossary.html#gloss-hepia"><span data-acronym-label="hepia" data-acronym-form="singular+abbrv">HEPIA</span></a> - UNet++ avec EfficientNetV2-S</figcaption>
 </figure>
 
-La Figure [4.36](#fig:quartier_hepia_modele_segformer_regnety_080){reference-type="ref" reference="fig:quartier_hepia_modele_segformer_regnety_080"} présente les résultats du modèle SegFormer + RegNetY-080 sur la zone <a href="../glossary.html#gloss-hepia"><span data-acronym-label="hepia" data-acronym-form="singular+abbrv">hepia</span></a>.
+La Figure [4.36](#fig:quartier_hepia_modele_segformer_regnety_080){reference-type="ref" reference="fig:quartier_hepia_modele_segformer_regnety_080"} présente les résultats du modèle SegFormer + RegNetY-080 sur la zone <a href="../glossary.html#gloss-hepia"><span data-acronym-label="hepia" data-acronym-form="singular+abbrv">HEPIA</span></a>.
 
 La segmentation des petits obstacles sur les toitures semble moins précise comparé aux autres modèles. La gestion des ombrages est correcte, mais le modèle a des difficultés à identifier les espaces libres dans les zones ombragées, surtout lorsque l’ombre est plus marquée. Les remarques sur les terrasses et cours intérieures restent similaires aux autres modèles.
 
 <figure id="fig:quartier_hepia_modele_segformer_regnety_080" data-latex-placement="H">
 
-<figcaption>Zone <a href="../glossary.html#gloss-hepia"><span data-acronym-label="hepia" data-acronym-form="singular+abbrv">hepia</span></a> - SegFormer avec RegNetY-080</figcaption>
+<figcaption>Zone <a href="../glossary.html#gloss-hepia"><span data-acronym-label="hepia" data-acronym-form="singular+abbrv">HEPIA</span></a> - SegFormer avec RegNetY-080</figcaption>
 </figure>
 
 #### Synthèse et analyse des résultats {#synthèse-et-analyse-des-résultats}
 
-Le Tableau [4.9](#tab:quartier_hepia_comparatif_modeles){reference-type="ref" reference="tab:quartier_hepia_comparatif_modeles"} résume les performances des six modèles testés sur la zone <a href="../glossary.html#gloss-hepia"><span data-acronym-label="hepia" data-acronym-form="singular+abbrv">hepia</span></a>, en se basant sur quatre critères : la détection des balcons/terrasses, la segmentation des toitures praticables, la détection des obstacles et la gestion des ombrages.
+Le Tableau [4.9](#tab:quartier_hepia_comparatif_modeles){reference-type="ref" reference="tab:quartier_hepia_comparatif_modeles"} résume les performances des six modèles testés sur la zone <a href="../glossary.html#gloss-hepia"><span data-acronym-label="hepia" data-acronym-form="singular+abbrv">HEPIA</span></a>, en se basant sur quatre critères : la détection des balcons/terrasses, la segmentation des toitures praticables, la détection des obstacles et la gestion des ombrages.
 
 <table id="tab:quartier_hepia_comparatif_modeles">
-<caption>Tableau comparatif des performances des 6 modèles sur la zone <a href="../glossary.html#gloss-hepia"><span data-acronym-label="hepia" data-acronym-form="singular+abbrv">hepia</span></a></caption>
+<caption>Tableau comparatif des performances des 6 modèles sur la zone <a href="../glossary.html#gloss-hepia"><span data-acronym-label="hepia" data-acronym-form="singular+abbrv">HEPIA</span></a></caption>
 <thead>
 <tr>
 <th style="text-align: left;">Modèle</th>
@@ -1317,7 +1307,7 @@ Pour conclure cette section, il est important de noter que ces images n’ont pa
 
 Cette évaluation qualitative permet aussi de révéler les biais présents dans le dataset d’entraînement. Malgré le soin apporté à sa création, ce dataset reste imparfait et les modèles reproduisent ses limites dans leurs prédictions.
 
-Un problème récurrent concerne les toitures praticables. Ces surfaces, bien que classées comme toitures par <a href="../glossary.html#gloss-sitg"><span data-acronym-label="sitg" data-acronym-form="singular+abbrv">sitg</span></a> (ce qui est techniquement correct puisqu’elles correspondent au dernier étage d’un bâtiment), posent problème aux modèles. La distinction entre surfaces praticables et non praticables reste difficile. L’ajout d’exemples supplémentaires dans le dataset pourrait améliorer les performances sur ce point.
+Un problème récurrent concerne les toitures praticables. Ces surfaces, bien que classées comme toitures par <a href="../glossary.html#gloss-sitg"><span data-acronym-label="sitg" data-acronym-form="singular+abbrv">SITG</span></a> (ce qui est techniquement correct puisqu’elles correspondent au dernier étage d’un bâtiment), posent problème aux modèles. La distinction entre surfaces praticables et non praticables reste difficile. L’ajout d’exemples supplémentaires dans le dataset pourrait améliorer les performances sur ce point.
 
 Les balcons montrent aussi des résultats variables. Ceux avec du mobilier sont correctement identifiés par tous les modèles, mais les balcons vides sont souvent confondus avec des toitures. Cela confirme le besoin de diversifier les exemples dans le dataset.
 
@@ -1351,7 +1341,7 @@ La stratégie d’ensemble k-fold améliore ces modèles de 0,9% à 2,0% en moye
 
 ### Analyse qualitative et limites identifiées {#analyse-qualitative-et-limites-identifiées}
 
-Les tests sur la zone <a href="../glossary.html#gloss-hepia"><span data-acronym-label="hepia" data-acronym-form="singular+abbrv">hepia</span></a> montrent une bonne capacité de généralisation mais aussi des limites. Les modèles détectent bien les obstacles classiques (panneaux solaires, cheminées, verrières, végétation) et fonctionnent correctement sur les zones avec ombrage léger à modéré.
+Les tests sur la zone <a href="../glossary.html#gloss-hepia"><span data-acronym-label="hepia" data-acronym-form="singular+abbrv">HEPIA</span></a> montrent une bonne capacité de généralisation mais aussi des limites. Les modèles détectent bien les obstacles classiques (panneaux solaires, cheminées, verrières, végétation) et fonctionnent correctement sur les zones avec ombrage léger à modéré.
 
 Deux défis principaux subsistent :
 
