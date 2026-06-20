@@ -18,7 +18,7 @@ Pour le résumé complet (français/anglais), voir la page [Résumé](chapters/0
 
 ## Liens
 
-- **Code** : [github.com/denisiglesiasgarcia/hesso-master-rooftops-code](https://github.com/denisiglesiasgarcia/hesso-master-rooftops-code)](https://github.com/denisiglesiasgarcia/hesso-master-rooftops-code)
+- **Code** : [github.com/denisiglesiasgarcia/hesso-master-rooftops-code](https://github.com/denisiglesiasgarcia/hesso-master-rooftops-code)
 - **LaTeX** : [github.com/denisiglesiasgarcia/hesso-master-rooftops-latex](https://github.com/denisiglesiasgarcia/hesso-master-rooftops-latex)
 - **Datasets** :
     - [SMP](https://drive.proton.me/urls/29R4M8ZRW8#Q8UvRrzEEDfC)
