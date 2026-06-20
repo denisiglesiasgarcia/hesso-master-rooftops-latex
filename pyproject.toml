@@ -1,0 +1,30 @@
+[project]
+name = "hesso-master-rooftops-latex"
+version = "0.1.0"
+description = "MkDocs Material site generator for the HES-SO Master thesis (LaTeX source elsewhere in this repo)"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "mkdocs-material>=9.7.6",
+]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.15.18",
+]
+
+[tool.ruff]
+target-version = "py313"
+line-length = 100
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort (import sorting)
+    "UP",  # pyupgrade (modernize syntax for the target version)
+    "B",   # bugbear (likely bugs / footguns)
+    "SIM", # simplify (redundant code patterns)
+    "C4",  # comprehensions
+]

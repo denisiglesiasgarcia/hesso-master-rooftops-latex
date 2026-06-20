@@ -1,0 +1,61 @@
+site_name: "Identification des parties utiles des toitures pour le solaire par machine learning"
+site_description: "Master thesis (HES-SO) — segmentation de toitures pour le potentiel solaire"
+repo_url: https://github.com/denisiglesiasgarcia/hesso-master-rooftops-latex
+use_directory_urls: false
+
+theme:
+  name: material
+  language: fr
+  palette:
+    - scheme: default
+      primary: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Mode sombre
+    - scheme: slate
+      primary: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Mode clair
+  features:
+    - navigation.sections
+    - navigation.top
+    - navigation.indexes
+    - toc.integrate
+    - content.code.copy
+
+markdown_extensions:
+  - admonition
+  - footnotes
+  - tables
+  - attr_list
+  - md_in_html
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.highlight
+  - pymdownx.superfences
+
+extra_css:
+  - stylesheets/extra.css
+
+extra_javascript:
+  - https://polyfill.io/v3/polyfill.min.js?features=es6
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+
+nav:
+  - Accueil: index.md
+  - Résumé: chapters/00-resume.md
+  - Chapitres:
+      - "1. Introduction": chapters/01-introduction.md
+      - "2. Analyse": chapters/02-analysis.md
+      - "3. Modèle": chapters/03-modele.md
+      - "4. Implémentation": chapters/04-implementation.md
+      - "5. Conclusions": chapters/05-conclusions.md
+  - Annexes:
+      - "A1. Fondamentaux ML": appendices/A1-fondamentaux-ml.md
+      - "A2. Fondamentaux énergie": appendices/A2-fondamentaux-energie.md
+  - Bibliographie: bibliography.md
+  - Glossaire: glossary.md
+
+plugins:
+  - search

@@ -6,11 +6,14 @@
 *.ind
 *.lof
 *.lol
+*.loc
 *.bbl-SAVE-ERROR
 *.tdo
 *.lot
 *.out
 *.toc
+*.mtc*
+*.maf
 *.acn
 *.acr
 *.alg
@@ -34,4 +37,17 @@
 _minted*/
 
 # Generated PDF (ignore the final thesis)
-# thesis.pdf
+IglesiasDenis_rapport_MSE_TM_SP25.pdf
+
+# Python / tooling
+.venv
+.ruff_cache
+__pycache__/
+*.pyc
+*.bak
+
+# MkDocs build output (regenerate with `uv run mkdocs build`)
+site/
+
+# Claude Code local settings (machine-specific, not meant to be shared)
+.claude

@@ -2,18 +2,19 @@
 
 LaTeX template based on [hesso-latextemplate-thesis](https://github.com/mdemierre/hesso-latextemplate-thesis) for the HES-SO//Master MSE thesis in French.
 
-## Thanks to
+This repo contains two separate things — the LaTeX thesis itself, and the tooling that publishes it as a browsable website:
 
-- Marc Demierre [@mdemierre](https://github.com/mdemierre) for the template
-- Maria Sisto, for the title page
-- Loïc Monney, for the section title style, captions style and font idea
-- EPFL, for the basic structure
+- **The LaTeX thesis**: `00-settings/`, `01-head/`, `02-main/`, `03-tail/`, `img/`, `thesis.tex`. Source of truth — see [LaTeX thesis](#latex-thesis) below.
+- **The website**: generated *from* the LaTeX by `site-generator/`, built by MkDocs into `docs/`/`site/`. See [Documentation website (MkDocs)](#documentation-website-mkdocs) below.
 
-## Howto use it
+## LaTeX thesis
 
 - Install vscode and [LaTeX Workshop](https://marketplace.visualstudio.com/items?itemName=James-Yu.latex-workshop)
 - Install [latex](https://www.latex-project.org/get/#tex-distributions) for your OS
 - Use this recipe in settings.json
+
+<details>
+<summary>VS Code <code>settings.json</code> recipe (click to expand)</summary>
 
 ```json
     "latex-workshop.latex.tools": [
@@ -750,3 +751,89 @@ LaTeX template based on [hesso-latextemplate-thesis](https://github.com/mdemierr
         }
     ],
 ```
+
+</details>
+
+## Documentation website (MkDocs)
+
+The thesis is also published as a browsable website (MkDocs Material), generated from the LaTeX above by the scripts in `site-generator/`:
+
+- `site-generator/` — the scripts that convert the LaTeX into the website (`convert_thesis.sh` and everything it calls). Not LaTeX, not website content — just the tooling in between.
+- `docs/` — the generated website content that MkDocs builds from. It is **generated from the LaTeX sources** — never edit files under `docs/chapters/`, `docs/appendices/`, `docs/bibliography.md`, `docs/glossary.md`, or `docs/assets/` by hand, since the next regeneration overwrites them. The only hand-written page is `docs/index.md` (the landing page).
+- `mkdocs.yml` — MkDocs site configuration (theme, nav, plugins). Stays at the repo root since that's where `mkdocs` expects to find it.
+
+### Prerequisites
+
+- [uv](https://docs.astral.sh/uv/) (Python package/venv manager)
+- [pandoc](https://pandoc.org/installing.html) (LaTeX → Markdown conversion + bibliography processing)
+- [cwebp](https://developers.google.com/speed/webp/download) (image conversion to WebP) — on macOS: `brew install webp`
+
+Install the Python dependencies (MkDocs Material) once with:
+
+```bash
+uv sync
+```
+
+### Regenerate the site from the LaTeX sources
+
+Run from the repo root:
+
+```bash
+./site-generator/convert_thesis.sh
+```
+
+This single script does everything:
+
+1. Mirrors figure folders into `docs/assets/figures/` and converts every image to lossless WebP ([fix_images.py](site-generator/fix_images.py)).
+2. Converts the abstract/résumé ([01-head/05_abstracts.tex](01-head/05_abstracts.tex)) to its own chapter page (`docs/chapters/00-resume.md`).
+3. Concatenates the 5 chapters + 2 appendices and runs them through **one** pandoc + citeproc pass, so figure/table/equation numbers and the bibliography are globally consistent (matching the original LaTeX, which is one continuous document) — then splits the result back into the per-chapter files MkDocs needs, plus a standalone `docs/bibliography.md` ([split_combined.py](site-generator/split_combined.py)).
+4. Fixes up cross-references, math rendering, custom code/table environments pandoc can't parse natively, and citation links ([fix_text.py](site-generator/fix_text.py)).
+5. Converts `03-tail/glossary.tex` to `docs/glossary.md` and resolves any citations inside glossary entries ([glossary_to_md.py](site-generator/glossary_to_md.py)).
+6. Links every acronym/glossary-term usage across the site to its glossary entry ([link_glossary.py](site-generator/link_glossary.py)).
+
+None of this touches the original `.tex` sources or images — all LaTeX constructs pandoc can't parse natively are patched on throwaway copies first ([preprocess_tex.py](site-generator/preprocess_tex.py)).
+
+### Preview locally
+
+```bash
+uv run mkdocs serve
+```
+
+Then open <http://127.0.0.1:8000>. `mkdocs serve` watches `docs/` and `mkdocs.yml` and reloads automatically — but it does **not** re-run the LaTeX conversion, so re-run `convert_thesis.sh` first after editing any chapter/appendix `.tex` file.
+
+### Build the static site
+
+```bash
+uv run mkdocs build --strict
+```
+
+Outputs to `site/`. `--strict` turns any broken internal link or missing file into a build failure — always run this after regenerating before committing, since it's the fastest way to catch a broken cross-reference.
+
+### Publishing
+
+[`.github/workflows/deploy.yml`](.github/workflows/deploy.yml) deploys `docs/` to GitHub Pages on every push to `main` — it only runs `mkdocs gh-deploy`, it does **not** regenerate `docs/` from the LaTeX sources. Always run `convert_thesis.sh` and commit the resulting `docs/` changes yourself before pushing.
+
+### Linting the build scripts
+
+The `site-generator/*.py` scripts and `convert_thesis.sh` are linted with [ruff](https://docs.astral.sh/ruff/) and [shellcheck](https://www.shellcheck.net/):
+
+```bash
+uv run ruff check --fix .   # lint + autofix
+uv run ruff format .        # format
+brew install shellcheck     # one-time, macOS
+shellcheck site-generator/convert_thesis.sh
+```
+
+A [pre-commit](https://pre-commit.com/) hook runs both automatically on every commit. One-time setup:
+
+```bash
+brew install pre-commit shellcheck   # macOS
+pre-commit install
+```
+
+## Thanks to
+
+- Marc Demierre [@mdemierre](https://github.com/mdemierre) for the template
+- Maria Sisto, for the title page
+- Loïc Monney, for the section title style, captions style and font idea
+- EPFL, for the basic structure

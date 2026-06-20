@@ -28,6 +28,7 @@ clean :
 	@rm *.pyg || true
 	@rm *.backup || true
 	@rm *.lof || true
+	@rm *.loc || true
 	@rm *.synctex.gz || true
 	@rm *.run.xml || true
 	@rm *.bcf || true
