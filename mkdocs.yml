@@ -19,10 +19,13 @@ theme:
         icon: material/brightness-4
         name: Mode clair
   features:
+    - navigation.tabs
+    - navigation.tabs.sticky
     - navigation.sections
     - navigation.top
     - navigation.indexes
-    - toc.integrate
+    - navigation.path
+    - toc.follow
     - content.code.copy
 
 markdown_extensions:

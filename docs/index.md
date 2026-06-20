@@ -4,7 +4,7 @@ description: "Travail de Master HES-SO en Data Science : identification automati
 
 # Identification des parties utiles des toitures pour le solaire par machine learning
 
-Travail de Master HES-SO en ingénierie, orientation Data Science.
+Travail de Master HES-SO en ingénierie ([MSE](https://www.hes-so.ch/master/hes-so-master/formations/engineering)), orientation [Data Science](https://www.hes-so.ch/domaines/ia/mse/ds). Finalisé en août 2025.
 
 Ce projet propose une méthode basée sur le machine learning pour identifier automatiquement les espaces libres sur les toitures du canton de Genève, afin de faciliter l'évaluation du potentiel solaire à l'échelle cantonale.
 
