@@ -127,6 +127,22 @@ def strip_addlinespace(text: str) -> str:
     return text.replace(r"\addlinespace", "")
 
 
+def strip_spacing_commands(text: str) -> str:
+    """\\vspace{...}/\\bigskip/\\smallskip/\\medskip are pure visual spacing,
+    meaningless on the web — but when one sits alone on the line between two
+    of this thesis's \\end{pythoncode}/\\begin{textcode} pairs (used to add a
+    gap between a code listing and its captured output), pandoc folds away
+    the paragraph break that would otherwise separate them. The two
+    "[[CODESTART/CODEEND" sentinels convert_code_listings() inserts there end
+    up glued onto the same line, and the fenced code blocks fix_text.py
+    builds from them glue together too (a closing ``` immediately followed
+    by the next opening ```lang on the same line, which markdown doesn't
+    recognize as two blocks)."""
+    text = re.sub(r"\\vspace\{[^}]*\}", "", text)
+    text = re.sub(r"\\(?:bigskip|smallskip|medskip)\b", "", text)
+    return text
+
+
 def fix_nameref_pageref(text: str) -> str:
     """\\nameref{X} (the target section's title) and \\pageref{X} (its PDF
     page number) come from the hyperref/nameref packages, which pandoc's
@@ -322,6 +338,7 @@ def preprocess(text: str) -> str:
     text = expand_multicolumn_dividers(text)
     text = strip_clines(text)
     text = strip_addlinespace(text)
+    text = strip_spacing_commands(text)
     text = fix_nameref_pageref(text)
     text = convert_code_listings(text)
     text = convert_longtblr_tables(text)

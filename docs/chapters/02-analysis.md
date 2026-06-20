@@ -637,12 +637,12 @@ Le dataset couvre environ 70 pays et a été annoté manuellement par des travai
 
 <figure id="fig:ch2_sam2_sa1b_diversite_pays" data-latex-placement="H">
 <figure id="fig:ch2_sam2_06_dataset_sa1b_pays1">
-<img src="../assets/figures/ch2/ch2_sam2_06_dataset_sa1b_pays1.webp"  alt="Carte de monde avec les pays les plus représentés dans le dataset SA-1B" />
-<figcaption>Carte de monde avec les pays les plus représentés dans le dataset SA-1B</figcaption>
+<img src="../assets/figures/ch2/ch2_sam2_06_dataset_sa1b_pays1.webp"  alt="Figure 2.34 — Carte de monde avec les pays les plus représentés dans le dataset SA-1B" />
+<figcaption>Figure 2.34 — Carte de monde avec les pays les plus représentés dans le dataset SA-1B</figcaption>
 </figure>
 <figure id="fig:ch2_sam2_07_dataset_sa1b_pays2">
-<img src="../assets/figures/ch2/ch2_sam2_07_dataset_sa1b_pays2.webp" style="width:100.0%"  alt="Distribution des images par pays dans le dataset SA-1B" />
-<figcaption>Distribution des images par pays dans le dataset SA-1B</figcaption>
+<img src="../assets/figures/ch2/ch2_sam2_07_dataset_sa1b_pays2.webp" style="width:100.0%"  alt="Figure 2.35 — Distribution des images par pays dans le dataset SA-1B" />
+<figcaption>Figure 2.35 — Distribution des images par pays dans le dataset SA-1B</figcaption>
 </figure>
 <figcaption>Figure 2.36 — Origine des images qui forment le dataset SA-1B utilisé pour l’entrainement de SAM <span class="citation" data-cites="kirillov_segment_2023">[<a href="../bibliography.html#ref-kirillov_segment_2023" role="doc-biblioref">32</a>]</span></figcaption>
 </figure>
@@ -785,7 +785,7 @@ Les gains sont particulièrement remarquables sur les benchmarks les plus exigea
 
 <span id="tab:ch2_sam2_resultats_sam2_vos_zeroshot"></span>
 
-<p class="thesis-caption"><em>Tableau 2.1 — Zero-shot accuracy sur 17 datasets vidéo avec différents types de prompts. Accuracy moyenne pour chaque type de prompt (1, 3 ou 5 clics, boîtes englobantes, ou masques de vérité terrain) appliqué sur la première image de chaque vidéo &#91;[35](../bibliography.md#ref-ravi_sam_2024)&#93;</em></p>
+<p class="thesis-caption" markdown="1"><em>Tableau 2.1 — Zero-shot accuracy sur 17 datasets vidéo avec différents types de prompts. Accuracy moyenne pour chaque type de prompt (1, 3 ou 5 clics, boîtes englobantes, ou masques de vérité terrain) appliqué sur la première image de chaque vidéo &#91;[35](../bibliography.md#ref-ravi_sam_2024)&#93;</em></p>
 Ces résultats sont d’autant plus remarquables que <a href="../glossary.html#gloss-sam2"><span data-acronym-label="sam2" data-acronym-form="singular+abbrv">SAM 2</span></a>, contrairement aux méthodes spécialisées qu’il surpasse, reste un modèle généraliste capable de segmenter n’importe quel objet sans restriction catégorielle, démontrant ainsi la puissance de son approche unifiée.
 
 ##### Segmentation d’images {#segmentation-dimages}
@@ -1020,8 +1020,8 @@ Ces bâtiments se distribuent de la manière suivante :
 Les données ont été labellisées selon les classes suivantes :
 
 <figure id="fig:stdl_03_classes" data-latex-placement="H">
-<img src="../assets/figures/ch2/stdl_03_classes.webp" style="width:100.0%"  alt="Classes et répartition des datasets" />
-<figcaption>Classes et répartition des datasets</figcaption>
+<img src="../assets/figures/ch2/stdl_03_classes.webp" style="width:100.0%"  alt="Figure 2.50 — Classes et répartition des datasets" />
+<figcaption>Figure 2.50 — Classes et répartition des datasets</figcaption>
 </figure>
 
 Chaque méthode utilisée dans ce projet nécessite la création de vérité terrain spécifique.
@@ -1241,7 +1241,7 @@ L’algorithme obtient un F1-score de 0.77 et un mIoU (mean Intersection over Un
 
 <span id="tab:stdl_02_resultats_segmentation_lidar"></span>
 
-<p class="thesis-caption"><em>Tableau 2.4 — Métriques obtenus par la segmentation <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">LiDAR</span></a></em></p>
+<p class="thesis-caption" markdown="1"><em>Tableau 2.4 — Métriques obtenus par la segmentation <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">LiDAR</span></a></em></p>
 Les objets de plus de 1 m<sup>2</sup> (Figure [2.53](#fig:stdl_06_segmentation_lidar_surfaces){reference-type="ref" reference="fig:stdl_06_segmentation_lidar_surfaces"}) et situés à plus de 1 m (Figure [2.54](#fig:stdl_07_segmentation_lidar_distances){reference-type="ref" reference="fig:stdl_07_segmentation_lidar_distances"}) du bord du toit sont bien détectés, avec des F1-score entre 0.82 et 0.92.
 
 <figure id="fig:stdl_06_segmentation_lidar_surfaces" data-latex-placement="H">
@@ -1276,7 +1276,7 @@ La plupart (Tableau [2.5](#tab:stdl_03_resultats_segmentation_lidar_classes){ref
 
 <span id="tab:stdl_03_resultats_segmentation_lidar_classes"></span>
 
-<p class="thesis-caption"><em>Tableau 2.5 — Recall par classe pour la segmentation LiDAR</em></p>
+<p class="thesis-caption" markdown="1"><em>Tableau 2.5 — Recall par classe pour la segmentation LiDAR</em></p>
 La surface occupée (Tableau [2.6](#tab:stdl_04_resultats_segmentation_lidar_affectation){reference-type="ref" reference="tab:stdl_04_resultats_segmentation_lidar_affectation"}) totale est sous-estimée de 38% par rapport à la vérité terrain.
 
 |  | Administrative | Industrial | Residential | Flat | Mixed | Pitched |
@@ -1288,7 +1288,7 @@ La surface occupée (Tableau [2.6](#tab:stdl_04_resultats_segmentation_lidar_aff
 
 <span id="tab:stdl_04_resultats_segmentation_lidar_affectation"></span>
 
-<p class="thesis-caption"><em>Tableau 2.6 — Récapitulatif des surfaces détectées et vérité terrain pour la segmentation <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">LiDAR</span></a></em></p>
+<p class="thesis-caption" markdown="1"><em>Tableau 2.6 — Récapitulatif des surfaces détectées et vérité terrain pour la segmentation <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">LiDAR</span></a></em></p>
 Les experts (Tableau [2.7](#tab:stdl_05_resultats_segmentation_lidar_experts){reference-type="ref" reference="tab:stdl_05_resultats_segmentation_lidar_experts"}) sont au moins partiellement satisfaits par plus de 69% des toits segmentés.
 
 | Evaluation          | OCAN | OCEN |
@@ -1299,7 +1299,7 @@ Les experts (Tableau [2.7](#tab:stdl_05_resultats_segmentation_lidar_experts){re
 
 <span id="tab:stdl_05_resultats_segmentation_lidar_experts"></span>
 
-<p class="thesis-caption"><em>Tableau 2.7 — Evaluation des experts pour la segmentation <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">LiDAR</span></a></em></p>
+<p class="thesis-caption" markdown="1"><em>Tableau 2.7 — Evaluation des experts pour la segmentation <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">LiDAR</span></a></em></p>
 ##### Discussion des résultats (<a href="../glossary.html#gloss-stdl"><span data-acronym-label="stdl" data-acronym-form="singular+abbrv">STDL</span></a>) {#discussion-des-résultats-stdl-1}
 
 La méthode prouve sa capacité à détecter les objets sur les toits, en particulier ceux de grande taille et éloignés des bords. Cependant, la délimitation précise des formes reste perfectible, comme en témoigne le faible mIoU. L’estimation de la surface occupée est moyenne, avec une erreur importante liée à la sous-détection des objets bas. Les faux positifs sont souvent de petite taille et situés près des bords, parfois à cause de l’absence de barrières dans la vérité terrain.
@@ -1362,7 +1362,7 @@ Les métriques obtenues (Tableau [2.8](#tab:stdl_06_segmentation_image_resultats
 
 <span id="tab:stdl_06_segmentation_image_resultats"></span>
 
-<p class="thesis-caption"><em>Tableau 2.8 — Métriques obtenues par la segmentation d’images</em></p>
+<p class="thesis-caption" markdown="1"><em>Tableau 2.8 — Métriques obtenues par la segmentation d’images</em></p>
 Les petits objets (Figure [2.57](#fig:stdl_10_segmentation_image_taille){reference-type="ref" reference="fig:stdl_10_segmentation_image_taille"}) avec une surface de moins d’un mètre carré sont moins bien détectés (AP d’environ 0.60). Les objets de plus d’un mètre carré sont mieux détectés (AP d’environ 0.83).
 
 <figure id="fig:stdl_10_segmentation_image_taille" data-latex-placement="H">
@@ -1387,7 +1387,7 @@ Les experts sont au minimum partiellement satisfait de 86% des résultats (Table
 
 <span id="tab:stdl_07_segmentation_image_resultats_experts"></span>
 
-<p class="thesis-caption"><em>Tableau 2.9 — Evaluation des experts pour la segmentation d’images</em></p>
+<p class="thesis-caption" markdown="1"><em>Tableau 2.9 — Evaluation des experts pour la segmentation d’images</em></p>
 ##### Discussion résultats (<a href="../glossary.html#gloss-stdl"><span data-acronym-label="stdl" data-acronym-form="singular+abbrv">STDL</span></a>) {#discussion-résultats-stdl}
 
 Points forts de cette approche :
@@ -1447,7 +1447,7 @@ Les couches vectorielles obtenues n’ont pas été évaluées par les experts. 
 
 <span id="tab:stdl_08_ensemble_resultats"></span>
 
-<p class="thesis-caption"><em>Tableau 2.10 — Métriques obtenues par les méthodes de combinaison</em></p>
+<p class="thesis-caption" markdown="1"><em>Tableau 2.10 — Métriques obtenues par les méthodes de combinaison</em></p>
 En complément du Tableau [2.10](#tab:stdl_08_ensemble_resultats){reference-type="ref" reference="tab:stdl_08_ensemble_resultats"}, le Tableau [2.11](#tab:stdl_09_resultats_methodos){reference-type="ref" reference="tab:stdl_09_resultats_methodos"} récapitule l’ensemble des métriques des méthodologies. La méthodologie de classification des pans de toit n’a pas de métrique, elle n’est donc pas incluse dans le tableau.
 
 | Méthodologie | Precision | Recall | F1-score | mIoU | Relative error &#91;%&#93; |
@@ -1459,7 +1459,7 @@ En complément du Tableau [2.10](#tab:stdl_08_ensemble_resultats){reference-type
 
 <span id="tab:stdl_09_resultats_methodos"></span>
 
-<p class="thesis-caption"><em>Tableau 2.11 — Comparatif des résultats des différentes méthodologies</em></p>
+<p class="thesis-caption" markdown="1"><em>Tableau 2.11 — Comparatif des résultats des différentes méthodologies</em></p>
 Les F1-scores des deux méthodes de combinaison sont proches, autour de 0.77, ce qui suggère des performances globales similaires.
 
 La concaténation obtient un recall exceptionnel de 0.94, détectant presque toutes les surfaces occupées. En contrepartie, la précision diminue d’environ 8 points, indiquant plus de faux positifs dans les résultats.
@@ -1656,7 +1656,7 @@ La Figure [2.62](#fig:solar_net_plus_exemple_methodo){reference-type="ref" refer
 
 <span id="tab:solar_net_plus_comparaison_quant"></span>
 
-<p class="thesis-caption"><em>Tableau 2.12 — Résultats quantitatifs du potentiel solaire sur le dataset RID &#91;[50](../bibliography.md#ref-li_deep_2024)&#93;</em></p>
+<p class="thesis-caption" markdown="1"><em>Tableau 2.12 — Résultats quantitatifs du potentiel solaire sur le dataset RID &#91;[50](../bibliography.md#ref-li_deep_2024)&#93;</em></p>
 #### Discussion et limites {#discussion-et-limites-5}
 
 - La démarche utilisée par cet article est assez unique, c’est le seul article qui va aussi loin dans la segmentation des toitures et l’identification des obstacles. Le dataset RID est disponible librement et il a été réalisé par les auteurs de cet article.
@@ -1707,7 +1707,7 @@ Le Tableau [2.13](#tab:castello_quantification_resultats){reference-type="ref" r
 
 <span id="tab:castello_quantification_resultats"></span>
 
-<p class="thesis-caption"><em>Tableau 2.13 — Performances du modèle U-Net développé</em></p>
+<p class="thesis-caption" markdown="1"><em>Tableau 2.13 — Performances du modèle U-Net développé</em></p>
 Le modèle réussit à détecter automatiquement les obstacles présents sur les toits, y compris les panneaux solaires existants, fenêtres, cheminées, équipements techniques et zones ombragées. L’étude révèle que la fraction médiane de la surface disponible varie selon la taille des toits :
 
 - 61% pour les grands toits (&gt;500 m<sup>2</sup>)
@@ -1720,12 +1720,12 @@ La Figure [2.65](#fig:castello_quantification_image_resultat){reference-type="re
 
 <figure id="fig:castello_quantification_image_resultat" data-latex-placement="H">
 <figure id="fig:castello_quantification_image_resultat1">
-<img src="../assets/figures/ch2/castello_quantification_image_resultat1.webp"  alt="Grandes toitures plates" />
-<figcaption>Grandes toitures plates</figcaption>
+<img src="../assets/figures/ch2/castello_quantification_image_resultat1.webp"  alt="Figure 2.63 — Grandes toitures plates" />
+<figcaption>Figure 2.63 — Grandes toitures plates</figcaption>
 </figure>
 <figure id="fig:castello_quantification_image_resultat2">
-<img src="../assets/figures/ch2/castello_quantification_image_resultat2.webp"  alt="Toitures en pente" />
-<figcaption>Toitures en pente</figcaption>
+<img src="../assets/figures/ch2/castello_quantification_image_resultat2.webp"  alt="Figure 2.64 — Toitures en pente" />
+<figcaption>Figure 2.64 — Toitures en pente</figcaption>
 </figure>
 <figcaption>Figure 2.65 — Images d’exemple <span class="citation" data-cites="castello_quantification_2021">[<a href="../bibliography.html#ref-castello_quantification_2021" role="doc-biblioref">52</a>]</span> du résultat après inférence. Les zones bleus sont les espaces disponibles.</figcaption>
 </figure>

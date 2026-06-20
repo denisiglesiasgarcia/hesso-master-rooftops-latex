@@ -30,7 +30,7 @@ The evaluation of 93 configurations combining different encoders and decoders id
 
 <span id="tab:abstract_top10_modeles"></span>
 
-<p class="thesis-caption"><em>Tableau 1 — Top 10 models by mean IoU on test dataset</em></p>
+<p class="thesis-caption" markdown="1"><em>Tableau 1 — Top 10 models by mean IoU on test dataset</em></p>
 Qualitative validation on the <a href="../glossary.html#gloss-hepia"><span data-acronym-label="hepia" data-acronym-form="singular+abbrv">HEPIA</span></a> area, absent from the training data, confirms that the models generalize well. Tests show good detection of classic obstacles (solar panels, chimneys, skylights) and correct handling of light to moderate shadows, as shown in Figure [2](#fig:abstract_exemple_segmentation_reussie){reference-type="ref" reference="fig:abstract_exemple_segmentation_reussie"}. However, green roofs and accessible terraces still pose problems, suggesting improvements needed in the dataset.
 
 <figure id="fig:abstract_exemple_segmentation_reussie" data-latex-placement="htbp">
@@ -82,7 +82,7 @@ L’évaluation de 93 configurations combinant différents encodeurs et décodeu
 
 <span id="tab:resume_top10_modeles"></span>
 
-<p class="thesis-caption"><em>Tableau 2 — Top 10 des modèles par IoU moyen sur dataset de test</em></p>
+<p class="thesis-caption" markdown="1"><em>Tableau 2 — Top 10 des modèles par IoU moyen sur dataset de test</em></p>
 La validation qualitative sur la zone de <a href="../glossary.html#gloss-hepia"><span data-acronym-label="hepia" data-acronym-form="singular+abbrv">HEPIA</span></a>, absente des données d’entraînement, confirme que les modèles généralisent bien. Les tests montrent une bonne détection des obstacles classiques (panneaux solaires, cheminées, verrières) et une gestion correcte des ombres légères à modérées, comme on peut le voir dans la Figure [4](#fig:resume_exemple_segmentation_reussie){reference-type="ref" reference="fig:resume_exemple_segmentation_reussie"}. Par contre, les toitures végétalisées et terrasses praticables posent encore problème, ce qui suggère des améliorations à apporter au dataset.
 
 <figure id="fig:resume_exemple_segmentation_reussie" data-latex-placement="htbp">

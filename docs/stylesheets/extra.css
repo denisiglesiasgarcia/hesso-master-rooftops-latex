@@ -33,6 +33,19 @@
   border: none;
   border-radius: 0;
   font-size: 0.74rem;
+  /* Pandoc's complex (colspan/rowspan) tables use a real <caption>, which
+     browsers default to placing *above* the table — every other caption on
+     the site (plain pipe tables, figures, code) renders below its content,
+     so this would otherwise be the one inconsistent case. */
+  caption-side: bottom;
+}
+
+.md-typeset table:not([class]) caption {
+  font-size: 0.8rem;
+  text-align: center;
+  font-style: italic;
+  margin-top: 0.3rem;
+  padding: 0;
 }
 
 .md-typeset table:not([class]) thead th {

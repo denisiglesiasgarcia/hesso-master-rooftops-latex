@@ -56,7 +56,7 @@ Le Tableau [4.1](#tab:vue_ensemble_metrique_moyennes){reference-type="ref" refer
 
 <span id="tab:vue_ensemble_metrique_moyennes"></span>
 
-<p class="thesis-caption"><em>Tableau 4.1 — Statistiques générales des modèles évalués sur le dataset de test</em></p>
+<p class="thesis-caption" markdown="1"><em>Tableau 4.1 — Statistiques générales des modèles évalués sur le dataset de test</em></p>
 La Figure [4.1](#fig:heatmap_iou){reference-type="ref" reference="fig:heatmap_iou"} présente une vue synthétique des performances pour chaque combinaison encodeur-décodeur.
 
 <figure id="fig:heatmap_iou" data-latex-placement="H">
@@ -125,7 +125,7 @@ En résumé, le Tableau [4.2](#tab:top10_modeles){reference-type="ref" referenc
 
 <span id="tab:top10_modeles"></span>
 
-<p class="thesis-caption"><em>Tableau 4.2 — Top 10 des modèles par IoU moyen sur dataset de test</em></p>
+<p class="thesis-caption" markdown="1"><em>Tableau 4.2 — Top 10 des modèles par IoU moyen sur dataset de test</em></p>
 Le mAP (mean Average Precision) constitue une métrique qui évalue la capacité d’un modèle à détecter et délimiter avec précision les espaces libres sur les toitures. Le mAP permet de vérifier non seulement si le modèle identifie les bonnes zones, mais aussi à quel point il les délimite précisément.
 
 L’IoU représente le rapport entre la surface de chevauchement et la surface totale couverte par la prédiction du modèle et la vérité terrain. Un IoU de 0,5 signifie que la zone détectée chevauche d’au moins 50% avec la zone réelle. Plus le seuil IoU est élevé, plus la détection doit être précise pour être considérée comme correcte.
@@ -185,7 +185,7 @@ L’analyse des performances par décodeur selon les métriques IoU (Figure [4.8
 
 <span id="tab:statistique_par_decodeur_iou"></span>
 
-<p class="thesis-caption"><em>Tableau 4.3 — Statistiques IoU par décodeur</em></p>
+<p class="thesis-caption" markdown="1"><em>Tableau 4.3 — Statistiques IoU par décodeur</em></p>
 <figure id="fig:ch4_06_architecture_boxplot_04_eval_test_map_95_mean" data-latex-placement="H">
 <img src="../assets/figures/ch4/ch4_06_architecture_boxplot_04_eval_test_map_95_mean.webp" style="width:105.0%"  alt="Figure 4.9 — Boîte à moustaches mAP@95 par décodeur" />
 <figcaption>Figure 4.9 — Boîte à moustaches mAP@95 par décodeur</figcaption>
@@ -209,7 +209,7 @@ L’analyse des performances par décodeur selon les métriques IoU (Figure [4.8
 
 <span id="tab:statistique_par_decodeur_map95"></span>
 
-<p class="thesis-caption"><em>Tableau 4.4 — Statistiques mAP@0.95 par décodeur</em></p>
+<p class="thesis-caption" markdown="1"><em>Tableau 4.4 — Statistiques mAP@0.95 par décodeur</em></p>
 Les décodeurs présentent des performances très variables selon les encodeurs choisis, ce qui se manifeste par la variance (largeur des boîtes) et les valeurs extrêmes (moustaches) observées dans les boîtes à moustaches. Certains décodeurs affichent néanmoins des performances globalement inférieures aux autres en termes de mAP@0.95, notamment MANet et YOLOv12.
 
 #### Performance par encodeur {#performance-par-encodeur}
@@ -248,7 +248,7 @@ L’analyse des encodeurs avec les métriques IoU (Figure [4.10](#fig:ch4_07_bac
 
 <span id="tab:statistique_par_encodeur_iou"></span>
 
-<p class="thesis-caption"><em>Tableau 4.5 — Statistiques IoU par encodeur</em></p>
+<p class="thesis-caption" markdown="1"><em>Tableau 4.5 — Statistiques IoU par encodeur</em></p>
 <figure id="fig:ch4_07_backbone_boxplot_04_eval_test_map_95_mean" data-latex-placement="H">
 <img src="../assets/figures/ch4/ch4_07_backbone_boxplot_04_eval_test_map_95_mean.webp" style="width:120.0%"  alt="Figure 4.11 — Boîte à moustaches IoU par encodeur" />
 <figcaption>Figure 4.11 — Boîte à moustaches IoU par encodeur</figcaption>
@@ -281,7 +281,7 @@ L’analyse des encodeurs avec les métriques IoU (Figure [4.10](#fig:ch4_07_bac
 
 <span id="tab:statistique_par_encodeur_map95"></span>
 
-<p class="thesis-caption"><em>Tableau 4.6 — Statistiques mAP@0.95 par décodeur</em></p>
+<p class="thesis-caption" markdown="1"><em>Tableau 4.6 — Statistiques mAP@0.95 par décodeur</em></p>
 Les encodeurs présentent une variance plus réduite que les décodeurs, témoignant d’une plus grande stabilité des performances. EfficientVIT constitue la seule exception avec une variance importante, probablement liée à sa complexité et à son architecture spécifique.
 
 RepVIT\_M1, EfficientNetV2\_RW\_S et RegNetY\_032 se distinguent par leurs performances élevées, atteignant des IoU moyens respectifs de 0,718, 0,727 et 0,726, ainsi que des mAP@0.95 de 0,138, 0,136 et 0,140.
@@ -347,7 +347,7 @@ Le Tableau [4.7](#tab:performance_moyenne_map_different_seuils){reference-type=
 
 <span id="tab:performance_moyenne_map_different_seuils"></span>
 
-<p class="thesis-caption"><em>Tableau 4.7 — Performances moyennes mAP à différents seuils. Chute relative mAP@0.5 à mAP@0.95</em></p>
+<p class="thesis-caption" markdown="1"><em>Tableau 4.7 — Performances moyennes mAP à différents seuils. Chute relative mAP@0.5 à mAP@0.95</em></p>
 Les modèles SMP conservent mieux leurs performances aux seuils élevés, à l’exception de MANet, démontrant une segmentation plus précise des contours. La transition du mAP@0.5 au mAP@0.95 révèle une chute significative des performances, pouvant atteindre jusqu’à -92,3% pour MANet. Les modèles UNet et UPerNet présentent des diminutions plus modérées de -84,7% et -83,6% respectivement, suggérant une robustesse relative face aux seuils exigeants.
 
 L’analyse du passage de mAP@0.90 à mAP@0.95 met en évidence une dégradation importante des performances, dépassant 50% dans tous les cas. Cette observation souligne la difficulté intrinsèque à maintenir une précision élevée dans les détections les plus exigeantes.
@@ -411,6 +411,7 @@ Pour chaque combinaison encodeur-décodeur, voici comment se déroule le process
 2.  Prédiction individuelle : Chaque modèle produit une carte de probabilité pour toutes les images du dataset de test
 
 3.  Agrégation des prédictions : Les probabilités sont moyennées pixel par pixel avec la formule suivante :
+
     $$\begin{equation}
             P_{ensemble}(x,y) = \frac{1}{K} \sum_{k=1}^{K} P_k(x,y)
     \end{equation}$$
@@ -467,7 +468,7 @@ Le Tableau [4.8](#tab:kfold_ensemble){reference-type="ref" reference="tab:kfold_
 
 <span id="tab:kfold_ensemble"></span>
 
-<p class="thesis-caption"><em>Tableau 4.8 — Comparaison des performances des modèles avec et sans ensemble k-fold. Amélioration calculée par rapport à l’IoU moyen des folds.</em></p>
+<p class="thesis-caption" markdown="1"><em>Tableau 4.8 — Comparaison des performances des modèles avec et sans ensemble k-fold. Amélioration calculée par rapport à l’IoU moyen des folds.</em></p>
 #### Visualisation des résultats {#visualisation-des-résultats}
 
 Les figures [4.17](#fig:unet_mambaoutsmall_best_cases){reference-type="ref" reference="fig:unet_mambaoutsmall_best_cases"} et [4.18](#fig:unet_mambaoutsmall_worst_cases){reference-type="ref" reference="fig:unet_mambaoutsmall_worst_cases"} illustrent les cas extrêmes de performance du modèle UNet avec mambaout\_small sur le dataset de test.
@@ -687,7 +688,7 @@ La Figure [4.19](#fig:upernet_efficientnetv2_s_best_cases){reference-type="ref" 
 <img src="../assets/figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_1_iou0.000_24931113_tile_19_19_52ccbb_overlay_pred.webp"  alt="Prédiction - IoU = 0.000" />
 <figcaption>Prédiction - IoU = 0.000</figcaption>
 </figure>
-<figcaption>Pires IoU pour UPerNet avec EfficientNetV2-S sur le dataset de test</figcaption>
+<figcaption>Figure 4.20 — Pires IoU pour UPerNet avec EfficientNetV2-S sur le dataset de test</figcaption>
 </figure>
 
 Les Figures [4.21](#fig:segformer_mambaoutbase_best_cases){reference-type="ref" reference="fig:segformer_mambaoutbase_best_cases"} et [4.22](#fig:segformer_mambaoutbase_worst_cases){reference-type="ref" reference="fig:segformer_mambaoutbase_worst_cases"} montrent les cas extrêmes du modèle SegFormer + mambaout\_base sur le dataset de test.

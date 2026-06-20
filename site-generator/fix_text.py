@@ -94,6 +94,11 @@ def expand_code_blocks(text: str) -> str:
     return re.sub(r"§§CODESTART§§(\w+)§§(.*?)§§CODEEND§§", repl, text, flags=re.DOTALL)
 
 
+# Every `<p class="thesis-caption">` built below carries markdown="1" so the
+# md_in_html extension re-parses its content as Markdown — without it, a
+# caption whose text contains a citation link like `[49](url)` shows the
+# raw `[49](url)` text instead of a working link, since md_in_html otherwise
+# treats raw HTML blocks as opaque.
 def expand_code_captions(text: str, counters: dict) -> str:
     def repl(m: re.Match) -> str:
         label = unescape_markdown(m.group(1))
@@ -101,7 +106,9 @@ def expand_code_captions(text: str, counters: dict) -> str:
         counters["code"] = counters.get("code", 0) + 1
         n = counters["code"]
         anchor = f'<span id="{label}"></span>' if label else ""
-        return f'{anchor}\n\n<p class="thesis-caption"><em>Code {n} — {caption}</em></p>'
+        return (
+            f'{anchor}\n\n<p class="thesis-caption" markdown="1"><em>Code {n} — {caption}</em></p>'
+        )
 
     return re.sub(r"§§CODECAPTION§§([^§]*)§§([^§]*)§§", repl, text)
 
@@ -132,7 +139,9 @@ def expand_raw_tables(text: str, counters: dict) -> str:
 
         anchor = f'<span id="{label}"></span>' if label else ""
         table_html = "".join(parts)
-        caption_html = f'<p class="thesis-caption"><em>Tableau {n} — {caption}</em></p>'
+        caption_html = (
+            f'<p class="thesis-caption" markdown="1"><em>Tableau {n} — {caption}</em></p>'
+        )
         return f"{anchor}\n\n{table_html}\n\n{caption_html}"
 
     return re.sub(r"§§RAWTABLE§§([^§]*)§§([^§]*)§§([^§]*)§§", repl, text)
@@ -177,7 +186,10 @@ def fix_native_table_captions(text: str) -> str:
     def repl(m: re.Match) -> str:
         caption = m.group(1).strip()
         label = m.group(2)
-        return f'<span id="{label}"></span>\n\n<p class="thesis-caption"><em>{caption}</em></p>'
+        return (
+            f'<span id="{label}"></span>\n\n'
+            f'<p class="thesis-caption" markdown="1"><em>{caption}</em></p>'
+        )
 
     return re.sub(r"^(.+?)\s*\{#(tab:[\w.-]+)\}\s*$", repl, text, flags=re.MULTILINE)
 
@@ -198,7 +210,7 @@ def number_equations(text: str, counters: dict) -> str:
         # (e.g. a two-step update rule) — point all of them at this one
         # number rather than only anchoring the first.
         anchors = "".join(f'<span id="{label}"></span>' for label in labels)
-        return f'{anchors}\n\n{block}\n\n<p class="thesis-caption"><em>({n})</em></p>'
+        return f'{anchors}\n\n{block}\n\n<p class="thesis-caption" markdown="1"><em>({n})</em></p>'
 
     return re.sub(r"\$\$.*?\$\$", repl, text, flags=re.DOTALL)
 
@@ -348,6 +360,81 @@ def harvest_resolved_numbers(texts: dict[Path, str]) -> dict[str, str]:
     return numbers
 
 
+# Combined-pass files only — chapters/00-resume.md is its own separate
+# pandoc run with no chapter prefix in its numbering, so it isn't part of
+# this scheme and stays on harvest_resolved_numbers alone (see below).
+CHAPTER_INDEX = {
+    DOCS / "chapters" / "01-introduction.md": 1,
+    DOCS / "chapters" / "02-analysis.md": 2,
+    DOCS / "chapters" / "03-modele.md": 3,
+    DOCS / "chapters" / "04-implementation.md": 4,
+    DOCS / "chapters" / "05-conclusions.md": 5,
+    DOCS / "appendices" / "A1-fondamentaux-ml.md": 6,
+    DOCS / "appendices" / "A2-fondamentaux-energie.md": 7,
+}
+
+
+def compute_structural_numbers(texts: dict[Path, str]) -> dict[str, str]:
+    """harvest_resolved_numbers only finds a number for labels that happen
+    to be \\ref'd somewhere in the prose — anything never referenced (a
+    surprisingly common ~12% of figures here) gets no number at all, even
+    though pandoc's own internal chapter.N counter clearly still ticks
+    forward for it (confirmed empirically: numbers harvested on either side
+    of an unreferenced figure/table have no gap, e.g. ...6.2, [unref], 6.4...
+    means the unreferenced one really is 6.3). Recompute every number
+    directly from document order instead of relying on \\ref having been
+    used.
+
+    Figures need a post-order walk, not a flat scan: a figure that groups
+    several individually-\\label'd subfigures is numbered by pandoc *after*
+    all its children (confirmed: a group's own number, e.g. 2.21, exceeds
+    every one of its subfigures', e.g. 2.16-2.20, even though the group's
+    opening tag comes first in the HTML) — so each nested figure must be
+    numbered before the figure containing it."""
+    figure_open_re = re.compile(r'<figure id="(fig:[\w-]+)"[^>]*>')
+    table_open_re = re.compile(r'<table id="(tab:[\w-]+)">|<span id="(tab:[\w-]+)"></span>')
+
+    def walk_figures(
+        text: str, counter: list[int], chapter_n: int, numbers: dict[str, str]
+    ) -> None:
+        i = 0
+        while True:
+            m = figure_open_re.search(text, i)
+            if not m:
+                break
+            label = m.group(1)
+            depth = 1
+            j = m.end()
+            while depth > 0:
+                next_open = text.find("<figure", j)
+                next_close = text.find("</figure>", j)
+                if next_close == -1:
+                    j = len(text)
+                    break
+                if next_open != -1 and next_open < next_close:
+                    depth += 1
+                    j = next_open + len("<figure")
+                else:
+                    depth -= 1
+                    j = next_close + len("</figure>")
+            block_end = j - len("</figure>") if j <= len(text) else j
+            walk_figures(text[m.end() : block_end], counter, chapter_n, numbers)
+            counter[0] += 1
+            numbers[label] = f"{chapter_n}.{counter[0]}"
+            i = j
+
+    numbers: dict[str, str] = {}
+    for path, chapter_n in CHAPTER_INDEX.items():
+        text = texts.get(path)
+        if text is None:
+            continue
+        walk_figures(text, [0], chapter_n, numbers)
+        for tab_counter, m in enumerate(table_open_re.finditer(text), start=1):
+            label = m.group(1) or m.group(2)
+            numbers[label] = f"{chapter_n}.{tab_counter}"
+    return numbers
+
+
 def add_figure_caption_numbers(text: str, numbers: dict[str, str]) -> str:
     """Prefix each figure's *own* caption with "Figure N — " using the number
     harvested from its in-text references. Most subfigures are a bare nested
@@ -437,11 +524,12 @@ def add_native_table_caption_numbers(text: str, numbers: dict[str, str]) -> str:
             return m.group(0)
         return (
             f'<span id="{label}"></span>\n\n'
-            f'<p class="thesis-caption"><em>Tableau {number} — {caption}</em></p>'
+            f'<p class="thesis-caption" markdown="1"><em>Tableau {number} — {caption}</em></p>'
         )
 
     return re.sub(
-        r'<span id="(tab:[\w-]+)"></span>\n\n<p class="thesis-caption"><em>(.*?)</em></p>',
+        r'<span id="(tab:[\w-]+)"></span>\n\n'
+        r'<p class="thesis-caption" markdown="1"><em>(.*?)</em></p>',
         span_repl,
         text,
         flags=re.DOTALL,
@@ -462,11 +550,12 @@ def build_list_pages(texts: dict[Path, str]) -> str:
     )
     table_re = re.compile(
         r'(?:<table id="(tab:[\w-]+)">\s*<caption>|<span id="(tab:[\w-]+)"></span>\s*\n\n'
-        r'<p class="thesis-caption"><em>)Tableau ([\d.]+) — (.*?)(?:</caption>|</em></p>)',
+        r'<p class="thesis-caption" markdown="1"><em>)Tableau ([\d.]+) — '
+        r"(.*?)(?:</caption>|</em></p>)",
         re.DOTALL,
     )
     code_re = re.compile(
-        r'<span id="(code:[\w-]+)"></span>\s*\n\n<p class="thesis-caption"><em>'
+        r'<span id="(code:[\w-]+)"></span>\s*\n\n<p class="thesis-caption" markdown="1"><em>'
         r"Code (\d+) — (.*?)</em></p>",
         re.DOTALL,
     )
@@ -576,16 +665,28 @@ def main() -> None:
     registry: dict[str, tuple[Path, str]] = {}
     caption_after_span = re.compile(
         r'\A(?:<span id="[^"]+"></span>)*\n\n(?:(?!<span id=").)*?'
-        r'<p class="thesis-caption"><em>(.*?)</em></p>',
+        r'<p class="thesis-caption" markdown="1"><em>(.*?)</em></p>',
         re.DOTALL,
     )
+    # A real LaTeX \ref{} to a Code/Tableau float resolves to just its bare
+    # number (e.g. "Le Code 3"), never its caption text. But the caption
+    # text captured above for these already carries a "Code 3 — ..." /
+    # "Tableau 3 — ..." prefix (added at creation time, before this registry
+    # is built) — using it verbatim as ref display text doubles the word
+    # ("Le Code Code 3 — ..."). Strip back down to the number for those.
+    caption_number_prefix = re.compile(r"^(?:Code|Tableau) ([\d.]+) — ")
+
+    def _ref_display_text(caption: str) -> str:
+        m = caption_number_prefix.match(caption)
+        return m.group(1) if m else caption
+
     for path, text in texts.items():
         # A block (e.g. an `aligned` equation with two \label{}s) can have
         # several adjacent anchor spans sharing one caption further down.
         for sm in re.finditer(r'<span id="([^"]+)"></span>', text):
             cap_m = caption_after_span.match(text[sm.end() :])
             if cap_m:
-                registry[sm.group(1)] = (path, cap_m.group(1))
+                registry[sm.group(1)] = (path, _ref_display_text(cap_m.group(1)))
         for m in re.finditer(r"^(#{1,6})\s+(.*?)\s*\{#([^}]+)\}\s*$", text, re.MULTILINE):
             registry[m.group(3)] = (path, m.group(2).strip())
 
@@ -630,9 +731,14 @@ def main() -> None:
     fix_cross_page_link_attrs(texts, anchor_location)
 
     # Prefix every figure's/native table's own caption with "Figure N — " /
-    # "Tableau N — ", using the number pandoc already assigned at its in-text
-    # references (it never adds this to the caption itself otherwise).
-    numbers = harvest_resolved_numbers(texts)
+    # "Tableau N — ". Compute the number directly from document structure
+    # for the combined-pass chapters/appendices (covers every figure/table,
+    # not just ones \ref'd somewhere); fall back to harvesting an already-
+    # resolved in-text reference for chapters/00-resume.md, which is its own
+    # separate pandoc pass and outside that chapter.N numbering scheme.
+    numbers = compute_structural_numbers(texts)
+    for label, number in harvest_resolved_numbers(texts).items():
+        numbers.setdefault(label, number)
     for path, text in texts.items():
         text = add_figure_caption_numbers(text, numbers)
         text = add_native_table_caption_numbers(text, numbers)

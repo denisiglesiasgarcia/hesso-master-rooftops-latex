@@ -181,7 +181,7 @@ $$\begin{equation}
     \label{eq:heaviside}
 \end{equation}$$
 
-<p class="thesis-caption"><em>(1)</em></p>
+<p class="thesis-caption" markdown="1"><em>(1)</em></p>
 
 L’utilité de ce neurone est remarquable car il permet de créer des opérateurs logiques.
 
@@ -196,7 +196,7 @@ $$\begin{equation}
     \label{eq:operateurs_logiques}
 \end{equation}$$
 
-<p class="thesis-caption"><em>(2)</em></p>
+<p class="thesis-caption" markdown="1"><em>(2)</em></p>
 
 Un exemple d’application de l’opérateur “ET” de l’Équation [(2)](#eq:operateurs_logiques){reference-type="ref" reference="eq:operateurs_logiques"} permet de vérifier qu’il fonctionne correctement :
 
@@ -217,7 +217,7 @@ $$\begin{equation}
     \label{eq:exemple_ET}
 \end{equation}$$
 
-<p class="thesis-caption"><em>(3)</em></p>
+<p class="thesis-caption" markdown="1"><em>(3)</em></p>
 
 Ce modèle a certaines limitations :
 
@@ -232,11 +232,12 @@ Ce modèle a certaines limitations :
 En 1958, Frank Rosenblatt &#91;[98](../bibliography.md#ref-rosenblatt_perceptron_1958)&#93; publie un article ou il propose le perceptron, un nouveau type de neurone artificiel.
 
 <figure id="fig:enter-label" data-latex-placement="H">
-<img src="../assets/figures/A1/A1_04_perceptron.webp" style="width:100.0%"  alt="Schéma du perceptron [97], neurone artificielle proposée par Frank Rosenblatt." />
-<figcaption>Schéma du perceptron <span class="citation" data-cites="zahn_cours_2024">[<a href="../bibliography.html#ref-zahn_cours_2024" role="doc-biblioref">97</a>]</span>, neurone artificielle proposée par Frank Rosenblatt.</figcaption>
+<img src="../assets/figures/A1/A1_04_perceptron.webp" style="width:100.0%"  alt="Figure 6.4 — Schéma du perceptron [97], neurone artificielle proposée par Frank Rosenblatt." />
+<figcaption>Figure 6.4 — Schéma du perceptron <span class="citation" data-cites="zahn_cours_2024">[<a href="../bibliography.html#ref-zahn_cours_2024" role="doc-biblioref">97</a>]</span>, neurone artificielle proposée par Frank Rosenblatt.</figcaption>
 </figure>
 
 Celui-ci se distingue du neurone de McCulloch-Pitts car elle permet d’utiliser des nombres réels pour les entrées, poids et biais. L’équation [(4)](#eq:perceptron){reference-type="ref" reference="eq:perceptron"} &#91;[98](../bibliography.md#ref-rosenblatt_perceptron_1958)&#93; du perceptron est la suivante:
+
 <span id="eq:perceptron"></span>
 
 $$\begin{equation}
@@ -244,7 +245,7 @@ $$\begin{equation}
     \label{eq:perceptron}
 \end{equation}$$
 
-<p class="thesis-caption"><em>(4)</em></p>
+<p class="thesis-caption" markdown="1"><em>(4)</em></p>
 
 Dans l’équation [(4)](#eq:perceptron){reference-type="ref" reference="eq:perceptron"}, *H* représente la fonction d’activation de Heaviside, *w*<sub>*k*</sub> les poids, *x*<sub>*k*</sub> les entrées, *b* le biais, et *n* le nombre d’entrées.
 
@@ -261,6 +262,7 @@ On dispose d’un ensemble de données étiquetées {(**x**<sup>(*i*)</sup>, *
     2.  Calculer la valeur prédite *ŷ*<sup>(*i*)</sup> = *H*(**w** ⋅ **x**<sup>(*i*)</sup> + *b*)
 
     3.  Utiliser la mise à jour des paramètres (équation [(5)](#eq:perceptron_maj1){reference-type="ref" reference="eq:perceptron_maj1"} et [(5)](#eq:perceptron_maj2){reference-type="ref" reference="eq:perceptron_maj2"} ci-dessous) :
+
         <span id="eq:perceptron_maj1"></span><span id="eq:perceptron_maj2"></span>
 
 $$\begin{align}
@@ -270,7 +272,7 @@ $$\begin{align}
                     \label{eq:perceptron_maj2}
         \end{align}$$
 
-<p class="thesis-caption"><em>(5)</em></p>
+<p class="thesis-caption" markdown="1"><em>(5)</em></p>
 
 Le taux d’apprentissage *α* (“learning rate”) est un paramètre de l’algorithme, cette valeur doit être positive. Une valeur de départ tel que *α* = 0.1 semble judicieuse pour démarrer.
 
@@ -303,7 +305,7 @@ $$\begin{equation}
 \label{eq:sigmoid}
 \end{equation}$$
 
-<p class="thesis-caption"><em>(6)</em></p>
+<p class="thesis-caption" markdown="1"><em>(6)</em></p>
 
 Cette fonction (Figure [6.7](#fig:A1_07_fonction_activation_sigmoid){reference-type="ref" reference="fig:A1_07_fonction_activation_sigmoid"}) va permettre au perceptron de retourner des valeurs entre 0 et 1, ce qui va augmenter considérablement les capacités du perceptron.
 
@@ -342,11 +344,11 @@ Le Tableau [6.1](#tab:metriques_ml){reference-type="ref" reference="tab:metrique
 
 <span id="tab:metriques_ml"></span>
 
-<p class="thesis-caption"><em>Tableau 6.1 — Résumé des principales métriques utilisées en machine learning pour évaluer la performance</em></p>
+<p class="thesis-caption" markdown="1"><em>Tableau 6.1 — Résumé des principales métriques utilisées en machine learning pour évaluer la performance</em></p>
 La matrice de confusion est un outil qui permet d’évaluer les performances d’un modèle.
 
 <table id="tab:matrice_confusion">
-<caption>Matrice de confusion</caption>
+<caption>Tableau 6.2 — Matrice de confusion</caption>
 <tbody>
 <tr>
 <td style="text-align: center;"></td>
@@ -435,7 +437,7 @@ $$\begin{align}
     \label{eq:metriques_exemple}
 \end{align}$$
 
-<p class="thesis-caption"><em>(7)</em></p>
+<p class="thesis-caption" markdown="1"><em>(7)</em></p>
 
 Dans ce cas on voit que l’accuracy est de 85%, le modèle classifie correctement (TP + TN) 85% de toutes les images (TP + TN + FP + FN).
 
@@ -573,8 +575,8 @@ Les images sont des données très utilisées dans la “computer vision” qui 
 Un exemple de dataset d’images est le “CIFAR-10” &#91;[100](../bibliography.md#ref-krizhevsky_learning_2009)&#93;.
 
 <figure id="fig:A1_09_cifar" data-latex-placement="H">
-<img src="../assets/figures/A1/A1_09_cifar.webp" style="width:90.0%"  alt="Dataset d’images CIFAR-10 [101]" />
-<figcaption>Dataset d’images CIFAR-10 <span class="citation" data-cites="krizhevsky_cifar-10_nodate">[<a href="../bibliography.html#ref-krizhevsky_cifar-10_nodate" role="doc-biblioref">101</a>]</span></figcaption>
+<img src="../assets/figures/A1/A1_09_cifar.webp" style="width:90.0%"  alt="Figure 6.9 — Dataset d’images CIFAR-10 [101]" />
+<figcaption>Figure 6.9 — Dataset d’images CIFAR-10 <span class="citation" data-cites="krizhevsky_cifar-10_nodate">[<a href="../bibliography.html#ref-krizhevsky_cifar-10_nodate" role="doc-biblioref">101</a>]</span></figcaption>
 </figure>
 
 Ce dataset a les caractéristiques suivantes :
@@ -704,7 +706,7 @@ Le Tableau [6.6](#tab:comparatif_orthophotos){reference-type="ref" reference="ta
 
 <span id="tab:comparatif_orthophotos"></span>
 
-<p class="thesis-caption"><em>Tableau 6.6 — Comparatif des 3 types d’orthophotos</em></p>
+<p class="thesis-caption" markdown="1"><em>Tableau 6.6 — Comparatif des 3 types d’orthophotos</em></p>
 #### Fournisseurs d’orthophotos {#fournisseurs-dorthophotos}
 
 Au niveau mondial, il y a plusieurs fournisseurs d’orthophotos &#91;[103](../bibliography.md#ref-stdl_recherche_2024)&#93;, voici quelques exemples :
@@ -719,7 +721,7 @@ Au niveau mondial, il y a plusieurs fournisseurs d’orthophotos &#91;[103](../b
 
 <span id="tab:fournisseurs_orthophotos"></span>
 
-<p class="thesis-caption"><em>Comparatif de 3 fournisseurs d’orthophoto mondiaux</em></p>
+<p class="thesis-caption" markdown="1"><em>Tableau 6.7 — Comparatif de 3 fournisseurs d’orthophoto mondiaux</em></p>
 En ce qui concerne la Suisse, Swisstopo &#91;[104](../bibliography.md#ref-swisstopo_swissimage_nodate)&#93; met librement à disposition des orthophotos de tout le pays. Les détails techniques sont les suivants :
 
 - Systèmes de coordonnées : CH1903+/MN95 (EPSG:2056)
@@ -861,7 +863,7 @@ Swisstopo va continuer à mettre à jour ses données dans les années suivantes
 En ce qui concerne le canton de Genève, les dernières données <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">LiDAR</span></a> &#91;[109](../bibliography.md#ref-sitg_nuages_2021)&#93; &#91;[110](../bibliography.md#ref-sitg_nuages_2023)&#93; disponibles sont:
 
 <table id="tab:lidar_geneve_compact">
-<caption>Données <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">LiDAR</span></a> disponibles dans le canton de Genève</caption>
+<caption>Tableau 6.8 — Données <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">LiDAR</span></a> disponibles dans le canton de Genève</caption>
 <thead>
 <tr>
 <th style="text-align: left;"></th>
@@ -1039,8 +1041,8 @@ Il y a principalement 3 types de segmentation d’image qui sont couramment util
 
 <figure id="fig:types_segmentation" data-latex-placement="H">
 <figure id="fig:A1_26_segmentation_image_exemple">
-<img src="../assets/figures/A1/A1_26_segmentation_image_exemple.webp"  alt="Image d’exemple" />
-<figcaption>Image d’exemple</figcaption>
+<img src="../assets/figures/A1/A1_26_segmentation_image_exemple.webp"  alt="Figure 6.26 — Image d’exemple" />
+<figcaption>Figure 6.26 — Image d’exemple</figcaption>
 </figure>
 <figure id="fig:A1_27_segmentation_semantique">
 <img src="../assets/figures/A1/A1_27_segmentation_semantique.webp"  alt="Figure 6.27 — Segmentation sémantique" />
@@ -1054,7 +1056,7 @@ Il y a principalement 3 types de segmentation d’image qui sont couramment util
 <img src="../assets/figures/A1/A1_29_segmentation_panoptique.webp"  alt="Figure 6.29 — Segmentation panoptique" />
 <figcaption>Figure 6.29 — Segmentation panoptique</figcaption>
 </figure>
-<figcaption>Comparaison des différents types de segmentation d’image <span class="citation" data-cites="jung_benchmarking_2022">[<a href="../bibliography.html#ref-jung_benchmarking_2022" role="doc-biblioref">112</a>]</span></figcaption>
+<figcaption>Figure 6.30 — Comparaison des différents types de segmentation d’image <span class="citation" data-cites="jung_benchmarking_2022">[<a href="../bibliography.html#ref-jung_benchmarking_2022" role="doc-biblioref">112</a>]</span></figcaption>
 </figure>
 
 La segmentation sémantique (Figure [6.27](#fig:A1_27_segmentation_semantique){reference-type="ref" reference="fig:A1_27_segmentation_semantique"}) va assigner une classe à chaque pixel de l’image. Ce genre de segmentation est utile pour distinguer par exemple les routes des immeubles, mais ce n’est pas assez sophistiqué pour distinguer les routes entre elles.
@@ -1073,7 +1075,7 @@ Le Tableau [6.9](#tab:comparatif_segmentation){reference-type="ref" reference="
 
 <span id="tab:comparatif_segmentation"></span>
 
-<p class="thesis-caption"><em>Tableau 6.9 — Comparatif des différents types de segmentation d’image</em></p>
+<p class="thesis-caption" markdown="1"><em>Tableau 6.9 — Comparatif des différents types de segmentation d’image</em></p>
 <figure id="fig:A1_30_segmentation_semantique_hepia" data-latex-placement="H">
 <img src="../assets/figures/A1/A1_30_segmentation_semantique_hepia.webp" style="width:100.0%"  alt="Figure 6.31 — Orthophoto d’exemple de segmentation" />
 <figcaption>Figure 6.31 — Orthophoto d’exemple de segmentation</figcaption>
@@ -1180,7 +1182,7 @@ SQ = \frac{\sum_{(p,g) \in TP} IoU(p,g)}{|TP|}
 \label{eq:segmentation_quality}
 \end{equation}$$
 
-<p class="thesis-caption"><em>(8)</em></p>
+<p class="thesis-caption" markdown="1"><em>(8)</em></p>
 
 La recognition quality (RQ) &#91;[115](../bibliography.md#ref-kirillov_panoptic_2019)&#93; évalue l’accuracy des classes attribuées aux régions segmentées par un modèle de segmentation panoptique (Équation [(9)](#eq:recognition_quality){reference-type="ref" reference="eq:recognition_quality"}). Elle est basée sur le score F1, qui est une moyenne harmonique de la precision et du recall.
 
@@ -1191,7 +1193,7 @@ RQ = \frac{|TP|}{|TP| + \frac{1}{2}|FP| + \frac{1}{2}|FN|}
 \label{eq:recognition_quality}
 \end{equation}$$
 
-<p class="thesis-caption"><em>(9)</em></p>
+<p class="thesis-caption" markdown="1"><em>(9)</em></p>
 
 Finalement, la panoptic quality (PQ) &#91;[115](../bibliography.md#ref-kirillov_panoptic_2019)&#93; (Équation [(10)](#eq:panoptic_quality){reference-type="ref" reference="eq:panoptic_quality"}) est la multiplication de SQ (Équation [(8)](#eq:segmentation_quality){reference-type="ref" reference="eq:segmentation_quality"}) et RQ (Équation [(9)](#eq:recognition_quality){reference-type="ref" reference="eq:recognition_quality"})
 
@@ -1202,7 +1204,7 @@ PQ = SQ \cdot RQ = \frac{\sum_{(p,g) \in TP} IoU(p,g)}{|TP|} \cdot \frac{|TP|}{|
 \label{eq:panoptic_quality}
 \end{equation}$$
 
-<p class="thesis-caption"><em>(10)</em></p>
+<p class="thesis-caption" markdown="1"><em>(10)</em></p>
 
 #### Métriques par application {#métriques-par-application}
 
