@@ -3,7 +3,11 @@
 {% block extrahead %}
   {% set og_title = config.site_name if (page and page.is_homepage) else (page.title if page and page.title else config.site_name) %}
   {% set og_description = (page.meta.description if page and page.meta and page.meta.description else config.site_description) %}
-  {% set og_image = config.site_url ~ "img/social-card.png" %}
+  {# Filename carries a version suffix (not a query string) because LinkedIn's
+     image cache keys on the URL but ignores query parameters for cache-busting
+     — bumping this is the only reliable way to force it to refetch after the
+     image changes. #}
+  {% set og_image = config.site_url ~ "img/social-card-v2.png" %}
   {% set og_url = config.site_url ~ (page.url if page else "") %}
 
   <meta property="og:type" content="website">
