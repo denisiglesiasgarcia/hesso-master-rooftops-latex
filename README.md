@@ -770,6 +770,7 @@ The thesis is also published as a browsable website (MkDocs Material), generated
 - [uv](https://docs.astral.sh/uv/) (Python package/venv manager)
 - [pandoc](https://pandoc.org/installing.html) (LaTeX → Markdown conversion + bibliography processing)
 - [cwebp](https://developers.google.com/speed/webp/download) (image conversion to WebP) — on macOS: `brew install webp`
+- [rsvg-convert](https://wiki.gnome.org/Projects/LibRsvg) (only needed to regenerate `docs/img/*.png` from their `.svg` source — favicon and the social-preview card) — on macOS: `brew install librsvg`
 
 Install the Python dependencies (MkDocs Material) once with:
 
