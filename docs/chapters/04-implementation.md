@@ -1,3 +1,7 @@
+---
+description: "Ce chapitre présente l’évaluation des modèles de segmentation développés pour identifier les espaces libres sur les toitures du canton de Genève.…"
+---
+
 # Évaluation, validation et analyse {#chap:eval_valid_modele}
 
 Ce chapitre présente l’évaluation des modèles de segmentation développés pour identifier les espaces libres sur les toitures du canton de Genève. L’objectif est d’analyser les performances de 93 configurations sur un dataset de test indépendant pour déterminer les architectures les plus adaptées à un déploiement opérationnel.
@@ -56,7 +60,7 @@ Le Tableau [4.1](#tab:vue_ensemble_metrique_moyennes){reference-type="ref" refer
 La Figure [4.1](#fig:heatmap_iou){reference-type="ref" reference="fig:heatmap_iou"} présente une vue synthétique des performances pour chaque combinaison encodeur-décodeur.
 
 <figure id="fig:heatmap_iou" data-latex-placement="H">
-<img src="../assets/figures/ch4/ch4_01_architecture_backbone_heatmap_01_eval_test_iou_mean.webp" style="width:145.0%" />
+<img src="../assets/figures/ch4/ch4_01_architecture_backbone_heatmap_01_eval_test_iou_mean.webp" style="width:145.0%"  alt="Heatmap IoU par combinaison encodeur-décodeur" />
 <figcaption>Heatmap IoU par combinaison encodeur-décodeur</figcaption>
 </figure>
 
@@ -67,7 +71,7 @@ Par exemple, YOLOv12m obtient un IoU de 0,11, ce qui est relativement surprenant
 Ces modèles semblent tous présenter des résultats exceptionnels à première vue, mais il est important de visualiser le F1-score (Figure [4.2](#fig:ch4_01_architecture_backbone_heatmap_08_eval_test_f1_score_mean){reference-type="ref" reference="fig:ch4_01_architecture_backbone_heatmap_08_eval_test_f1_score_mean"}) pour mieux comprendre la qualité des prédictions. Le F1-score constitue une métrique plus robuste car elle prend en compte à la fois la precision et le rappel, ce qui s’avère crucial pour les tâches de segmentation où les faux positifs et les faux négatifs peuvent avoir un impact significatif.
 
 <figure id="fig:ch4_01_architecture_backbone_heatmap_08_eval_test_f1_score_mean" data-latex-placement="H">
-<img src="../assets/figures/ch4/ch4_01_architecture_backbone_heatmap_08_eval_test_f1_score_mean.webp" style="width:145.0%" />
+<img src="../assets/figures/ch4/ch4_01_architecture_backbone_heatmap_08_eval_test_f1_score_mean.webp" style="width:145.0%"  alt="Heatmap F1-score par combinaison encodeur-décodeur" />
 <figcaption>Heatmap F1-score par combinaison encodeur-décodeur</figcaption>
 </figure>
 
@@ -78,29 +82,29 @@ Les modèles YOLOv12 présentent des F1-scores significativement plus faibles qu
 La Figure [4.3](#fig:ch4_02_top_models_performance_01_eval_test_iou_mean){reference-type="ref" reference="fig:ch4_02_top_models_performance_01_eval_test_iou_mean"} illustre les 10 meilleurs modèles selon leur IoU.
 
 <figure id="fig:ch4_02_top_models_performance_01_eval_test_iou_mean" data-latex-placement="H">
-<img src="../assets/figures/ch4/ch4_02_top_models_performance_01_eval_test_iou_mean.webp" style="width:110.0%" />
+<img src="../assets/figures/ch4/ch4_02_top_models_performance_01_eval_test_iou_mean.webp" style="width:110.0%"  alt="Top 10 des modèles par IoU moyen sur dataset de test" />
 <figcaption>Top 10 des modèles par IoU moyen sur dataset de test</figcaption>
 </figure>
 
 Les Figures [4.4](#fig:ch4_02_top_models_performance_02_eval_test_map_50_mean){reference-type="ref" reference="fig:ch4_02_top_models_performance_02_eval_test_map_50_mean"}, [4.5](#fig:ch4_02_top_models_performance_03_eval_test_map_75_mean){reference-type="ref" reference="fig:ch4_02_top_models_performance_03_eval_test_map_75_mean"} et [4.6](#fig:ch4_02_top_models_performance_04_eval_test_map_95_mean){reference-type="ref" reference="fig:ch4_02_top_models_performance_04_eval_test_map_95_mean"} présentent les performances des modèles selon la métrique mAP à différents seuils d’IoU (0.5, 0.75 et 0.95). La Figure [4.7](#fig:ch4_02_top_models_performance_08_eval_test_f1_score_mean){reference-type="ref" reference="fig:ch4_02_top_models_performance_08_eval_test_f1_score_mean"} présente les performances des modèles selon le F1-score.
 
 <figure id="fig:ch4_02_top_models_performance_02_eval_test_map_50_mean" data-latex-placement="H">
-<img src="../assets/figures/ch4/ch4_02_top_models_performance_02_eval_test_map_50_mean.webp" style="width:105.0%" />
+<img src="../assets/figures/ch4/ch4_02_top_models_performance_02_eval_test_map_50_mean.webp" style="width:105.0%"  alt="Top 10 des modèles par mAP@0.5 moyen sur dataset de test" />
 <figcaption>Top 10 des modèles par mAP@0.5 moyen sur dataset de test</figcaption>
 </figure>
 
 <figure id="fig:ch4_02_top_models_performance_03_eval_test_map_75_mean" data-latex-placement="H">
-<img src="../assets/figures/ch4/ch4_02_top_models_performance_03_eval_test_map_75_mean.webp" style="width:105.0%" />
+<img src="../assets/figures/ch4/ch4_02_top_models_performance_03_eval_test_map_75_mean.webp" style="width:105.0%"  alt="Top 10 des modèles par mAP@0.75 moyen sur dataset de test" />
 <figcaption>Top 10 des modèles par mAP@0.75 moyen sur dataset de test</figcaption>
 </figure>
 
 <figure id="fig:ch4_02_top_models_performance_04_eval_test_map_95_mean" data-latex-placement="H">
-<img src="../assets/figures/ch4/ch4_02_top_models_performance_04_eval_test_map_95_mean.webp" style="width:105.0%" />
+<img src="../assets/figures/ch4/ch4_02_top_models_performance_04_eval_test_map_95_mean.webp" style="width:105.0%"  alt="Top 10 des modèles par mAP@0.95 moyen sur dataset de test" />
 <figcaption>Top 10 des modèles par mAP@0.95 moyen sur dataset de test</figcaption>
 </figure>
 
 <figure id="fig:ch4_02_top_models_performance_08_eval_test_f1_score_mean" data-latex-placement="H">
-<img src="../assets/figures/ch4/ch4_02_top_models_performance_08_eval_test_f1_score_mean.webp" style="width:105.0%" />
+<img src="../assets/figures/ch4/ch4_02_top_models_performance_08_eval_test_f1_score_mean.webp" style="width:105.0%"  alt="Top 10 des modèles par F1-score moyen sur dataset de test" />
 <figcaption>Top 10 des modèles par F1-score moyen sur dataset de test</figcaption>
 </figure>
 
@@ -169,7 +173,7 @@ Ces performances indiquent que ces modèles sont capables de segmenter précisé
 L’analyse des performances par décodeur selon les métriques IoU (Figure [4.8](#fig:ch4_06_architecture_boxplot_01_eval_test_iou_mean){reference-type="ref" reference="fig:ch4_06_architecture_boxplot_01_eval_test_iou_mean"} et Tableau [4.3](#tab:statistique_par_decodeur_iou){reference-type="ref" reference="tab:statistique_par_decodeur_iou"}) et mAP@0.95 (Figure [4.9](#fig:ch4_06_architecture_boxplot_04_eval_test_map_95_mean){reference-type="ref" reference="fig:ch4_06_architecture_boxplot_04_eval_test_map_95_mean"} et Tableau [4.4](#tab:statistique_par_decodeur_map95){reference-type="ref" reference="tab:statistique_par_decodeur_map95"}) révèle des tendances significatives.
 
 <figure id="fig:ch4_06_architecture_boxplot_01_eval_test_iou_mean" data-latex-placement="H">
-<img src="../assets/figures/ch4/ch4_06_architecture_boxplot_01_eval_test_iou_mean.webp" style="width:105.0%" />
+<img src="../assets/figures/ch4/ch4_06_architecture_boxplot_01_eval_test_iou_mean.webp" style="width:105.0%"  alt="Boîte à moustaches IoU par décodeur" />
 <figcaption>Boîte à moustaches IoU par décodeur</figcaption>
 </figure>
 
@@ -193,7 +197,7 @@ L’analyse des performances par décodeur selon les métriques IoU (Figure [4.8
 
 <p class="thesis-caption"><em>Statistiques IoU par décodeur</em></p>
 <figure id="fig:ch4_06_architecture_boxplot_04_eval_test_map_95_mean" data-latex-placement="H">
-<img src="../assets/figures/ch4/ch4_06_architecture_boxplot_04_eval_test_map_95_mean.webp" style="width:105.0%" />
+<img src="../assets/figures/ch4/ch4_06_architecture_boxplot_04_eval_test_map_95_mean.webp" style="width:105.0%"  alt="Boîte à moustaches mAP@95 par décodeur" />
 <figcaption>Boîte à moustaches mAP@95 par décodeur</figcaption>
 </figure>
 
@@ -223,7 +227,7 @@ Les décodeurs présentent des performances très variables selon les encodeurs 
 L’analyse des encodeurs avec les métriques IoU (Figure [4.10](#fig:ch4_07_backbone_boxplot_01_eval_test_iou_mean){reference-type="ref" reference="fig:ch4_07_backbone_boxplot_01_eval_test_iou_mean"} et Tableau [4.5](#tab:statistique_par_encodeur_iou){reference-type="ref" reference="tab:statistique_par_encodeur_iou"}) et mAP@0.95 (Figure [4.11](#fig:ch4_07_backbone_boxplot_04_eval_test_map_95_mean){reference-type="ref" reference="fig:ch4_07_backbone_boxplot_04_eval_test_map_95_mean"} et Tableau [4.6](#tab:statistique_par_encodeur_map95){reference-type="ref" reference="tab:statistique_par_encodeur_map95"}) révèle des différences notables.
 
 <figure id="fig:ch4_07_backbone_boxplot_01_eval_test_iou_mean" data-latex-placement="H">
-<img src="../assets/figures/ch4/ch4_07_backbone_boxplot_01_eval_test_iou_mean.webp" style="width:120.0%" />
+<img src="../assets/figures/ch4/ch4_07_backbone_boxplot_01_eval_test_iou_mean.webp" style="width:120.0%"  alt="Boîte à moustaches IoU par encodeur" />
 <figcaption>Boîte à moustaches IoU par encodeur</figcaption>
 </figure>
 
@@ -256,7 +260,7 @@ L’analyse des encodeurs avec les métriques IoU (Figure [4.10](#fig:ch4_07_bac
 
 <p class="thesis-caption"><em>Statistiques IoU par encodeur</em></p>
 <figure id="fig:ch4_07_backbone_boxplot_04_eval_test_map_95_mean" data-latex-placement="H">
-<img src="../assets/figures/ch4/ch4_07_backbone_boxplot_04_eval_test_map_95_mean.webp" style="width:120.0%" />
+<img src="../assets/figures/ch4/ch4_07_backbone_boxplot_04_eval_test_map_95_mean.webp" style="width:120.0%"  alt="Boîte à moustaches IoU par encodeur" />
 <figcaption>Boîte à moustaches IoU par encodeur</figcaption>
 </figure>
 
@@ -301,7 +305,7 @@ Les encodeurs mambaout\_base et mambaout\_small affichent également des perform
 L’analyse du front de Pareto (Figures  [4.12](#fig:ch4_09_performance_vs_parameters_pareto_01_eval_test_iou_mean){reference-type="ref" reference="fig:ch4_09_performance_vs_parameters_pareto_01_eval_test_iou_mean"} et [4.13](#fig:ch4_09_performance_vs_parameters_pareto_04_eval_test_map_95_mean){reference-type="ref" reference="fig:ch4_09_performance_vs_parameters_pareto_04_eval_test_map_95_mean"}) identifient les modèles offrant le meilleur compromis entre performance et complexité selon les métriques visées.
 
 <figure id="fig:ch4_09_performance_vs_parameters_pareto_01_eval_test_iou_mean" data-latex-placement="H">
-<img src="../assets/figures/ch4/ch4_09_performance_vs_parameters_pareto_01_eval_test_iou_mean.webp" style="width:105.0%" />
+<img src="../assets/figures/ch4/ch4_09_performance_vs_parameters_pareto_01_eval_test_iou_mean.webp" style="width:105.0%"  alt="IoU vs nombre de paramètres. Les modèles sur la ligne rouge représentent les solutions optimales." />
 <figcaption>IoU vs nombre de paramètres. Les modèles sur la ligne rouge représentent les solutions optimales.</figcaption>
 </figure>
 
@@ -316,7 +320,7 @@ Les modèles optimaux identifiés dans la Figure [4.12](#fig:ch4_09_performance_
 Au-delà de 25M paramètres, les gains en IoU deviennent marginaux (&lt;1% IoU), suggérant une saturation du bénéfice apporté par la complexité additionnelle.
 
 <figure id="fig:ch4_09_performance_vs_parameters_pareto_04_eval_test_map_95_mean" data-latex-placement="H">
-<img src="../assets/figures/ch4/ch4_09_performance_vs_parameters_pareto_04_eval_test_map_95_mean.webp" style="width:105.0%" />
+<img src="../assets/figures/ch4/ch4_09_performance_vs_parameters_pareto_04_eval_test_map_95_mean.webp" style="width:105.0%"  alt="mAP@0.95 vs nombre de paramètres. Les modèles sur la ligne rouge représentent les solutions optimales." />
 <figcaption>mAP@0.95 vs nombre de paramètres. Les modèles sur la ligne rouge représentent les solutions optimales.</figcaption>
 </figure>
 
@@ -327,7 +331,7 @@ Les encodeurs (Figure [4.13](#fig:ch4_09_performance_vs_parameters_pareto_04_eva
 La distribution des temps d’entraînement (Figure [4.14](#fig:ch4_11_training_time_dist_09){reference-type="ref" reference="fig:ch4_11_training_time_dist_09"}) nécessaires révèlent des écarts significatifs entre les modèles, allant de 1,8 à 48,3 heures pour les configurations les plus complexes. Il n’y a pas de corrélation évidente entre le nombre de paramètres et le temps d’entraînement, ce qui suggère que la complexité des architectures joue un rôle plus important que la taille brute du modèle.
 
 <figure id="fig:ch4_11_training_time_dist_09" data-latex-placement="H">
-<img src="../assets/figures/ch4/ch4_11_training_time_dist_09.webp" style="width:100.0%" />
+<img src="../assets/figures/ch4/ch4_11_training_time_dist_09.webp" style="width:100.0%"  alt="Distribution du temps d’entraînement total (5 fold)" />
 <figcaption>Distribution du temps d’entraînement total (5 fold)</figcaption>
 </figure>
 
@@ -365,7 +369,7 @@ L’analyse des performances selon la taille des modèles (Figures  [4.15](#fig
 Les deux métriques utilisées montrent des résultats assez différents. Pour l’IoU (Figure [4.15](#fig:ch4_05_models_by_size_category_01_eval_test_iou_mean){reference-type="ref" reference="fig:ch4_05_models_by_size_category_01_eval_test_iou_mean"}), les performances restent relativement stables peu importe la taille du modèle, avec des valeurs comprises entre 0,689 et 0,741. Cette constance indique que le nombre de paramètres n’influence pas directement la qualité de segmentation.
 
 <figure id="fig:ch4_05_models_by_size_category_01_eval_test_iou_mean" data-latex-placement="H">
-<img src="../assets/figures/ch4/ch4_05_models_by_size_category_01_eval_test_iou_mean.webp" style="width:105.0%" />
+<img src="../assets/figures/ch4/ch4_05_models_by_size_category_01_eval_test_iou_mean.webp" style="width:105.0%"  alt="Top 3 modèles par IoU par taille (paramètres)" />
 <figcaption>Top 3 modèles par IoU par taille (paramètres)</figcaption>
 </figure>
 
@@ -374,7 +378,7 @@ Des modèles légers comme RepViT avec seulement 7M de paramètres obtiennent de
 La métrique mAP@0.95 (Figure [4.16](#fig:ch4_05_models_by_size_category_04_eval_test_map_95_mean){reference-type="ref" reference="fig:ch4_05_models_by_size_category_04_eval_test_map_95_mean"}) raconte une histoire différente. Cette métrique, qui mesure la précision avec un seuil IoU strict de 0.95, donne des résultats plus variés allant de 0,083 à 0,191. Les écarts sont donc beaucoup plus marqués entre les différentes architectures.
 
 <figure id="fig:ch4_05_models_by_size_category_04_eval_test_map_95_mean" data-latex-placement="H">
-<img src="../assets/figures/ch4/ch4_05_models_by_size_category_04_eval_test_map_95_mean.webp" style="width:105.0%" />
+<img src="../assets/figures/ch4/ch4_05_models_by_size_category_04_eval_test_map_95_mean.webp" style="width:105.0%"  alt="Top 3 modèles par mAP@0.95 par taille (paramètres)" />
 <figcaption>Top 3 modèles par mAP@0.95 par taille (paramètres)</figcaption>
 </figure>
 
@@ -484,51 +488,51 @@ La Figure [4.18](#fig:unet_mambaoutsmall_worst_cases){reference-type="ref" refer
 
 <figure id="fig:unet_mambaoutsmall_best_cases" data-latex-placement="H">
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/unet_tu-mambaout_small/best_cases/best_5_iou0.998_24991116_tile_5_3_322356_original.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/unet_tu-mambaout_small/best_cases/best_5_iou0.998_24991116_tile_5_3_322356_original.webp"  alt="Top1 - Original" />
 <figcaption>Top1 - Original</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/unet_tu-mambaout_small/best_cases/best_5_iou0.998_24991116_tile_5_3_322356_overlay_gt.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/unet_tu-mambaout_small/best_cases/best_5_iou0.998_24991116_tile_5_3_322356_overlay_gt.webp"  alt="Vérité terrain" />
 <figcaption>Vérité terrain</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/unet_tu-mambaout_small/best_cases/best_5_iou0.998_24991116_tile_5_3_322356_overlay_pred.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/unet_tu-mambaout_small/best_cases/best_5_iou0.998_24991116_tile_5_3_322356_overlay_pred.webp"  alt="Prédiction - IoU = 0.998" />
 <figcaption>Prédiction - IoU = 0.998</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/unet_tu-mambaout_small/best_cases/best_4_iou0.991_24961121_tile_15_10_cc6553_original.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/unet_tu-mambaout_small/best_cases/best_4_iou0.991_24961121_tile_15_10_cc6553_original.webp"  alt="Top2 - Original" />
 <figcaption>Top2 - Original</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/unet_tu-mambaout_small/best_cases/best_4_iou0.991_24961121_tile_15_10_cc6553_overlay_gt.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/unet_tu-mambaout_small/best_cases/best_4_iou0.991_24961121_tile_15_10_cc6553_overlay_gt.webp"  alt="Vérité terrain" />
 <figcaption>Vérité terrain</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/unet_tu-mambaout_small/best_cases/best_4_iou0.991_24961121_tile_15_10_cc6553_overlay_pred.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/unet_tu-mambaout_small/best_cases/best_4_iou0.991_24961121_tile_15_10_cc6553_overlay_pred.webp"  alt="Prédiction - IoU = 0.991" />
 <figcaption>Prédiction - IoU = 0.991</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/unet_tu-mambaout_small/best_cases/best_3_iou0.988_24931117_tile_18_5_f475a0_original.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/unet_tu-mambaout_small/best_cases/best_3_iou0.988_24931117_tile_18_5_f475a0_original.webp"  alt="Top3 - Original" />
 <figcaption>Top3 - Original</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/unet_tu-mambaout_small/best_cases/best_3_iou0.988_24931117_tile_18_5_f475a0_overlay_gt.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/unet_tu-mambaout_small/best_cases/best_3_iou0.988_24931117_tile_18_5_f475a0_overlay_gt.webp"  alt="Vérité terrain" />
 <figcaption>Vérité terrain</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/unet_tu-mambaout_small/best_cases/best_3_iou0.988_24931117_tile_18_5_f475a0_overlay_pred.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/unet_tu-mambaout_small/best_cases/best_3_iou0.988_24931117_tile_18_5_f475a0_overlay_pred.webp"  alt="Prédiction - IoU = 0.988" />
 <figcaption>Prédiction - IoU = 0.988</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/unet_tu-mambaout_small/best_cases/best_2_iou0.984_24931113_tile_13_18_a66e08_original.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/unet_tu-mambaout_small/best_cases/best_2_iou0.984_24931113_tile_13_18_a66e08_original.webp"  alt="Top4 - Original" />
 <figcaption>Top4 - Original</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/unet_tu-mambaout_small/best_cases/best_2_iou0.984_24931113_tile_13_18_a66e08_overlay_gt.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/unet_tu-mambaout_small/best_cases/best_2_iou0.984_24931113_tile_13_18_a66e08_overlay_gt.webp"  alt="Vérité terrain" />
 <figcaption>Vérité terrain</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/unet_tu-mambaout_small/best_cases/best_2_iou0.984_24931113_tile_13_18_a66e08_overlay_pred.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/unet_tu-mambaout_small/best_cases/best_2_iou0.984_24931113_tile_13_18_a66e08_overlay_pred.webp"  alt="Prédiction - IoU = 0.984" />
 <figcaption>Prédiction - IoU = 0.984</figcaption>
 </figure>
 <figcaption>Meilleurs IoU pour Unet avec mambaout_small backbone sur le dataset de test</figcaption>
@@ -536,51 +540,51 @@ La Figure [4.18](#fig:unet_mambaoutsmall_worst_cases){reference-type="ref" refer
 
 <figure id="fig:unet_mambaoutsmall_worst_cases" data-latex-placement="H">
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/unet_tu-mambaout_small/worst_cases/worst_5_iou0.000_25001117_tile_3_9_5ba8f7_original.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/unet_tu-mambaout_small/worst_cases/worst_5_iou0.000_25001117_tile_3_9_5ba8f7_original.webp"  alt="Top1 - Original" />
 <figcaption>Top1 - Original</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/unet_tu-mambaout_small/worst_cases/worst_5_iou0.000_25001117_tile_3_9_5ba8f7_overlay_gt.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/unet_tu-mambaout_small/worst_cases/worst_5_iou0.000_25001117_tile_3_9_5ba8f7_overlay_gt.webp"  alt="Vérité terrain" />
 <figcaption>Vérité terrain</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/unet_tu-mambaout_small/worst_cases/worst_5_iou0.000_25001117_tile_3_9_5ba8f7_overlay_pred.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/unet_tu-mambaout_small/worst_cases/worst_5_iou0.000_25001117_tile_3_9_5ba8f7_overlay_pred.webp"  alt="Prédiction - IoU = 0.000" />
 <figcaption>Prédiction - IoU = 0.000</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/unet_tu-mambaout_small/worst_cases/worst_4_iou0.000_25001112_tile_9_1_991a94_original.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/unet_tu-mambaout_small/worst_cases/worst_4_iou0.000_25001112_tile_9_1_991a94_original.webp"  alt="Top2 - Original" />
 <figcaption>Top2 - Original</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/unet_tu-mambaout_small/worst_cases/worst_4_iou0.000_25001112_tile_9_1_991a94_overlay_gt.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/unet_tu-mambaout_small/worst_cases/worst_4_iou0.000_25001112_tile_9_1_991a94_overlay_gt.webp"  alt="Vérité terrain" />
 <figcaption>Vérité terrain</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/unet_tu-mambaout_small/worst_cases/worst_4_iou0.000_25001112_tile_9_1_991a94_overlay_pred.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/unet_tu-mambaout_small/worst_cases/worst_4_iou0.000_25001112_tile_9_1_991a94_overlay_pred.webp"  alt="Prédiction - IoU = 0.000" />
 <figcaption>Prédiction - IoU = 0.000</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/unet_tu-mambaout_small/worst_cases/worst_3_iou0.000_24991122_tile_9_19_7ebcec_original.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/unet_tu-mambaout_small/worst_cases/worst_3_iou0.000_24991122_tile_9_19_7ebcec_original.webp"  alt="Top3 - Original" />
 <figcaption>Top3 - Original</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/unet_tu-mambaout_small/worst_cases/worst_3_iou0.000_24991122_tile_9_19_7ebcec_overlay_gt.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/unet_tu-mambaout_small/worst_cases/worst_3_iou0.000_24991122_tile_9_19_7ebcec_overlay_gt.webp"  alt="Vérité terrain" />
 <figcaption>Vérité terrain</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/unet_tu-mambaout_small/worst_cases/worst_3_iou0.000_24991122_tile_9_19_7ebcec_overlay_pred.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/unet_tu-mambaout_small/worst_cases/worst_3_iou0.000_24991122_tile_9_19_7ebcec_overlay_pred.webp"  alt="Prédiction - IoU = 0.000" />
 <figcaption>Prédiction - IoU = 0.000</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/unet_tu-mambaout_small/worst_cases/worst_2_iou0.000_24951112_tile_4_13_2bd653_original.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/unet_tu-mambaout_small/worst_cases/worst_2_iou0.000_24951112_tile_4_13_2bd653_original.webp"  alt="Top4 - Original" />
 <figcaption>Top4 - Original</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/unet_tu-mambaout_small/worst_cases/worst_2_iou0.000_24951112_tile_4_13_2bd653_overlay_gt.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/unet_tu-mambaout_small/worst_cases/worst_2_iou0.000_24951112_tile_4_13_2bd653_overlay_gt.webp"  alt="Vérité terrain" />
 <figcaption>Vérité terrain</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/unet_tu-mambaout_small/worst_cases/worst_2_iou0.000_24951112_tile_4_13_2bd653_overlay_pred.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/unet_tu-mambaout_small/worst_cases/worst_2_iou0.000_24951112_tile_4_13_2bd653_overlay_pred.webp"  alt="Prédiction - IoU = 0.000" />
 <figcaption>Prédiction - IoU = 0.000</figcaption>
 </figure>
 <figcaption>Pires IoU pour Unet avec mambaout_small sur le dataset de test</figcaption>
@@ -594,51 +598,51 @@ La Figure [4.19](#fig:upernet_efficientnetv2_s_best_cases){reference-type="ref" 
 
 <figure id="fig:upernet_efficientnetv2_s_best_cases" data-latex-placement="H">
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_5_iou0.999_24991116_tile_5_3_322356_original.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_5_iou0.999_24991116_tile_5_3_322356_original.webp"  alt="Top1 - Original" />
 <figcaption>Top1 - Original</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_5_iou0.999_24991116_tile_5_3_322356_overlay_gt.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_5_iou0.999_24991116_tile_5_3_322356_overlay_gt.webp"  alt="Vérité terrain" />
 <figcaption>Vérité terrain</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_5_iou0.999_24991116_tile_5_3_322356_overlay_pred.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_5_iou0.999_24991116_tile_5_3_322356_overlay_pred.webp"  alt="Prédiction - IoU = 0.999" />
 <figcaption>Prédiction - IoU = 0.999</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_4_iou0.987_24961121_tile_15_10_cc6553_original.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_4_iou0.987_24961121_tile_15_10_cc6553_original.webp"  alt="Top2 - Original" />
 <figcaption>Top2 - Original</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_4_iou0.987_24961121_tile_15_10_cc6553_overlay_gt.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_4_iou0.987_24961121_tile_15_10_cc6553_overlay_gt.webp"  alt="Vérité terrain" />
 <figcaption>Vérité terrain</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_4_iou0.987_24961121_tile_15_10_cc6553_overlay_pred.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_4_iou0.987_24961121_tile_15_10_cc6553_overlay_pred.webp"  alt="Prédiction - IoU = 0.987" />
 <figcaption>Prédiction - IoU = 0.987</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_3_iou0.987_24941121_tile_16_8_fd3555_original.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_3_iou0.987_24941121_tile_16_8_fd3555_original.webp"  alt="Top3 - Original" />
 <figcaption>Top3 - Original</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_3_iou0.987_24941121_tile_16_8_fd3555_overlay_gt.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_3_iou0.987_24941121_tile_16_8_fd3555_overlay_gt.webp"  alt="Vérité terrain" />
 <figcaption>Vérité terrain</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_3_iou0.987_24941121_tile_16_8_fd3555_overlay_pred.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_3_iou0.987_24941121_tile_16_8_fd3555_overlay_pred.webp"  alt="Prédiction - IoU = 0.987" />
 <figcaption>Prédiction - IoU = 0.987</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_2_iou0.984_24931113_tile_13_18_a66e08_original.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_2_iou0.984_24931113_tile_13_18_a66e08_original.webp"  alt="Top4 - Original" />
 <figcaption>Top4 - Original</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_2_iou0.984_24931113_tile_13_18_a66e08_overlay_gt.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_2_iou0.984_24931113_tile_13_18_a66e08_overlay_gt.webp"  alt="Vérité terrain" />
 <figcaption>Vérité terrain</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_2_iou0.984_24931113_tile_13_18_a66e08_overlay_pred.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_2_iou0.984_24931113_tile_13_18_a66e08_overlay_pred.webp"  alt="Prédiction - IoU = 0.984" />
 <figcaption>Prédiction - IoU = 0.984</figcaption>
 </figure>
 <figcaption>Meilleurs IoU pour UPerNet avec EfficientNetV2-S sur le dataset de test</figcaption>
@@ -646,51 +650,51 @@ La Figure [4.19](#fig:upernet_efficientnetv2_s_best_cases){reference-type="ref" 
 
 <figure id="fig:upernet_efficientnetv2_s_worst_cases" data-latex-placement="H">
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_5_iou0.000_25001117_tile_3_9_5ba8f7_original.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_5_iou0.000_25001117_tile_3_9_5ba8f7_original.webp"  alt="Top1 - Original" />
 <figcaption>Top1 - Original</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_5_iou0.000_25001117_tile_3_9_5ba8f7_overlay_gt.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_5_iou0.000_25001117_tile_3_9_5ba8f7_overlay_gt.webp"  alt="Vérité terrain" />
 <figcaption>Vérité terrain</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_5_iou0.000_25001117_tile_3_9_5ba8f7_overlay_pred.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_5_iou0.000_25001117_tile_3_9_5ba8f7_overlay_pred.webp"  alt="Prédiction - IoU = 0.000" />
 <figcaption>Prédiction - IoU = 0.000</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_4_iou0.000_25001112_tile_9_1_991a94_original.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_4_iou0.000_25001112_tile_9_1_991a94_original.webp"  alt="Top2 - Original" />
 <figcaption>Top2 - Original</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_4_iou0.000_25001112_tile_9_1_991a94_overlay_gt.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_4_iou0.000_25001112_tile_9_1_991a94_overlay_gt.webp"  alt="Vérité terrain" />
 <figcaption>Vérité terrain</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_4_iou0.000_25001112_tile_9_1_991a94_overlay_pred.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_4_iou0.000_25001112_tile_9_1_991a94_overlay_pred.webp"  alt="Prédiction - IoU = 0.000" />
 <figcaption>Prédiction - IoU = 0.000</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_3_iou0.000_24991122_tile_9_19_7ebcec_original.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_3_iou0.000_24991122_tile_9_19_7ebcec_original.webp"  alt="Top3 - Original" />
 <figcaption>Top3 - Original</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_3_iou0.000_24991122_tile_9_19_7ebcec_overlay_gt.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_3_iou0.000_24991122_tile_9_19_7ebcec_overlay_gt.webp"  alt="Vérité terrain" />
 <figcaption>Vérité terrain</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_3_iou0.000_24991122_tile_9_19_7ebcec_overlay_pred.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_3_iou0.000_24991122_tile_9_19_7ebcec_overlay_pred.webp"  alt="Prédiction - IoU = 0.000" />
 <figcaption>Prédiction - IoU = 0.000</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_1_iou0.000_24931113_tile_19_19_52ccbb_original.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_1_iou0.000_24931113_tile_19_19_52ccbb_original.webp"  alt="Top4 - Original" />
 <figcaption>Top4 - Original</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_1_iou0.000_24931113_tile_19_19_52ccbb_overlay_gt.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_1_iou0.000_24931113_tile_19_19_52ccbb_overlay_gt.webp"  alt="Vérité terrain" />
 <figcaption>Vérité terrain</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_1_iou0.000_24931113_tile_19_19_52ccbb_overlay_pred.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_1_iou0.000_24931113_tile_19_19_52ccbb_overlay_pred.webp"  alt="Prédiction - IoU = 0.000" />
 <figcaption>Prédiction - IoU = 0.000</figcaption>
 </figure>
 <figcaption>Pires IoU pour UPerNet avec EfficientNetV2-S sur le dataset de test</figcaption>
@@ -704,51 +708,51 @@ La Figure [4.22](#fig:segformer_mambaoutbase_worst_cases){reference-type="ref" r
 
 <figure id="fig:segformer_mambaoutbase_best_cases" data-latex-placement="H">
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/best_cases/best_5_iou0.997_24991116_tile_5_3_322356_original.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/best_cases/best_5_iou0.997_24991116_tile_5_3_322356_original.webp"  alt="Top1 - Original" />
 <figcaption>Top1 - Original</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/best_cases/best_5_iou0.997_24991116_tile_5_3_322356_overlay_gt.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/best_cases/best_5_iou0.997_24991116_tile_5_3_322356_overlay_gt.webp"  alt="Vérité terrain" />
 <figcaption>Vérité terrain</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/best_cases/best_5_iou0.997_24991116_tile_5_3_322356_overlay_pred.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/best_cases/best_5_iou0.997_24991116_tile_5_3_322356_overlay_pred.webp"  alt="Prédiction - IoU = 0.997" />
 <figcaption>Prédiction - IoU = 0.997</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/best_cases/best_4_iou0.984_24931117_tile_18_5_f475a0_original.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/best_cases/best_4_iou0.984_24931117_tile_18_5_f475a0_original.webp"  alt="Top2 - Original" />
 <figcaption>Top2 - Original</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/best_cases/best_4_iou0.984_24931117_tile_18_5_f475a0_overlay_gt.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/best_cases/best_4_iou0.984_24931117_tile_18_5_f475a0_overlay_gt.webp"  alt="Vérité terrain" />
 <figcaption>Vérité terrain</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/best_cases/best_4_iou0.984_24931117_tile_18_5_f475a0_overlay_pred.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/best_cases/best_4_iou0.984_24931117_tile_18_5_f475a0_overlay_pred.webp"  alt="Prédiction - IoU = 0.984" />
 <figcaption>Prédiction - IoU = 0.984</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/best_cases/best_3_iou0.984_24931113_tile_13_18_a66e08_original.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/best_cases/best_3_iou0.984_24931113_tile_13_18_a66e08_original.webp"  alt="Top3 - Original" />
 <figcaption>Top3 - Original</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/best_cases/best_3_iou0.984_24931113_tile_13_18_a66e08_overlay_gt.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/best_cases/best_3_iou0.984_24931113_tile_13_18_a66e08_overlay_gt.webp"  alt="Vérité terrain" />
 <figcaption>Vérité terrain</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/best_cases/best_3_iou0.984_24931113_tile_13_18_a66e08_overlay_pred.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/best_cases/best_3_iou0.984_24931113_tile_13_18_a66e08_overlay_pred.webp"  alt="Prédiction - IoU = 0.984" />
 <figcaption>Prédiction - IoU = 0.984</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/best_cases/best_2_iou0.983_24961121_tile_15_10_cc6553_original.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/best_cases/best_2_iou0.983_24961121_tile_15_10_cc6553_original.webp"  alt="Top4 - Original" />
 <figcaption>Top4 - Original</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/best_cases/best_2_iou0.983_24961121_tile_15_10_cc6553_overlay_gt.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/best_cases/best_2_iou0.983_24961121_tile_15_10_cc6553_overlay_gt.webp"  alt="Vérité terrain" />
 <figcaption>Vérité terrain</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/best_cases/best_2_iou0.983_24961121_tile_15_10_cc6553_overlay_pred.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/best_cases/best_2_iou0.983_24961121_tile_15_10_cc6553_overlay_pred.webp"  alt="Prédiction - IoU = 0.983" />
 <figcaption>Prédiction - IoU = 0.983</figcaption>
 </figure>
 <figcaption>Meilleurs IoU pour SegFormer avec mambaout_base sur le dataset de test</figcaption>
@@ -756,51 +760,51 @@ La Figure [4.22](#fig:segformer_mambaoutbase_worst_cases){reference-type="ref" r
 
 <figure id="fig:segformer_mambaoutbase_worst_cases" data-latex-placement="H">
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/worst_cases/worst_5_iou0.000_25001117_tile_3_9_5ba8f7_original.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/worst_cases/worst_5_iou0.000_25001117_tile_3_9_5ba8f7_original.webp"  alt="Top1 - Original" />
 <figcaption>Top1 - Original</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/worst_cases/worst_5_iou0.000_25001117_tile_3_9_5ba8f7_overlay_gt.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/worst_cases/worst_5_iou0.000_25001117_tile_3_9_5ba8f7_overlay_gt.webp"  alt="Vérité terrain" />
 <figcaption>Vérité terrain</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/worst_cases/worst_5_iou0.000_25001117_tile_3_9_5ba8f7_overlay_pred.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/worst_cases/worst_5_iou0.000_25001117_tile_3_9_5ba8f7_overlay_pred.webp"  alt="Prédiction - IoU = 0.000" />
 <figcaption>Prédiction - IoU = 0.000</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/worst_cases/worst_4_iou0.000_25001112_tile_9_1_991a94_original.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/worst_cases/worst_4_iou0.000_25001112_tile_9_1_991a94_original.webp"  alt="Top2 - Original" />
 <figcaption>Top2 - Original</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/worst_cases/worst_4_iou0.000_25001112_tile_9_1_991a94_overlay_gt.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/worst_cases/worst_4_iou0.000_25001112_tile_9_1_991a94_overlay_gt.webp"  alt="Vérité terrain" />
 <figcaption>Vérité terrain</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/worst_cases/worst_4_iou0.000_25001112_tile_9_1_991a94_overlay_pred.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/worst_cases/worst_4_iou0.000_25001112_tile_9_1_991a94_overlay_pred.webp"  alt="Prédiction - IoU = 0.000" />
 <figcaption>Prédiction - IoU = 0.000</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/worst_cases/worst_3_iou0.000_24991122_tile_9_19_7ebcec_original.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/worst_cases/worst_3_iou0.000_24991122_tile_9_19_7ebcec_original.webp"  alt="Top3 - Original" />
 <figcaption>Top3 - Original</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/worst_cases/worst_3_iou0.000_24991122_tile_9_19_7ebcec_overlay_gt.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/worst_cases/worst_3_iou0.000_24991122_tile_9_19_7ebcec_overlay_gt.webp"  alt="Vérité terrain" />
 <figcaption>Vérité terrain</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/worst_cases/worst_3_iou0.000_24991122_tile_9_19_7ebcec_overlay_pred.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/worst_cases/worst_3_iou0.000_24991122_tile_9_19_7ebcec_overlay_pred.webp"  alt="Prédiction - IoU = 0.000" />
 <figcaption>Prédiction - IoU = 0.000</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/worst_cases/worst_1_iou0.000_24931113_tile_19_19_52ccbb_original.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/worst_cases/worst_1_iou0.000_24931113_tile_19_19_52ccbb_original.webp"  alt="Top4 - Original" />
 <figcaption>Top4 - Original</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/worst_cases/worst_1_iou0.000_24931113_tile_19_19_52ccbb_overlay_gt.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/worst_cases/worst_1_iou0.000_24931113_tile_19_19_52ccbb_overlay_gt.webp"  alt="Vérité terrain" />
 <figcaption>Vérité terrain</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/worst_cases/worst_1_iou0.000_24931113_tile_19_19_52ccbb_overlay_pred.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/worst_cases/worst_1_iou0.000_24931113_tile_19_19_52ccbb_overlay_pred.webp"  alt="Prédiction - IoU = 0.000" />
 <figcaption>Prédiction - IoU = 0.000</figcaption>
 </figure>
 <figcaption>Pires IoU pour SegFormer avec mambaout_base sur le dataset de test</figcaption>
@@ -814,51 +818,51 @@ La Figure [4.24](#fig:linknet_efficientnet_b5_worst_cases){reference-type="ref" 
 
 <figure id="fig:linknet_efficientnet_b5_best_cases" data-latex-placement="H">
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/best_cases/best_5_iou0.997_24991116_tile_5_3_322356_original.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/best_cases/best_5_iou0.997_24991116_tile_5_3_322356_original.webp"  alt="Top1 - Original" />
 <figcaption>Top1 - Original</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/best_cases/best_5_iou0.997_24991116_tile_5_3_322356_overlay_gt.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/best_cases/best_5_iou0.997_24991116_tile_5_3_322356_overlay_gt.webp"  alt="Vérité terrain" />
 <figcaption>Vérité terrain</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/best_cases/best_5_iou0.997_24991116_tile_5_3_322356_overlay_pred.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/best_cases/best_5_iou0.997_24991116_tile_5_3_322356_overlay_pred.webp"  alt="Prédiction - IoU = 0.997" />
 <figcaption>Prédiction - IoU = 0.997</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/best_cases/best_4_iou0.992_24931113_tile_13_18_a66e08_original.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/best_cases/best_4_iou0.992_24931113_tile_13_18_a66e08_original.webp"  alt="Top2 - Original" />
 <figcaption>Top2 - Original</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/best_cases/best_4_iou0.992_24931113_tile_13_18_a66e08_overlay_gt.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/best_cases/best_4_iou0.992_24931113_tile_13_18_a66e08_overlay_gt.webp"  alt="Vérité terrain" />
 <figcaption>Vérité terrain</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/best_cases/best_4_iou0.992_24931113_tile_13_18_a66e08_overlay_pred.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/best_cases/best_4_iou0.992_24931113_tile_13_18_a66e08_overlay_pred.webp"  alt="Prédiction - IoU = 0.992" />
 <figcaption>Prédiction - IoU = 0.992</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/best_cases/best_3_iou0.986_24931117_tile_18_5_f475a0_original.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/best_cases/best_3_iou0.986_24931117_tile_18_5_f475a0_original.webp"  alt="Top3 - Original" />
 <figcaption>Top3 - Original</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/best_cases/best_3_iou0.986_24931117_tile_18_5_f475a0_overlay_gt.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/best_cases/best_3_iou0.986_24931117_tile_18_5_f475a0_overlay_gt.webp"  alt="Vérité terrain" />
 <figcaption>Vérité terrain</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/best_cases/best_3_iou0.986_24931117_tile_18_5_f475a0_overlay_pred.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/best_cases/best_3_iou0.986_24931117_tile_18_5_f475a0_overlay_pred.webp"  alt="Prédiction - IoU = 0.986" />
 <figcaption>Prédiction - IoU = 0.986</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/best_cases/best_2_iou0.986_24961121_tile_15_10_cc6553_original.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/best_cases/best_2_iou0.986_24961121_tile_15_10_cc6553_original.webp"  alt="Top4 - Original" />
 <figcaption>Top4 - Original</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/best_cases/best_2_iou0.986_24961121_tile_15_10_cc6553_overlay_gt.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/best_cases/best_2_iou0.986_24961121_tile_15_10_cc6553_overlay_gt.webp"  alt="Vérité terrain" />
 <figcaption>Vérité terrain</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/best_cases/best_2_iou0.986_24961121_tile_15_10_cc6553_overlay_pred.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/best_cases/best_2_iou0.986_24961121_tile_15_10_cc6553_overlay_pred.webp"  alt="Prédiction - IoU = 0.986" />
 <figcaption>Prédiction - IoU = 0.986</figcaption>
 </figure>
 <figcaption>Meilleurs IoU pour LinkNet avec EfficientNet-B5 sur le dataset de test</figcaption>
@@ -866,51 +870,51 @@ La Figure [4.24](#fig:linknet_efficientnet_b5_worst_cases){reference-type="ref" 
 
 <figure id="fig:linknet_efficientnet_b5_worst_cases" data-latex-placement="H">
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/worst_cases/worst_5_iou0.000_25051119_tile_18_9_ba3084_original.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/worst_cases/worst_5_iou0.000_25051119_tile_18_9_ba3084_original.webp"  alt="Top1 - Original" />
 <figcaption>Top1 - Original</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/worst_cases/worst_5_iou0.000_25051119_tile_18_9_ba3084_overlay_gt.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/worst_cases/worst_5_iou0.000_25051119_tile_18_9_ba3084_overlay_gt.webp"  alt="Vérité terrain" />
 <figcaption>Vérité terrain</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/worst_cases/worst_5_iou0.000_25051119_tile_18_9_ba3084_overlay_pred.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/worst_cases/worst_5_iou0.000_25051119_tile_18_9_ba3084_overlay_pred.webp"  alt="Prédiction - IoU = 0.000" />
 <figcaption>Prédiction - IoU = 0.000</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/worst_cases/worst_4_iou0.000_25011125_tile_14_5_cdc6dc_original.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/worst_cases/worst_4_iou0.000_25011125_tile_14_5_cdc6dc_original.webp"  alt="Top2 - Original" />
 <figcaption>Top2 - Original</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/worst_cases/worst_4_iou0.000_25011125_tile_14_5_cdc6dc_overlay_gt.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/worst_cases/worst_4_iou0.000_25011125_tile_14_5_cdc6dc_overlay_gt.webp"  alt="Vérité terrain" />
 <figcaption>Vérité terrain</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/worst_cases/worst_4_iou0.000_25011125_tile_14_5_cdc6dc_overlay_pred.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/worst_cases/worst_4_iou0.000_25011125_tile_14_5_cdc6dc_overlay_pred.webp"  alt="Prédiction - IoU = 0.000" />
 <figcaption>Prédiction - IoU = 0.000</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/worst_cases/worst_3_iou0.000_25011115_tile_17_4_52cb42_original.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/worst_cases/worst_3_iou0.000_25011115_tile_17_4_52cb42_original.webp"  alt="Top3 - Original" />
 <figcaption>Top3 - Original</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/worst_cases/worst_3_iou0.000_25011115_tile_17_4_52cb42_overlay_gt.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/worst_cases/worst_3_iou0.000_25011115_tile_17_4_52cb42_overlay_gt.webp"  alt="Vérité terrain" />
 <figcaption>Vérité terrain</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/worst_cases/worst_3_iou0.000_25011115_tile_17_4_52cb42_overlay_pred.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/worst_cases/worst_3_iou0.000_25011115_tile_17_4_52cb42_overlay_pred.webp"  alt="Prédiction - IoU = 0.000" />
 <figcaption>Prédiction - IoU = 0.000</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/worst_cases/worst_2_iou0.000_25001117_tile_3_9_5ba8f7_original.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/worst_cases/worst_2_iou0.000_25001117_tile_3_9_5ba8f7_original.webp"  alt="Top4 - Original" />
 <figcaption>Top4 - Original</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/worst_cases/worst_2_iou0.000_25001117_tile_3_9_5ba8f7_overlay_gt.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/worst_cases/worst_2_iou0.000_25001117_tile_3_9_5ba8f7_overlay_gt.webp"  alt="Vérité terrain" />
 <figcaption>Vérité terrain</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/worst_cases/worst_2_iou0.000_25001117_tile_3_9_5ba8f7_overlay_pred.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/worst_cases/worst_2_iou0.000_25001117_tile_3_9_5ba8f7_overlay_pred.webp"  alt="Prédiction - IoU = 0.000" />
 <figcaption>Prédiction - IoU = 0.000</figcaption>
 </figure>
 <figcaption>Pires IoU pour LinkNet avec EfficientNet-B5 sur le dataset de test</figcaption>
@@ -924,51 +928,51 @@ La Figure [4.26](#fig:unetplusplus_efficientnetv2_s_worst_cases){reference-type=
 
 <figure id="fig:unetplusplus_efficientnetv2_s_best_cases" data-latex-placement="H">
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_5_iou0.989_24931113_tile_13_18_a66e08_original.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_5_iou0.989_24931113_tile_13_18_a66e08_original.webp"  alt="Top1 - Original" />
 <figcaption>Top1 - Original</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_5_iou0.989_24931113_tile_13_18_a66e08_overlay_gt.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_5_iou0.989_24931113_tile_13_18_a66e08_overlay_gt.webp"  alt="Vérité terrain" />
 <figcaption>Vérité terrain</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_5_iou0.989_24931113_tile_13_18_a66e08_overlay_pred.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_5_iou0.989_24931113_tile_13_18_a66e08_overlay_pred.webp"  alt="Prédiction - IoU = 0.989" />
 <figcaption>Prédiction - IoU = 0.989</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_4_iou0.988_24961121_tile_15_10_cc6553_original.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_4_iou0.988_24961121_tile_15_10_cc6553_original.webp"  alt="Top2 - Original" />
 <figcaption>Top2 - Original</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_4_iou0.988_24961121_tile_15_10_cc6553_overlay_gt.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_4_iou0.988_24961121_tile_15_10_cc6553_overlay_gt.webp"  alt="Vérité terrain" />
 <figcaption>Vérité terrain</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_4_iou0.988_24961121_tile_15_10_cc6553_overlay_pred.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_4_iou0.988_24961121_tile_15_10_cc6553_overlay_pred.webp"  alt="Prédiction - IoU = 0.988" />
 <figcaption>Prédiction - IoU = 0.988</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_3_iou0.987_24931117_tile_18_5_f475a0_original.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_3_iou0.987_24931117_tile_18_5_f475a0_original.webp"  alt="Top3 - Original" />
 <figcaption>Top3 - Original</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_3_iou0.987_24931117_tile_18_5_f475a0_overlay_gt.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_3_iou0.987_24931117_tile_18_5_f475a0_overlay_gt.webp"  alt="Vérité terrain" />
 <figcaption>Vérité terrain</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_3_iou0.987_24931117_tile_18_5_f475a0_overlay_pred.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_3_iou0.987_24931117_tile_18_5_f475a0_overlay_pred.webp"  alt="Prédiction - IoU = 0.987" />
 <figcaption>Prédiction - IoU = 0.987</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_2_iou0.982_25061124_tile_11_8_51e0da_original.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_2_iou0.982_25061124_tile_11_8_51e0da_original.webp"  alt="Top4 - Original" />
 <figcaption>Top4 - Original</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_2_iou0.982_25061124_tile_11_8_51e0da_overlay_gt.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_2_iou0.982_25061124_tile_11_8_51e0da_overlay_gt.webp"  alt="Vérité terrain" />
 <figcaption>Vérité terrain</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_2_iou0.982_25061124_tile_11_8_51e0da_overlay_pred.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_2_iou0.982_25061124_tile_11_8_51e0da_overlay_pred.webp"  alt="Prédiction - IoU = 0.982" />
 <figcaption>Prédiction - IoU = 0.982</figcaption>
 </figure>
 <figcaption>Meilleurs IoU pour Unet++ avec EfficientNetV2-S sur le dataset de test</figcaption>
@@ -976,51 +980,51 @@ La Figure [4.26](#fig:unetplusplus_efficientnetv2_s_worst_cases){reference-type=
 
 <figure id="fig:unetplusplus_efficientnetv2_s_worst_cases" data-latex-placement="H">
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_4_iou0.000_25011115_tile_17_4_52cb42_original.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_4_iou0.000_25011115_tile_17_4_52cb42_original.webp"  alt="Top1 - Original" />
 <figcaption>Top1 - Original</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_4_iou0.000_25011115_tile_17_4_52cb42_overlay_gt.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_4_iou0.000_25011115_tile_17_4_52cb42_overlay_gt.webp"  alt="Vérité terrain" />
 <figcaption>Vérité terrain</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_4_iou0.000_25011115_tile_17_4_52cb42_overlay_pred.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_4_iou0.000_25011115_tile_17_4_52cb42_overlay_pred.webp"  alt="Prédiction - IoU = 0.000" />
 <figcaption>Prédiction - IoU = 0.000</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_3_iou0.000_25001117_tile_3_9_5ba8f7_original.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_3_iou0.000_25001117_tile_3_9_5ba8f7_original.webp"  alt="Top2 - Original" />
 <figcaption>Top2 - Original</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_3_iou0.000_25001117_tile_3_9_5ba8f7_overlay_gt.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_3_iou0.000_25001117_tile_3_9_5ba8f7_overlay_gt.webp"  alt="Vérité terrain" />
 <figcaption>Vérité terrain</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_3_iou0.000_25001117_tile_3_9_5ba8f7_overlay_pred.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_3_iou0.000_25001117_tile_3_9_5ba8f7_overlay_pred.webp"  alt="Prédiction - IoU = 0.000" />
 <figcaption>Prédiction - IoU = 0.000</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_2_iou0.000_24951112_tile_4_13_2bd653_original.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_2_iou0.000_24951112_tile_4_13_2bd653_original.webp"  alt="Top3 - Original" />
 <figcaption>Top3 - Original</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_2_iou0.000_24951112_tile_4_13_2bd653_overlay_gt.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_2_iou0.000_24951112_tile_4_13_2bd653_overlay_gt.webp"  alt="Vérité terrain" />
 <figcaption>Vérité terrain</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_2_iou0.000_24951112_tile_4_13_2bd653_overlay_pred.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_2_iou0.000_24951112_tile_4_13_2bd653_overlay_pred.webp"  alt="Prédiction - IoU = 0.000" />
 <figcaption>Prédiction - IoU = 0.000</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_1_iou0.000_24931113_tile_19_19_52ccbb_original.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_1_iou0.000_24931113_tile_19_19_52ccbb_original.webp"  alt="Top4 - Original" />
 <figcaption>Top4 - Original</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_1_iou0.000_24931113_tile_19_19_52ccbb_overlay_gt.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_1_iou0.000_24931113_tile_19_19_52ccbb_overlay_gt.webp"  alt="Vérité terrain" />
 <figcaption>Vérité terrain</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_1_iou0.000_24931113_tile_19_19_52ccbb_overlay_pred.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_1_iou0.000_24931113_tile_19_19_52ccbb_overlay_pred.webp"  alt="Prédiction - IoU = 0.000" />
 <figcaption>Prédiction - IoU = 0.000</figcaption>
 </figure>
 <figcaption>Pires IoU pour Unet++ avec EfficientNetV2-S sur le dataset de test</figcaption>
@@ -1034,51 +1038,51 @@ La Figure [4.28](#fig:segformer_regnety_080_worst_cases){reference-type="ref" re
 
 <figure id="fig:segformer_regnety_080_best_cases" data-latex-placement="H">
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/best_cases/best_5_iou0.998_24991116_tile_5_3_322356_original.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/best_cases/best_5_iou0.998_24991116_tile_5_3_322356_original.webp"  alt="Top1 - Original" />
 <figcaption>Top1 - Original</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/best_cases/best_5_iou0.998_24991116_tile_5_3_322356_overlay_gt.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/best_cases/best_5_iou0.998_24991116_tile_5_3_322356_overlay_gt.webp"  alt="Vérité terrain" />
 <figcaption>Vérité terrain</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/best_cases/best_5_iou0.998_24991116_tile_5_3_322356_overlay_pred.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/best_cases/best_5_iou0.998_24991116_tile_5_3_322356_overlay_pred.webp"  alt="Prédiction - IoU = 0.998" />
 <figcaption>Prédiction - IoU = 0.998</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/best_cases/best_4_iou0.989_24941121_tile_16_8_fd3555_original.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/best_cases/best_4_iou0.989_24941121_tile_16_8_fd3555_original.webp"  alt="Top2 - Original" />
 <figcaption>Top2 - Original</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/best_cases/best_4_iou0.989_24941121_tile_16_8_fd3555_overlay_gt.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/best_cases/best_4_iou0.989_24941121_tile_16_8_fd3555_overlay_gt.webp"  alt="Vérité terrain" />
 <figcaption>Vérité terrain</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/best_cases/best_4_iou0.989_24941121_tile_16_8_fd3555_overlay_pred.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/best_cases/best_4_iou0.989_24941121_tile_16_8_fd3555_overlay_pred.webp"  alt="Prédiction - IoU = 0.989" />
 <figcaption>Prédiction - IoU = 0.989</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/best_cases/best_3_iou0.987_24961121_tile_15_10_cc6553_original.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/best_cases/best_3_iou0.987_24961121_tile_15_10_cc6553_original.webp"  alt="Top3 - Original" />
 <figcaption>Top3 - Original</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/best_cases/best_3_iou0.987_24961121_tile_15_10_cc6553_overlay_gt.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/best_cases/best_3_iou0.987_24961121_tile_15_10_cc6553_overlay_gt.webp"  alt="Vérité terrain" />
 <figcaption>Vérité terrain</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/best_cases/best_3_iou0.987_24961121_tile_15_10_cc6553_overlay_pred.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/best_cases/best_3_iou0.987_24961121_tile_15_10_cc6553_overlay_pred.webp"  alt="Prédiction - IoU = 0.987" />
 <figcaption>Prédiction - IoU = 0.987</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/best_cases/best_2_iou0.985_24931117_tile_18_5_f475a0_original.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/best_cases/best_2_iou0.985_24931117_tile_18_5_f475a0_original.webp"  alt="Top4 - Original" />
 <figcaption>Top4 - Original</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/best_cases/best_2_iou0.985_24931117_tile_18_5_f475a0_overlay_gt.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/best_cases/best_2_iou0.985_24931117_tile_18_5_f475a0_overlay_gt.webp"  alt="Vérité terrain" />
 <figcaption>Vérité terrain</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/best_cases/best_2_iou0.985_24931117_tile_18_5_f475a0_overlay_pred.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/best_cases/best_2_iou0.985_24931117_tile_18_5_f475a0_overlay_pred.webp"  alt="Prédiction - IoU = 0.985" />
 <figcaption>Prédiction - IoU = 0.985</figcaption>
 </figure>
 <figcaption>Meilleurs IoU pour SegFormer avec RegNetY-080 sur le dataset de test</figcaption>
@@ -1086,51 +1090,51 @@ La Figure [4.28](#fig:segformer_regnety_080_worst_cases){reference-type="ref" re
 
 <figure id="fig:segformer_regnety_080_worst_cases" data-latex-placement="H">
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/worst_cases/worst_5_iou0.000_25011115_tile_17_4_52cb42_original.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/worst_cases/worst_5_iou0.000_25011115_tile_17_4_52cb42_original.webp"  alt="Top1 - Original" />
 <figcaption>Top1 - Original</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/worst_cases/worst_5_iou0.000_25011115_tile_17_4_52cb42_overlay_gt.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/worst_cases/worst_5_iou0.000_25011115_tile_17_4_52cb42_overlay_gt.webp"  alt="Vérité terrain" />
 <figcaption>Vérité terrain</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/worst_cases/worst_5_iou0.000_25011115_tile_17_4_52cb42_overlay_pred.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/worst_cases/worst_5_iou0.000_25011115_tile_17_4_52cb42_overlay_pred.webp"  alt="Prédiction - IoU = 0.000" />
 <figcaption>Prédiction - IoU = 0.000</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/worst_cases/worst_4_iou0.000_25001117_tile_3_9_5ba8f7_original.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/worst_cases/worst_4_iou0.000_25001117_tile_3_9_5ba8f7_original.webp"  alt="Top2 - Original" />
 <figcaption>Top2 - Original</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/worst_cases/worst_4_iou0.000_25001117_tile_3_9_5ba8f7_overlay_gt.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/worst_cases/worst_4_iou0.000_25001117_tile_3_9_5ba8f7_overlay_gt.webp"  alt="Vérité terrain" />
 <figcaption>Vérité terrain</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/worst_cases/worst_4_iou0.000_25001117_tile_3_9_5ba8f7_overlay_pred.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/worst_cases/worst_4_iou0.000_25001117_tile_3_9_5ba8f7_overlay_pred.webp"  alt="Prédiction - IoU = 0.000" />
 <figcaption>Prédiction - IoU = 0.000</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/worst_cases/worst_3_iou0.000_24991122_tile_9_19_7ebcec_original.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/worst_cases/worst_3_iou0.000_24991122_tile_9_19_7ebcec_original.webp"  alt="Top3 - Original" />
 <figcaption>Top3 - Original</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/worst_cases/worst_3_iou0.000_24991122_tile_9_19_7ebcec_overlay_gt.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/worst_cases/worst_3_iou0.000_24991122_tile_9_19_7ebcec_overlay_gt.webp"  alt="Vérité terrain" />
 <figcaption>Vérité terrain</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/worst_cases/worst_3_iou0.000_24991122_tile_9_19_7ebcec_overlay_pred.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/worst_cases/worst_3_iou0.000_24991122_tile_9_19_7ebcec_overlay_pred.webp"  alt="Prédiction - IoU = 0.000" />
 <figcaption>Prédiction - IoU = 0.000</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/worst_cases/worst_1_iou0.000_24931113_tile_19_19_52ccbb_original.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/worst_cases/worst_1_iou0.000_24931113_tile_19_19_52ccbb_original.webp"  alt="Top4 - Original" />
 <figcaption>Top4 - Original</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/worst_cases/worst_1_iou0.000_24931113_tile_19_19_52ccbb_overlay_gt.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/worst_cases/worst_1_iou0.000_24931113_tile_19_19_52ccbb_overlay_gt.webp"  alt="Vérité terrain" />
 <figcaption>Vérité terrain</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/worst_cases/worst_1_iou0.000_24931113_tile_19_19_52ccbb_overlay_pred.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/worst_cases/worst_1_iou0.000_24931113_tile_19_19_52ccbb_overlay_pred.webp"  alt="Prédiction - IoU = 0.000" />
 <figcaption>Prédiction - IoU = 0.000</figcaption>
 </figure>
 <figcaption>Pires IoU pour SegFormer avec RegNetY-080 sur le dataset de test</figcaption>

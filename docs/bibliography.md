@@ -1,3 +1,7 @@
+---
+description: "Bibliographie numérotée par ordre de citation du mémoire de Master."
+---
+
 # Bibliographie {#bibliography .unnumbered}
 
 <div id="refs" markdown="1">

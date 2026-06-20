@@ -1,3 +1,7 @@
+---
+description: "Ce chapitre va explorer la création d’un modèle de machine learning de A à Z."
+---
+
 # Méthodologie {#chap:proposition_modele}
 
 Ce chapitre va explorer la création d’un modèle de machine learning de A à Z.
@@ -7,7 +11,7 @@ Ce chapitre va explorer la création d’un modèle de machine learning de A à 
 La création d’un modèle de machine learning consiste en plusieurs phases distinctes. La Figure [3.1](#fig:ch3_resume_machine_learning_supervise){reference-type="ref" reference="fig:ch3_resume_machine_learning_supervise"} résume les principales étapes et servira de fil conducteur pour ce chapitre.
 
 <figure id="fig:ch3_resume_machine_learning_supervise" data-latex-placement="H">
-<img src="../assets/figures/A1/A1_01_resume_machine_learning_supervise.webp" style="width:100.0%" />
+<img src="../assets/figures/A1/A1_01_resume_machine_learning_supervise.webp" style="width:100.0%"  alt="Résumé de machine learning supervisé" />
 <figcaption>Résumé de machine learning supervisé</figcaption>
 </figure>
 
@@ -64,7 +68,7 @@ Les orthophotos de 2019 (Figure [3.2](#fig:ch3_dataset_methodo_01_orthophoto_201
 La sous-section (voir page ) parcourt en détail les types d’orthophotos les plus utilisées dans la géomatique.
 
 <figure id="fig:ch3_dataset_methodo_01_orthophoto_2019" data-latex-placement="H">
-<img src="../assets/figures/ch3/ch3_dataset_methodo_01_orthophoto_2019.webp" style="width:100.0%" />
+<img src="../assets/figures/ch3/ch3_dataset_methodo_01_orthophoto_2019.webp" style="width:100.0%"  alt="Orthophotos 2019" />
 <figcaption>Orthophotos 2019</figcaption>
 </figure>
 
@@ -73,7 +77,7 @@ La sous-section (voir page ) parcourt en détail les types d’orthophotos les 
 Les orthophotos peuvent être commandées gratuitement via leur service pour données volumineuses &#91;[71](../bibliography.md#ref-sitg_commande_nodate)&#93;. Une autre option est de télécharger tuile à tuile sur leur site dédié (Figure [3.3](#fig:ch3_donnees_sitg_orthophotos_telechargement_web){reference-type="ref" reference="fig:ch3_donnees_sitg_orthophotos_telechargement_web"}).
 
 <figure id="fig:ch3_donnees_sitg_orthophotos_telechargement_web" data-latex-placement="H">
-<img src="../assets/figures/ch3/ch3_donnees_sitg_orthophotos_telechargement_web.webp" style="width:100.0%" />
+<img src="../assets/figures/ch3/ch3_donnees_sitg_orthophotos_telechargement_web.webp" style="width:100.0%"  alt="Site dédié au téléchargement des orthophotos et données lidar [71]" />
 <figcaption>Site dédié au téléchargement des orthophotos et données <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">lidar</span></a> <span class="citation" data-cites="sitg_commande_nodate">[<a href="../bibliography.html#ref-sitg_commande_nodate" role="doc-biblioref">71</a>]</span></figcaption>
 </figure>
 
@@ -103,7 +107,7 @@ La couche vectorielle “CAD\_BATIMENTS\_HORSOL” &#91;[68](../bibliography.md#
 Cette couche vectorielle est enrichie de données tabulaires associées à chacun des polygones. Les données utilisées sont l’“<a href="../glossary.html#gloss-egid"><span data-acronym-label="egid" data-acronym-form="singular+short">egid</span></a>” et “NOMEN\_CLASSE”. L’<a href="../glossary.html#gloss-egid"><span data-acronym-label="egid" data-acronym-form="singular+short">egid</span></a> est un identifiant unique pour tous les bâtiments en Suisse. “NOMEN\_CLASSE” identifie l’usage du bâtiment et va permettre de définir une classe <a href="../glossary.html#gloss-sia"><span data-acronym-label="sia" data-acronym-form="singular+short">sia</span></a>.
 
 <figure id="fig:ch3_dataset_methodo_02_batiment_horsol" data-latex-placement="H">
-<img src="../assets/figures/ch3/ch3_dataset_methodo_02_batiment_horsol.webp" style="width:100.0%" />
+<img src="../assets/figures/ch3/ch3_dataset_methodo_02_batiment_horsol.webp" style="width:100.0%"  alt="Couche vectorielle bâtiments hors-sol" />
 <figcaption>Couche vectorielle bâtiments hors-sol</figcaption>
 </figure>
 
@@ -112,7 +116,7 @@ Cette couche vectorielle est enrichie de données tabulaires associées à chacu
 La couche vectorielle “CAD\_BATIMENTS\_HORSOL\_TOIT” &#91;[42](../bibliography.md#ref-sitg_toits_nodate)&#93; regroupe toutes les toitures des bâtiments hors-sol du Canton de Genève (Figure [3.5](#fig:ch3_dataset_methodo_03_batiment_horsol_toiture){reference-type="ref" reference="fig:ch3_dataset_methodo_03_batiment_horsol_toiture"}). Un <a href="../glossary.html#gloss-egid"><span data-acronym-label="egid" data-acronym-form="singular+short">egid</span></a> est associé à chacun des polygones des toitures.
 
 <figure id="fig:ch3_dataset_methodo_03_batiment_horsol_toiture" data-latex-placement="H">
-<img src="../assets/figures/ch3/ch3_dataset_methodo_03_batiment_horsol_toiture.webp" style="width:100.0%" />
+<img src="../assets/figures/ch3/ch3_dataset_methodo_03_batiment_horsol_toiture.webp" style="width:100.0%"  alt="Couche vectorielle toits des bâtiments" />
 <figcaption>Couche vectorielle toits des bâtiments</figcaption>
 </figure>
 
@@ -121,7 +125,7 @@ La couche vectorielle “CAD\_BATIMENTS\_HORSOL\_TOIT” &#91;[42](../bibliograp
 La couche vectorielle “CAD\_BATIMENT\_HORSOL\_TOIT\_SP” &#91;[42](../bibliography.md#ref-sitg_toits_nodate)&#93; recense les éléments de toiture (superstructures) d’une surface inférieure à 9 m<sup>2</sup> présents sur les toitures des bâtiments hors-sol du Canton de Genève (Figure [3.6](#fig:ch3_dataset_methodo_04_batiment_horsol_toiture_sp){reference-type="ref" reference="fig:ch3_dataset_methodo_04_batiment_horsol_toiture_sp"}). Un <a href="../glossary.html#gloss-egid"><span data-acronym-label="egid" data-acronym-form="singular+short">egid</span></a> est associé à chacun des polygones de ces superstructures.
 
 <figure id="fig:ch3_dataset_methodo_04_batiment_horsol_toiture_sp" data-latex-placement="H">
-<img src="../assets/figures/ch3/ch3_dataset_methodo_04_batiment_horsol_toiture_sp.webp" style="width:100.0%" />
+<img src="../assets/figures/ch3/ch3_dataset_methodo_04_batiment_horsol_toiture_sp.webp" style="width:100.0%"  alt="Couche vectorielle superstructures des toits des bâtiments" />
 <figcaption>Couche vectorielle superstructures des toits des bâtiments</figcaption>
 </figure>
 
@@ -154,7 +158,7 @@ Les données sélectionnées nécessitent d’être analysées, transformées et
 La Figure [3.7](#fig:ch3_preparation_donnees_01_etl){reference-type="ref" reference="fig:ch3_preparation_donnees_01_etl"} résume les principales étapes pour les données vectorielles.
 
 <figure id="fig:ch3_preparation_donnees_01_etl" data-latex-placement="H">
-<img src="../assets/figures/ch3/ch3_preparation_donnees_01_etl.webp" style="width:95.0%" />
+<img src="../assets/figures/ch3/ch3_preparation_donnees_01_etl.webp" style="width:95.0%"  alt="Principales étapes de la préparation des données vectorielles" />
 <figcaption>Principales étapes de la préparation des données vectorielles</figcaption>
 </figure>
 
@@ -188,7 +192,7 @@ La visualisation des données permet de détecter certains problèmes difficilem
 Pour résoudre ce problème et par cohérence, toutes les données ont été téléchargées à nouveau directement depuis <a href="../glossary.html#gloss-sitg"><span data-acronym-label="sitg" data-acronym-form="singular+abbrv">sitg</span></a>. Ces nouvelles données ne présentaient pas ce problème, ce qui suggère que l’erreur vient du processus de téléchargement via QGIS.
 
 <figure id="fig:ch3_preparation_donnees_02_bug_celigny" data-latex-placement="H">
-<img src="../assets/figures/ch3/ch3_preparation_donnees_02_bug_celigny.webp" style="width:100.0%" />
+<img src="../assets/figures/ch3/ch3_preparation_donnees_02_bug_celigny.webp" style="width:100.0%"  alt="Problème avec la commune de Céligny" />
 <figcaption>Problème avec la commune de Céligny</figcaption>
 </figure>
 
@@ -199,7 +203,7 @@ Certains polygones se trouvent en dehors du canton de Genève. Le filtre est ass
 La Figure [3.9](#fig:ch3_preparation_donnees_03_hors_canton){reference-type="ref" reference="fig:ch3_preparation_donnees_03_hors_canton"} illustre les toitures situées hors canton. Au total, 1436 polygones ont été supprimés, principalement des bâtiments du CERN &#91;[75](../bibliography.md#ref-cern_home_nodate)&#93;.
 
 <figure id="fig:ch3_preparation_donnees_03_hors_canton" data-latex-placement="H">
-<img src="../assets/figures/ch3/ch3_preparation_donnees_03_hors_canton.webp" style="width:115.0%" />
+<img src="../assets/figures/ch3/ch3_preparation_donnees_03_hors_canton.webp" style="width:115.0%"  alt="Visualisation des toitures hors canton de Genève" />
 <figcaption>Visualisation des toitures hors canton de Genève</figcaption>
 </figure>
 
@@ -316,7 +320,7 @@ La première vérification consiste à s’assurer que tous les <a href="../glos
 <p class="thesis-caption"><em>Code 3 — Distribution des catégories <a href="../glossary.html#gloss-sia"><span data-acronym-label="sia" data-acronym-form="singular+short">sia</span></a> et vérification des données.</em></p>
 
 <figure id="fig:ch3_preparation_donnees_categorie_sia_01_barplot" data-latex-placement="H">
-<img src="../assets/figures/ch3/ch3_preparation_donnees_categorie_sia_01_barplot.webp" style="width:100.0%" />
+<img src="../assets/figures/ch3/ch3_preparation_donnees_categorie_sia_01_barplot.webp" style="width:100.0%"  alt="Distribution des catégories sia pour la couche des bâtiments hors-sol" />
 <figcaption>Distribution des catégories <a href="../glossary.html#gloss-sia"><span data-acronym-label="sia" data-acronym-form="singular+short">sia</span></a> pour la couche des bâtiments hors-sol</figcaption>
 </figure>
 
@@ -354,7 +358,7 @@ Les 416 orthophotos sont des fichiers au format GeoTIFF de dimensions pixels. Ce
 La Figure [3.11](#fig:ch3_preparation_donnees_orthophotos_01_etl){reference-type="ref" reference="fig:ch3_preparation_donnees_orthophotos_01_etl"} décrit les étapes de ce processus de découpage. Chaque tuile générée mesure pixels ( mètres) avec un recouvrement de 256 pixels (12,80 mètres) avec les tuiles adjacentes. Ce recouvrement garantit qu’aucun bâtiment ne soit coupé aux bordures des tuiles.
 
 <figure id="fig:ch3_preparation_donnees_orthophotos_01_etl" data-latex-placement="H">
-<img src="../assets/figures/ch3/ch3_preparation_donnees_orthophotos_01_etl.webp" style="width:100.0%" />
+<img src="../assets/figures/ch3/ch3_preparation_donnees_orthophotos_01_etl.webp" style="width:100.0%"  alt="Découpe des orthophotos en tuiles 1280x1280 pixels avec recouvrement" />
 <figcaption>Découpe des orthophotos en tuiles 1280x1280 pixels avec recouvrement</figcaption>
 </figure>
 
@@ -367,7 +371,7 @@ Un quadrillage de tuiles de pixels avec un recouvrement de 256 pixels est ensuit
 Dans les zones urbaines caractérisées par une forte densité de bâtiments, chaque orthophoto génère un nombre élevé de tuiles. Cette concentration de données est particulièrement intéressante pour l’entraînement du modèle, car elle offre une grande variété d’exemples architecturaux dans un espace géographique restreint.
 
 <figure id="fig:ch3_preparation_donnees_orthophotos_02_exemple_decoupe_orthophoto1" data-latex-placement="H">
-<img src="../assets/figures/ch3/ch3_preparation_donnees_orthophotos_02_exemple_decoupe_orthophoto1.webp" style="width:100.0%" />
+<img src="../assets/figures/ch3/ch3_preparation_donnees_orthophotos_02_exemple_decoupe_orthophoto1.webp" style="width:100.0%"  alt="Exemple de découpage d’une orthophoto en tuiles pour une zone urbaine" />
 <figcaption>Exemple de découpage d’une orthophoto en tuiles pour une zone urbaine</figcaption>
 </figure>
 
@@ -378,19 +382,19 @@ Il convient de noter que toutes les tuiles générées ne présentent pas des di
 Ces cas particuliers seront traités après la finalisation de l’annotation. La priorité a été donnée à l’obtention de distributions de tuiles identiques pour l’ensemble des orthophotos, afin d’avoir une cohérence dans le processus de découpage et post-traitement.
 
 <figure id="fig:ch3_preparation_donnees_orthophotos_03_exemple_decoupe_orthophoto2" data-latex-placement="H">
-<img src="../assets/figures/ch3/ch3_preparation_donnees_orthophotos_03_exemple_decoupe_orthophoto2.webp" style="width:100.0%" />
+<img src="../assets/figures/ch3/ch3_preparation_donnees_orthophotos_03_exemple_decoupe_orthophoto2.webp" style="width:100.0%"  alt="Calepinage des tuiles découpées pour la zone urbaine" />
 <figcaption>Calepinage des tuiles découpées pour la zone urbaine</figcaption>
 </figure>
 
 La tuile 258 (Figure [3.14](#fig:ch3_preparation_donnees_orthophotos_04a_exemple_decoupe_orthophoto3){reference-type="ref" reference="fig:ch3_preparation_donnees_orthophotos_04a_exemple_decoupe_orthophoto3"}), située à proximité de <a href="../glossary.html#gloss-hepia"><span data-acronym-label="hepia" data-acronym-form="singular+abbrv">hepia</span></a>, illustre bien cette complexité. Chaque tuile peut avoir jusqu’à 8 zones de recouvrement avec ses voisines (Figure [3.15](#fig:ch3_preparation_donnees_orthophotos_04_exemple_decoupe_orthophoto3){reference-type="ref" reference="fig:ch3_preparation_donnees_orthophotos_04_exemple_decoupe_orthophoto3"}) au nord (238), nord-est (239), est (259), sud-est (279), sud (278), sud-ouest (277), ouest (257) et nord-ouest (237). Seule la zone centrale de pixels n’a aucun recouvrement et constitue la partie unique de chaque tuile.
 
 <figure id="fig:ch3_preparation_donnees_orthophotos_04a_exemple_decoupe_orthophoto3" data-latex-placement="H">
-<img src="../assets/figures/ch3/ch3_preparation_donnees_orthophotos_04a_exemple_decoupe_orthophoto3.webp" style="width:40.0%" />
+<img src="../assets/figures/ch3/ch3_preparation_donnees_orthophotos_04a_exemple_decoupe_orthophoto3.webp" style="width:40.0%"  alt="Tuile 258" />
 <figcaption>Tuile 258</figcaption>
 </figure>
 
 <figure id="fig:ch3_preparation_donnees_orthophotos_04_exemple_decoupe_orthophoto3" data-latex-placement="H">
-<img src="../assets/figures/ch3/ch3_preparation_donnees_orthophotos_04_exemple_decoupe_orthophoto3.webp" style="width:90.0%" />
+<img src="../assets/figures/ch3/ch3_preparation_donnees_orthophotos_04_exemple_decoupe_orthophoto3.webp" style="width:90.0%"  alt="Recouvrement pour la tuile 258" />
 <figcaption>Recouvrement pour la tuile 258</figcaption>
 </figure>
 
@@ -399,14 +403,14 @@ La tuile 258 (Figure [3.14](#fig:ch3_preparation_donnees_orthophotos_04a_exemple
 La Figure [3.16](#fig:ch3_preparation_donnees_orthophotos_05_exemple_decoupe_orthophoto4){reference-type="ref" reference="fig:ch3_preparation_donnees_orthophotos_05_exemple_decoupe_orthophoto4"} illustre le découpage dans une zone plus rurale. Ces zones présentent des caractéristiques architecturales très différentes des zones urbaines, avec notamment des villas individuelles, des bâtiments agricoles et des constructions plus dispersées sur le territoire. Cette diversité typologique est nécessaire pour constituer un dataset riche et varié.
 
 <figure id="fig:ch3_preparation_donnees_orthophotos_05_exemple_decoupe_orthophoto4" data-latex-placement="H">
-<img src="../assets/figures/ch3/ch3_preparation_donnees_orthophotos_05_exemple_decoupe_orthophoto4.webp" style="width:100.0%" />
+<img src="../assets/figures/ch3/ch3_preparation_donnees_orthophotos_05_exemple_decoupe_orthophoto4.webp" style="width:100.0%"  alt="Exemple de découpage d’une orthophoto en tuiles pour une zone rurale" />
 <figcaption>Exemple de découpage d’une orthophoto en tuiles pour une zone rurale</figcaption>
 </figure>
 
 Comme observé précédemment, cette figure révèle également quelques bugs dans le script de traitement des tuiles, avec des tuiles manquantes par endroits (nord 41-42). Cependant, l’analyse à l’échelle du canton (Figure [3.17](#fig:ch3_preparation_donnees_orthophotos_07_exemple_decoupe_orthophoto6){reference-type="ref" reference="fig:ch3_preparation_donnees_orthophotos_07_exemple_decoupe_orthophoto6"}) confirme que ces erreurs ponctuelles ne compromettent pas la qualité globale du découpage.
 
 <figure id="fig:ch3_preparation_donnees_orthophotos_07_exemple_decoupe_orthophoto6" data-latex-placement="H">
-<img src="../assets/figures/ch3/ch3_preparation_donnees_orthophotos_07_exemple_decoupe_orthophoto6.webp" style="width:100.0%" />
+<img src="../assets/figures/ch3/ch3_preparation_donnees_orthophotos_07_exemple_decoupe_orthophoto6.webp" style="width:100.0%"  alt="Tuiles découpées pour toutes les orthophotos" />
 <figcaption>Tuiles découpées pour toutes les orthophotos</figcaption>
 </figure>
 
@@ -508,7 +512,7 @@ Pour analyser la distribution des tuiles par classe <a href="../glossary.html#gl
 La Figure [3.18](#fig:ch3_selection_donnees_01_distribution_sia){reference-type="ref" reference="fig:ch3_selection_donnees_01_distribution_sia"} illustre la distribution des classes <a href="../glossary.html#gloss-sia"><span data-acronym-label="sia" data-acronym-form="singular+short">sia</span></a> dominantes par tuile. Cette distribution présente une forte similarité avec celle des classes <a href="../glossary.html#gloss-sia"><span data-acronym-label="sia" data-acronym-form="singular+short">sia</span></a> pour les bâtiments hors-sol (Figure [3.10](#fig:ch3_preparation_donnees_categorie_sia_01_barplot){reference-type="ref" reference="fig:ch3_preparation_donnees_categorie_sia_01_barplot"}). Cette cohérence est nécessaire pour préserver la représentativité de l’échantillon lors de la sélection du dataset.
 
 <figure id="fig:ch3_selection_donnees_01_distribution_sia" data-latex-placement="H">
-<img src="../assets/figures/ch3/ch3_selection_donnees_01_distribution_sia.webp" style="width:100.0%" />
+<img src="../assets/figures/ch3/ch3_selection_donnees_01_distribution_sia.webp" style="width:100.0%"  alt="Distribution des classes sia dominantes par tuile" />
 <figcaption>Distribution des classes <a href="../glossary.html#gloss-sia"><span data-acronym-label="sia" data-acronym-form="singular+short">sia</span></a> dominantes par tuile</figcaption>
 </figure>
 
@@ -519,7 +523,7 @@ Le deuxième critère retenu est la surface des toitures. Pour chaque tuile, la 
 La Figure [3.19](#fig:ch3_selection_donnees_02_taille_bin){reference-type="ref" reference="fig:ch3_selection_donnees_02_taille_bin"} représente cette distribution par intervalles de surface. Les intervalles ont été choisis de manière empirique dans le but de refléter les ordres de grandeur caractéristiques des différents types de bâtiments.
 
 <figure id="fig:ch3_selection_donnees_02_taille_bin" data-latex-placement="H">
-<img src="../assets/figures/ch3/ch3_selection_donnees_02_taille_bin.webp" style="width:100.0%" />
+<img src="../assets/figures/ch3/ch3_selection_donnees_02_taille_bin.webp" style="width:100.0%"  alt="Distribution des surfaces de toitures par intervalles" />
 <figcaption>Distribution des surfaces de toitures par intervalles</figcaption>
 </figure>
 
@@ -571,14 +575,14 @@ Pour la restauration, seuls 2 <a href="../glossary.html#gloss-egid"><span data-a
 Les piscines couvertes constituent également un cas particulier avec seulement 11 <a href="../glossary.html#gloss-egid"><span data-acronym-label="egid" data-acronym-form="singular+short">egid</span></a> sur l’ensemble du canton (Figure [3.10](#fig:ch3_preparation_donnees_categorie_sia_01_barplot){reference-type="ref" reference="fig:ch3_preparation_donnees_categorie_sia_01_barplot"}). Ces bâtiments, généralement de taille conséquente avec des surfaces supérieures à 2000 m<sup>2</sup> dans la plupart des cas, ne permettent pas d’atteindre la représentation souhaitée dans tous les intervalles de surface.
 
 <figure id="fig:ch3_selection_donnees_03_selection_stacked" data-latex-placement="H">
-<img src="../assets/figures/ch3/ch3_selection_donnees_03_selection_stacked.webp" style="width:100.0%" />
+<img src="../assets/figures/ch3/ch3_selection_donnees_03_selection_stacked.webp" style="width:100.0%"  alt="Sélection de l’échantillon pour le dataset" />
 <figcaption>Sélection de l’échantillon pour le dataset</figcaption>
 </figure>
 
 L’échantillonnage stratifié permet de sélectionner de manière aléatoire les individus qui formeront les différents sous-groupes selon chaque combinaison classe <a href="../glossary.html#gloss-sia"><span data-acronym-label="sia" data-acronym-form="singular+short">sia</span></a> / intervalle de surface. La Figure [3.21](#fig:ch3_selection_donnees_04_selection_map_sia){reference-type="ref" reference="fig:ch3_selection_donnees_04_selection_map_sia"} confirme que l’échantillon inclut des tuiles réparties sur l’ensemble du canton, garantissant une bonne représentation de toutes les spécificités architecturales.
 
 <figure id="fig:ch3_selection_donnees_04_selection_map_sia" data-latex-placement="H">
-<img src="../assets/figures/ch3/ch3_selection_donnees_04_selection_map_sia.webp" style="width:100.0%" />
+<img src="../assets/figures/ch3/ch3_selection_donnees_04_selection_map_sia.webp" style="width:100.0%"  alt="Échantillon sélectionné de 539 tuiles par catégorie sia" />
 <figcaption>Échantillon sélectionné de 539 tuiles par catégorie <a href="../glossary.html#gloss-sia"><span data-acronym-label="sia" data-acronym-form="singular+short">sia</span></a></figcaption>
 </figure>
 
@@ -607,14 +611,14 @@ Le deuxième outil évalué est Roboflow &#91;[57](../bibliography.md#ref-robofl
 Cet outil a été utilisé pour créer un dataset de 45 images dans le cadre d’une des pistes explorées dans la sous-section (voir page ). L’interface utilisateur est assez intuitive et ergonomique.
 
 <figure id="fig:ch3_labellisation_01_outils_01_robolfow" data-latex-placement="H">
-<img src="../assets/figures/ch3/ch3_labellisation_01_outils_01_robolfow.webp" style="width:100.0%" />
+<img src="../assets/figures/ch3/ch3_labellisation_01_outils_01_robolfow.webp" style="width:100.0%"  alt="Interface Roboflow" />
 <figcaption>Interface Roboflow</figcaption>
 </figure>
 
 Malgré que Roboflow a tous les outils nécessaires pour effectuer des annotations rapides, <a href="../glossary.html#gloss-sam"><span data-acronym-label="sam" data-acronym-form="singular+abbrv">sam</span></a> (Figure [3.23](#fig:ch3_labellisation_01_outils_02_robolfow_sam){reference-type="ref" reference="fig:ch3_labellisation_01_outils_02_robolfow_sam"}) présente certaines limitations et ne permet qu’une sélection simplifiée des zones à annoter. Dans le contexte spécifique des toitures, cette approche nécessite de nombreux clics pour obtenir une annotation correspondant précisément à la zone souhaitée.
 
 <figure id="fig:ch3_labellisation_01_outils_02_robolfow_sam" data-latex-placement="H">
-<img src="../assets/figures/ch3/ch3_labellisation_01_outils_02_robolfow_sam.webp" style="width:100.0%" />
+<img src="../assets/figures/ch3/ch3_labellisation_01_outils_02_robolfow_sam.webp" style="width:100.0%"  alt="Exemple d’annotation avec sam dans Roboflow" />
 <figcaption>Exemple d’annotation avec <a href="../glossary.html#gloss-sam"><span data-acronym-label="sam" data-acronym-form="singular+abbrv">sam</span></a> dans Roboflow</figcaption>
 </figure>
 
@@ -629,12 +633,12 @@ Supervisely a été retenu comme outil de labellisation car il permet d’annote
 La version payante ne présente pas cette restriction et a été jugée pertinente à cause du gain de temps considérable qu’elle apporte. Le processus complet de labellisation s’est étalé sur environ un mois et demi, représentant environ 30 heures par semaine.
 
 <figure id="fig:ch3_labellisation_01_outils_03_supervisely_modeles" data-latex-placement="H">
-<img src="../assets/figures/ch3/ch3_labellisation_01_outils_03_supervisely_modeles.webp" style="width:97.0%" />
+<img src="../assets/figures/ch3/ch3_labellisation_01_outils_03_supervisely_modeles.webp" style="width:97.0%"  alt="Modèles de segmentation disponibles dans Supervisely" />
 <figcaption>Modèles de segmentation disponibles dans Supervisely</figcaption>
 </figure>
 
 <figure id="fig:ch3_labellisation_01_outils_04_supervisely_segmentation" data-latex-placement="H">
-<img src="../assets/figures/ch3/ch3_labellisation_01_outils_04_supervisely_segmentation.webp" style="width:97.0%" />
+<img src="../assets/figures/ch3/ch3_labellisation_01_outils_04_supervisely_segmentation.webp" style="width:97.0%"  alt="Labellisation avec segmentation dans Supervisely" />
 <figcaption>Labellisation avec segmentation dans Supervisely</figcaption>
 </figure>
 
@@ -664,11 +668,11 @@ Le premier exemple est une toiture plate (Figure [3.28](#fig:labellisation_acrot
 
 <figure id="fig:labellisation_acrotere_exemple" data-latex-placement="H">
 <figure id="fig:ch3_labellisation_02_exemples_01_acrotere1">
-<img src="../assets/figures/ch3/ch3_labellisation_02_exemples_01_acrotere1.webp" />
+<img src="../assets/figures/ch3/ch3_labellisation_02_exemples_01_acrotere1.webp"  alt="Original" />
 <figcaption>Original</figcaption>
 </figure>
 <figure id="fig:ch3_labellisation_02_exemples_01_acrotere2">
-<img src="../assets/figures/ch3/ch3_labellisation_02_exemples_01_acrotere2.webp" />
+<img src="../assets/figures/ch3/ch3_labellisation_02_exemples_01_acrotere2.webp"  alt="Labellisation" />
 <figcaption>Labellisation</figcaption>
 </figure>
 <figcaption>Exemple de labellisation 1</figcaption>
@@ -678,11 +682,11 @@ Le deuxième exemple (Figure [3.31](#fig:labellisation_lucarne_exemple){referenc
 
 <figure id="fig:labellisation_lucarne_exemple" data-latex-placement="H">
 <figure id="fig:ch3_labellisation_02_exemples_02_lucarne1">
-<img src="../assets/figures/ch3/ch3_labellisation_02_exemples_02_lucarne1.webp" />
+<img src="../assets/figures/ch3/ch3_labellisation_02_exemples_02_lucarne1.webp"  alt="Original" />
 <figcaption>Original</figcaption>
 </figure>
 <figure id="fig:ch3_labellisation_02_exemples_02_lucarne2">
-<img src="../assets/figures/ch3/ch3_labellisation_02_exemples_02_lucarne2.webp" />
+<img src="../assets/figures/ch3/ch3_labellisation_02_exemples_02_lucarne2.webp"  alt="Labellisation" />
 <figcaption>Labellisation</figcaption>
 </figure>
 <figcaption>Exemple de labellisation 2</figcaption>
@@ -692,11 +696,11 @@ L’exemple suivant (Figure [3.34](#fig:labellisation_solaire_exemple){reference
 
 <figure id="fig:labellisation_solaire_exemple" data-latex-placement="H">
 <figure id="fig:ch3_labellisation_02_exemples_03_solaire1">
-<img src="../assets/figures/ch3/ch3_labellisation_02_exemples_03_solaire1.webp" />
+<img src="../assets/figures/ch3/ch3_labellisation_02_exemples_03_solaire1.webp"  alt="Original" />
 <figcaption>Original</figcaption>
 </figure>
 <figure id="fig:ch3_labellisation_02_exemples_03_solaire2">
-<img src="../assets/figures/ch3/ch3_labellisation_02_exemples_03_solaire2.webp" />
+<img src="../assets/figures/ch3/ch3_labellisation_02_exemples_03_solaire2.webp"  alt="Labellisation" />
 <figcaption>Labellisation</figcaption>
 </figure>
 <figcaption>Exemple de labellisation 3</figcaption>
@@ -707,7 +711,7 @@ Le dataset inclut également des images qui contiennent une toiture selon la cou
 L’ajout de ce type d’exemples sans toiture exploitable devrait permettre à l’algorithme de mieux comprendre les caractéristiques recherchées dans un espace libre. Cette approche pourrait également éviter que l’algorithme considère automatiquement toutes les surfaces comme libres, ce qui l’aiderait à développer une capacité de discrimination plus fine entre les espaces réellement disponibles et ceux qui ne le sont pas.
 
 <figure id="fig:ch3_labellisation_02_exemples_04_image_non_annotee" data-latex-placement="H">
-<img src="../assets/figures/ch3/ch3_labellisation_02_exemples_04_image_non_annotee.webp" style="width:100.0%" />
+<img src="../assets/figures/ch3/ch3_labellisation_02_exemples_04_image_non_annotee.webp" style="width:100.0%"  alt="Exemple d’image sans aucune surface libre disponible" />
 <figcaption>Exemple d’image sans aucune surface libre disponible</figcaption>
 </figure>
 
@@ -724,7 +728,7 @@ Supervisely propose également d’autres formats d’annotation que les masques
 Les données annotées doivent être traitées puis réparties en datasets d’entraînement, de validation et de test. Cette étape constitue une phase cruciale qui détermine la qualité de l’apprentissage du modèle et sa capacité de généralisation. La Figure [3.36](#fig:ch3_postprocessing_dataset_03_overview){reference-type="ref" reference="fig:ch3_postprocessing_dataset_03_overview"} décrit les principales phases.
 
 <figure id="fig:ch3_postprocessing_dataset_03_overview" data-latex-placement="H">
-<img src="../assets/figures/ch3/ch3_postprocessing_dataset_03_overview.webp" style="width:100.0%" />
+<img src="../assets/figures/ch3/ch3_postprocessing_dataset_03_overview.webp" style="width:100.0%"  alt="Principales étapes du post-traitement" />
 <figcaption>Principales étapes du post-traitement</figcaption>
 </figure>
 
@@ -734,11 +738,11 @@ Les données ont été annotées sur l’intégralité de l’image pour des rai
 
 <figure id="fig:exemple_post_traitement_dataset" data-latex-placement="H">
 <figure id="fig:ch3_postprocessing_dataset_01_exemple_dataset">
-<img src="../assets/figures/ch3/ch3_postprocessing_dataset_01_exemple_dataset.webp" />
+<img src="../assets/figures/ch3/ch3_postprocessing_dataset_01_exemple_dataset.webp"  alt="Tuile d’exemple" />
 <figcaption>Tuile d’exemple</figcaption>
 </figure>
 <figure id="fig:ch3_postprocessing_dataset_02_exemple_postraitement">
-<img src="../assets/figures/ch3/ch3_postprocessing_dataset_02_exemple_postraitement.webp" />
+<img src="../assets/figures/ch3/ch3_postprocessing_dataset_02_exemple_postraitement.webp"  alt="Tuile d’exemple après post-traitement" />
 <figcaption>Tuile d’exemple après post-traitement</figcaption>
 </figure>
 <figcaption>Exemple de post-traitement</figcaption>
@@ -751,7 +755,7 @@ Les images étant au format GeoTIFF, il suffit de définir à 0 (noir) toutes le
 Les tuiles présentent un recouvrement de 256 pixels qui peut causer des problèmes s’il n’est pas géré correctement. La Figure [3.40](#fig:ch3_postprocessing_dataset_04_data_leakage){reference-type="ref" reference="fig:ch3_postprocessing_dataset_04_data_leakage"} illustre cette problématique avec 3 datasets destinés à l’entraînement d’un modèle. Si les tuiles sont assignées de manière aléatoire aux différents datasets, il existe un risque que le dataset d’entraînement contienne une partie de toiture également présente dans le dataset de test. Cette situation compromet l’évaluation des performances du modèle, puisque celui-ci aura déjà été exposé à certaines zones lors de la phase d’apprentissage, faussant ainsi les résultats obtenus sur des données supposées inconnues.
 
 <figure id="fig:ch3_postprocessing_dataset_04_data_leakage" data-latex-placement="H">
-<img src="../assets/figures/ch3/ch3_postprocessing_dataset_04_data_leakage.webp" style="width:100.0%" />
+<img src="../assets/figures/ch3/ch3_postprocessing_dataset_04_data_leakage.webp" style="width:100.0%"  alt="Fuite de données entre datasets" />
 <figcaption>Fuite de données entre datasets</figcaption>
 </figure>
 
@@ -762,7 +766,7 @@ Cette fuite de données entre datasets peut également se produire entre le data
 Une des manières de résoudre le problème des fuites de données consiste en un masquage sélectif d’une des tuiles en cas de recouvrement. La Figure [3.41](#fig:ch3_postprocessing_dataset_05_traitement_chevauchement){reference-type="ref" reference="fig:ch3_postprocessing_dataset_05_traitement_chevauchement"} illustre ce processus en trois phases distinctes.
 
 <figure id="fig:ch3_postprocessing_dataset_05_traitement_chevauchement" data-latex-placement="H">
-<img src="../assets/figures/ch3/ch3_postprocessing_dataset_05_traitement_chevauchement.webp" style="width:115.0%" />
+<img src="../assets/figures/ch3/ch3_postprocessing_dataset_05_traitement_chevauchement.webp" style="width:115.0%"  alt="Traitement des chevauchements entre tuiles" />
 <figcaption>Traitement des chevauchements entre tuiles</figcaption>
 </figure>
 
@@ -946,7 +950,7 @@ La segmentation sémantique nécessite de grandes quantités de données annoté
 Une alternative plus complexe à mettre en place consiste à utiliser une validation croisée (Figure [3.42](#fig:ch3_postprocessing_dataset_06_kfold){reference-type="ref" reference="fig:ch3_postprocessing_dataset_06_kfold"}). Cette méthode permet de diviser les données annotées en une partie d’entraînement constituée de 5 ensembles de données (“folds”) et un dataset de test distinct. L’avantage de cette approche réside dans le fait que chaque fold sert alternativement de dataset de validation. Ainsi, lors du premier entraînement, les folds 0, 1, 2 et 3 constituent l’ensemble d’entraînement tandis que le fold 4 sert de validation. Lors de l’entraînement suivant, les folds 0, 1, 2 et 4 sont utilisés pour l’entraînement et le fold 3 devient le dataset de validation. Cette rotation se poursuit jusqu’à ce que chaque fold ait servi de validation. Le dataset de test demeure quant à lui exclusivement réservé à l’évaluation finale, une fois l’ensemble du processus d’entraînement terminé.
 
 <figure id="fig:ch3_postprocessing_dataset_06_kfold" data-latex-placement="H">
-<img src="../assets/figures/ch3/ch3_postprocessing_dataset_06_kfold.webp" style="width:115.0%" />
+<img src="../assets/figures/ch3/ch3_postprocessing_dataset_06_kfold.webp" style="width:115.0%"  alt="Répartition datasets" />
 <figcaption>Répartition datasets</figcaption>
 </figure>
 
@@ -1063,7 +1067,7 @@ Le meilleur résultat (Code [&#91;code:post\_traitement\_stratification\_resulta
 La validation de la distribution des datasets (Figure [3.43](#fig:ch3_postprocessing_dataset_07_validation){reference-type="ref" reference="fig:ch3_postprocessing_dataset_07_validation"}) comprend trois étapes distinctes. La première consiste à vérifier les chevauchements entre tuiles pour s’assurer de l’absence de fuites de données. La deuxième étape consiste à vérifier que les images respectent le format attendu et sont correctement structurées pour l’entraînement du modèle. Enfin, la troisième vise à déterminer la répartition optimale des datasets selon les critères de stratification définis.
 
 <figure id="fig:ch3_postprocessing_dataset_07_validation" data-latex-placement="H">
-<img src="../assets/figures/ch3/ch3_postprocessing_dataset_07_validation.webp" style="width:105.0%" />
+<img src="../assets/figures/ch3/ch3_postprocessing_dataset_07_validation.webp" style="width:105.0%"  alt="Validation de la distribution des datasets" />
 <figcaption>Validation de la distribution des datasets</figcaption>
 </figure>
 
@@ -1071,19 +1075,19 @@ Le chevauchement des tuiles est vérifié après leur traitement. La Figure [3.4
 
 <figure id="fig:exemple_post_traitement_validation_tuile_droite" data-latex-placement="H">
 <figure id="fig:ch3_postprocessing_dataset_08_validation_chevauchement_droite1">
-<img src="../assets/figures/ch3/ch3_postprocessing_dataset_08_validation_chevauchement_droite1.webp" />
+<img src="../assets/figures/ch3/ch3_postprocessing_dataset_08_validation_chevauchement_droite1.webp"  alt="Tuile avec chevauchement à droite (rouge)" />
 <figcaption>Tuile avec chevauchement à droite (rouge)</figcaption>
 </figure>
 <figure id="fig:ch3_postprocessing_dataset_09_validation_chevauchement_droite2">
-<img src="../assets/figures/ch3/ch3_postprocessing_dataset_09_validation_chevauchement_droite2.webp" />
+<img src="../assets/figures/ch3/ch3_postprocessing_dataset_09_validation_chevauchement_droite2.webp"  alt="Tuile avec chevauchement à gauche (bleu)" />
 <figcaption>Tuile avec chevauchement à gauche (bleu)</figcaption>
 </figure>
 <figure id="fig:ch3_postprocessing_dataset_10_validation_chevauchement_droite3">
-<img src="../assets/figures/ch3/ch3_postprocessing_dataset_10_validation_chevauchement_droite3.webp" />
+<img src="../assets/figures/ch3/ch3_postprocessing_dataset_10_validation_chevauchement_droite3.webp"  alt="Tuile avec chevauchement à droite avec annotations (rouge)" />
 <figcaption>Tuile avec chevauchement à droite avec annotations (rouge)</figcaption>
 </figure>
 <figure id="fig:ch3_postprocessing_dataset_11_validation_chevauchement_droite4">
-<img src="../assets/figures/ch3/ch3_postprocessing_dataset_11_validation_chevauchement_droite4.webp" />
+<img src="../assets/figures/ch3/ch3_postprocessing_dataset_11_validation_chevauchement_droite4.webp"  alt="Tuile avec chevauchement à gauche avec annotations (bleu)" />
 <figcaption>Tuile avec chevauchement à gauche avec annotations (bleu)</figcaption>
 </figure>
 <figcaption>Cas chevauchement tuile à droite</figcaption>
@@ -1093,19 +1097,19 @@ La Figure [3.53](#fig:exemple_post_traitement_validation_tuile_bas){reference-ty
 
 <figure id="fig:exemple_post_traitement_validation_tuile_bas" data-latex-placement="H">
 <figure id="fig:ch3_postprocessing_dataset_12_validation_chevauchement_bas1">
-<img src="../assets/figures/ch3/ch3_postprocessing_dataset_12_validation_chevauchement_bas1.webp" />
+<img src="../assets/figures/ch3/ch3_postprocessing_dataset_12_validation_chevauchement_bas1.webp"  alt="Tuile avec chevauchement en bas (rouge)" />
 <figcaption>Tuile avec chevauchement en bas (rouge)</figcaption>
 </figure>
 <figure id="fig:ch3_postprocessing_dataset_13_validation_chevauchement_bas2">
-<img src="../assets/figures/ch3/ch3_postprocessing_dataset_13_validation_chevauchement_bas2.webp" />
+<img src="../assets/figures/ch3/ch3_postprocessing_dataset_13_validation_chevauchement_bas2.webp"  alt="Tuile avec chevauchement en haut (bleu)" />
 <figcaption>Tuile avec chevauchement en haut (bleu)</figcaption>
 </figure>
 <figure id="fig:ch3_postprocessing_dataset_14_validation_chevauchement_bas3">
-<img src="../assets/figures/ch3/ch3_postprocessing_dataset_14_validation_chevauchement_bas3.webp" />
+<img src="../assets/figures/ch3/ch3_postprocessing_dataset_14_validation_chevauchement_bas3.webp"  alt="Tuile avec chevauchement en bas avec annotations (rouge)" />
 <figcaption>Tuile avec chevauchement en bas avec annotations (rouge)</figcaption>
 </figure>
 <figure id="fig:ch3_postprocessing_dataset_15_validation_chevauchement_bas4">
-<img src="../assets/figures/ch3/ch3_postprocessing_dataset_15_validation_chevauchement_bas4.webp" />
+<img src="../assets/figures/ch3/ch3_postprocessing_dataset_15_validation_chevauchement_bas4.webp"  alt="Tuile avec chevauchement en haut avec annotations (bleu)" />
 <figcaption>Tuile avec chevauchement en haut avec annotations (bleu)</figcaption>
 </figure>
 <figcaption>Cas chevauchement tuile en bas</figcaption>
@@ -1119,15 +1123,15 @@ La solution adoptée (Figure [3.57](#fig:ch3_postprocessing_dataset_verification
 
 <figure id="fig:ch3_postprocessing_dataset_verification_taille" data-latex-placement="H">
 <figure id="fig:ch3_postprocessing_dataset_16_verification_taille1">
-<img src="../assets/figures/ch3/ch3_postprocessing_dataset_16_verification_taille1.webp" />
+<img src="../assets/figures/ch3/ch3_postprocessing_dataset_16_verification_taille1.webp"  alt="Tuile (ligne pointillée jaune) avec bandes noires" />
 <figcaption>Tuile (ligne pointillée jaune) avec bandes noires</figcaption>
 </figure>
 <figure id="fig:ch3_postprocessing_dataset_17_verification_taille2">
-<img src="../assets/figures/ch3/ch3_postprocessing_dataset_17_verification_taille2.webp" />
+<img src="../assets/figures/ch3/ch3_postprocessing_dataset_17_verification_taille2.webp"  alt="Annotations (ligne pointillée jaune) avec bandes noires" />
 <figcaption>Annotations (ligne pointillée jaune) avec bandes noires</figcaption>
 </figure>
 <figure id="fig:ch3_postprocessing_dataset_18_verification_taille3">
-<img src="../assets/figures/ch3/ch3_postprocessing_dataset_18_verification_taille3.webp" />
+<img src="../assets/figures/ch3/ch3_postprocessing_dataset_18_verification_taille3.webp"  alt="Tuile et annotations (ligne pointillée jaune) avec bandes noires" />
 <figcaption>Tuile et annotations (ligne pointillée jaune) avec bandes noires</figcaption>
 </figure>
 <figcaption>Ajout de bandes noires pour convertir les tuiles et annotations (ligne pointillée jaune) au format 1280x1280 pixels</figcaption>
@@ -1140,12 +1144,12 @@ Finalement, l’algorithme utilisé pour la distribution des données annotées 
 Les Figures [3.58](#fig:ch3_postprocessing_dataset_19_distribution_barchart_surface){reference-type="ref" reference="fig:ch3_postprocessing_dataset_19_distribution_barchart_surface"} et [3.59](#fig:ch3_postprocessing_dataset_20_distribution_barchart_classe){reference-type="ref" reference="fig:ch3_postprocessing_dataset_20_distribution_barchart_classe"} représentent respectivement la distribution des intervalles de surface et des classes <a href="../glossary.html#gloss-sia"><span data-acronym-label="sia" data-acronym-form="singular+short">sia</span></a> par dataset. La ligne pointillée en bleu indique le seuil théorique équilibré : les datasets situés au-dessus de cette ligne ont reçu plus d’images que l’objectif fixé. L’algorithme de stratification optimise au mieux la distribution, mais des compromis demeurent nécessaires pour maintenir l’équilibre global entre les différents critères de stratification.
 
 <figure id="fig:ch3_postprocessing_dataset_19_distribution_barchart_surface" data-latex-placement="H">
-<img src="../assets/figures/ch3/ch3_postprocessing_dataset_19_distribution_barchart_surface.webp" style="width:100.0%" />
+<img src="../assets/figures/ch3/ch3_postprocessing_dataset_19_distribution_barchart_surface.webp" style="width:100.0%"  alt="Distribution des intervalles de surface par dataset" />
 <figcaption>Distribution des intervalles de surface par dataset</figcaption>
 </figure>
 
 <figure id="fig:ch3_postprocessing_dataset_20_distribution_barchart_classe" data-latex-placement="H">
-<img src="../assets/figures/ch3/ch3_postprocessing_dataset_20_distribution_barchart_classe.webp" style="width:105.0%" />
+<img src="../assets/figures/ch3/ch3_postprocessing_dataset_20_distribution_barchart_classe.webp" style="width:105.0%"  alt="Distribution des classes sia par dataset" />
 <figcaption>Distribution des classes <a href="../glossary.html#gloss-sia"><span data-acronym-label="sia" data-acronym-form="singular+short">sia</span></a> par dataset</figcaption>
 </figure>
 
@@ -1166,7 +1170,7 @@ Segmentation models pytorch (SMP) &#91;[85](../bibliography.md#ref-noauthor_welc
 Une des architectures les plus populaires est U-Net &#91;[86](../bibliography.md#ref-ronneberger_u-net_2015)&#93; qui permet d’expliquer le fonctionnement des modèles dans SMP. U-Net est un réseau de neurones convolutionnel en forme de “U” (Figure [3.60](#fig:ch36_architecture_01_architecture_unet){reference-type="ref" reference="fig:ch36_architecture_01_architecture_unet"}) qui se divise en trois parties : l’encodeur, le décodeur et les connexions de saut (skip connections).
 
 <figure id="fig:ch36_architecture_01_architecture_unet" data-latex-placement="H">
-<img src="../assets/figures/ch3/ch36_architecture_01_architecture_unet.webp" style="width:105.0%" />
+<img src="../assets/figures/ch3/ch36_architecture_01_architecture_unet.webp" style="width:105.0%"  alt="Architecture U-Net [86]" />
 <figcaption>Architecture U-Net <span class="citation" data-cites="ronneberger_u-net_2015">[<a href="../bibliography.html#ref-ronneberger_u-net_2015" role="doc-biblioref">86</a>]</span></figcaption>
 </figure>
 
@@ -1208,7 +1212,7 @@ En synthèse, le Tableau [&#91;tab:ch36\_architecture\_smp\_avantage\_inconvenie
 Afin d’améliorer les performances des architectures de base, il est possible d’intégrer des encodeurs plus modernes tout en conservant le décodeur d’origine. La Figure [3.61](#fig:ch36_architecture_02_architecture_taille_decodeur){reference-type="ref" reference="fig:ch36_architecture_02_architecture_taille_decodeur"} présente la taille des décodeurs des différentes architectures SMP. La taille du décodeur s’étend de 0,1M de paramètres pour PAN à 29,6M pour DPT, ce qui aura une influence sur les performances et le temps d’entraînement des modèles.
 
 <figure id="fig:ch36_architecture_02_architecture_taille_decodeur" data-latex-placement="H">
-<img src="../assets/figures/ch3/ch36_architecture_02_architecture_taille_decodeur.webp" style="width:100.0%" />
+<img src="../assets/figures/ch3/ch36_architecture_02_architecture_taille_decodeur.webp" style="width:100.0%"  alt="Taille des décodeurs des architectures SMP" />
 <figcaption>Taille des décodeurs des architectures SMP</figcaption>
 </figure>
 
@@ -1227,14 +1231,14 @@ Les encodeurs sélectionnés sont les plus populaires et les plus performants, i
 La Figure [3.62](#fig:ch36_architecture_03_backbone_taille_encodeur_famille){reference-type="ref" reference="fig:ch36_architecture_03_backbone_taille_encodeur_famille"} présente les encodeurs (backbone) séléctionnés groupés par architecture. Certains encodeurs sont disponibles dans plusieurs tailles pour une même architecture, par exemple EfficientNet-B3 et EfficientNet-B5.
 
 <figure id="fig:ch36_architecture_03_backbone_taille_encodeur_famille" data-latex-placement="H">
-<img src="../assets/figures/ch3/ch36_architecture_03_backbone_taille_encodeur_famille.webp" style="width:100.0%" />
+<img src="../assets/figures/ch3/ch36_architecture_03_backbone_taille_encodeur_famille.webp" style="width:100.0%"  alt="Encodeurs groupés par type d’architecture" />
 <figcaption>Encodeurs groupés par type d’architecture</figcaption>
 </figure>
 
 La Figure [3.63](#fig:ch36_architecture_04_backbone_taille_encodeur_ordonnee){reference-type="ref" reference="fig:ch36_architecture_04_backbone_taille_encodeur_ordonnee"} présente les encodeurs par ordre croissant de taille, mesurée en nombre de paramètres. Cette représentation permet de visualiser rapidement la complexité relative des différents encodeurs. Le plus petit encodeur est FastViT T8 avec 3.2 millions de paramètres, tandis que le plus grand est EfficientNetV2-XL avec 206.0 millions de paramètres.
 
 <figure id="fig:ch36_architecture_04_backbone_taille_encodeur_ordonnee" data-latex-placement="H">
-<img src="../assets/figures/ch3/ch36_architecture_04_backbone_taille_encodeur_ordonnee.webp" style="width:100.0%" />
+<img src="../assets/figures/ch3/ch36_architecture_04_backbone_taille_encodeur_ordonnee.webp" style="width:100.0%"  alt="Encodeurs par ordre croissant de paramètres" />
 <figcaption>Encodeurs par ordre croissant de paramètres</figcaption>
 </figure>
 
@@ -1324,11 +1328,11 @@ YOLO dispose de stratégies d’augmentation de données propres dans sa librair
 
 <figure id="fig:ch36_augmentation_donnees_yolo_mosaic" data-latex-placement="H">
 <figure id="fig:ch36_augmentations_00a_yolo_exemple1_original">
-<img src="../assets/figures/ch3/ch36_augmentations_00a_yolo_exemple1_original.webp" />
+<img src="../assets/figures/ch3/ch36_augmentations_00a_yolo_exemple1_original.webp"  alt="Image originale" />
 <figcaption>Image originale</figcaption>
 </figure>
 <figure id="fig:ch36_augmentations_00b_yolo_exemple1_mosaic">
-<img src="../assets/figures/ch3/ch36_augmentations_00b_yolo_exemple1_mosaic.webp" />
+<img src="../assets/figures/ch3/ch36_augmentations_00b_yolo_exemple1_mosaic.webp"  alt="Image transformée avec mosaic" />
 <figcaption>Image transformée avec <code>mosaic</code></figcaption>
 </figure>
 <figcaption>Transformation <code>mosaic</code> de YOLO</figcaption>
@@ -1357,28 +1361,28 @@ La première transformation `SquareSymmetry` applique une symétrie à l’image
 La Figure [3.67](#fig:ch36_augmentations_01_squaresymmetry){reference-type="ref" reference="fig:ch36_augmentations_01_squaresymmetry"} montre deux exemples de cet effet. Dans l’exemple de gauche (colonne du centre), la symétrie est un miroir vertical, cette même symétrie est bien entendu aussi appliquée à son masque correspondant. L’exemple de droite n’applique aucun effet.
 
 <figure id="fig:ch36_augmentations_01_squaresymmetry" data-latex-placement="H">
-<img src="../assets/figures/ch3/ch36_augmentations_01_squaresymmetry.webp" style="width:100.0%" />
+<img src="../assets/figures/ch3/ch36_augmentations_01_squaresymmetry.webp" style="width:100.0%"  alt="Augmentation de données - exemples de symétrie" />
 <figcaption>Augmentation de données - exemples de symétrie</figcaption>
 </figure>
 
 Le deuxième effet `Affine` applique plusieurs opérations sur l’image. L’effet d’échelle (Figure [3.68](#fig:ch36_augmentations_02_scale){reference-type="ref" reference="fig:ch36_augmentations_02_scale"}) réalise un léger zoom entre ± 5%. Les essais avec un zoom plus important ont montré que le modèle avait des difficultés à apprendre. Certaines images ayant un grand pourcentage d’arrière-plan noir, un zoom trop important peut rapidement réduire drastiquement la partie utile à l’apprentissage du modèle.
 
 <figure id="fig:ch36_augmentations_02_scale" data-latex-placement="H">
-<img src="../assets/figures/ch3/ch36_augmentations_02_scale.webp" style="width:100.0%" />
+<img src="../assets/figures/ch3/ch36_augmentations_02_scale.webp" style="width:100.0%"  alt="Augmentation de données - exemples de échelle" />
 <figcaption>Augmentation de données - exemples de échelle</figcaption>
 </figure>
 
 `Affine` dispose d’un effet de translation (Figure [3.68](#fig:ch36_augmentations_02_scale){reference-type="ref" reference="fig:ch36_augmentations_02_scale"}) dans lequel l’image est déplacée vers la droite de 10%. Cet effet implique une perte d’information utile à l’apprentissage et doit être utilisé avec parcimonie.
 
 <figure id="fig:ch36_augmentations_03_translation" data-latex-placement="H">
-<img src="../assets/figures/ch3/ch36_augmentations_03_translation.webp" style="width:100.0%" />
+<img src="../assets/figures/ch3/ch36_augmentations_03_translation.webp" style="width:100.0%"  alt="Augmentation de données - exemples de translation" />
 <figcaption>Augmentation de données - exemples de translation</figcaption>
 </figure>
 
 La dernière option utilisée de `Affine` est la rotation (Figure [3.70](#fig:ch36_augmentations_04_rotation){reference-type="ref" reference="fig:ch36_augmentations_04_rotation"}. Pour éviter que cela ne soit une symétrie mais tout de même apporter une variété à l’image et améliorer l’apprentissage, la rotation est comprise entre ± 45°. Tous les effets combinés de `Affine` ont une probabilité `p=0.6`.
 
 <figure id="fig:ch36_augmentations_04_rotation" data-latex-placement="H">
-<img src="../assets/figures/ch3/ch36_augmentations_04_rotation.webp" style="width:100.0%" />
+<img src="../assets/figures/ch3/ch36_augmentations_04_rotation.webp" style="width:100.0%"  alt="Augmentation de données - exemples de rotation" />
 <figcaption>Augmentation de données - exemples de rotation</figcaption>
 </figure>
 
@@ -1387,21 +1391,21 @@ La dernière option utilisée de `Affine` est la rotation (Figure [3.70](#fig:ch
 `GaussianBlur` floute l’image d’entrée (Figure [3.71](#fig:ch36_augmentations_05_flou_gaussien){reference-type="ref" reference="fig:ch36_augmentations_05_flou_gaussien"}) à l’aide d’un filtre gaussien dont la taille du noyau et la valeur *σ* sont aléatoires. Les valeurs par défaut sont utilisées sauf pour `blur_limit` qui augmente la taille des noyaux et le floutage, sinon le flou est à peine visible. `blur_limit=(3, 7)` implique un flou plus fort mais encore raisonnable.
 
 <figure id="fig:ch36_augmentations_05_flou_gaussien" data-latex-placement="H">
-<img src="../assets/figures/ch3/ch36_augmentations_05_flou_gaussien.webp" style="width:100.0%" />
+<img src="../assets/figures/ch3/ch36_augmentations_05_flou_gaussien.webp" style="width:100.0%"  alt="Augmentation de données - exemples de flou gaussien" />
 <figcaption>Augmentation de données - exemples de flou gaussien</figcaption>
 </figure>
 
 `MedianBlur` utilise un filtre médian pour flouter l’image d’entrée (Figure [3.72](#fig:ch36_augmentations_06_flou_median){reference-type="ref" reference="fig:ch36_augmentations_06_flou_median"}). Le filtrage médian est particulièrement efficace pour supprimer les bruits de type « poivre et sel » tout en préservant les contours. La valeur par défaut est `blur_limit=(3, 7)`, mais avec `blur_limit=5` le rendu est plus uniforme.
 
 <figure id="fig:ch36_augmentations_06_flou_median" data-latex-placement="H">
-<img src="../assets/figures/ch3/ch36_augmentations_06_flou_median.webp" style="width:100.0%" />
+<img src="../assets/figures/ch3/ch36_augmentations_06_flou_median.webp" style="width:100.0%"  alt="Augmentation de données - exemples de flou médian" />
 <figcaption>Augmentation de données - exemples de flou médian</figcaption>
 </figure>
 
 `MotionBlur` simule les effets de flou de mouvement qui se produisent lors de la capture d’images, tels que le tremblement de l’appareil photo ou le mouvement d’un objet. Les valeurs par défaut créent un effet très léger de mouvement.
 
 <figure id="fig:ch36_augmentations_07_flou_motion" data-latex-placement="H">
-<img src="../assets/figures/ch3/ch36_augmentations_07_flou_motion.webp" style="width:100.0%" />
+<img src="../assets/figures/ch3/ch36_augmentations_07_flou_motion.webp" style="width:100.0%"  alt="Augmentation de données - exemples de flou “mouvement”" />
 <figcaption>Augmentation de données - exemples de flou “mouvement”</figcaption>
 </figure>
 
@@ -1410,7 +1414,7 @@ Le deuxième `OneOf` permet de sélectionner une des transformations disponibles
 Le bruit gaussien est un bruit dont la densité de probabilité suit la loi normale. `GaussNoise` permet d’ajouter du bruit gaussien à l’image (Figure [3.74](#fig:ch36_augmentations_08_bruit_gaussien){reference-type="ref" reference="fig:ch36_augmentations_08_bruit_gaussien"}).
 
 <figure id="fig:ch36_augmentations_08_bruit_gaussien" data-latex-placement="H">
-<img src="../assets/figures/ch3/ch36_augmentations_08_bruit_gaussien.webp" style="width:100.0%" />
+<img src="../assets/figures/ch3/ch36_augmentations_08_bruit_gaussien.webp" style="width:100.0%"  alt="Augmentation de données - exemples de bruit gaussien" />
 <figcaption>Augmentation de données - exemples de bruit gaussien</figcaption>
 </figure>
 
@@ -1421,21 +1425,21 @@ Le bruit gaussien est un bruit dont la densité de probabilité suit la loi norm
 2.  Les variations aléatoires de l’intensité des pixels
 
 <figure id="fig:ch36_augmentations_09_bruit_iso" data-latex-placement="H">
-<img src="../assets/figures/ch3/ch36_augmentations_09_bruit_iso.webp" style="width:100.0%" />
+<img src="../assets/figures/ch3/ch36_augmentations_09_bruit_iso.webp" style="width:100.0%"  alt="Augmentation de données - exemples de bruit ISO" />
 <figcaption>Augmentation de données - exemples de bruit ISO</figcaption>
 </figure>
 
 `MultiplicativeNoise` multiplie chaque pixel de l’image par une valeur aléatoire ou un ensemble de valeurs, créant ainsi un bruit qui varie selon l’intensité de l’image (Figure [3.76](#fig:ch36_augmentations_10_bruit_multiplicatif){reference-type="ref" reference="fig:ch36_augmentations_10_bruit_multiplicatif"}).
 
 <figure id="fig:ch36_augmentations_10_bruit_multiplicatif" data-latex-placement="H">
-<img src="../assets/figures/ch3/ch36_augmentations_10_bruit_multiplicatif.webp" style="width:100.0%" />
+<img src="../assets/figures/ch3/ch36_augmentations_10_bruit_multiplicatif.webp" style="width:100.0%"  alt="Augmentation de données - exemples de bruit “multiplicatif”" />
 <figcaption>Augmentation de données - exemples de bruit “multiplicatif”</figcaption>
 </figure>
 
 `SaltAndPepper` est une forme de bruit impulsionnel qui place aléatoirement les pixels à une valeur maximale (sel) ou à une valeur minimale (poivre).
 
 <figure id="fig:ch36_augmentations_11_bruit_poivre_et_sel" data-latex-placement="H">
-<img src="../assets/figures/ch3/ch36_augmentations_11_bruit_poivre_et_sel.webp" style="width:100.0%" />
+<img src="../assets/figures/ch3/ch36_augmentations_11_bruit_poivre_et_sel.webp" style="width:100.0%"  alt="Augmentation de données - exemples de bruit “poivre et sel”" />
 <figcaption>Augmentation de données - exemples de bruit “poivre et sel”</figcaption>
 </figure>
 
@@ -1444,14 +1448,14 @@ Les deux dernières transformations sont des simulations d’effets météo sur 
 `RandomSunFlare` simule un effet de lumière solaire sur l’image en ajoutant des cercles semi-transparents de différentes tailles (Figure [3.78](#fig:ch36_augmentations_12_effets_meteo_eblouissement){reference-type="ref" reference="fig:ch36_augmentations_12_effets_meteo_eblouissement"}).
 
 <figure id="fig:ch36_augmentations_12_effets_meteo_eblouissement" data-latex-placement="H">
-<img src="../assets/figures/ch3/ch36_augmentations_12_effets_meteo_eblouissement.webp" style="width:100.0%" />
+<img src="../assets/figures/ch3/ch36_augmentations_12_effets_meteo_eblouissement.webp" style="width:100.0%"  alt="Augmentation de données - exemples d’effet météo éblouissement" />
 <figcaption>Augmentation de données - exemples d’effet météo éblouissement</figcaption>
 </figure>
 
 `RandomFog` simule un effet de brouillard sur l’image (Figure [3.79](#fig:ch36_augmentations_13_effets_meteo_brouillard){reference-type="ref" reference="fig:ch36_augmentations_13_effets_meteo_brouillard"}).
 
 <figure id="fig:ch36_augmentations_13_effets_meteo_brouillard" data-latex-placement="H">
-<img src="../assets/figures/ch3/ch36_augmentations_13_effets_meteo_brouillard.webp" style="width:100.0%" />
+<img src="../assets/figures/ch3/ch36_augmentations_13_effets_meteo_brouillard.webp" style="width:100.0%"  alt="Augmentation de données - exemples d’effet météo brouillard" />
 <figcaption>Augmentation de données - exemples d’effet météo brouillard</figcaption>
 </figure>
 
@@ -1462,12 +1466,12 @@ Les résultats obtenus avec la combinaison séquentielle de transformations de `
 La Figure [3.80](#fig:ch36_augmentations_14_exemples_complets1){reference-type="ref" reference="fig:ch36_augmentations_14_exemples_complets1"} et [3.81](#fig:ch36_augmentations_15_exemples_complets2){reference-type="ref" reference="fig:ch36_augmentations_15_exemples_complets2"} représentent chacune deux exemples d’augmentations à partir de la même image. Avec les probabilités d’application de chaque transformation, chaque image augmentée est différente et cela sans que l’image de base soit trop dénaturée.
 
 <figure id="fig:ch36_augmentations_14_exemples_complets1" data-latex-placement="H">
-<img src="../assets/figures/ch3/ch36_augmentations_14_exemples_complets1.webp" style="width:100.0%" />
+<img src="../assets/figures/ch3/ch36_augmentations_14_exemples_complets1.webp" style="width:100.0%"  alt="Augmentation de données - exemples complets 1" />
 <figcaption>Augmentation de données - exemples complets 1</figcaption>
 </figure>
 
 <figure id="fig:ch36_augmentations_15_exemples_complets2" data-latex-placement="H">
-<img src="../assets/figures/ch3/ch36_augmentations_15_exemples_complets2.webp" style="width:100.0%" />
+<img src="../assets/figures/ch3/ch36_augmentations_15_exemples_complets2.webp" style="width:100.0%"  alt="Augmentation de données - exemples complets 2" />
 <figcaption>Augmentation de données - exemples complets 2</figcaption>
 </figure>
 
@@ -1910,15 +1914,15 @@ Les deux étapes précédentes vont déterminer l’action à réaliser sur l’
 
 <figure id="fig:piste_exploree_classification_image_exemple" data-latex-placement="H">
 <figure id="fig:ch3_piste_exploree_classification_02_image_originale">
-<img src="../assets/figures/ch3/ch3_piste_exploree_classification_02_image_originale.webp" />
+<img src="../assets/figures/ch3/ch3_piste_exploree_classification_02_image_originale.webp"  alt="Image d’exemple" />
 <figcaption>Image d’exemple</figcaption>
 </figure>
 <figure id="fig:ch3_piste_exploree_classification_03_couche_toiture">
-<img src="../assets/figures/ch3/ch3_piste_exploree_classification_03_couche_toiture.webp" />
+<img src="../assets/figures/ch3/ch3_piste_exploree_classification_03_couche_toiture.webp"  alt="Couche toiture superposée" />
 <figcaption>Couche toiture superposée</figcaption>
 </figure>
 <figure id="fig:ch3_piste_exploree_classification_04_image_resultante">
-<img src="../assets/figures/ch3/ch3_piste_exploree_classification_04_image_resultante.webp" />
+<img src="../assets/figures/ch3/ch3_piste_exploree_classification_04_image_resultante.webp"  alt="Résultat final" />
 <figcaption>Résultat final</figcaption>
 </figure>
 <figcaption>Exemple de toiture avec un "trou" et sans superstructure</figcaption>
@@ -1931,12 +1935,12 @@ La Figure [3.88](#fig:ch3_piste_exploree_classification_05_classification_simpli
 La Figure [3.89](#fig:ch3_piste_exploree_classification_06_classification_finale){reference-type="ref" reference="fig:ch3_piste_exploree_classification_06_classification_finale"} montre la classification finale en 3 classes. Les résultats indiquent que quasiment toutes les toitures sont libres, ce qui est loin d’être le cas. Le problème est la couche des superstructures, celle-ci n’est pas complète et pas tous les éléments en dessous de 9 m<sup>2</sup> sont représentés. La classification ne tient pas en compte de la réalité terrain et sa précision et pertinence va dépendre de la qualité des données géomatiques utilisées.
 
 <figure id="fig:ch3_piste_exploree_classification_05_classification_simplified" data-latex-placement="H">
-<img src="../assets/figures/ch3/ch3_piste_exploree_classification_05_classification_intermediaire.webp" style="width:100.0%" />
+<img src="../assets/figures/ch3/ch3_piste_exploree_classification_05_classification_intermediaire.webp" style="width:100.0%"  alt="Classification intermédiaire" />
 <figcaption>Classification intermédiaire</figcaption>
 </figure>
 
 <figure id="fig:ch3_piste_exploree_classification_06_classification_finale" data-latex-placement="H">
-<img src="../assets/figures/ch3/ch3_piste_exploree_classification_06_classification_finale.webp" style="width:100.0%" />
+<img src="../assets/figures/ch3/ch3_piste_exploree_classification_06_classification_finale.webp" style="width:100.0%"  alt="Classification finale" />
 <figcaption>Classification finale</figcaption>
 </figure>
 
@@ -1944,19 +1948,19 @@ La Figure [3.94](#fig:piste_exploree_classification_resultats_explications){refe
 
 <figure id="fig:piste_exploree_classification_resultats_explications" data-latex-placement="H">
 <figure id="fig:ch3_piste_exploree_classification_07_resultats_image_exemple">
-<img src="../assets/figures/ch3/ch3_piste_exploree_classification_07_resultats_image_exemple.webp" />
+<img src="../assets/figures/ch3/ch3_piste_exploree_classification_07_resultats_image_exemple.webp"  alt="Image d’exemple" />
 <figcaption>Image d’exemple</figcaption>
 </figure>
 <figure id="fig:ch3_piste_exploree_classification_08_resultats_image_toiture">
-<img src="../assets/figures/ch3/ch3_piste_exploree_classification_08_resultats_image_toiture.webp" />
+<img src="../assets/figures/ch3/ch3_piste_exploree_classification_08_resultats_image_toiture.webp"  alt="Couche des toitures" />
 <figcaption>Couche des toitures</figcaption>
 </figure>
 <figure id="fig:ch3_piste_exploree_classification_10_resultats_image_sp">
-<img src="../assets/figures/ch3/ch3_piste_exploree_classification_10_resultats_image_sp.webp" />
+<img src="../assets/figures/ch3/ch3_piste_exploree_classification_10_resultats_image_sp.webp"  alt="Couche des superstructures" />
 <figcaption>Couche des superstructures</figcaption>
 </figure>
 <figure id="fig:ch3_piste_exploree_classification_09_resultats_image__toiture_sp">
-<img src="../assets/figures/ch3/ch3_piste_exploree_classification_09_resultats_image__toiture_sp.webp" />
+<img src="../assets/figures/ch3/ch3_piste_exploree_classification_09_resultats_image__toiture_sp.webp"  alt="Couche des toitures et superstructures" />
 <figcaption>Couche des toitures et superstructures</figcaption>
 </figure>
 <figcaption>Exemple de toiture problématique pour la classification</figcaption>
@@ -2018,27 +2022,27 @@ La sixième étape (Figure [3.100](#fig:ch3_essai_sam_06_une_zone_libre){referen
 
 <figure id="fig:essai_algo_sam" data-latex-placement="H">
 <figure id="fig:ch3_essai_sam_01_image_original">
-<img src="../assets/figures/ch3/ch3_essai_sam_01_image_original.webp" />
+<img src="../assets/figures/ch3/ch3_essai_sam_01_image_original.webp"  alt="Image d’exemple" />
 <figcaption>Image d’exemple</figcaption>
 </figure>
 <figure id="fig:ch3_essai_sam_02_ROI">
-<img src="../assets/figures/ch3/ch3_essai_sam_02_ROI.webp" />
+<img src="../assets/figures/ch3/ch3_essai_sam_02_ROI.webp"  alt="Zone d’intérêt (ROI)" />
 <figcaption>Zone d’intérêt (ROI)</figcaption>
 </figure>
 <figure id="fig:ch3_essai_sam_03_200_masks">
-<img src="../assets/figures/ch3/ch3_essai_sam_03_200_masks.webp" />
+<img src="../assets/figures/ch3/ch3_essai_sam_03_200_masks.webp"  alt="Polygones segmentés (200)" />
 <figcaption>Polygones segmentés (200)</figcaption>
 </figure>
 <figure id="fig:ch3_essai_sam_04_194_filtered_masks">
-<img src="../assets/figures/ch3/ch3_essai_sam_04_194_filtered_masks.webp" />
+<img src="../assets/figures/ch3/ch3_essai_sam_04_194_filtered_masks.webp"  alt="Polygone segmentés filtrés (194)" />
 <figcaption>Polygone segmentés filtrés (194)</figcaption>
 </figure>
 <figure id="fig:ch3_essai_sam_05_filtered_masks_overlay">
-<img src="../assets/figures/ch3/ch3_essai_sam_05_filtered_masks_overlay.webp" />
+<img src="../assets/figures/ch3/ch3_essai_sam_05_filtered_masks_overlay.webp"  alt="Mise en évidence des polygones filtrés" />
 <figcaption>Mise en évidence des polygones filtrés</figcaption>
 </figure>
 <figure id="fig:ch3_essai_sam_06_une_zone_libre">
-<img src="../assets/figures/ch3/ch3_essai_sam_06_une_zone_libre.webp" />
+<img src="../assets/figures/ch3/ch3_essai_sam_06_une_zone_libre.webp"  alt="Espace libre" />
 <figcaption>Espace libre</figcaption>
 </figure>
 <figcaption>Essai d’utilisation de <a href="../glossary.html#gloss-sam"><span data-acronym-label="sam" data-acronym-form="singular+abbrv">sam</span></a></figcaption>
@@ -2049,7 +2053,7 @@ La sixième étape (Figure [3.100](#fig:ch3_essai_sam_06_une_zone_libre){referen
 La piste d’un fine-tuning de <a href="../glossary.html#gloss-sam"><span data-acronym-label="sam" data-acronym-form="singular+abbrv">sam</span></a> pour mieux l’adapter à la tâche d’identification des espaces libres a été explorée. Un dataset de 45 images (Figure [3.102](#fig:ch3_piste_exploree_classification_11_fine_tuning_dataset){reference-type="ref" reference="fig:ch3_piste_exploree_classification_11_fine_tuning_dataset"}) n’a pas permis d’améliorer significativement les performances du modèle. Une des problématiques rencontrées lors de la création de ce dataset est qu’il faut identifier tous les obstacles présents sur la toiture, ce qui prend énormément de temps et nécessite une grande quantité de classes différentes.
 
 <figure id="fig:ch3_piste_exploree_classification_11_fine_tuning_dataset" data-latex-placement="H">
-<img src="../assets/figures/ch3/ch3_piste_exploree_classification_11_fine_tuning_dataset.webp" style="width:100.0%" />
+<img src="../assets/figures/ch3/ch3_piste_exploree_classification_11_fine_tuning_dataset.webp" style="width:100.0%"  alt="Image du dataset pour le fine-tuning sam" />
 <figcaption>Image du dataset pour le fine-tuning <a href="../glossary.html#gloss-sam"><span data-acronym-label="sam" data-acronym-form="singular+abbrv">sam</span></a></figcaption>
 </figure>
 

@@ -1,3 +1,7 @@
+---
+description: "Ce chapitre va permettre d’avoir les bases nécessaires pour comprendre ce qu’est le machine learning, ses limites et ses applications."
+---
+
 # Principes fondamentaux de machine learning {#chap:fondamentaux_ml}
 
 Ce chapitre va permettre d’avoir les bases nécessaires pour comprendre ce qu’est le machine learning, ses limites et ses applications.
@@ -27,7 +31,7 @@ Les principaux algorithmes de machine learning peuvent se diviser en 2 catégori
 La figure [6.1](#fig:A1_01_resume_machine_learning_supervise){reference-type="ref" reference="fig:A1_01_resume_machine_learning_supervise"} permet d’avoir un aperçu des phases de création d’un modèle de machine learning à partir d’un algorithme supervisé.
 
 <figure id="fig:A1_01_resume_machine_learning_supervise" data-latex-placement="H">
-<img src="../assets/figures/A1/A1_01_resume_machine_learning_supervise.webp" style="width:100.0%" />
+<img src="../assets/figures/A1/A1_01_resume_machine_learning_supervise.webp" style="width:100.0%"  alt="Résumé du machine learning supervisé" />
 <figcaption>Résumé du machine learning supervisé</figcaption>
 </figure>
 
@@ -141,14 +145,14 @@ Un réseau de neurones est un modèle mathématique inspiré de la structure et 
 L’idée a été inspirée par le fonctionnement des neurones biologiques. C’est-à-dire que chaque neurone (voir Figure [6.2](#fig:A1_02_neurone_humaine){reference-type="ref" reference="fig:A1_02_neurone_humaine"}) reçoit des signaux d’entrée de ses dendrites et produit des signaux de sortie le long de son axone. L’axone se ramifie ensuite et se connecte via des synapses aux dendrites d’autres neurones, formant ainsi un réseau neuronal.
 
 <figure id="fig:A1_02_neurone_humaine" data-latex-placement="H">
-<img src="../assets/figures/A1/A1_02_neurone_humaine.webp" style="width:85.0%" />
+<img src="../assets/figures/A1/A1_02_neurone_humaine.webp" style="width:85.0%"  alt="Neurone humaine [95]" />
 <figcaption>Neurone humaine <span class="citation" data-cites="noauthor_neurone_2025">[<a href="../bibliography.html#ref-noauthor_neurone_2025" role="doc-biblioref">95</a>]</span></figcaption>
 </figure>
 
 Le premier neurone artificiel &#91;[96](../bibliography.md#ref-mcculloch_logical_1943)&#93; a été créée en 1943 par Warren Sturgis McCulloch et Walter Pitts. La Figure [6.3](#fig:A1_03_neurone_artificielle_mcculloch){reference-type="ref" reference="fig:A1_03_neurone_artificielle_mcculloch"} permet de voir les similarités avec une neurone biologique. Le neurone de McCulloch-Pitts est une unité binaire avec un seuil d’activation qui reçoit une ou plusieurs entrées, effectue un calcul et produit une sortie.
 
 <figure id="fig:A1_03_neurone_artificielle_mcculloch">
-<img src="../assets/figures/A1/A1_03_neurone_artificielle_mcculloch.webp" style="width:100.0%" />
+<img src="../assets/figures/A1/A1_03_neurone_artificielle_mcculloch.webp" style="width:100.0%"  alt="Neurone artificielle proposée par McCulloch-Pitts [97]" />
 <figcaption>Neurone artificielle proposée par McCulloch-Pitts <span class="citation" data-cites="zahn_cours_2024">[<a href="../bibliography.html#ref-zahn_cours_2024" role="doc-biblioref">97</a>]</span></figcaption>
 </figure>
 
@@ -228,7 +232,7 @@ Ce modèle a certaines limitations :
 En 1958, Frank Rosenblatt &#91;[98](../bibliography.md#ref-rosenblatt_perceptron_1958)&#93; publie un article ou il propose le perceptron, un nouveau type de neurone artificiel.
 
 <figure id="fig:enter-label" data-latex-placement="H">
-<img src="../assets/figures/A1/A1_04_perceptron.webp" style="width:100.0%" />
+<img src="../assets/figures/A1/A1_04_perceptron.webp" style="width:100.0%"  alt="Schéma du perceptron [97], neurone artificielle proposée par Frank Rosenblatt." />
 <figcaption>Schéma du perceptron <span class="citation" data-cites="zahn_cours_2024">[<a href="../bibliography.html#ref-zahn_cours_2024" role="doc-biblioref">97</a>]</span>, neurone artificielle proposée par Frank Rosenblatt.</figcaption>
 </figure>
 
@@ -279,14 +283,14 @@ En résumé, les neurones artificielles sont des modèles mathématiques inspir�
 La combinaison de plusieurs perceptrons va créer un réseau de neurones. Cela va créer un réseau de neurones d’une seule couche où les perceptrons sont tous connectés à l’entrée (Figure [6.5](#fig:A1_05_reseau_neurones_simple){reference-type="ref" reference="fig:A1_05_reseau_neurones_simple"}).
 
 <figure id="fig:A1_05_reseau_neurones_simple" data-latex-placement="H">
-<img src="../assets/figures/A1/A1_05_reseau_neurones_simple.webp" style="width:80.0%" />
+<img src="../assets/figures/A1/A1_05_reseau_neurones_simple.webp" style="width:80.0%"  alt="Réseau de neurones avec plusieurs perceptrons interconnectés [97]" />
 <figcaption>Réseau de neurones avec plusieurs perceptrons interconnectés <span class="citation" data-cites="zahn_cours_2024">[<a href="../bibliography.html#ref-zahn_cours_2024" role="doc-biblioref">97</a>]</span></figcaption>
 </figure>
 
 C’est aussi possible de connecter plusieurs couches de perceptron entre eux, tel qu’illustré dans la Figure [6.6](#fig:A1_06_perceptron_multicouche){reference-type="ref" reference="fig:A1_06_perceptron_multicouche"}.
 
 <figure id="fig:A1_06_perceptron_multicouche" data-latex-placement="H">
-<img src="../assets/figures/A1/A1_06_perceptron_multicouche.webp" style="width:75.0%" />
+<img src="../assets/figures/A1/A1_06_perceptron_multicouche.webp" style="width:75.0%"  alt="Perceptron multicouche [97]" />
 <figcaption>Perceptron multicouche <span class="citation" data-cites="zahn_cours_2024">[<a href="../bibliography.html#ref-zahn_cours_2024" role="doc-biblioref">97</a>]</span></figcaption>
 </figure>
 
@@ -304,14 +308,14 @@ $$\begin{equation}
 Cette fonction (Figure [6.7](#fig:A1_07_fonction_activation_sigmoid){reference-type="ref" reference="fig:A1_07_fonction_activation_sigmoid"}) va permettre au perceptron de retourner des valeurs entre 0 et 1, ce qui va augmenter considérablement les capacités du perceptron.
 
 <figure id="fig:A1_07_fonction_activation_sigmoid" data-latex-placement="H">
-<img src="../assets/figures/A1/A1_07_fonction_activation_sigmoid.webp" style="width:75.0%" />
+<img src="../assets/figures/A1/A1_07_fonction_activation_sigmoid.webp" style="width:75.0%"  alt="Fonction d’activation sigmoid" />
 <figcaption>Fonction d’activation sigmoid</figcaption>
 </figure>
 
 Le perceptron multicouche est suffisamment sophistiqué pour réaliser de la reconnaissance de caractères sur le dataset MNIST &#91;[99](../bibliography.md#ref-lecun_gradient-based_1998)&#93;.
 
 <figure id="fig:A1_08_dataset_mnist" data-latex-placement="H">
-<img src="../assets/figures/A1/A1_08_dataset_mnist.webp" style="width:75.0%" />
+<img src="../assets/figures/A1/A1_08_dataset_mnist.webp" style="width:75.0%"  alt="Dataset MNIST [99]" />
 <figcaption>Dataset MNIST <span class="citation" data-cites="lecun_gradient-based_1998">[<a href="../bibliography.html#ref-lecun_gradient-based_1998" role="doc-biblioref">99</a>]</span></figcaption>
 </figure>
 
@@ -611,7 +615,7 @@ Les images sont des données très utilisées dans la “computer vision” qui 
 Un exemple de dataset d’images est le “CIFAR-10” &#91;[100](../bibliography.md#ref-krizhevsky_learning_2009)&#93;.
 
 <figure id="fig:A1_09_cifar" data-latex-placement="H">
-<img src="../assets/figures/A1/A1_09_cifar.webp" style="width:90.0%" />
+<img src="../assets/figures/A1/A1_09_cifar.webp" style="width:90.0%"  alt="Dataset d’images CIFAR-10 [101]" />
 <figcaption>Dataset d’images CIFAR-10 <span class="citation" data-cites="krizhevsky_cifar-10_nodate">[<a href="../bibliography.html#ref-krizhevsky_cifar-10_nodate" role="doc-biblioref">101</a>]</span></figcaption>
 </figure>
 
@@ -656,12 +660,12 @@ Il existe 3 types différents d’orthophotos &#91;[102](../bibliography.md#ref-
 Les orthophotos dynamiques sont générés de manière dynamique à partir d’images sources, en utilisant un modèle numérique de terrain comme référence.
 
 <figure id="fig:A1_10_ortophoto_dynamique1" data-latex-placement="H">
-<img src="../assets/figures/A1/A1_10_ortophoto_dynamique1.webp" style="width:100.0%" />
+<img src="../assets/figures/A1/A1_10_ortophoto_dynamique1.webp" style="width:100.0%"  alt="Exemple d’orthophoto dynamique [102]" />
 <figcaption>Exemple d’orthophoto dynamique <span class="citation" data-cites="barrette_different_2022">[<a href="../bibliography.html#ref-barrette_different_2022" role="doc-biblioref">102</a>]</span></figcaption>
 </figure>
 
 <figure id="fig:A1_11_orthophoto_dynamique2" data-latex-placement="H">
-<img src="../assets/figures/A1/A1_11_orthophoto_dynamique2.webp" style="width:100.0%" />
+<img src="../assets/figures/A1/A1_11_orthophoto_dynamique2.webp" style="width:100.0%"  alt="Deuxième exemple d’orthophoto dynamique [102]" />
 <figcaption>Deuxième exemple d’orthophoto dynamique <span class="citation" data-cites="barrette_different_2022">[<a href="../bibliography.html#ref-barrette_different_2022" role="doc-biblioref">102</a>]</span></figcaption>
 </figure>
 
@@ -694,12 +698,12 @@ Les principaux inconvénients des orthomosaïques sont :
 - Les lignes de séparation utilisées lors de la génération de l’image peuvent être visibles (voir Figure [6.13](#fig:A1_13_orthomosaique_lignes){reference-type="ref" reference="fig:A1_13_orthomosaique_lignes"} de la page suivante)
 
 <figure id="fig:A1_12_orthomosaique" data-latex-placement="H">
-<img src="../assets/figures/A1/A1_12_orthomosaique.webp" style="width:100.0%" />
+<img src="../assets/figures/A1/A1_12_orthomosaique.webp" style="width:100.0%"  alt="Exemple d’orthomosaïque [102]" />
 <figcaption>Exemple d’orthomosaïque <span class="citation" data-cites="barrette_different_2022">[<a href="../bibliography.html#ref-barrette_different_2022" role="doc-biblioref">102</a>]</span></figcaption>
 </figure>
 
 <figure id="fig:A1_13_orthomosaique_lignes" data-latex-placement="H">
-<img src="../assets/figures/A1/A1_13_orthomosaique_lignes.webp" style="width:100.0%" />
+<img src="../assets/figures/A1/A1_13_orthomosaique_lignes.webp" style="width:100.0%"  alt="Exemple d’orthomosaïque avec lignes de séparation [102]" />
 <figcaption>Exemple d’orthomosaïque avec lignes de séparation <span class="citation" data-cites="barrette_different_2022">[<a href="../bibliography.html#ref-barrette_different_2022" role="doc-biblioref">102</a>]</span></figcaption>
 </figure>
 
@@ -708,7 +712,7 @@ Les principaux inconvénients des orthomosaïques sont :
 Les true orthophotos sont créés en utilisant un modèle numérique de surface très détaillé pour générer une orthophoto de sortie précise pour tous les pixels (Figure [6.14](#fig:A1_14_true_orthophoto){reference-type="ref" reference="fig:A1_14_true_orthophoto"}).
 
 <figure id="fig:A1_14_true_orthophoto" data-latex-placement="H">
-<img src="../assets/figures/A1/A1_14_true_orthophoto.webp" style="width:100.0%" />
+<img src="../assets/figures/A1/A1_14_true_orthophoto.webp" style="width:100.0%"  alt="Exemple de true orthophoto [102]" />
 <figcaption>Exemple de true orthophoto <span class="citation" data-cites="barrette_different_2022">[<a href="../bibliography.html#ref-barrette_different_2022" role="doc-biblioref">102</a>]</span></figcaption>
 </figure>
 
@@ -813,12 +817,12 @@ Les données <a href="../glossary.html#gloss-lidar"><span data-acronym-label="li
 La Figure [6.15](#fig:A1_15_lidar_exemple){reference-type="ref" reference="fig:A1_15_lidar_exemple"} représente des objets d’exemple et la Figure [6.16](#fig:A1_16_lidar_exemple2){reference-type="ref" reference="fig:A1_16_lidar_exemple2"} permet de voir comment ces objets sont vus par le <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">lidar</span></a>
 
 <figure id="fig:A1_15_lidar_exemple" data-latex-placement="H">
-<img src="../assets/figures/A1/A1_15_lidar_exemple1.webp" style="width:100.0%" />
+<img src="../assets/figures/A1/A1_15_lidar_exemple1.webp" style="width:100.0%"  alt="Objets pour le nuage de points LIDAR [107]" />
 <figcaption>Objets pour le nuage de points LIDAR <span class="citation" data-cites="cadden_lidar_2021">[<a href="../bibliography.html#ref-cadden_lidar_2021" role="doc-biblioref">107</a>]</span></figcaption>
 </figure>
 
 <figure id="fig:A1_16_lidar_exemple2" data-latex-placement="H">
-<img src="../assets/figures/A1/A1_16_lidar_exemple2.webp" style="width:100.0%" />
+<img src="../assets/figures/A1/A1_16_lidar_exemple2.webp" style="width:100.0%"  alt="Nuage de points LIDAR sur des objets [107]" />
 <figcaption>Nuage de points LIDAR sur des objets <span class="citation" data-cites="cadden_lidar_2021">[<a href="../bibliography.html#ref-cadden_lidar_2021" role="doc-biblioref">107</a>]</span></figcaption>
 </figure>
 
@@ -863,7 +867,7 @@ Au niveau mondial, il n’y a pas de données <a href="../glossary.html#gloss-li
 En ce qui concerne la Suisse, Swisstopo &#91;[108](../bibliography.md#ref-swisstopo_acquisition_2024)&#93; met à disposition des données qui couvrent l’intégralité du territoire. Dans la Figure [6.17](#fig:A1_17_swisstopo_lidar){reference-type="ref" reference="fig:A1_17_swisstopo_lidar"}, on peut voir les 6 campagnes d’acquisition de données qui ont été menées. Les données sont disponibles en moyenne environ 12 mois après le survol.
 
 <figure id="fig:A1_17_swisstopo_lidar" data-latex-placement="H">
-<img src="../assets/figures/A1/A1_17_swisstopo_lidar.webp" style="width:100.0%" />
+<img src="../assets/figures/A1/A1_17_swisstopo_lidar.webp" style="width:100.0%"  alt="Données LIDAR disponibles en Suisse [108]" />
 <figcaption>Données LIDAR disponibles en Suisse <span class="citation" data-cites="swisstopo_acquisition_2024">[<a href="../bibliography.html#ref-swisstopo_acquisition_2024" role="doc-biblioref">108</a>]</span></figcaption>
 </figure>
 
@@ -892,7 +896,7 @@ Les caractéristiques des données <a href="../glossary.html#gloss-lidar"><span 
 Swisstopo va continuer à mettre à jour ses données dans les années suivantes (Figure [6.18](#fig:A1_18_swisstopo_prevision_lidar){reference-type="ref" reference="fig:A1_18_swisstopo_prevision_lidar"}). La prévision est que la mise à jour de ces données sera finalisée en 2030.
 
 <figure id="fig:A1_18_swisstopo_prevision_lidar" data-latex-placement="H">
-<img src="../assets/figures/A1/A1_18_swisstopo_prevision_lidar.webp" style="width:100.0%" />
+<img src="../assets/figures/A1/A1_18_swisstopo_prevision_lidar.webp" style="width:100.0%"  alt="Prévision d’acquisition de données LIDAR en Suisse [108]" />
 <figcaption>Prévision d’acquisition de données LIDAR en Suisse <span class="citation" data-cites="swisstopo_acquisition_2024">[<a href="../bibliography.html#ref-swisstopo_acquisition_2024" role="doc-biblioref">108</a>]</span></figcaption>
 </figure>
 
@@ -965,7 +969,7 @@ En ce qui concerne le canton de Genève, les dernières données <a href="../glo
 </table>
 
 <figure id="fig:A1_19_geneve_lidar" data-latex-placement="H">
-<img src="../assets/figures/A1/A1_19_geneve_lidar.webp" style="width:75.0%" />
+<img src="../assets/figures/A1/A1_19_geneve_lidar.webp" style="width:75.0%"  alt="Représentation à partir des données LIDAR d’une partie du canton de Genève [110]" />
 <figcaption>Représentation à partir des données LIDAR d’une partie du canton de Genève <span class="citation" data-cites="sitg_nuages_2023">[<a href="../bibliography.html#ref-sitg_nuages_2023" role="doc-biblioref">110</a>]</span></figcaption>
 </figure>
 
@@ -994,14 +998,14 @@ Les données vectorielles sont largement utilisées en géomatique pour diverses
 - L’urbanisme : Les données vectorielles sont utilisées pour planifier et concevoir des infrastructures urbaines, telles que des routes, des bâtiments et des parcs.
 
 <figure id="fig:A1_20_donnees_vectorielles_exemple" data-latex-placement="H">
-<img src="../assets/figures/A1/A1_20_donnees_vectorielles_exemple.webp" style="width:100.0%" />
+<img src="../assets/figures/A1/A1_20_donnees_vectorielles_exemple.webp" style="width:100.0%"  alt="Exemple de données vectorielles de sitg. Rue de la Prairie 8 à Genève" />
 <figcaption>Exemple de données vectorielles de <a href="../glossary.html#gloss-sitg"><span data-acronym-label="sitg" data-acronym-form="singular+abbrv">sitg</span></a>. Rue de la Prairie 8 à Genève</figcaption>
 </figure>
 
 La Figure [6.20](#fig:A1_20_donnees_vectorielles_exemple){reference-type="ref" reference="fig:A1_20_donnees_vectorielles_exemple"} montre un exemple de données vectorielles extraites de <a href="../glossary.html#gloss-sitg"><span data-acronym-label="sitg" data-acronym-form="singular+abbrv">sitg</span></a>, le portail de géodonnées du canton de Genève. En plus des points, lignes et polygones il est possible d’associer des données en forme de tableau (Figure [6.21](#fig:A1_21_donnees_vectorielles_tableau){reference-type="ref" reference="fig:A1_21_donnees_vectorielles_tableau"}).
 
 <figure id="fig:A1_21_donnees_vectorielles_tableau" data-latex-placement="H">
-<img src="../assets/figures/A1/A1_21_donnees_vectorielles_tableau.webp" style="width:75.0%" />
+<img src="../assets/figures/A1/A1_21_donnees_vectorielles_tableau.webp" style="width:75.0%"  alt="Exemple de données tabulaires associées a un polygone. Rue de la Prairie 8 à Genève. Données de sitg" />
 <figcaption>Exemple de données tabulaires associées a un polygone. Rue de la Prairie 8 à Genève. Données de <a href="../glossary.html#gloss-sitg"><span data-acronym-label="sitg" data-acronym-form="singular+abbrv">sitg</span></a></figcaption>
 </figure>
 
@@ -1020,7 +1024,7 @@ Swisstopo met à disposition du publique un site[^2] pour visualiser toutes les 
 L’analyse d’images est un domaine important du machine learning, qui permet aux machines d’analyser, de comprendre et de déduire des informations à partir d’images. La Figure [6.22](#fig:A1_22_schema_ml){reference-type="ref" reference="fig:A1_22_schema_ml"} ci-dessous illustre les principales applications.
 
 <figure id="fig:A1_22_schema_ml" data-latex-placement="H">
-<img src="../assets/figures/A1/A1_22_schema_ml.webp" style="width:100.0%" />
+<img src="../assets/figures/A1/A1_22_schema_ml.webp" style="width:100.0%"  alt="Exemple de classification, détection, segmentation, suivi et analyse de pose [111]" />
 <figcaption>Exemple de classification, détection, segmentation, suivi et analyse de pose <span class="citation" data-cites="ultralytics_classer_nodate">[<a href="../bibliography.html#ref-ultralytics_classer_nodate" role="doc-biblioref">111</a>]</span></figcaption>
 </figure>
 
@@ -1037,7 +1041,7 @@ Il existe d’autres applications tel que le suivi (compter des objets dans une 
 La Figure [6.23](#fig:A1_23_image_exemple){reference-type="ref" reference="fig:A1_23_image_exemple"} ci-dessous va permettre d’illustrer les différentes applications.
 
 <figure id="fig:A1_23_image_exemple" data-latex-placement="H">
-<img src="../assets/figures/A1/A1_23_image_exemple.webp" style="width:100.0%" />
+<img src="../assets/figures/A1/A1_23_image_exemple.webp" style="width:100.0%"  alt="Orthophoto de la haute école du paysage, d’ingénierie et architecture de Genève (hepia), situé à la rue de la Prairie 4" />
 <figcaption>Orthophoto de la haute école du paysage, d’ingénierie et architecture de Genève (hepia), situé à la rue de la Prairie 4</figcaption>
 </figure>
 
@@ -1050,7 +1054,7 @@ Dans la Figure [6.23](#fig:A1_23_image_exemple){reference-type="ref" reference=
 La Figure [6.24](#fig:A1_24_classification){reference-type="ref" reference="fig:A1_24_classification"} représente un deuxième exemple de classification d’images.
 
 <figure id="fig:A1_24_classification" data-latex-placement="H">
-<img src="../assets/figures/A1/A1_24_classification.webp" style="width:100.0%" />
+<img src="../assets/figures/A1/A1_24_classification.webp" style="width:100.0%"  alt="Exemple de classification d’image [111]" />
 <figcaption>Exemple de classification d’image <span class="citation" data-cites="ultralytics_classer_nodate">[<a href="../bibliography.html#ref-ultralytics_classer_nodate" role="doc-biblioref">111</a>]</span></figcaption>
 </figure>
 
@@ -1059,7 +1063,7 @@ La Figure [6.24](#fig:A1_24_classification){reference-type="ref" reference="fig:
 La détection va identifier les différentes classes sur l’image, ainsi que leur position. Les modèles utilisés pour la détection d’objets sont généralement entraînés sur des données étiquetées où chaque objet est associé à une boîte englobante et une étiquette de classe.
 
 <figure id="fig:A1_25_detection_hepia" data-latex-placement="H">
-<img src="../assets/figures/A1/A1_25_detection_hepia.webp" style="width:100.0%" />
+<img src="../assets/figures/A1/A1_25_detection_hepia.webp" style="width:100.0%"  alt="Orthophoto d’exemple de détection" />
 <figcaption>Orthophoto d’exemple de détection</figcaption>
 </figure>
 
@@ -1077,19 +1081,19 @@ Il y a principalement 3 types de segmentation d’image qui sont couramment util
 
 <figure id="fig:types_segmentation" data-latex-placement="H">
 <figure id="fig:A1_26_segmentation_image_exemple">
-<img src="../assets/figures/A1/A1_26_segmentation_image_exemple.webp" />
+<img src="../assets/figures/A1/A1_26_segmentation_image_exemple.webp"  alt="Image d’exemple" />
 <figcaption>Image d’exemple</figcaption>
 </figure>
 <figure id="fig:A1_27_segmentation_semantique">
-<img src="../assets/figures/A1/A1_27_segmentation_semantique.webp" />
+<img src="../assets/figures/A1/A1_27_segmentation_semantique.webp"  alt="Segmentation sémantique" />
 <figcaption>Segmentation sémantique</figcaption>
 </figure>
 <figure id="fig:A1_28_segmentation_instance">
-<img src="../assets/figures/A1/A1_28_segmentation_instance.webp" />
+<img src="../assets/figures/A1/A1_28_segmentation_instance.webp"  alt="Segmentation instance" />
 <figcaption>Segmentation instance</figcaption>
 </figure>
 <figure id="fig:A1_29_segmentation_panoptique">
-<img src="../assets/figures/A1/A1_29_segmentation_panoptique.webp" />
+<img src="../assets/figures/A1/A1_29_segmentation_panoptique.webp"  alt="Segmentation panoptique" />
 <figcaption>Segmentation panoptique</figcaption>
 </figure>
 <figcaption>Comparaison des différents types de segmentation d’image <span class="citation" data-cites="jung_benchmarking_2022">[<a href="../bibliography.html#ref-jung_benchmarking_2022" role="doc-biblioref">112</a>]</span></figcaption>
@@ -1113,7 +1117,7 @@ Le Tableau [6.9](#tab:comparatif_segmentation){reference-type="ref" reference="
 
 <p class="thesis-caption"><em>Comparatif des différents types de segmentation d’image</em></p>
 <figure id="fig:A1_30_segmentation_semantique_hepia" data-latex-placement="H">
-<img src="../assets/figures/A1/A1_30_segmentation_semantique_hepia.webp" style="width:100.0%" />
+<img src="../assets/figures/A1/A1_30_segmentation_semantique_hepia.webp" style="width:100.0%"  alt="Orthophoto d’exemple de segmentation" />
 <figcaption>Orthophoto d’exemple de segmentation</figcaption>
 </figure>
 
@@ -1136,17 +1140,17 @@ L’évaluation des performances dans le domaine de la vision par ordinateur («
 L’intersection sur l’Union (IoU) mesure le chevauchement entre le masque de segmentation prédit et le masque de vérité terrain. Elle est calculée comme la zone d’intersection divisée par la zone d’union entre les deux masques. La Figure [6.32](#fig:A1_31_iou_concept){reference-type="ref" reference="fig:A1_31_iou_concept"} illustre ce concept. Plus le masque prédit par le modèle est proche de la valeur annotée (vérité terrain), plus le IoU sera élevé. Un IoU élevé indique que le modèle prédit bien.
 
 <figure id="fig:A1_31_iou_concept" data-latex-placement="H">
-<img src="../assets/figures/A1/A1_31_iou_concept.webp" style="width:50.0%" />
+<img src="../assets/figures/A1/A1_31_iou_concept.webp" style="width:50.0%"  alt="Intersection sur l’union [113]" />
 <figcaption>Intersection sur l’union <span class="citation" data-cites="rosebrock_intersection_2016">[<a href="../bibliography.html#ref-rosebrock_intersection_2016" role="doc-biblioref">113</a>]</span></figcaption>
 </figure>
 
 <figure id="fig:iou_exemples" data-latex-placement="H">
 <figure id="fig:A1_32_iou_exemple1">
-<img src="../assets/figures/A1/A1_32_iou_exemple1.webp" />
+<img src="../assets/figures/A1/A1_32_iou_exemple1.webp"  alt="Exemple de bon IoU [114]" />
 <figcaption>Exemple de bon IoU <span class="citation" data-cites="mechea_panoptic_2019">[<a href="../bibliography.html#ref-mechea_panoptic_2019" role="doc-biblioref">114</a>]</span></figcaption>
 </figure>
 <figure id="fig:A1_33_iou_exemple2">
-<img src="../assets/figures/A1/A1_33_iou_exemple2.webp" />
+<img src="../assets/figures/A1/A1_33_iou_exemple2.webp"  alt="Exemple de mauvais IoU [114]" />
 <figcaption>Exemple de mauvais IoU <span class="citation" data-cites="mechea_panoptic_2019">[<a href="../bibliography.html#ref-mechea_panoptic_2019" role="doc-biblioref">114</a>]</span></figcaption>
 </figure>
 <figcaption>Exemples de IoU <span class="citation" data-cites="mechea_panoptic_2019">[<a href="../bibliography.html#ref-mechea_panoptic_2019" role="doc-biblioref">114</a>]</span></figcaption>
@@ -1163,7 +1167,7 @@ L’intersection moyenne sur l’union (mIoU) est la moyenne de l’IoU pour tou
 L’average precision (AP) se base sur le graphique precision-recall (Figure [6.36](#fig:A1_34_precision_recall){reference-type="ref" reference="fig:A1_34_precision_recall"}), ce graphique a dans l’axe des abscisses (x) le recall et dans l’axe des ordonnées (y) la precision. C’est un graphique qui va permettre de visualiser le lien entre la precision et le recall.
 
 <figure id="fig:A1_34_precision_recall" data-latex-placement="H">
-<img src="../assets/figures/A1/A1_34_precision_recall.webp" style="width:100.0%" />
+<img src="../assets/figures/A1/A1_34_precision_recall.webp" style="width:100.0%"  alt="Exemple de courbe precision-recall. Average precision (AP) et mean average precision (mAP) calculés dans la légende." />
 <figcaption>Exemple de courbe precision-recall. Average precision (AP) et mean average precision (mAP) calculés dans la légende.</figcaption>
 </figure>
 

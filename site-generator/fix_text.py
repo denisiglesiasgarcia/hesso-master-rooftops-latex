@@ -16,6 +16,7 @@ Run after fix_images.py, from the repo root.
 """
 
 import base64
+import html
 import json
 import re
 from pathlib import Path
@@ -267,6 +268,66 @@ def fix_cross_page_link_attrs(texts: dict[Path, str], anchor_location: dict[str,
         texts[path] = link_re.sub(repl, text)
 
 
+def add_image_alt_text(text: str) -> str:
+    """Pandoc carries a figure's caption only in <figcaption>, never copies it
+    into the <img>'s alt attribute — every image on the site ends up with no
+    alt text at all (bad for accessibility and image search). The two are
+    always adjacent in the generated HTML, for both single-image figures and
+    each subfigure of a multi-image one, so this doesn't need to know
+    anything about the surrounding <figure> nesting."""
+
+    def repl(m: re.Match) -> str:
+        attrs, caption_html = m.group(1), m.group(2)
+        if "alt=" in attrs:
+            return m.group(0)
+        alt_text = re.sub(r"<[^>]+>", "", caption_html).strip()
+        alt_text = html.unescape(alt_text).replace('"', "'")
+        return f'<img {attrs} alt="{alt_text}" />\n<figcaption>{caption_html}</figcaption>'
+
+    return re.sub(
+        r"<img ([^>]*?)/>\s*\n<figcaption>(.*?)</figcaption>", repl, text, flags=re.DOTALL
+    )
+
+
+# Pages whose content doesn't read as natural prose (a numbered reference
+# list, a glossary table) get a fixed description instead of trying to
+# extract one from their first paragraph.
+FIXED_DESCRIPTIONS = {
+    "bibliography.md": "Bibliographie numérotée par ordre de citation du mémoire de Master.",
+    "glossary.md": "Glossaire des termes, acronymes et abréviations du mémoire de Master.",
+}
+
+
+def add_meta_description(text: str, path: Path) -> str:
+    """Every generated page currently inherits the same global
+    site_description, so every search-result snippet for the whole site is
+    identical. Give each page its own, derived from its first real paragraph
+    (stripped of markup) and capped to a typical search-snippet length."""
+    if text.startswith("---\n"):
+        return text  # docs/index.md is hand-written with its own description
+    rel = path.relative_to(DOCS).as_posix()
+    fixed = FIXED_DESCRIPTIONS.get(rel)
+    if fixed:
+        description = fixed
+    else:
+        body = re.sub(r"^#.*$", "", text, count=1, flags=re.MULTILINE)
+        para_match = re.search(r"^[A-Za-zÀ-ÿ].+$", body, re.MULTILINE)
+        if not para_match:
+            return text
+        para = para_match.group(0)
+        para = re.sub(r"<[^>]+>", "", para)
+        para = re.sub(r"\[([^\]]*)\]\([^)]*\)", r"\1", para)
+        para = html.unescape(para)
+        # Drop leftover numeric citation markers (e.g. "[1]", "[2, 3]") —
+        # meaningful in body text, just noise in a search-snippet description.
+        para = re.sub(r"\s*\[\d+(?:,\s*\d+)*\]\.?", "", para).strip()
+        if len(para) > 155:
+            para = para[:155].rsplit(" ", 1)[0] + "…"
+        description = para
+    description = description.replace('"', "'")
+    return f'---\ndescription: "{description}"\n---\n\n{text}'
+
+
 def main() -> None:
     md_files = sorted(DOCS.rglob("*.md"))
     texts = {}
@@ -338,6 +399,11 @@ def main() -> None:
         for m in re.finditer(r"^#{1,6}\s+.*\{#([^}\s]+)", text, re.MULTILINE):
             anchor_location[m.group(1)] = path
     fix_cross_page_link_attrs(texts, anchor_location)
+
+    for path, text in texts.items():
+        text = add_image_alt_text(text)
+        text = add_meta_description(text, path)
+        texts[path] = text
 
     for path, text in texts.items():
         path.write_text(text, encoding="utf-8")

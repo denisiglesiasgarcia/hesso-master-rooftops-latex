@@ -1,3 +1,7 @@
+---
+description: "Ce chapitre dresse un état de l’art des avancées récentes dans la vision par ordinateur, la cartographie du potentiel solaire et l’analyse des toitures.…"
+---
+
 # État de l’art {#chap:analysis}
 
 Ce chapitre dresse un état de l’art des avancées récentes dans la vision par ordinateur, la cartographie du potentiel solaire et l’analyse des toitures. Il examine les différentes méthodes et technologies développées dans ces domaines, en mettant l’accent sur les approches les plus innovantes et leurs applications pratiques.
@@ -95,7 +99,7 @@ Une deuxième phase du cadastre est effectuée en 2014 &#91;[10](../bibliography
 Cette mise à jour positionne le cadastre solaire comme outil d’aide à la décision. Le rendu de l’étude est constitué de plusieurs couches vectorielles. La figure [2.1](#fig:cadastre_solaire_2014){reference-type="ref" reference="fig:cadastre_solaire_2014"} illustre les informations disponibles.
 
 <figure id="fig:cadastre_solaire_2014" data-latex-placement="H">
-<img src="../assets/figures/ch2/cadastre_solaire_2014.webp" style="width:100.0%" />
+<img src="../assets/figures/ch2/cadastre_solaire_2014.webp" style="width:100.0%"  alt="Image d’exemple avec une partie des informations disponibles par bâtiment [10]." />
 <figcaption>Image d’exemple avec une partie des informations disponibles par bâtiment <span class="citation" data-cites="desthieux_etude_2014">[<a href="../bibliography.html#ref-desthieux_etude_2014" role="doc-biblioref">10</a>]</span>.</figcaption>
 </figure>
 
@@ -120,7 +124,7 @@ Dès 2018, plusieurs mises à jour &#91;[3](../bibliography.md#ref-desthieux_sol
 En 2020, l’article &#91;[12](../bibliography.md#ref-stendardo_gpu-enabled_2020)&#93; de &#91;[12](../bibliography.md#ref-stendardo_gpu-enabled_2020)&#93; aborde la question de l’optimisation des calculs pour le cadastre du Grand Genève. Les auteurs proposent l’utilisation des <a href="../glossary.html#gloss-gpu"><span data-acronym-label="gpu" data-acronym-form="singular+abbrv">gpu</span></a> pour réduire considérablement les temps de traitement. Cette amélioration répond à un défi croissant : chaque nouvelle version du cadastre intègre davantage de données et requiert des calculs plus précis, ce qui allonge inévitablement les temps d’exécution. L’optimisation du code devient donc un aspect fondamental pour la viabilité du projet.
 
 <figure id="fig:cadastre_solaire_gpu" data-latex-placement="H">
-<img src="../assets/figures/ch2/cadastre_solaire_gpu.webp" style="width:100.0%" />
+<img src="../assets/figures/ch2/cadastre_solaire_gpu.webp" style="width:100.0%"  alt="Schéma pour le calcul d’une tuile [12]" />
 <figcaption>Schéma pour le calcul d’une tuile <span class="citation" data-cites="stendardo_gpu-enabled_2020">[<a href="../bibliography.html#ref-stendardo_gpu-enabled_2020" role="doc-biblioref">12</a>]</span></figcaption>
 </figure>
 
@@ -162,7 +166,7 @@ La méthodologie &#91;[3](../bibliography.md#ref-desthieux_solar_2018)&#93; pour
 La Figure [2.4](#fig:cadastre_solaire_methodologie){reference-type="ref" reference="fig:cadastre_solaire_methodologie"} résume ces points.
 
 <figure id="fig:cadastre_solaire_methodologie" data-latex-placement="H">
-<img src="../assets/figures/ch2/cadastre_solaire_methodologie.webp" style="width:100.0%" />
+<img src="../assets/figures/ch2/cadastre_solaire_methodologie.webp" style="width:100.0%"  alt="Méthodologie utilisée pour la création du cadastre solaire [3]" />
 <figcaption>Méthodologie utilisée pour la création du cadastre solaire <span class="citation" data-cites="desthieux_solar_2018">[<a href="../bibliography.html#ref-desthieux_solar_2018" role="doc-biblioref">3</a>]</span></figcaption>
 </figure>
 
@@ -185,7 +189,7 @@ Pour chaque pixel du modèle 3D des toitures, deux paramètres géométriques es
 La modélisation des façades présente une complexité supplémentaire car la représentation raster ne permet pas de bien représenter les surfaces verticales. Pour contourner cette limitation, des points supplémentaires appelés “hyperpoints” sont distribués le long des façades (Figure [2.5](#fig:cadastre_solaire_hyperpoints){reference-type="ref" reference="fig:cadastre_solaire_hyperpoints"}). Cette méthode permet de discrétiser chaque façade en une série de points verticaux géolocalisés, sur lesquels les calculs d’ensoleillement peuvent être appliqués avec précision.
 
 <figure id="fig:cadastre_solaire_hyperpoints" data-latex-placement="H">
-<img src="../assets/figures/ch2/cadastre_solaire_hyperpoints.webp" style="width:100.0%" />
+<img src="../assets/figures/ch2/cadastre_solaire_hyperpoints.webp" style="width:100.0%"  alt="Méthode de création des hyperpoints sur les façades [3]" />
 <figcaption>Méthode de création des hyperpoints sur les façades <span class="citation" data-cites="desthieux_solar_2018">[<a href="../bibliography.html#ref-desthieux_solar_2018" role="doc-biblioref">3</a>]</span></figcaption>
 </figure>
 
@@ -208,7 +212,7 @@ L’ombrage constitue l’un des facteurs les plus déterminants pour la perform
 - Les ombrages saisonniers: générés par des éléments variables comme la végétation ou l’accumulation de neige. Ces ombrages évoluent au cours des saisons et nécessitent une gestion adaptative par un entretien régulier et une conception appropriée de l’installation.
 
 <figure id="fig:cadastre_solaire_ombrage" data-latex-placement="H">
-<img src="../assets/figures/ch2/cadastre_solaire_ombrage.webp" style="width:100.0%" />
+<img src="../assets/figures/ch2/cadastre_solaire_ombrage.webp" style="width:100.0%"  alt="Illustration des différents types d’ombrages [3]" />
 <figcaption>Illustration des différents types d’ombrages <span class="citation" data-cites="desthieux_solar_2018">[<a href="../bibliography.html#ref-desthieux_solar_2018" role="doc-biblioref">3</a>]</span></figcaption>
 </figure>
 
@@ -219,7 +223,7 @@ Cette analyse produit des cartes d’ombrage qui indiquent, pour chaque heure de
 En complément de l’ombrage direct, le modèle calcule également le facteur de vue du ciel (sky view factor). Ce paramètre mesure la portion de ciel visible depuis un point précis de la ville. Si une personne se tient à un point donné (représenté en rouge sur la Figure [2.7](#fig:cadastre_solaire_svf){reference-type="ref" reference="fig:cadastre_solaire_svf"}) et observe le ciel dans toutes les directions, certaines portions seront masquées par les bâtiments, la végétation, ou le relief.
 
 <figure id="fig:cadastre_solaire_svf" data-latex-placement="H">
-<img src="../assets/figures/ch2/ch2_cadastre_solaire_svf.webp" style="width:100.0%" />
+<img src="../assets/figures/ch2/ch2_cadastre_solaire_svf.webp" style="width:100.0%"  alt="Le sky view factor (SVF) indique la proportion de ciel visible depuis un point [19]" />
 <figcaption>Le sky view factor (SVF) indique la proportion de ciel visible depuis un point <span class="citation" data-cites="zaksek_sky-view_2011">[<a href="../bibliography.html#ref-zaksek_sky-view_2011" role="doc-biblioref">19</a>]</span></figcaption>
 </figure>
 
@@ -266,14 +270,14 @@ Ces données constituent une base d’aide à la décision pour l’identificati
 L’ensemble des résultats de simulation est mis à disposition des citoyens et des professionnels sur le géoportail cartographique de <a href="../glossary.html#gloss-sitg"><span data-acronym-label="sitg" data-acronym-form="singular+abbrv">sitg</span></a> (Figure [2.8](#fig:cadastre_solaire_couche_vec_sitg){reference-type="ref" reference="fig:cadastre_solaire_couche_vec_sitg"}). Ces données peuvent être visualisées sous forme de couches cartographiques, intégrées aux autres informations territoriales disponibles sur la plateforme.
 
 <figure id="fig:cadastre_solaire_couche_vec_sitg" data-latex-placement="H">
-<img src="../assets/figures/ch2/cadastre_solaire_couche_vec_sitg.webp" style="width:100.0%" />
+<img src="../assets/figures/ch2/cadastre_solaire_couche_vec_sitg.webp" style="width:100.0%"  alt="Visualisation des couches vectorielles sur l’interface sitg [3]" />
 <figcaption>Visualisation des couches vectorielles sur l’interface <a href="../glossary.html#gloss-sitg"><span data-acronym-label="sitg" data-acronym-form="singular+abbrv">sitg</span></a> <span class="citation" data-cites="desthieux_solar_2018">[<a href="../bibliography.html#ref-desthieux_solar_2018" role="doc-biblioref">3</a>]</span></figcaption>
 </figure>
 
 Un site web spécifiquement dédié au cadastre solaire a également été développé (Figure [2.9](#fig:cadastre_solaire_sitg_labs){reference-type="ref" reference="fig:cadastre_solaire_sitg_labs"}). Cette interface permet à tout utilisateur de rechercher une adresse et de visualiser simplement le potentiel solaire du bâtiment correspondant. L’outil fournit des estimations de production d’énergie et des analyses de rentabilité économique.
 
 <figure id="fig:cadastre_solaire_sitg_labs" data-latex-placement="H">
-<img src="../assets/figures/ch2/cadastre_solaire_sitg_labs.webp" style="width:100.0%" />
+<img src="../assets/figures/ch2/cadastre_solaire_sitg_labs.webp" style="width:100.0%"  alt="Interface utilisateur du cadastre solaire destinée au grand public [3]" />
 <figcaption>Interface utilisateur du cadastre solaire destinée au grand public <span class="citation" data-cites="desthieux_solar_2018">[<a href="../bibliography.html#ref-desthieux_solar_2018" role="doc-biblioref">3</a>]</span></figcaption>
 </figure>
 
@@ -328,35 +332,35 @@ Les données 3D des bâtiments sont converties en polygones 2D pour les toits (v
 La Figure [2.10](#fig:ch2_montoitsolaire_01_mns){reference-type="ref" reference="fig:ch2_montoitsolaire_01_mns"} présente un exemple d’élévation de surface <a href="../glossary.html#gloss-mns"><span data-acronym-label="mns" data-acronym-form="singular+abbrv">mns</span></a> (Modèle Numérique de Surface).
 
 <figure id="fig:ch2_montoitsolaire_01_mns" data-latex-placement="H">
-<img src="../assets/figures/ch2/ch2_montoitsolaire_01_mns.webp" style="width:100.0%" />
+<img src="../assets/figures/ch2/ch2_montoitsolaire_01_mns.webp" style="width:100.0%"  alt="mns [21]" />
 <figcaption><a href="../glossary.html#gloss-mns"><span data-acronym-label="mns" data-acronym-form="singular+abbrv">mns</span></a> <span class="citation" data-cites="bfe_wie_nodate">[<a href="../bibliography.html#ref-bfe_wie_nodate" role="doc-biblioref">21</a>]</span></figcaption>
 </figure>
 
 Sur ce même exemple, la Figure [2.11](#fig:ch2_montoitsolaire_02_mns_3d){reference-type="ref" reference="fig:ch2_montoitsolaire_02_mns_3d"} superpose les bâtiments en 3D au modèle numérique de surface, illustrant la combinaison des données altimétriques et volumétriques.
 
 <figure id="fig:ch2_montoitsolaire_02_mns_3d" data-latex-placement="H">
-<img src="../assets/figures/ch2/ch2_montoitsolaire_02_mns_3d.webp" style="width:100.0%" />
+<img src="../assets/figures/ch2/ch2_montoitsolaire_02_mns_3d.webp" style="width:100.0%"  alt="mns avec bâtiments 3D [21]" />
 <figcaption><a href="../glossary.html#gloss-mns"><span data-acronym-label="mns" data-acronym-form="singular+abbrv">mns</span></a> avec bâtiments 3D <span class="citation" data-cites="bfe_wie_nodate">[<a href="../bibliography.html#ref-bfe_wie_nodate" role="doc-biblioref">21</a>]</span></figcaption>
 </figure>
 
 La Figure [2.12](#fig:ch2_montoitsolaire_03_3d_vectoriel1){reference-type="ref" reference="fig:ch2_montoitsolaire_03_3d_vectoriel1"} illustre la conversion des bâtiments 3D en données vectorielles bidimensionnelles, processus essentiel pour la suite des calculs.
 
 <figure id="fig:ch2_montoitsolaire_03_3d_vectoriel1" data-latex-placement="H">
-<img src="../assets/figures/ch2/ch2_montoitsolaire_03_3d_vectoriel1.webp" style="width:100.0%" />
+<img src="../assets/figures/ch2/ch2_montoitsolaire_03_3d_vectoriel1.webp" style="width:100.0%"  alt="Réduction des données 3D de swissBUILDINGS3D 2.0 en polygones 2D [21]" />
 <figcaption>Réduction des données 3D de swissBUILDINGS3D 2.0 en polygones 2D <span class="citation" data-cites="bfe_wie_nodate">[<a href="../bibliography.html#ref-bfe_wie_nodate" role="doc-biblioref">21</a>]</span></figcaption>
 </figure>
 
 ArcGIS permet de convertir les données 3D en vectorielles à l’aide d’entités multipatch, qui représentent les arêtes et limites des surfaces tridimensionnelles. Dans la Figure [2.13](#fig:ch2_montoitsolaire_04_3d_vectoriel2){reference-type="ref" reference="fig:ch2_montoitsolaire_04_3d_vectoriel2"}, les surfaces partielles (multipatch) sont délimitées par des lignes bleu clair.
 
 <figure id="fig:ch2_montoitsolaire_04_3d_vectoriel2" data-latex-placement="H">
-<img src="../assets/figures/ch2/ch2_montoitsolaire_04_3d_vectoriel2.webp" style="width:100.0%" />
+<img src="../assets/figures/ch2/ch2_montoitsolaire_04_3d_vectoriel2.webp" style="width:100.0%"  alt="Fonctions multipatch 3D sur les données swissBUILDINGS3D 2.0 [21]" />
 <figcaption>Fonctions multipatch 3D sur les données swissBUILDINGS3D 2.0 <span class="citation" data-cites="bfe_wie_nodate">[<a href="../bibliography.html#ref-bfe_wie_nodate" role="doc-biblioref">21</a>]</span></figcaption>
 </figure>
 
 Ces entités multipatch sont ensuite converties en polygones 2D. La Figure [2.14](#fig:ch2_montoitsolaire_05_3d_vectoriel3){reference-type="ref" reference="fig:ch2_montoitsolaire_05_3d_vectoriel3"} présente deux exemples de toiture avec une lucarne et illustre comment cette géométrie complexe est simplifiée en représentation bidimensionnelle.
 
 <figure id="fig:ch2_montoitsolaire_05_3d_vectoriel3" data-latex-placement="H">
-<img src="../assets/figures/ch2/ch2_montoitsolaire_05_3d_vectoriel3.webp" />
+<img src="../assets/figures/ch2/ch2_montoitsolaire_05_3d_vectoriel3.webp"  alt="Exemples de surfaces de toitures imbriquées issues de swissBUILDINGS3D 2.0 [21]" />
 <figcaption>Exemples de surfaces de toitures imbriquées issues de swissBUILDINGS3D 2.0 <span class="citation" data-cites="bfe_wie_nodate">[<a href="../bibliography.html#ref-bfe_wie_nodate" role="doc-biblioref">21</a>]</span></figcaption>
 </figure>
 
@@ -449,7 +453,7 @@ YOLOv12 relève ce défi en proposant le premier framework YOLO centré sur l’
 YOLOv12 peut être utilisé directement ou servir de base pour spécialiser le modèle dans des tâches spécifiques avec un nouveau dataset, s’inscrivant alors dans une approche de transfer learning. YOLO se décline en plusieurs modèles spécialisés (Figure [2.15](#fig:ch2_yolo_00_type_modeles){reference-type="ref" reference="fig:ch2_yolo_00_type_modeles"}) pour la détection, la segmentation, la classification, l’analyse de pose et la détection d’objets avec boîte orientée.
 
 <figure id="fig:ch2_yolo_00_type_modeles" data-latex-placement="H">
-<img src="../assets/figures/ch2/ch2_yolo_00_type_modeles.webp" style="width:120.0%" />
+<img src="../assets/figures/ch2/ch2_yolo_00_type_modeles.webp" style="width:120.0%"  alt="Modèles de YOLOv12 [26]" />
 <figcaption>Modèles de YOLOv12 <span class="citation" data-cites="ultralytics_computer_nodate">[<a href="../bibliography.html#ref-ultralytics_computer_nodate" role="doc-biblioref">26</a>]</span></figcaption>
 </figure>
 
@@ -479,23 +483,23 @@ Le mécanisme d’attention (Figure [2.21](#fig:ch2_yolo_mecanismes_attention){r
 
 <figure id="fig:ch2_yolo_mecanismes_attention" data-latex-placement="H">
 <figure id="fig:ch2_yolo_01_attention_area_criss_cross">
-<img src="../assets/figures/ch2/ch2_yolo_01_attention_area_criss_cross.webp" />
+<img src="../assets/figures/ch2/ch2_yolo_01_attention_area_criss_cross.webp"  alt="Mécanisme d’attention type “criss cross”" />
 <figcaption>Mécanisme d’attention type “criss cross”</figcaption>
 </figure>
 <figure id="fig:ch2_yolo_02_attention_area_window">
-<img src="../assets/figures/ch2/ch2_yolo_02_attention_area_window.webp" />
+<img src="../assets/figures/ch2/ch2_yolo_02_attention_area_window.webp"  alt="Mécanisme d’attention type “fenêtre”" />
 <figcaption>Mécanisme d’attention type “fenêtre”</figcaption>
 </figure>
 <figure id="fig:ch2_yolo_03_attention_area_criss_axial">
-<img src="../assets/figures/ch2/ch2_yolo_03_attention_area_criss_axial.webp" />
+<img src="../assets/figures/ch2/ch2_yolo_03_attention_area_criss_axial.webp"  alt="Mécanisme d’attention type “axial”" />
 <figcaption>Mécanisme d’attention type “axial”</figcaption>
 </figure>
 <figure id="fig:ch2_yolo_04_attention_area_yolo1">
-<img src="../assets/figures/ch2/ch2_yolo_04_attention_area_yolo1.webp" />
+<img src="../assets/figures/ch2/ch2_yolo_04_attention_area_yolo1.webp"  alt="Mécanisme d’attention horizontal proposé dans YOLOv12" />
 <figcaption>Mécanisme d’attention horizontal proposé dans YOLOv12</figcaption>
 </figure>
 <figure id="fig:ch2_yolo_05_attention_area_yolo2">
-<img src="../assets/figures/ch2/ch2_yolo_05_attention_area_yolo2.webp" />
+<img src="../assets/figures/ch2/ch2_yolo_05_attention_area_yolo2.webp"  alt="Mécanisme d’attention vertical proposé dans YOLOv12" />
 <figcaption>Mécanisme d’attention vertical proposé dans YOLOv12</figcaption>
 </figure>
 <figcaption>Mécanismes d’attention <span class="citation" data-cites="tian_yolov12_2025">[<a href="../bibliography.html#ref-tian_yolov12_2025" role="doc-biblioref">28</a>]</span></figcaption>
@@ -515,19 +519,19 @@ R-ELAN (Figure [2.25](#fig:ch2_yolo_09_architecture_relan){reference-type="ref" 
 
 <figure id="fig:ch2_yolo_architecture_simplifiee" data-latex-placement="H">
 <figure id="fig:ch2_yolo_06_architecture_csp">
-<img src="../assets/figures/ch2/ch2_yolo_06_architecture_csp.webp" />
+<img src="../assets/figures/ch2/ch2_yolo_06_architecture_csp.webp"  alt="“CSPNet” (YOLOv4/v5)" />
 <figcaption>“CSPNet” (YOLOv4/v5)</figcaption>
 </figure>
 <figure id="fig:ch2_yolo_07_architecture_elan">
-<img src="../assets/figures/ch2/ch2_yolo_07_architecture_elan.webp" />
+<img src="../assets/figures/ch2/ch2_yolo_07_architecture_elan.webp"  alt="“ELAN” (YOLOv7)" />
 <figcaption>“ELAN” (YOLOv7)</figcaption>
 </figure>
 <figure id="fig:ch2_yolo_08_architecture_c3k2">
-<img src="../assets/figures/ch2/ch2_yolo_08_architecture_c3k2.webp" />
+<img src="../assets/figures/ch2/ch2_yolo_08_architecture_c3k2.webp"  alt="“\(C_3K_2\)” (YOLOv11)" />
 <figcaption>“<span class="math inline">\(C_3K_2\)</span>” (YOLOv11)</figcaption>
 </figure>
 <figure id="fig:ch2_yolo_09_architecture_relan">
-<img src="../assets/figures/ch2/ch2_yolo_09_architecture_relan.webp" />
+<img src="../assets/figures/ch2/ch2_yolo_09_architecture_relan.webp"  alt="“R-ELAN” (YOLOv12)" />
 <figcaption>“R-ELAN” (YOLOv12)</figcaption>
 </figure>
 <figcaption>Évolution architecturale des blocs utilisés dans YOLO <span class="citation" data-cites="tian_yolov12_2025">[<a href="../bibliography.html#ref-tian_yolov12_2025" role="doc-biblioref">28</a>]</span></figcaption>
@@ -558,7 +562,7 @@ L’efficacité computationnelle est remarquable face aux détecteurs bout-à-bo
 Les cartes d’activation (Figure [2.27](#fig:ch2_yolo_10_perception){reference-type="ref" reference="fig:ch2_yolo_10_perception"}) révèlent une amélioration qualitative notable, avec des contours d’objets plus nets et une activation de premier plan plus précise comparé à YOLOv10/v11, illustrant concrètement les bénéfices des mécanismes d’attention optimisés.
 
 <figure id="fig:ch2_yolo_10_perception" data-latex-placement="H">
-<img src="../assets/figures/ch2/ch2_yolo_10_perception.webp" style="width:120.0%" />
+<img src="../assets/figures/ch2/ch2_yolo_10_perception.webp" style="width:120.0%"  alt="Perception des objets dans YOLOv10, YOLOv11 et YOLOv12 [28]" />
 <figcaption>Perception des objets dans YOLOv10, YOLOv11 et YOLOv12 <span class="citation" data-cites="tian_yolov12_2025">[<a href="../bibliography.html#ref-tian_yolov12_2025" role="doc-biblioref">28</a>]</span></figcaption>
 </figure>
 
@@ -591,7 +595,7 @@ Le modèle Segment Anything (<a href="../glossary.html#gloss-sam"><span data-acr
 La Figure [2.28](#fig:ch2_sam2_01_fonctionnement_sam){reference-type="ref" reference="fig:ch2_sam2_01_fonctionnement_sam"} permet d’avoir une vue d’ensemble des différentes parties de SAM.
 
 <figure id="fig:ch2_sam2_01_fonctionnement_sam" data-latex-placement="H">
-<img src="../assets/figures/ch2/ch2_sam2_01_fonctionnement_sam.webp" style="width:120.0%" />
+<img src="../assets/figures/ch2/ch2_sam2_01_fonctionnement_sam.webp" style="width:120.0%"  alt="Fonctionnement de segment anything (sam)" />
 <figcaption>Fonctionnement de segment anything (<a href="../glossary.html#gloss-sam"><span data-acronym-label="sam" data-acronym-form="singular+abbrv">sam</span></a>)</figcaption>
 </figure>
 
@@ -600,7 +604,7 @@ Le premier élément est l’encodeur d’images (“1” sur la Figure [2.28](#
 Le deuxième élément est le prompt encoder (“2” sur la Figure [2.28](#fig:ch2_sam2_01_fonctionnement_sam){reference-type="ref" reference="fig:ch2_sam2_01_fonctionnement_sam"}). SAM fonctionne avec une interface graphique, la Figure [2.29](#fig:ch2_sam2_02_prompt_encoder){reference-type="ref" reference="fig:ch2_sam2_02_prompt_encoder"} montre l’interface graphique développée par Meta AI pour tester SAM.
 
 <figure id="fig:ch2_sam2_02_prompt_encoder" data-latex-placement="H">
-<img src="../assets/figures/ch2/ch2_sam2_02_prompt_encoder.webp" style="width:120.0%" />
+<img src="../assets/figures/ch2/ch2_sam2_02_prompt_encoder.webp" style="width:120.0%"  alt="Interface graphique de démonstration de SAM [33]" />
 <figcaption>Interface graphique de démonstration de SAM <span class="citation" data-cites="fair_segment_nodate">[<a href="../bibliography.html#ref-fair_segment_nodate" role="doc-biblioref">33</a>]</span></figcaption>
 </figure>
 
@@ -608,11 +612,11 @@ A l’aide des outils à gauche de la Figure [2.29](#fig:ch2_sam2_02_prompt_enco
 
 <figure id="fig:ch2_sam2_prompt_exemple_point_rectangle" data-latex-placement="H">
 <figure id="fig:ch2_sam2_03_prompt1">
-<img src="../assets/figures/ch2/ch2_sam2_03_prompt1.webp" />
+<img src="../assets/figures/ch2/ch2_sam2_03_prompt1.webp"  alt="Exemple de sélection de masque avec un point" />
 <figcaption>Exemple de sélection de masque avec un point</figcaption>
 </figure>
 <figure id="fig:ch2_sam2_04_prompt2">
-<img src="../assets/figures/ch2/ch2_sam2_04_prompt2.webp" />
+<img src="../assets/figures/ch2/ch2_sam2_04_prompt2.webp"  alt="Exemple de sélection de masque avec une boite rectangulaire" />
 <figcaption>Exemple de sélection de masque avec une boite rectangulaire</figcaption>
 </figure>
 <figcaption>Interface graphique de démonstration de SAM <span class="citation" data-cites="fair_segment_nodate">[<a href="../bibliography.html#ref-fair_segment_nodate" role="doc-biblioref">33</a>]</span></figcaption>
@@ -623,7 +627,7 @@ SAM permet aussi de décrire avec du texte ce que l’on souhaite segmenter sur 
 La troisième partie est le mask decoder (“3” sur la Figure [2.28](#fig:ch2_sam2_01_fonctionnement_sam){reference-type="ref" reference="fig:ch2_sam2_01_fonctionnement_sam"}). Le mask decoder va utiliser les représentations vectorielles de l’encodeur d’images (“1” sur la Figure [2.28](#fig:ch2_sam2_01_fonctionnement_sam){reference-type="ref" reference="fig:ch2_sam2_01_fonctionnement_sam"}), ainsi que celles du prompt encoder (“2” sur la Figure [2.28](#fig:ch2_sam2_01_fonctionnement_sam){reference-type="ref" reference="fig:ch2_sam2_01_fonctionnement_sam"}) pour segmenter l’image en différents masques. Chacun de ces masques est une polyligne fermée, comme indiqué sur la Figure [2.33](#fig:ch2_sam2_05_masques){reference-type="ref" reference="fig:ch2_sam2_05_masques"}. Le modèle indique aussi la probabilité (confidence) qu’il estime que la segmentation est juste.
 
 <figure id="fig:ch2_sam2_05_masques" data-latex-placement="H">
-<img src="../assets/figures/ch2/ch2_sam2_05_masques.webp" style="width:100.0%" />
+<img src="../assets/figures/ch2/ch2_sam2_05_masques.webp" style="width:100.0%"  alt="Interface graphique de démonstration de SAM. Exemple de segmentation" />
 <figcaption>Interface graphique de démonstration de SAM. Exemple de segmentation</figcaption>
 </figure>
 
@@ -633,11 +637,11 @@ Le dataset couvre environ 70 pays et a été annoté manuellement par des travai
 
 <figure id="fig:ch2_sam2_sa1b_diversite_pays" data-latex-placement="H">
 <figure id="fig:ch2_sam2_06_dataset_sa1b_pays1">
-<img src="../assets/figures/ch2/ch2_sam2_06_dataset_sa1b_pays1.webp" />
+<img src="../assets/figures/ch2/ch2_sam2_06_dataset_sa1b_pays1.webp"  alt="Carte de monde avec les pays les plus représentés dans le dataset SA-1B" />
 <figcaption>Carte de monde avec les pays les plus représentés dans le dataset SA-1B</figcaption>
 </figure>
 <figure id="fig:ch2_sam2_07_dataset_sa1b_pays2">
-<img src="../assets/figures/ch2/ch2_sam2_07_dataset_sa1b_pays2.webp" style="width:100.0%" />
+<img src="../assets/figures/ch2/ch2_sam2_07_dataset_sa1b_pays2.webp" style="width:100.0%"  alt="Distribution des images par pays dans le dataset SA-1B" />
 <figcaption>Distribution des images par pays dans le dataset SA-1B</figcaption>
 </figure>
 <figcaption>Origine des images qui forment le dataset SA-1B utilisé pour l’entrainement de SAM <span class="citation" data-cites="kirillov_segment_2023">[<a href="../bibliography.html#ref-kirillov_segment_2023" role="doc-biblioref">32</a>]</span></figcaption>
@@ -648,14 +652,14 @@ Le dataset contient des annotations précises pour chaque objet dans chaque imag
 Dans la Figure [2.37](#fig:ch2_sam2_08_eval_sam_humain){reference-type="ref" reference="fig:ch2_sam2_08_eval_sam_humain"}, Meta AI a demandé a des personnes d’évaluer la qualité de la segmentation sur 7 datasets différents. SAM est plus performant que le modèle RITM &#91;[34](../bibliography.md#ref-sofiiuk_reviving_2021)&#93; dans tous les cas.
 
 <figure id="fig:ch2_sam2_08_eval_sam_humain" data-latex-placement="H">
-<img src="../assets/figures/ch2/ch2_sam2_08_eval_sam_humain.webp" style="width:100.0%" />
+<img src="../assets/figures/ch2/ch2_sam2_08_eval_sam_humain.webp" style="width:100.0%"  alt="Evaluation par des humains de la qualité des masques générés par SAM et RITM [32]" />
 <figcaption>Evaluation par des humains de la qualité des masques générés par SAM et RITM <span class="citation" data-cites="kirillov_segment_2023">[<a href="../bibliography.html#ref-kirillov_segment_2023" role="doc-biblioref">32</a>]</span></figcaption>
 </figure>
 
 Dans une autre comparaison (Figure [2.38](#fig:ch2_sam2_09_eval_sam_miou){reference-type="ref" reference="fig:ch2_sam2_09_eval_sam_miou"}), l’objectif est de comparer plusieurs modèles qui effectuent de la segmentation sur 23 datasets. SAM a un mIoU plus élevé que les autres modèles.
 
 <figure id="fig:ch2_sam2_09_eval_sam_miou" data-latex-placement="H">
-<img src="../assets/figures/ch2/ch2_sam2_09_eval_sam_miou.webp" style="width:50.0%" />
+<img src="../assets/figures/ch2/ch2_sam2_09_eval_sam_miou.webp" style="width:50.0%"  alt="Comparatif de mIoU sur 23 datasets de SAM [32]" />
 <figcaption>Comparatif de mIoU sur 23 datasets de SAM <span class="citation" data-cites="kirillov_segment_2023">[<a href="../bibliography.html#ref-kirillov_segment_2023" role="doc-biblioref">32</a>]</span></figcaption>
 </figure>
 
@@ -714,7 +718,7 @@ Un processus de vérification qualité garantit la cohérence temporelle des ann
 - Décodeur de masque : Architecture similaire à celle de SAM original, augmentée d’une tête de prédiction supplémentaire qui détermine si l’objet d’intérêt est visible ou caché dans le photogramme actuel, gérant ainsi les disparitions temporaires d’objets.
 
 <figure id="fig:ch2_sam2_11_architecture_sam2" data-latex-placement="H">
-<img src="../assets/figures/ch2/ch2_sam2_11_architecture_sam2.webp" style="width:115.0%" />
+<img src="../assets/figures/ch2/ch2_sam2_11_architecture_sam2.webp" style="width:115.0%"  alt="Architecture SAM2 [35]" />
 <figcaption>Architecture SAM2 <span class="citation" data-cites="ravi_sam_2024">[<a href="../bibliography.html#ref-ravi_sam_2024" role="doc-biblioref">35</a>]</span></figcaption>
 </figure>
 
@@ -733,7 +737,7 @@ Une fois entraîné, <a href="../glossary.html#gloss-sam2"><span data-acronym-la
 La première étape consiste en la sélection initiale de l’objet cible (frame 1, step 1 sur Figure [2.44](#fig:ch2_sam2_12_entrainement_sam2){reference-type="ref" reference="fig:ch2_sam2_12_entrainement_sam2"}). L’utilisateur fournit des invites sur une image de référence : les points verts correspondent aux zones à inclure dans la segmentation, tandis que les points rouges représentent les régions à exclure. Dans l’exemple, <a href="../glossary.html#gloss-sam2"><span data-acronym-label="sam2" data-acronym-form="singular+abbrv">sam2</span></a> identifie le segment de l’objet d’intérêt (la langue) dans l’image 1, puis propage automatiquement ce segment aux images suivantes pour former un masque temporel continu.
 
 <figure id="fig:ch2_sam2_12_entrainement_sam2" data-latex-placement="H">
-<img src="../assets/figures/ch2/ch2_sam2_12_entrainement_sam2.webp" style="width:115.0%" />
+<img src="../assets/figures/ch2/ch2_sam2_12_entrainement_sam2.webp" style="width:115.0%"  alt="Processus de segmentation interactive avec sam2 : sélection initiale et raffinement par mémoire temporelle [35]" />
 <figcaption>Processus de segmentation interactive avec <a href="../glossary.html#gloss-sam2"><span data-acronym-label="sam2" data-acronym-form="singular+abbrv">sam2</span></a> : sélection initiale et raffinement par mémoire temporelle <span class="citation" data-cites="ravi_sam_2024">[<a href="../bibliography.html#ref-ravi_sam_2024" role="doc-biblioref">35</a>]</span></figcaption>
 </figure>
 
@@ -755,11 +759,11 @@ Le second mode correspond à l’évaluation en ligne (online), qui simule un co
 
 <figure id="fig:ch2_sam2_resultats_sam2_segmentation_video" data-latex-placement="H">
 <figure id="fig:ch2_sam2_13_resultats_sam2_segmentation_video_offline">
-<img src="../assets/figures/ch2/ch2_sam2_13_resultats_sam2_segmentation_video_offline.webp" />
+<img src="../assets/figures/ch2/ch2_sam2_13_resultats_sam2_segmentation_video_offline.webp"  alt="Evaluation en mode offline" />
 <figcaption>Evaluation en mode offline</figcaption>
 </figure>
 <figure id="fig:ch2_sam2_14_resultats_sam2_segmentation_video_online">
-<img src="../assets/figures/ch2/ch2_sam2_14_resultats_sam2_segmentation_video_online.webp" />
+<img src="../assets/figures/ch2/ch2_sam2_14_resultats_sam2_segmentation_video_online.webp"  alt="Evaluation en mode online" />
 <figcaption>Evaluation en mode online</figcaption>
 </figure>
 <figcaption>Zero-shot accuracy sur 9 datasets de segmentation vidéo interactive <span class="citation" data-cites="ravi_sam_2024">[<a href="../bibliography.html#ref-ravi_sam_2024" role="doc-biblioref">35</a>]</span></figcaption>
@@ -955,7 +959,7 @@ Ces orthophotos ont la particularité de ne pas avoir de décalage vis-à-vis d�
 <a href="../glossary.html#gloss-sitg"><span data-acronym-label="sitg" data-acronym-form="singular+abbrv">sitg</span></a> dispose d’une couche vectorielle d’emprise des toitures des bâtiments hors sol “CAD\_BATIMENTS\_HORSOL\_TOIT” &#91;[42](../bibliography.md#ref-sitg_toits_nodate)&#93;. Cette couche provient de la numérisation 3D des bâtiments. La Figure [2.48](#fig:stdl_01_couche_vectorielle){reference-type="ref" reference="fig:stdl_01_couche_vectorielle"} représente un exemple de cette couche avec une orthophoto en fond d’image.
 
 <figure id="fig:stdl_01_couche_vectorielle" data-latex-placement="H">
-<img src="../assets/figures/ch2/stdl_01_couche_vectorielle.webp" style="width:100.0%" />
+<img src="../assets/figures/ch2/stdl_01_couche_vectorielle.webp" style="width:100.0%"  alt="Image d’exemple de la couche vectorielle d’emprise au sol des bâtiments “CAD_BATIMENTS_HORSOL_TOIT” [42]" />
 <figcaption>Image d’exemple de la couche vectorielle d’emprise au sol des bâtiments “CAD_BATIMENTS_HORSOL_TOIT” <span class="citation" data-cites="sitg_toits_nodate">[<a href="../bibliography.html#ref-sitg_toits_nodate" role="doc-biblioref">42</a>]</span></figcaption>
 </figure>
 
@@ -966,7 +970,7 @@ Cette couche est régulièrement mise à jour. <a href="../glossary.html#gloss-s
 La Figure [2.49](#fig:stdl_02_verite_terrain){reference-type="ref" reference="fig:stdl_02_verite_terrain"} représente les bâtiments choisis par <a href="../glossary.html#gloss-stdl"><span data-acronym-label="stdl" data-acronym-form="singular+abbrv">stdl</span></a> pour la vérité terrain.
 
 <figure id="fig:stdl_02_verite_terrain" data-latex-placement="H">
-<img src="../assets/figures/ch2/stdl_02_verite_terrain.webp" style="width:100.0%" />
+<img src="../assets/figures/ch2/stdl_02_verite_terrain.webp" style="width:100.0%"  alt="Bâtiments choisis par stdl pour la vérité terrain dans le Canton de Genève. Images de sitg" />
 <figcaption>Bâtiments choisis par <a href="../glossary.html#gloss-stdl"><span data-acronym-label="stdl" data-acronym-form="singular+abbrv">stdl</span></a> pour la vérité terrain dans le Canton de Genève. Images de <a href="../glossary.html#gloss-sitg"><span data-acronym-label="sitg" data-acronym-form="singular+abbrv">sitg</span></a></figcaption>
 </figure>
 
@@ -981,7 +985,7 @@ Ces bâtiments se distribuent de la manière suivante :
 Les données ont été labellisées selon les classes suivantes :
 
 <figure id="fig:stdl_03_classes" data-latex-placement="H">
-<img src="../assets/figures/ch2/stdl_03_classes.webp" style="width:100.0%" />
+<img src="../assets/figures/ch2/stdl_03_classes.webp" style="width:100.0%"  alt="Classes et répartition des datasets" />
 <figcaption>Classes et répartition des datasets</figcaption>
 </figure>
 
@@ -1069,7 +1073,7 @@ La classification avec RF est plus performante que les seuils manuels, avec des 
 La Figure [2.51](#fig:stdl_04_rf_resultats){reference-type="ref" reference="fig:stdl_04_rf_resultats"} présente un aperçu des résultats obtenus.
 
 <figure id="fig:stdl_04_rf_resultats" data-latex-placement="H">
-<img src="../assets/figures/ch2/stdl_04_rf_resultats.webp" style="width:105.0%" />
+<img src="../assets/figures/ch2/stdl_04_rf_resultats.webp" style="width:105.0%"  alt="Comparatif des différents algorithmes de classification [2]" />
 <figcaption>Comparatif des différents algorithmes de classification <span class="citation" data-cites="herny_detection_2024">[<a href="../bibliography.html#ref-herny_detection_2024" role="doc-biblioref">2</a>]</span></figcaption>
 </figure>
 
@@ -1160,7 +1164,7 @@ La méthode proposée vise à détecter automatiquement les objets présents sur
 Les experts de l’<a href="../glossary.html#gloss-ocen"><span data-acronym-label="ocen" data-acronym-form="singular+abbrv">ocen</span></a> et l’<a href="../glossary.html#gloss-ocan"><span data-acronym-label="ocan" data-acronym-form="singular+abbrv">ocan</span></a> n’ont pas apprécié les images résultantes (Figure [2.52](#fig:stdl_05_exemple_segmentation_lidar){reference-type="ref" reference="fig:stdl_05_exemple_segmentation_lidar"}) car ils s’attendaient à des polygones plus semblables aux couches vectorielles (par exemple Figure [2.48](#fig:stdl_01_couche_vectorielle){reference-type="ref" reference="fig:stdl_01_couche_vectorielle"}). <a href="../glossary.html#gloss-stdl"><span data-acronym-label="stdl" data-acronym-form="singular+abbrv">stdl</span></a> a pourtant bien simplifié les polygones pour améliorer leur rendu visuel.
 
 <figure id="fig:stdl_05_exemple_segmentation_lidar" data-latex-placement="H">
-<img src="../assets/figures/ch2/stdl_05_exemple_segmentation_lidar.webp" style="width:100.0%" />
+<img src="../assets/figures/ch2/stdl_05_exemple_segmentation_lidar.webp" style="width:100.0%"  alt="Image d’exemple de la segmentation lidar [2]" />
 <figcaption>Image d’exemple de la segmentation <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">lidar</span></a> <span class="citation" data-cites="herny_detection_2024">[<a href="../bibliography.html#ref-herny_detection_2024" role="doc-biblioref">2</a>]</span></figcaption>
 </figure>
 
@@ -1178,14 +1182,14 @@ L’algorithme obtient un F1-score de 0.77 et un mIoU (mean Intersection over Un
 Les objets de plus de 1 m<sup>2</sup> (Figure [2.53](#fig:stdl_06_segmentation_lidar_surfaces){reference-type="ref" reference="fig:stdl_06_segmentation_lidar_surfaces"}) et situés à plus de 1 m (Figure [2.54](#fig:stdl_07_segmentation_lidar_distances){reference-type="ref" reference="fig:stdl_07_segmentation_lidar_distances"}) du bord du toit sont bien détectés, avec des F1-score entre 0.82 et 0.92.
 
 <figure id="fig:stdl_06_segmentation_lidar_surfaces" data-latex-placement="H">
-<img src="../assets/figures/ch2/stdl_06_segmentation_lidar_surfaces.webp" style="width:100.0%" />
+<img src="../assets/figures/ch2/stdl_06_segmentation_lidar_surfaces.webp" style="width:100.0%"  alt="Influence de la distance des objets au bord du toit selon la surface de l’objet dans la segmentation lidar [2]" />
 <figcaption>Influence de la distance des objets au bord du toit selon la surface de l’objet dans la segmentation <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">lidar</span></a> <span class="citation" data-cites="herny_detection_2024">[<a href="../bibliography.html#ref-herny_detection_2024" role="doc-biblioref">2</a>]</span></figcaption>
 </figure>
 
 Les objets (Figure [2.54](#fig:stdl_07_segmentation_lidar_distances){reference-type="ref" reference="fig:stdl_07_segmentation_lidar_distances"}) qui ont leur centroïde a plus d’un mètre du bord du toit sont bien labellisés. Le F1-score est entre 0.80 et 0.85 pour ces objets. Cependant, les objets qui ont leur centroïde proche du bord (moins d’un mètre) ne sont pas bien détectés et ont 65% de faux positif (FP), ce qui indique que la segmentation n’est pas fiable à cette distance.
 
 <figure id="fig:stdl_07_segmentation_lidar_distances" data-latex-placement="H">
-<img src="../assets/figures/ch2/stdl_07_segmentation_lidar_distances.webp" style="width:100.0%" />
+<img src="../assets/figures/ch2/stdl_07_segmentation_lidar_distances.webp" style="width:100.0%"  alt="Influence de la distance du centre des objets au bord du toit dans la segmentation lidar [2]" />
 <figcaption>Influence de la distance du centre des objets au bord du toit dans la segmentation <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">lidar</span></a> <span class="citation" data-cites="herny_detection_2024">[<a href="../bibliography.html#ref-herny_detection_2024" role="doc-biblioref">2</a>]</span></figcaption>
 </figure>
 
@@ -1256,7 +1260,7 @@ Les données utilisées sont :
 La Figure [2.55](#fig:stdl_08_methodo_segmentation_images){reference-type="ref" reference="fig:stdl_08_methodo_segmentation_images"} ci-dessous représente les principales étapes utilisées pour réaliser la segmentation d’image.
 
 <figure id="fig:stdl_08_methodo_segmentation_images" data-latex-placement="H">
-<img src="../assets/figures/ch2/stdl_08_methodo_segmentation_images.webp" style="width:100.0%" />
+<img src="../assets/figures/ch2/stdl_08_methodo_segmentation_images.webp" style="width:100.0%"  alt="Méthodologie pour la segmentation d’images [2]" />
 <figcaption>Méthodologie pour la segmentation d’images <span class="citation" data-cites="herny_detection_2024">[<a href="../bibliography.html#ref-herny_detection_2024" role="doc-biblioref">2</a>]</span></figcaption>
 </figure>
 
@@ -1281,7 +1285,7 @@ La logique est que tout ce qui n’est pas segmenté à l’intérieur du périm
 La Figure [2.56](#fig:stdl_09_segmentation_image_resultats){reference-type="ref" reference="fig:stdl_09_segmentation_image_resultats"} représente un exemple de résultat de la segmentation de plusieurs toitures. La segmentation rencontre des difficultés avec certains éléments de toiture tel que les puits de lumière.
 
 <figure id="fig:stdl_09_segmentation_image_resultats" data-latex-placement="H">
-<img src="../assets/figures/ch2/stdl_09_segmentation_image_resultats.webp" style="width:100.0%" />
+<img src="../assets/figures/ch2/stdl_09_segmentation_image_resultats.webp" style="width:100.0%"  alt="Exemple d’image résultat de la segmentation d’images [2]" />
 <figcaption>Exemple d’image résultat de la segmentation d’images <span class="citation" data-cites="herny_detection_2024">[<a href="../bibliography.html#ref-herny_detection_2024" role="doc-biblioref">2</a>]</span></figcaption>
 </figure>
 
@@ -1299,14 +1303,14 @@ Les métriques obtenues (Tableau [2.8](#tab:stdl_06_segmentation_image_resultats
 Les petits objets (Figure [2.57](#fig:stdl_10_segmentation_image_taille){reference-type="ref" reference="fig:stdl_10_segmentation_image_taille"}) avec une surface de moins d’un mètre carré sont moins bien détectés (AP d’environ 0.60). Les objets de plus d’un mètre carré sont mieux détectés (AP d’environ 0.83).
 
 <figure id="fig:stdl_10_segmentation_image_taille" data-latex-placement="H">
-<img src="../assets/figures/ch2/stdl_10_segmentation_image_taille.webp" style="width:100.0%" />
+<img src="../assets/figures/ch2/stdl_10_segmentation_image_taille.webp" style="width:100.0%"  alt="Objets segmentés selon taille en m2 pour la segmentation d’images [2]" />
 <figcaption>Objets segmentés selon taille en m<sup>2</sup> pour la segmentation d’images <span class="citation" data-cites="herny_detection_2024">[<a href="../bibliography.html#ref-herny_detection_2024" role="doc-biblioref">2</a>]</span></figcaption>
 </figure>
 
 Comme pour la segmentation <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">lidar</span></a>, la segmentation d’image fonctionne moins bien au bord de la toiture (Figure [2.58](#fig:stdl_11_segmentation_image_distance){reference-type="ref" reference="fig:stdl_11_segmentation_image_distance"}). La precision est de 0.77 pour les centroïde d’objets a plus d’un mètre du bord de la toiture contre seulement 0.51 pour ceux a moins d’un mètre.
 
 <figure id="fig:stdl_11_segmentation_image_distance" data-latex-placement="H">
-<img src="../assets/figures/ch2/stdl_11_segmentation_image_distance.webp" style="width:100.0%" />
+<img src="../assets/figures/ch2/stdl_11_segmentation_image_distance.webp" style="width:100.0%"  alt="Centroïde des objets segmentés selon la distance au borde de la toiture pour la segmentation d’images [2]" />
 <figcaption>Centroïde des objets segmentés selon la distance au borde de la toiture pour la segmentation d’images <span class="citation" data-cites="herny_detection_2024">[<a href="../bibliography.html#ref-herny_detection_2024" role="doc-biblioref">2</a>]</span></figcaption>
 </figure>
 
@@ -1514,7 +1518,7 @@ Le dataset consiste en 1880 images satellite en provenance de google. Les images
 La Figure [2.59](#fig:rid_dataset_sample){reference-type="ref" reference="fig:rid_dataset_sample"} représente une image d’exemple ainsi que ses annotations. Le jeu de données est divisé en dataset d’entraînement (70%), de validation (10%) et de test (20%).
 
 <figure id="fig:rid_dataset_sample" data-latex-placement="H">
-<img src="../assets/figures/ch2/rid_dataset_sample.webp" style="width:100.0%" />
+<img src="../assets/figures/ch2/rid_dataset_sample.webp" style="width:100.0%"  alt="Exemple d’image du dataset RID [50]" />
 <figcaption>Exemple d’image du dataset RID <span class="citation" data-cites="li_deep_2024">[<a href="../bibliography.html#ref-li_deep_2024" role="doc-biblioref">50</a>]</span></figcaption>
 </figure>
 
@@ -1549,19 +1553,19 @@ SolarNet+ utilise une approche en deux étapes :
     - Additionner les potentiels de tous les pans de toiture pour obtenir le potentiel solaire total du bâtiment
 
 <figure id="fig:solar_net_plus_methodo" data-latex-placement="H">
-<img src="../assets/figures/ch2/solar_net_plus_methodo.webp" style="width:110.0%" />
+<img src="../assets/figures/ch2/solar_net_plus_methodo.webp" style="width:110.0%"  alt="Méthodologie SolarNet+ [50]" />
 <figcaption>Méthodologie SolarNet+ <span class="citation" data-cites="li_deep_2024">[<a href="../bibliography.html#ref-li_deep_2024" role="doc-biblioref">50</a>]</span></figcaption>
 </figure>
 
 <figure id="fig:solar_net_plus_placement_pv" data-latex-placement="H">
-<img src="../assets/figures/ch2/solar_net_plus_placement_pv.webp" style="width:50.0%" />
+<img src="../assets/figures/ch2/solar_net_plus_placement_pv.webp" style="width:50.0%"  alt="Placement des panneaux solaire [50]" />
 <figcaption>Placement des panneaux solaire <span class="citation" data-cites="li_deep_2024">[<a href="../bibliography.html#ref-li_deep_2024" role="doc-biblioref">50</a>]</span></figcaption>
 </figure>
 
 La Figure [2.62](#fig:solar_net_plus_exemple_methodo){reference-type="ref" reference="fig:solar_net_plus_exemple_methodo"} permet d’avoir un aperçu des différentes phases du calcul de potentiel solaire. En allant de gauche à droite dans la lecture de la Figure [2.62](#fig:solar_net_plus_exemple_methodo){reference-type="ref" reference="fig:solar_net_plus_exemple_methodo"}, les deux premières images indiquent l’irradiation solaire avec et sans les obstacles. En bas à gauche de ces deux images, il y a une toiture avec plusieurs obstacles détectés (trous), sans les obstacles son irradiation solaire est bonne, mais avec les obstacles son irradiation solaire totale est réduite. La troisième image représente le placement des panneaux solaires. Finalement la quatrième image, représente le potentiel solaire total par pan de toiture selon le nombre de panneaux solaire placés dans la troisième image et l’irradiation solaire de la deuxième image.
 
 <figure id="fig:solar_net_plus_exemple_methodo" data-latex-placement="H">
-<img src="../assets/figures/ch2/solar_net_plus_exemple_methodo.webp" style="width:115.0%" />
+<img src="../assets/figures/ch2/solar_net_plus_exemple_methodo.webp" style="width:115.0%"  alt="Exemple d’application de la méthodologie [50]" />
 <figcaption>Exemple d’application de la méthodologie <span class="citation" data-cites="li_deep_2024">[<a href="../bibliography.html#ref-li_deep_2024" role="doc-biblioref">50</a>]</span></figcaption>
 </figure>
 
@@ -1653,11 +1657,11 @@ La Figure [2.65](#fig:castello_quantification_image_resultat){reference-type="re
 
 <figure id="fig:castello_quantification_image_resultat" data-latex-placement="H">
 <figure id="fig:castello_quantification_image_resultat1">
-<img src="../assets/figures/ch2/castello_quantification_image_resultat1.webp" />
+<img src="../assets/figures/ch2/castello_quantification_image_resultat1.webp"  alt="Grandes toitures plates" />
 <figcaption>Grandes toitures plates</figcaption>
 </figure>
 <figure id="fig:castello_quantification_image_resultat2">
-<img src="../assets/figures/ch2/castello_quantification_image_resultat2.webp" />
+<img src="../assets/figures/ch2/castello_quantification_image_resultat2.webp"  alt="Toitures en pente" />
 <figcaption>Toitures en pente</figcaption>
 </figure>
 <figcaption>Images d’exemple <span class="citation" data-cites="castello_quantification_2021">[<a href="../bibliography.html#ref-castello_quantification_2021" role="doc-biblioref">52</a>]</span> du résultat après inférence. Les zones bleus sont les espaces disponibles.</figcaption>
@@ -1726,14 +1730,14 @@ Les principaux chiffres-clés de ce dataset :
 Les annotations sont fournies en deux versions différentes. La version initiale a été réalisées par cinq annotateurs. Ensuite deux annotateurs supplémentaires ont corrigés et compléter les annotations initiales. La Figure [2.66](#fig:rid_dataset_image_sample){reference-type="ref" reference="fig:rid_dataset_image_sample"} représente avec une image d’exemple les différences entre les annotations.
 
 <figure id="fig:rid_dataset_image_sample" data-latex-placement="H">
-<img src="../assets/figures/ch2/rid_dataset_image_sample.webp" style="width:115.0%" />
+<img src="../assets/figures/ch2/rid_dataset_image_sample.webp" style="width:115.0%"  alt="Exemple d’image du dataset, ainsi que les différentes annotations des annotateurs [55]" />
 <figcaption>Exemple d’image du dataset, ainsi que les différentes annotations des annotateurs <span class="citation" data-cites="krapf_rid_2021">[<a href="../bibliography.html#ref-krapf_rid_2021" role="doc-biblioref">55</a>]</span></figcaption>
 </figure>
 
 La Figure [2.67](#fig:rid_dataset_distribution_classes){reference-type="ref" reference="fig:rid_dataset_distribution_classes"} représente la distribution des éléments de toiture par classe.
 
 <figure id="fig:rid_dataset_distribution_classes" data-latex-placement="H">
-<img src="../assets/figures/ch2/rid_dataset_distribution_classes.webp" style="width:100.0%" />
+<img src="../assets/figures/ch2/rid_dataset_distribution_classes.webp" style="width:100.0%"  alt="Distribution des classes dans le dataset des éléments de toiture [54]" />
 <figcaption>Distribution des classes dans le dataset des éléments de toiture <span class="citation" data-cites="krapf_ridroof_2022">[<a href="../bibliography.html#ref-krapf_ridroof_2022" role="doc-biblioref">54</a>]</span></figcaption>
 </figure>
 

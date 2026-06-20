@@ -1,3 +1,7 @@
+---
+description: "Ce travail de master s’intéresse à la transition énergétique et à l’utilisation des toitures pour produire de l’énergie solaire. L’objectif est de créer…"
+---
+
 # Conclusion {#chap:conclusion}
 
 Ce travail de master s’intéresse à la transition énergétique et à l’utilisation des toitures pour produire de l’énergie solaire. L’objectif est de créer une méthode pour identifier les espaces libres sur les toitures du canton de Genève en utilisant le machine learning et la segmentation sémantique d’orthophotos.

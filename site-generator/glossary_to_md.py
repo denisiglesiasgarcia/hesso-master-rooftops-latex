@@ -139,7 +139,19 @@ def main() -> None:
 
     rows.sort(key=lambda r: r[1].lower())
 
-    lines = ["# Glossaire", "", "| Terme | Définition |", "|---|---|"]
+    # glossary.md is written after fix_text.py's per-page description pass
+    # already ran, so it never sees this file — give it its own description
+    # here instead of relying on that generic pass.
+    lines = [
+        "---",
+        'description: "Glossaire des termes, acronymes et abréviations du mémoire de Master."',
+        "---",
+        "",
+        "# Glossaire",
+        "",
+        "| Terme | Définition |",
+        "|---|---|",
+    ]
     for key, name, description in rows:
         lines.append(f'| <span id="gloss-{key}">{name}</span> | {description} |')
 

@@ -1,3 +1,7 @@
+---
+description: "La crise climatique et la crise énergétique poussent à une gestion plus efficace de l’espace territorial. L’utilisation des toits pour des installations…"
+---
+
 # Introduction {#chap:introduction}
 
 ## Contexte {#contexte}

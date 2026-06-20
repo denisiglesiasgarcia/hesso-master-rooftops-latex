@@ -1,3 +1,7 @@
+---
+description: "Face à l’urgence climatique et la nécessité de réduire notre dépendance aux énergies fossiles, l’énergie solaire représente une solution prometteuse pour…"
+---
+
 # Fondamentaux d’énergie solaire {#chap:fondamentaux_energie}
 
 Face à l’urgence climatique et la nécessité de réduire notre dépendance aux énergies fossiles, l’énergie solaire représente une solution prometteuse pour la production d’énergie renouvelable en milieu urbain. Les toitures des bâtiments offrent des surfaces importantes et souvent inexploitées pour l’installation de panneaux solaires, qu’ils soient photovoltaïques pour la production d’électricité ou thermiques pour la production d’eau chaude.
@@ -67,7 +71,7 @@ Le rayonnement solaire &#91;[117](../bibliography.md#ref-energie_plus_ensoleille
 - Le rayonnement réfléchi : Correspond à la fraction du rayonnement réfléchie par l’environnement. Son intensité dépend de la nature des surfaces (neige : 80-90%, végétation : 10-25%) et de leur géométrie.
 
 <figure id="fig:type_rayonnement" data-latex-placement="H">
-<img src="../assets/figures/A2/A2_rayonnement.webp" style="width:50.0%" />
+<img src="../assets/figures/A2/A2_rayonnement.webp" style="width:50.0%"  alt="Rayonnement direct, diffus et réfléchi [117]" />
 <figcaption>Rayonnement direct, diffus et réfléchi <span class="citation" data-cites="energie_plus_ensoleillement_2010">[<a href="../bibliography.html#ref-energie_plus_ensoleillement_2010" role="doc-biblioref">117</a>]</span></figcaption>
 </figure>
 
@@ -76,7 +80,7 @@ Comme on peut le voir sur la Figure [7.1](#fig:type_rayonnement){reference-type=
 Le rayonnement solaire ne sera pas identique toute l’année, comme indiqué dans la Figure [7.2](#fig:hauteur_soleil){reference-type="ref" reference="fig:hauteur_soleil"}
 
 <figure id="fig:hauteur_soleil" data-latex-placement="H">
-<img src="../assets/figures/A2/A2_hauteur_soleil.webp" style="width:50.0%" />
+<img src="../assets/figures/A2/A2_hauteur_soleil.webp" style="width:50.0%"  alt="Rayonnement direct, diffus et réfléchi [117]" />
 <figcaption>Rayonnement direct, diffus et réfléchi <span class="citation" data-cites="energie_plus_ensoleillement_2010">[<a href="../bibliography.html#ref-energie_plus_ensoleillement_2010" role="doc-biblioref">117</a>]</span></figcaption>
 </figure>
 
@@ -103,6 +107,6 @@ L’angle d’inclinaison optimal dépend principalement de la latitude du lieu 
 L’inclinaison peut être adaptée selon les objectifs de production saisonnière. Pour maximiser la production en été, une faible inclinaison (20-30°) est préférable car elle permet de mieux capter le soleil lorsqu’il est haut dans le ciel. À l’inverse, une inclinaison plus importante (45-60°) est plus efficace en hiver quand le soleil est bas. Comme le montre la Figure [7.3](#fig:warmeundstrom){reference-type="ref" reference="fig:warmeundstrom"}, l’angle d’inclinaison influence également la captation des différentes composantes du rayonnement solaire. Un panneau horizontal (0 degrés) va principalement capter le rayonnement direct, alors qu’un panneau vertical (90 degrés) va mieux équilibrer la captation entre rayonnement direct et diffus. C’est pourquoi une inclinaison intermédiaire de 30-35 degrés représente un compromis optimal, permettant de bénéficier efficacement des trois composantes du rayonnement tout au long de l’année.
 
 <figure id="fig:warmeundstrom" data-latex-placement="H">
-<img src="../assets/figures/A2/A2_warmeundstrom.webp" style="width:50.0%" />
+<img src="../assets/figures/A2/A2_warmeundstrom.webp" style="width:50.0%"  alt="Influence de l’inclinaison et orientation des panneaux solaires [119]" />
 <figcaption>Influence de l’inclinaison et orientation des panneaux solaires <span class="citation" data-cites="noauthor_anwendung_nodate">[<a href="../bibliography.html#ref-noauthor_anwendung_nodate" role="doc-biblioref">119</a>]</span></figcaption>
 </figure>

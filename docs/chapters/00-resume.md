@@ -1,3 +1,7 @@
+---
+description: "The energy transition and urban densification require optimizing land use. Rooftops offer significant potential for solar panel installation, but the lack…"
+---
+
 # Abstract {#abstract .unnumbered}
 
 The energy transition and urban densification require optimizing land use. Rooftops offer significant potential for solar panel installation, but the lack of precise inventory of available surfaces complicates energy planning. This work proposes a machine learning-based method to automatically identify free spaces on rooftops in the Canton of Geneva.
@@ -5,7 +9,7 @@ The energy transition and urban densification require optimizing land use. Rooft
 The methodology (Figure [1](#fig:abstract_ch3_resume_machine_learning_supervise){reference-type="ref" reference="fig:abstract_ch3_resume_machine_learning_supervise"}) uses semantic segmentation of high-resolution orthophotos. A reference dataset was created with 530 georeferenced images of pixels from the 2019 orthophotos of <a href="../glossary.html#gloss-sitg"><span data-acronym-label="sitg" data-acronym-form="singular+abbrv">sitg</span></a>. These images were manually annotated over approximately 180 hours. Sampling was stratified according to building use (<a href="../glossary.html#gloss-sia"><span data-acronym-label="sia" data-acronym-form="singular+short">sia</span></a> category) and roof surfaces to represent the canton’s architectural diversity.
 
 <figure id="fig:abstract_ch3_resume_machine_learning_supervise" data-latex-placement="htbp">
-<img src="../assets/figures/A1/A1_01_resume_machine_learning_supervise.webp" style="width:100.0%" />
+<img src="../assets/figures/A1/A1_01_resume_machine_learning_supervise.webp" style="width:100.0%"  alt="Overview of the semantic segmentation methodology for identifying free spaces on rooftops" />
 <figcaption>Overview of the semantic segmentation methodology for identifying free spaces on rooftops</figcaption>
 </figure>
 
@@ -41,15 +45,15 @@ Qualitative validation on the <a href="../glossary.html#gloss-hepia"><span data-
 
 <figure id="fig:abstract_exemple_segmentation_reussie" data-latex-placement="htbp">
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/best_cases/best_3_iou0.986_24931117_tile_18_5_f475a0_original.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/best_cases/best_3_iou0.986_24931117_tile_18_5_f475a0_original.webp"  alt="Original" />
 <figcaption>Original</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/best_cases/best_3_iou0.986_24931117_tile_18_5_f475a0_overlay_gt.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/best_cases/best_3_iou0.986_24931117_tile_18_5_f475a0_overlay_gt.webp"  alt="Ground truth" />
 <figcaption>Ground truth</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/best_cases/best_3_iou0.986_24931117_tile_18_5_f475a0_overlay_pred.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/best_cases/best_3_iou0.986_24931117_tile_18_5_f475a0_overlay_pred.webp"  alt="Prediction - IoU = 0.986" />
 <figcaption>Prediction - IoU = 0.986</figcaption>
 </figure>
 <figcaption>Example of successful segmentation with LinkNet + EfficientNet-B5. The model correctly predicts free spaces while excluding obstacles present on the roof</figcaption>
@@ -67,7 +71,7 @@ La transition énergétique et la densification urbaine nécessitent d’optimis
 La méthodologie (Figure [3](#fig:resume_ch3_resume_machine_learning_supervise){reference-type="ref" reference="fig:resume_ch3_resume_machine_learning_supervise"}) utilise la segmentation sémantique d’orthophotos haute résolution. Un dataset de référence a été créé avec 530 images géoréférencées de pixels provenant des orthophotos 2019 du <a href="../glossary.html#gloss-sitg"><span data-acronym-label="sitg" data-acronym-form="singular+abbrv">sitg</span></a>. Ces images ont été annotées manuellement pendant environ 180 heures. L’échantillonnage a été stratifié selon l’utilisation des bâtiments (catégorie <a href="../glossary.html#gloss-sia"><span data-acronym-label="sia" data-acronym-form="singular+short">sia</span></a>) et les surfaces de toitures pour représenter la diversité architecturale du canton.
 
 <figure id="fig:resume_ch3_resume_machine_learning_supervise" data-latex-placement="htbp">
-<img src="../assets/figures/A1/A1_01_resume_machine_learning_supervise.webp" style="width:100.0%" />
+<img src="../assets/figures/A1/A1_01_resume_machine_learning_supervise.webp" style="width:100.0%"  alt="Vue d’ensemble de la méthodologie de segmentation sémantique pour l’identification des espaces libres sur les toitures" />
 <figcaption>Vue d’ensemble de la méthodologie de segmentation sémantique pour l’identification des espaces libres sur les toitures</figcaption>
 </figure>
 
@@ -103,15 +107,15 @@ La validation qualitative sur la zone de <a href="../glossary.html#gloss-hepia">
 
 <figure id="fig:resume_exemple_segmentation_reussie" data-latex-placement="htbp">
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/best_cases/best_3_iou0.986_24931117_tile_18_5_f475a0_original.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/best_cases/best_3_iou0.986_24931117_tile_18_5_f475a0_original.webp"  alt="Original" />
 <figcaption>Original</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/best_cases/best_3_iou0.986_24931117_tile_18_5_f475a0_overlay_gt.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/best_cases/best_3_iou0.986_24931117_tile_18_5_f475a0_overlay_gt.webp"  alt="Vérité terrain" />
 <figcaption>Vérité terrain</figcaption>
 </figure>
 <figure>
-<img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/best_cases/best_3_iou0.986_24931117_tile_18_5_f475a0_overlay_pred.webp" />
+<img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/best_cases/best_3_iou0.986_24931117_tile_18_5_f475a0_overlay_pred.webp"  alt="Prédiction - IoU = 0.986" />
 <figcaption>Prédiction - IoU = 0.986</figcaption>
 </figure>
 <figcaption>Exemple de segmentation réussie avec LinkNet + EfficientNet-B5. Le modèle prédit correctement les espaces libres en excluant les obstacles présents sur la toiture</figcaption>

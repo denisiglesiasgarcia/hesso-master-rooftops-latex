@@ -1,3 +1,7 @@
+---
+description: "Travail de Master HES-SO en Data Science : identification automatique par machine learning des espaces libres sur les toitures du canton de Genève pour le potentiel solaire."
+---
+
 # Identification des parties utiles des toitures pour le solaire par machine learning
 
 Travail de Master HES-SO en ingénierie, orientation Data Science.
@@ -14,5 +18,6 @@ Pour le résumé complet (français/anglais), voir la page [Résumé](chapters/0
 
 ## Liens
 
-- **Code et source LaTeX** : [github.com/denisiglesiasgarcia/hesso-master-rooftops-latex](https://github.com/denisiglesiasgarcia/hesso-master-rooftops-latex)
+- **Code** : [[github.com/denisiglesiasgarcia/hesso-master-rooftops-code](https://github.com/denisiglesiasgarcia/hesso-master-rooftops-code)](https://github.com/denisiglesiasgarcia/hesso-master-rooftops-code)
+- **LaTeX** : [github.com/denisiglesiasgarcia/hesso-master-rooftops-latex](https://github.com/denisiglesiasgarcia/hesso-master-rooftops-latex)
 - **Dataset** : lien à venir

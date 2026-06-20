@@ -1,3 +1,7 @@
+---
+description: "Glossaire des termes, acronymes et abréviations du mémoire de Master."
+---
+
 # Glossaire
 
 | Terme | Définition |
