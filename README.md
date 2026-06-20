@@ -1,5 +1,7 @@
 # hesso-master-rooftops-latex
 
+🌐 **[Read the thesis as a website](https://denisiglesiasgarcia.github.io/hesso-master-rooftops-latex/)** — "Identification des parties utiles des toitures pour le solaire par Machine Learning" (HES-SO Master thesis, Denis Iglesias Garcia)
+
 LaTeX template based on [hesso-latextemplate-thesis](https://github.com/mdemierre/hesso-latextemplate-thesis) for the HES-SO//Master MSE thesis in French.
 
 This repo contains two separate things — the LaTeX thesis itself, and the tooling that publishes it as a browsable website:
