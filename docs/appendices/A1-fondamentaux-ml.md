@@ -198,7 +198,7 @@ $$\begin{equation}
 
 <p class="thesis-caption"><em>(2)</em></p>
 
-Un exemple d’application de l’opérateur “ET” de l’Équation [&#91;eq:operateurs\_logiques&#93;](#eq:operateurs_logiques){reference-type="ref" reference="eq:operateurs_logiques"} permet de vérifier qu’il fonctionne correctement :
+Un exemple d’application de l’opérateur “ET” de l’Équation [(2)](#eq:operateurs_logiques){reference-type="ref" reference="eq:operateurs_logiques"} permet de vérifier qu’il fonctionne correctement :
 
 <span id="eq:exemple_ET"></span>
 
@@ -236,7 +236,7 @@ En 1958, Frank Rosenblatt &#91;[98](../bibliography.md#ref-rosenblatt_perceptron
 <figcaption>Schéma du perceptron <span class="citation" data-cites="zahn_cours_2024">[<a href="../bibliography.html#ref-zahn_cours_2024" role="doc-biblioref">97</a>]</span>, neurone artificielle proposée par Frank Rosenblatt.</figcaption>
 </figure>
 
-Celui-ci se distingue du neurone de McCulloch-Pitts car elle permet d’utiliser des nombres réels pour les entrées, poids et biais. L’équation [&#91;eq:perceptron&#93;](#eq:perceptron){reference-type="ref" reference="eq:perceptron"} &#91;[98](../bibliography.md#ref-rosenblatt_perceptron_1958)&#93; du perceptron est la suivante:
+Celui-ci se distingue du neurone de McCulloch-Pitts car elle permet d’utiliser des nombres réels pour les entrées, poids et biais. L’équation [(4)](#eq:perceptron){reference-type="ref" reference="eq:perceptron"} &#91;[98](../bibliography.md#ref-rosenblatt_perceptron_1958)&#93; du perceptron est la suivante:
 <span id="eq:perceptron"></span>
 
 $$\begin{equation}
@@ -246,7 +246,7 @@ $$\begin{equation}
 
 <p class="thesis-caption"><em>(4)</em></p>
 
-Dans l’équation [&#91;eq:perceptron&#93;](#eq:perceptron){reference-type="ref" reference="eq:perceptron"}, *H* représente la fonction d’activation de Heaviside, *w*<sub>*k*</sub> les poids, *x*<sub>*k*</sub> les entrées, *b* le biais, et *n* le nombre d’entrées.
+Dans l’équation [(4)](#eq:perceptron){reference-type="ref" reference="eq:perceptron"}, *H* représente la fonction d’activation de Heaviside, *w*<sub>*k*</sub> les poids, *x*<sub>*k*</sub> les entrées, *b* le biais, et *n* le nombre d’entrées.
 
 L’évolution la plus remarquable par rapport au neurone de McCulloch-Pitts, est que le perceptron peut “apprendre” des données et actualiser les poids et biais.
 
@@ -260,7 +260,7 @@ On dispose d’un ensemble de données étiquetées {(**x**<sup>(*i*)</sup>, *
 
     2.  Calculer la valeur prédite *ŷ*<sup>(*i*)</sup> = *H*(**w** ⋅ **x**<sup>(*i*)</sup> + *b*)
 
-    3.  Utiliser la mise à jour des paramètres (équation [&#91;eq:perceptron\_maj1&#93;](#eq:perceptron_maj1){reference-type="ref" reference="eq:perceptron_maj1"} et [&#91;eq:perceptron\_maj2&#93;](#eq:perceptron_maj2){reference-type="ref" reference="eq:perceptron_maj2"} ci-dessous) :
+    3.  Utiliser la mise à jour des paramètres (équation [(5)](#eq:perceptron_maj1){reference-type="ref" reference="eq:perceptron_maj1"} et [(5)](#eq:perceptron_maj2){reference-type="ref" reference="eq:perceptron_maj2"} ci-dessous) :
         <span id="eq:perceptron_maj1"></span><span id="eq:perceptron_maj2"></span>
 
 $$\begin{align}
@@ -294,7 +294,7 @@ C’est aussi possible de connecter plusieurs couches de perceptron entre eux, t
 <figcaption>Perceptron multicouche <span class="citation" data-cites="zahn_cours_2024">[<a href="../bibliography.html#ref-zahn_cours_2024" role="doc-biblioref">97</a>]</span></figcaption>
 </figure>
 
-Pour améliorer les performances du perceptron, la fonction d’activation de Heaviside (Équation [&#91;eq:heaviside&#93;](#eq:heaviside){reference-type="ref" reference="eq:heaviside"}) est remplacée par la fonction d’activation de sigmoid (Equation [&#91;eq:sigmoid&#93;](#eq:sigmoid){reference-type="ref" reference="eq:sigmoid"}).
+Pour améliorer les performances du perceptron, la fonction d’activation de Heaviside (Équation [(1)](#eq:heaviside){reference-type="ref" reference="eq:heaviside"}) est remplacée par la fonction d’activation de sigmoid (Equation [(6)](#eq:sigmoid){reference-type="ref" reference="eq:sigmoid"}).
 
 <span id="eq:sigmoid"></span>
 
@@ -1213,7 +1213,7 @@ Le PQ permet d’avoir une métrique unique pour la détection du contour des ob
 
 - Recognition quality (RQ)
 
-La segmentation quality (SQ) &#91;[115](../bibliography.md#ref-kirillov_panoptic_2019)&#93; évalue la qualité des masques de segmentation produits par un modèle de segmentation panoptique (Équation [&#91;eq:segmentation\_quality&#93;](#eq:segmentation_quality){reference-type="ref" reference="eq:segmentation_quality"}). Elle est calculée comme la moyenne de l’intersection sur l’union (mIoU) entre les segments prédits et les segments de la vérité de terrain qui ont été mis en correspondance.
+La segmentation quality (SQ) &#91;[115](../bibliography.md#ref-kirillov_panoptic_2019)&#93; évalue la qualité des masques de segmentation produits par un modèle de segmentation panoptique (Équation [(8)](#eq:segmentation_quality){reference-type="ref" reference="eq:segmentation_quality"}). Elle est calculée comme la moyenne de l’intersection sur l’union (mIoU) entre les segments prédits et les segments de la vérité de terrain qui ont été mis en correspondance.
 
 <span id="eq:segmentation_quality"></span>
 
@@ -1224,7 +1224,7 @@ SQ = \frac{\sum_{(p,g) \in TP} IoU(p,g)}{|TP|}
 
 <p class="thesis-caption"><em>(8)</em></p>
 
-La recognition quality (RQ) &#91;[115](../bibliography.md#ref-kirillov_panoptic_2019)&#93; évalue l’accuracy des classes attribuées aux régions segmentées par un modèle de segmentation panoptique (Équation [&#91;eq:recognition\_quality&#93;](#eq:recognition_quality){reference-type="ref" reference="eq:recognition_quality"}). Elle est basée sur le score F1, qui est une moyenne harmonique de la precision et du recall.
+La recognition quality (RQ) &#91;[115](../bibliography.md#ref-kirillov_panoptic_2019)&#93; évalue l’accuracy des classes attribuées aux régions segmentées par un modèle de segmentation panoptique (Équation [(9)](#eq:recognition_quality){reference-type="ref" reference="eq:recognition_quality"}). Elle est basée sur le score F1, qui est une moyenne harmonique de la precision et du recall.
 
 <span id="eq:recognition_quality"></span>
 
@@ -1235,7 +1235,7 @@ RQ = \frac{|TP|}{|TP| + \frac{1}{2}|FP| + \frac{1}{2}|FN|}
 
 <p class="thesis-caption"><em>(9)</em></p>
 
-Finalement, la panoptic quality (PQ) &#91;[115](../bibliography.md#ref-kirillov_panoptic_2019)&#93; (Équation [&#91;eq:panoptic\_quality&#93;](#eq:panoptic_quality){reference-type="ref" reference="eq:panoptic_quality"}) est la multiplication de SQ (Équation [&#91;eq:segmentation\_quality&#93;](#eq:segmentation_quality){reference-type="ref" reference="eq:segmentation_quality"}) et RQ (Équation [&#91;eq:recognition\_quality&#93;](#eq:recognition_quality){reference-type="ref" reference="eq:recognition_quality"})
+Finalement, la panoptic quality (PQ) &#91;[115](../bibliography.md#ref-kirillov_panoptic_2019)&#93; (Équation [(10)](#eq:panoptic_quality){reference-type="ref" reference="eq:panoptic_quality"}) est la multiplication de SQ (Équation [(8)](#eq:segmentation_quality){reference-type="ref" reference="eq:segmentation_quality"}) et RQ (Équation [(9)](#eq:recognition_quality){reference-type="ref" reference="eq:recognition_quality"})
 
 <span id="eq:panoptic_quality"></span>
 

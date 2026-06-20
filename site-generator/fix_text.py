@@ -362,28 +362,30 @@ def main() -> None:
         for m in re.finditer(r"^(#{1,6})\s+(.*?)\s*\{#([^}]+)\}\s*$", text, re.MULTILINE):
             registry[m.group(3)] = (path, m.group(2).strip())
 
-    # Resolve unresolved refs: <a href="#LABEL" data-reference-type="ref"
-    # data-reference="LABEL">[label-text]</a> where the visible text is just
-    # the raw label (pandoc couldn't build a real anchor/number for it).
-    ref_re = re.compile(
-        r'<a href="#([^"]+)" data-reference-type="ref" data-reference="([^"]+)">(\[[^\]]*\])</a>'
-    )
+    # Resolve unresolved refs. pandoc's link_attributes extension (needed for
+    # the bibliography fix) made it switch every \ref{}-style output — both
+    # the ones it resolves itself and the ones it can't — to one Markdown
+    # form: `[text](#label){reference-type="ref" reference="label"}`. For
+    # labels pandoc never builds an anchor/number for (equations that fail to
+    # parse as Math, and this site's own code-listing sentinels), `text` is
+    # just the raw label, still wrapped in the HTML-entity brackets
+    # fix_bracket_escapes already converted it to.
+    ref_re = re.compile(r'\[([^\]]*)\]\(#([^)]+)\)(\{reference-type="ref" reference="[^"]+"\})')
 
     for path in list(texts):
         text = texts[path]
 
         def repl(m: re.Match, path: Path = path) -> str:
-            label = m.group(1)
+            visible, label, attrs = m.group(1), m.group(2), m.group(3)
             unescaped_label = unescape_markdown(label)
-            visible = unescape_markdown(m.group(3))
-            if visible != f"[{unescaped_label}]":
+            if unescape_markdown(visible) != f"&#91;{unescaped_label}&#93;":
                 return m.group(0)
             target = registry.get(unescaped_label)
             if target is None:
                 return m.group(0)
             target_path, display_text = target
-            href = relative_href(path, target_path, unescaped_label, html=True)
-            return f'<a href="{href}">{display_text}</a>'
+            href = relative_href(path, target_path, unescaped_label, html=False)
+            return f"[{display_text}]({href}){attrs}"
 
         texts[path] = ref_re.sub(repl, text)
 

@@ -211,7 +211,7 @@ La Figure [3.9](#fig:ch3_preparation_donnees_03_hors_canton){reference-type="ref
 
 Le filtre appliqué précédemment a éliminé une grande partie des <a href="../glossary.html#gloss-egid"><span data-acronym-label="egid" data-acronym-form="singular+short">EGID</span></a> invalides, mais il est important de bien vérifier car l’<a href="../glossary.html#gloss-egid"><span data-acronym-label="egid" data-acronym-form="singular+short">EGID</span></a> est la clé de jointure entre toutes les couches.
 
-L’<a href="../glossary.html#gloss-egid"><span data-acronym-label="egid" data-acronym-form="singular+short">EGID</span></a> minimum de la couche des bâtiments hors-sol est utilisé comme filtre (Code [&#91;code:filtre\_egid&#93;](#code:filtre_egid){reference-type="ref" reference="code:filtre_egid"}) pour identifier les <a href="../glossary.html#gloss-egid"><span data-acronym-label="egid" data-acronym-form="singular+short">EGID</span></a> invalides. Cette vérification détecte un total de 24 <a href="../glossary.html#gloss-egid"><span data-acronym-label="egid" data-acronym-form="singular+short">EGID</span></a> invalides dans la couche des toitures.
+L’<a href="../glossary.html#gloss-egid"><span data-acronym-label="egid" data-acronym-form="singular+short">EGID</span></a> minimum de la couche des bâtiments hors-sol est utilisé comme filtre (Code [Code 1 — Filtre <a href="../glossary.html#gloss-egid"><span data-acronym-label="egid" data-acronym-form="singular+short">EGID</span></a>](#code:filtre_egid){reference-type="ref" reference="code:filtre_egid"}) pour identifier les <a href="../glossary.html#gloss-egid"><span data-acronym-label="egid" data-acronym-form="singular+short">EGID</span></a> invalides. Cette vérification détecte un total de 24 <a href="../glossary.html#gloss-egid"><span data-acronym-label="egid" data-acronym-form="singular+short">EGID</span></a> invalides dans la couche des toitures.
 
 ```python
     # EGID bizarre
@@ -259,7 +259,7 @@ En Suisse, chaque bâtiment peut être classé selon son utilisation en 12 caté
 <span id="tab:categories_batiments_sia_380_1"></span>
 
 <p class="thesis-caption"><em>Catégories de bâtiments <a href="../glossary.html#gloss-sia"><span data-acronym-label="sia" data-acronym-form="singular+short">SIA</span></a> selon la norme <a href="../glossary.html#gloss-sia"><span data-acronym-label="sia" data-acronym-form="singular+short">SIA</span></a> 380/1:2016 &#91;[49](../bibliography.md#ref-sia_sia-shop_nodate)&#93;</em></p>
-Cette information n’est pas incluse directement dans la couche des bâtiments hors-sol, par contre la destination est renseignée pour chaque <a href="../glossary.html#gloss-egid"><span data-acronym-label="egid" data-acronym-form="singular+short">EGID</span></a>. Le Code [&#91;code:assigner\_categorie\_sia&#93;](#code:assigner_categorie_sia){reference-type="ref" reference="code:assigner_categorie_sia"} montre un exemple de conversion pour la première catégorie <a href="../glossary.html#gloss-sia"><span data-acronym-label="sia" data-acronym-form="singular+short">SIA</span></a>.
+Cette information n’est pas incluse directement dans la couche des bâtiments hors-sol, par contre la destination est renseignée pour chaque <a href="../glossary.html#gloss-egid"><span data-acronym-label="egid" data-acronym-form="singular+short">EGID</span></a>. Le Code [Code 2 — Exemple de conversion entre la destination et la première catégorie <a href="../glossary.html#gloss-sia"><span data-acronym-label="sia" data-acronym-form="singular+short">SIA</span></a>](#code:assigner_categorie_sia){reference-type="ref" reference="code:assigner_categorie_sia"} montre un exemple de conversion pour la première catégorie <a href="../glossary.html#gloss-sia"><span data-acronym-label="sia" data-acronym-form="singular+short">SIA</span></a>.
 
 ```python
     def assign_sia_category(destination):
@@ -291,7 +291,7 @@ Cette information n’est pas incluse directement dans la couche des bâtiments 
 
 <p class="thesis-caption"><em>Code 2 — Exemple de conversion entre la destination et la première catégorie <a href="../glossary.html#gloss-sia"><span data-acronym-label="sia" data-acronym-form="singular+short">SIA</span></a></em></p>
 
-La première vérification consiste à s’assurer que tous les <a href="../glossary.html#gloss-egid"><span data-acronym-label="egid" data-acronym-form="singular+short">EGID</span></a> possèdent une catégorie <a href="../glossary.html#gloss-sia"><span data-acronym-label="sia" data-acronym-form="singular+short">SIA</span></a> et à analyser la distribution de ces catégories. Le Code [&#91;code:categorie\_sia\_distribution\_verification&#93;](#code:categorie_sia_distribution_verification){reference-type="ref" reference="code:categorie_sia_distribution_verification"} inclut une instruction “assert” qui interrompt le script si tous les <a href="../glossary.html#gloss-egid"><span data-acronym-label="egid" data-acronym-form="singular+short">EGID</span></a> ne disposent pas d’une catégorie assignée.
+La première vérification consiste à s’assurer que tous les <a href="../glossary.html#gloss-egid"><span data-acronym-label="egid" data-acronym-form="singular+short">EGID</span></a> possèdent une catégorie <a href="../glossary.html#gloss-sia"><span data-acronym-label="sia" data-acronym-form="singular+short">SIA</span></a> et à analyser la distribution de ces catégories. Le Code [Code 3 — Distribution des catégories <a href="../glossary.html#gloss-sia"><span data-acronym-label="sia" data-acronym-form="singular+short">SIA</span></a> et vérification des données.](#code:categorie_sia_distribution_verification){reference-type="ref" reference="code:categorie_sia_distribution_verification"} inclut une instruction “assert” qui interrompt le script si tous les <a href="../glossary.html#gloss-egid"><span data-acronym-label="egid" data-acronym-form="singular+short">EGID</span></a> ne disposent pas d’une catégorie assignée.
 
 ```python
     print(gdf_cad_batiment_horsol["sia_cat"].value_counts())
@@ -416,7 +416,7 @@ Comme observé précédemment, cette figure révèle également quelques bugs da
 
 ##### Implémentation {#implémentation}
 
-Le Code [&#91;code:pseudo\_code\_decoupe\_orthophotos\_tuiles\_1280\_1280&#93;](#code:pseudo_code_decoupe_orthophotos_tuiles_1280_1280){reference-type="ref" reference="code:pseudo_code_decoupe_orthophotos_tuiles_1280_1280"} utilise du pseudo-code pour expliquer les étapes de découpage. Les principales librairies employées sont rasterio &#91;[78](../bibliography.md#ref-noauthor_rasterio_nodate)&#93; et shapely &#91;[79](../bibliography.md#ref-noauthor_shapely_nodate)&#93;. Rasterio permet la manipulation des données raster (orthophotos), tandis que shapely offre une boîte à outils complète pour le traitement des géométries et données géospatiales.
+Le Code [Code 4 — Pseudo-code pour la découpe des orthophotos 20000x20000 pixels en tuiles de 1280x1280 pixels](#code:pseudo_code_decoupe_orthophotos_tuiles_1280_1280){reference-type="ref" reference="code:pseudo_code_decoupe_orthophotos_tuiles_1280_1280"} utilise du pseudo-code pour expliquer les étapes de découpage. Les principales librairies employées sont rasterio &#91;[78](../bibliography.md#ref-noauthor_rasterio_nodate)&#93; et shapely &#91;[79](../bibliography.md#ref-noauthor_shapely_nodate)&#93;. Rasterio permet la manipulation des données raster (orthophotos), tandis que shapely offre une boîte à outils complète pour le traitement des géométries et données géospatiales.
 
 ```text
     DÉBUT process_geotiff_with_buildings(geotiff, gdf_batiments, output)
@@ -533,7 +533,7 @@ Chaque intervalle correspond à une typologie architecturale spécifique. Le plu
 
 L’échantillonnage des tuiles s’effectue selon une approche stratifiée pour garantir une représentation équilibrée de chaque catégorie. Cette méthode repose sur deux critères de stratification, la classe dominante (`dominant_class`) et la catégorie de surface (`area_bin`).
 
-La fonction `sample_tiles` (Code [&#91;code:echantillonnage\_tuiles&#93;](#code:echantillonnage_tuiles){reference-type="ref" reference="code:echantillonnage_tuiles"}) implémente cette logique d’échantillonnage avec un paramètre `random_state=42` qui permet la reproductibilité des résultats en fixant la graine du générateur de nombres aléatoires.
+La fonction `sample_tiles` (Code [Code 5 — Fonction d’échantillonnage stratifié par groupe](#code:echantillonnage_tuiles){reference-type="ref" reference="code:echantillonnage_tuiles"}) implémente cette logique d’échantillonnage avec un paramètre `random_state=42` qui permet la reproductibilité des résultats en fixant la graine du générateur de nombres aléatoires.
 
 ```python
     def sample_tiles(group, n_samples):
@@ -772,7 +772,7 @@ Une des manières de résoudre le problème des fuites de données consiste en u
 
 La première étape consiste à identifier les paires de tuiles qui se chevauchent géographiquement. La deuxième phase calcule leur position relative pour déterminer précisément les zones de recouvrement. Enfin, la troisième étape procède au masquage d’une partie spécifique dans l’une des tuiles concernées, éliminant ainsi la redondance d’information entre les datasets.
 
-La première étape est réalisée par la fonction `find_overlapping_tiles` (Code [&#91;code:post\_traitement\_detection\_tuile\_chevauchement&#93;](#code:post_traitement_detection_tuile_chevauchement){reference-type="ref" reference="code:post_traitement_detection_tuile_chevauchement"}) qui permet d’identifier les paires de tuiles se chevauchent.
+La première étape est réalisée par la fonction `find_overlapping_tiles` (Code [Code 7 — Détection des tuiles qui se chevauchent](#code:post_traitement_detection_tuile_chevauchement){reference-type="ref" reference="code:post_traitement_detection_tuile_chevauchement"}) qui permet d’identifier les paires de tuiles se chevauchent.
 
 ```python
     def find_overlapping_tiles(gdf, min_overlap_area=1.0):
@@ -837,7 +837,7 @@ La fonction commence par créer un index spatial pour optimiser les performances
 
 Pour chaque tuile, la fonction identifie ensuite les candidates potentielles en utilisant les boîtes englobantes, puis vérifie si une intersection géométrique réelle existe entre elles. Lorsqu’un recouvrement est détecté et dépasse le seuil minimal défini, elle calcule la surface d’intersection ainsi que les pourcentages de recouvrement pour chacune des deux tuiles concernées. Ces informations sont finalement stockées dans un dictionnaire Python.
 
-La deuxième étape est réalisée par la fonction `determine_relative_position` (Code [&#91;code:post\_traitement\_position\_relative\_tuiles&#93;](#code:post_traitement_position_relative_tuiles){reference-type="ref" reference="code:post_traitement_position_relative_tuiles"}) qui traite les paires de tuiles identifiées lors de l’étape précédente. Cette fonction calcule les centroïdes des deux tuiles concernées et détermine leur position relative l’une par rapport à l’autre. Cette information de positionnement sera ensuite utilisée pour décider quelle zone masquer lors du traitement des recouvrements.
+La deuxième étape est réalisée par la fonction `determine_relative_position` (Code [Code 8 — Position relative des tuiles](#code:post_traitement_position_relative_tuiles){reference-type="ref" reference="code:post_traitement_position_relative_tuiles"}) qui traite les paires de tuiles identifiées lors de l’étape précédente. Cette fonction calcule les centroïdes des deux tuiles concernées et détermine leur position relative l’une par rapport à l’autre. Cette information de positionnement sera ensuite utilisée pour décider quelle zone masquer lors du traitement des recouvrements.
 
 ```python
     def determine_relative_position(geom1, geom2):
@@ -882,7 +882,7 @@ La deuxième étape est réalisée par la fonction `determine_relative_position`
 
 <p class="thesis-caption"><em>Code 8 — Position relative des tuiles</em></p>
 
-Finalement, la fonction `remove_overlaps` (Code [&#91;code:post\_traitement\_masquage\_selectif&#93;](#code:post_traitement_masquage_selectif){reference-type="ref" reference="code:post_traitement_masquage_selectif"}) applique un masquage sélectif aux tuiles qui se chevauchent, en ciblant spécifiquement celles situées à droite ou en bas selon leur position relative déterminée à l’étape précédente. Cette approche systématique garantit l’élimination des redondances tout en conservant l’intégrité des données dans chaque dataset.
+Finalement, la fonction `remove_overlaps` (Code [Code 9 — Masquage sélectif](#code:post_traitement_masquage_selectif){reference-type="ref" reference="code:post_traitement_masquage_selectif"}) applique un masquage sélectif aux tuiles qui se chevauchent, en ciblant spécifiquement celles situées à droite ou en bas selon leur position relative déterminée à l’étape précédente. Cette approche systématique garantit l’élimination des redondances tout en conservant l’intégrité des données dans chaque dataset.
 
 ```python
     def remove_overlaps(overlap_df, gdf_dataset, remove_positions=['right', 'bottom']):
@@ -956,7 +956,7 @@ Une alternative plus complexe à mettre en place consiste à utiliser une valida
 
 Pour répartir les données annotées, il est nécessaire d’effectuer une stratification similaire à celle utilisée lors de la phase de sélection des données à annoter. Cette stratification analyse les combinaisons de classes <a href="../glossary.html#gloss-sia"><span data-acronym-label="sia" data-acronym-form="singular+short">SIA</span></a> et d’intervalles de surface présentes dans le dataset. Les combinaisons les plus rares sont distribuées en priorité dans les différents ensembles, puis les combinaisons plus fréquentes sont réparties selon le même principe. L’objectif est de garantir que tous les datasets conservent une représentation équilibrée et représentative du dataset original annoté.
 
-La fonction `create_stratified_dataset_splits` (Code [&#91;code:post\_traitement\_stratification&#93;](#code:post_traitement_stratification){reference-type="ref" reference="code:post_traitement_stratification"}) permet de réaliser cette stratification.
+La fonction `create_stratified_dataset_splits` (Code [Code 10 — Stratification pour la répartition des données annotées](#code:post_traitement_stratification){reference-type="ref" reference="code:post_traitement_stratification"}) permet de réaliser cette stratification.
 
 ```python
     def create_stratified_dataset_splits(df, test_size=0.2, n_folds=5, max_attempts=100):
@@ -1028,7 +1028,7 @@ où *σ* représente l’écart-type et *μ* la moyenne des pourcentages de rép
 
 Un coefficient proche de zéro indique une distribution parfaitement équilibrée, tandis qu’une valeur élevée révèle des déséquilibres importants. Le score de qualité global combine les coefficients de variation moyens pour les classes dominantes et les intervalles de surface, permettant d’identifier objectivement la répartition optimale parmi les multiples tentatives générées.
 
-Le meilleur résultat (Code [&#91;code:post\_traitement\_stratification\_resultats&#93;](#code:post_traitement_stratification_resultats){reference-type="ref" reference="code:post_traitement_stratification_resultats"}) est obtenu à l’itération 84, malgré des essais avec plus de 10000 itérations.
+Le meilleur résultat (Code [Code 11 — Résultats fonction `create_stratified_dataset_splits`](#code:post_traitement_stratification_resultats){reference-type="ref" reference="code:post_traitement_stratification_resultats"}) est obtenu à l’itération 84, malgré des essais avec plus de 10000 itérations.
 
 ```text
     Target: Class CV ≤ 0.050, Area CV ≤ 0.050
@@ -1139,7 +1139,7 @@ La solution adoptée (Figure [3.57](#fig:ch3_postprocessing_dataset_verification
 
 Les coordonnées valides et les doublons d’images ont déjà été vérifiés lors de la sélection des images à annoter, il n’y a donc pas eu de corrections à apporter à cette étape.
 
-Finalement, l’algorithme utilisé pour la distribution des données annotées en datasets vise une répartition optimale malgré la difficulté de réaliser une stratification avec double critère. Le coefficient de variation obtenu se situe à 8.8% pour la surface et 8.6% pour la classe, soit en dessous de l’objectif de 10% (Code [&#91;code:post\_traitement\_stratification\_resultats&#93;](#code:post_traitement_stratification_resultats){reference-type="ref" reference="code:post_traitement_stratification_resultats"}).
+Finalement, l’algorithme utilisé pour la distribution des données annotées en datasets vise une répartition optimale malgré la difficulté de réaliser une stratification avec double critère. Le coefficient de variation obtenu se situe à 8.8% pour la surface et 8.6% pour la classe, soit en dessous de l’objectif de 10% (Code [Code 11 — Résultats fonction `create_stratified_dataset_splits`](#code:post_traitement_stratification_resultats){reference-type="ref" reference="code:post_traitement_stratification_resultats"}).
 
 Les Figures [3.58](#fig:ch3_postprocessing_dataset_19_distribution_barchart_surface){reference-type="ref" reference="fig:ch3_postprocessing_dataset_19_distribution_barchart_surface"} et [3.59](#fig:ch3_postprocessing_dataset_20_distribution_barchart_classe){reference-type="ref" reference="fig:ch3_postprocessing_dataset_20_distribution_barchart_classe"} représentent respectivement la distribution des intervalles de surface et des classes <a href="../glossary.html#gloss-sia"><span data-acronym-label="sia" data-acronym-form="singular+short">SIA</span></a> par dataset. La ligne pointillée en bleu indique le seuil théorique équilibré : les datasets situés au-dessus de cette ligne ont reçu plus d’images que l’objectif fixé. L’algorithme de stratification optimise au mieux la distribution, mais des compromis demeurent nécessaires pour maintenir l’équilibre global entre les différents critères de stratification.
 
@@ -1184,7 +1184,7 @@ Les connexions de saut (skip connections) permettent d’établir des ponts entr
 
 ##### Architectures testées {#architectures-testées}
 
-SMP propose plusieurs architectures qui sont déjà prêtes à l’utilisation. Le Code [&#91;code:smp\_quick\_start\_model&#93;](#code:smp_quick_start_model){reference-type="ref" reference="code:smp_quick_start_model"} permet de créer un modèle U-Net de manière simplifiée.
+SMP propose plusieurs architectures qui sont déjà prêtes à l’utilisation. Le Code [Code 12 — Utilisation d’un modèle SMP &#91;[87](../bibliography.md#ref-noauthor_quick_nodate)&#93;](#code:smp_quick_start_model){reference-type="ref" reference="code:smp_quick_start_model"} permet de créer un modèle U-Net de manière simplifiée.
 
 ```python
     import segmentation_models_pytorch as smp
@@ -1201,7 +1201,7 @@ SMP propose plusieurs architectures qui sont déjà prêtes à l’utilisation. 
 
 <p class="thesis-caption"><em>Code 12 — Utilisation d’un modèle SMP &#91;[87](../bibliography.md#ref-noauthor_quick_nodate)&#93;</em></p>
 
-En synthèse, le Tableau [&#91;tab:ch36\_architecture\_smp\_avantage\_inconvenient&#93;](#tab:ch36_architecture_smp_avantage_inconvenient){reference-type="ref" reference="tab:ch36_architecture_smp_avantage_inconvenient"} présente les avantages et inconvénients de chacune des architectures. L’architecture DeepLabV3 est disponible dans SMP mais n’est pas incluse car DeepLabV3+ est sa nouvelle version.
+En synthèse, le Tableau [Tableau 1 — Avantages et inconvénients des architectures proposées dans SMP](#tab:ch36_architecture_smp_avantage_inconvenient){reference-type="ref" reference="tab:ch36_architecture_smp_avantage_inconvenient"} présente les avantages et inconvénients de chacune des architectures. L’architecture DeepLabV3 est disponible dans SMP mais n’est pas incluse car DeepLabV3+ est sa nouvelle version.
 
 <span id="tab:ch36_architecture_smp_avantage_inconvenient"></span>
 
@@ -1220,7 +1220,7 @@ Afin d’améliorer les performances des architectures de base, il est possible 
 
 Le choix des encodeurs est crucial pour la performance du modèle de segmentation. Les encodeurs sont des modèles pré-entraînés sur tel que le dataset ImageNet &#91;[88](../bibliography.md#ref-noauthor_imagenet_nodate)&#93;, permettant d’extraire des caractéristiques pertinentes des images d’entrée. Dans SMP, une vingtaine d’encodeurs sont disponibles. En complément, Pytorch-Image-Models (timm) &#91;[89](../bibliography.md#ref-wightman_pytorch_2025)&#93; propose plus de 800 encodeurs, bien que la compatibilité entre SMP et timm ne soit pas garantie.
 
-Les encodeurs sélectionnés sont les plus populaires et les plus performants, indépendamment de leur taille, et ont tous été pré-entraînés sur ImageNet. Cette approche permet d’accélérer l’entraînement du modèle en exploitant les caractéristiques que le modèle de base a déjà apprises. Le Tableau [&#91;tab:ch36\_encodeurs\_smp\_avantage\_inconvenient&#93;](#tab:ch36_encodeurs_smp_avantage_inconvenient){reference-type="ref" reference="tab:ch36_encodeurs_smp_avantage_inconvenient"} présente les avantages et inconvénients des encodeurs testés dans SMP.
+Les encodeurs sélectionnés sont les plus populaires et les plus performants, indépendamment de leur taille, et ont tous été pré-entraînés sur ImageNet. Cette approche permet d’accélérer l’entraînement du modèle en exploitant les caractéristiques que le modèle de base a déjà apprises. Le Tableau [Tableau 2 — Avantages et inconvénients des architectures des encodeurs testés](#tab:ch36_encodeurs_smp_avantage_inconvenient){reference-type="ref" reference="tab:ch36_encodeurs_smp_avantage_inconvenient"} présente les avantages et inconvénients des encodeurs testés dans SMP.
 
 <span id="tab:ch36_encodeurs_smp_avantage_inconvenient"></span>
 
@@ -1281,7 +1281,7 @@ L’augmentation des données permet de créer plusieurs versions d’une même 
 
 ##### Stratégie d’augmentation de données {#stratégie-daugmentation-de-données}
 
-La librairie Albumentations &#91;[90](../bibliography.md#ref-albumentations_albumentations_nodate)&#93; permet de faire de l’augmentation de données directement sur les images avant qu’elles soient utilisées pour l’entraînement du modèle. Le Code [&#91;code:pipeline\_augmentation\_donnees&#93;](#code:pipeline_augmentation_donnees){reference-type="ref" reference="code:pipeline_augmentation_donnees"} présente la combinaison de transformations utilisées pour réaliser l’augmentation de données.
+La librairie Albumentations &#91;[90](../bibliography.md#ref-albumentations_albumentations_nodate)&#93; permet de faire de l’augmentation de données directement sur les images avant qu’elles soient utilisées pour l’entraînement du modèle. Le Code [Code 13 — Pipeline augmentation des données](#code:pipeline_augmentation_donnees){reference-type="ref" reference="code:pipeline_augmentation_donnees"} présente la combinaison de transformations utilisées pour réaliser l’augmentation de données.
 
 ```python
     import albumentations as A
@@ -1340,7 +1340,7 @@ YOLO dispose de stratégies d’augmentation de données propres dans sa librair
 
 YOLO applique aussi des transformations qui affectent le contraste et les couleurs, ce qui n’est pas adapté aux images aériennes. Les premiers tests avec ces réglages automatiques ont donné des résultats relativement mauvais. YOLO dispose en théorie d’une compatibilité totale avec Albumentations; dans la pratique, ils ne permettent d’utiliser qu’une partie des transformations d’Albumentations.
 
-La solution adoptée consiste à inclure exactement les mêmes transformations que pour SMP (Code [&#91;code:pipeline\_augmentation\_donnees&#93;](#code:pipeline_augmentation_donnees){reference-type="ref" reference="code:pipeline_augmentation_donnees"}), mais en les intégrant directement au sein du dataset d’entraînement pour chacun des folds. Chaque image est augmentée 10 fois, portant ainsi le dataset d’entraînement pour YOLO à 353 images originales et 3530 images augmentées, soit un total de 3880 images. Les annotations subissent les mêmes transformations que les images correspondantes. Les datasets de test et de validation ne subissent pas d’augmentation de données. L’augmentation de données automatique est désactivée lors de l’entraînement des modèles YOLO, permettant ainsi d’obtenir des résultats comparables entre SMP et YOLO.
+La solution adoptée consiste à inclure exactement les mêmes transformations que pour SMP (Code [Code 13 — Pipeline augmentation des données](#code:pipeline_augmentation_donnees){reference-type="ref" reference="code:pipeline_augmentation_donnees"}), mais en les intégrant directement au sein du dataset d’entraînement pour chacun des folds. Chaque image est augmentée 10 fois, portant ainsi le dataset d’entraînement pour YOLO à 353 images originales et 3530 images augmentées, soit un total de 3880 images. Les annotations subissent les mêmes transformations que les images correspondantes. Les datasets de test et de validation ne subissent pas d’augmentation de données. L’augmentation de données automatique est désactivée lors de l’entraînement des modèles YOLO, permettant ainsi d’obtenir des résultats comparables entre SMP et YOLO.
 
 Cette méthode d’augmentation de données pour YOLO implique un temps d’entraînement plus long, car il faut traiter dix fois plus d’images durant le processus d’apprentissage. Cependant, les résultats obtenus s’avèrent supérieurs à ceux des transformations automatiques natives de YOLO.
 
@@ -1485,7 +1485,7 @@ Le processus d’entraînement des modèles SMP suit une approche structurée or
 
 ##### Configuration modèles {#configuration-modèles}
 
-La configuration des hyperparamètres est réalisée dans le fichier `training_configs.py`, qui est ensuite importé dans le script d’entraînement. Le Code [&#91;code:ch36\_entrainement\_config\_smp&#93;](#code:ch36_entrainement_config_smp){reference-type="ref" reference="code:ch36_entrainement_config_smp"} présente un exemple de fichier de configuration pour SMP. Dans cet exemple, la configuration correspond à un modèle U-Net avec un encodeur EfficientNet-B3 pré-entraîné sur ImageNet.
+La configuration des hyperparamètres est réalisée dans le fichier `training_configs.py`, qui est ensuite importé dans le script d’entraînement. Le Code [Code 14 — Exemple de fichier de configuration d’entraînement pour SMP](#code:ch36_entrainement_config_smp){reference-type="ref" reference="code:ch36_entrainement_config_smp"} présente un exemple de fichier de configuration pour SMP. Dans cet exemple, la configuration correspond à un modèle U-Net avec un encodeur EfficientNet-B3 pré-entraîné sur ImageNet.
 
 ```python
     # training_configs.py
@@ -1553,7 +1553,7 @@ Ces paramètres sont utilisés pour la majorité des modèles. MambaOut constitu
 
 ##### Initialisation du modèle {#initialisation-du-modèle}
 
-La deuxième étape consiste à créer le modèle en combinant l’architecture sélectionnée (U-Net, FPN, etc.) avec l’encodeur choisi. Le Code [&#91;code:ch36\_creation\_modele\_smp&#93;](#code:ch36_creation_modele_smp){reference-type="ref" reference="code:ch36_creation_modele_smp"} illustre cette initialisation.
+La deuxième étape consiste à créer le modèle en combinant l’architecture sélectionnée (U-Net, FPN, etc.) avec l’encodeur choisi. Le Code [Code 15 — Création et initialisation d’un modèle SMP](#code:ch36_creation_modele_smp){reference-type="ref" reference="code:ch36_creation_modele_smp"} illustre cette initialisation.
 
 ```python
         import segmentation_models_pytorch as smp
@@ -1580,7 +1580,7 @@ L’utilisation de poids pré-entraînés (`encoder_weights="imagenet"`) permet 
 
 ##### Configuration de l’optimisation {#configuration-de-loptimisation}
 
-L’optimiseur AdamW est utilisé avec une stratégie de réduction adaptative du taux d’apprentissage. Le Code [&#91;code:ch36\_optimiseur\_smp&#93;](#code:ch36_optimiseur_smp){reference-type="ref" reference="code:ch36_optimiseur_smp"} présente cette configuration.
+L’optimiseur AdamW est utilisé avec une stratégie de réduction adaptative du taux d’apprentissage. Le Code [Code 16 — Configuration de l’optimiseur et planificateur](#code:ch36_optimiseur_smp){reference-type="ref" reference="code:ch36_optimiseur_smp"} présente cette configuration.
 
 ```python
     # Optimiseur AdamW avec régularisation
@@ -1618,7 +1618,7 @@ La fonction de perte `BCEWithLogitsLoss` combine une activation sigmoïde avec l
 
 ##### Entraînement avec précision mixte {#entraînement-avec-précision-mixte}
 
-La précision mixte &#91;[94](../bibliography.md#ref-noauthor_automatic_nodate)&#93; permet d’accélérer l’entraînement en utilisant des types de données à virgule flottante 16 bits (FP16) pour les calculs, tout en conservant la précision des poids en 32 bits (FP32). Cette technique réduit la consommation de mémoire et accélère les calculs sur les GPU modernes. L’entraînement peut être accéléré d’un facteur de 2 à 3. Le Code [&#91;code:ch36\_boucle\_entrainement&#93;](#code:ch36_boucle_entrainement){reference-type="ref" reference="code:ch36_boucle_entrainement"} illustre la boucle d’entraînement principale avec précision mixte.
+La précision mixte &#91;[94](../bibliography.md#ref-noauthor_automatic_nodate)&#93; permet d’accélérer l’entraînement en utilisant des types de données à virgule flottante 16 bits (FP16) pour les calculs, tout en conservant la précision des poids en 32 bits (FP32). Cette technique réduit la consommation de mémoire et accélère les calculs sur les GPU modernes. L’entraînement peut être accéléré d’un facteur de 2 à 3. Le Code [Code 17 — Boucle d’entraînement avec précision mixte et accumulation de gradients](#code:ch36_boucle_entrainement){reference-type="ref" reference="code:ch36_boucle_entrainement"} illustre la boucle d’entraînement principale avec précision mixte.
 
 ```python
     from torch.amp import GradScaler, autocast
@@ -1674,7 +1674,7 @@ La précision mixte &#91;[94](../bibliography.md#ref-noauthor_automatic_nodate)&
 
 <p class="thesis-caption"><em>Code 17 — Boucle d’entraînement avec précision mixte et accumulation de gradients</em></p>
 
-La boucle d’entraînement du Code [&#91;code:ch36\_boucle\_entrainement&#93;](#code:ch36_boucle_entrainement){reference-type="ref" reference="code:ch36_boucle_entrainement"} fonctionne selon le processus suivant :
+La boucle d’entraînement du Code [Code 17 — Boucle d’entraînement avec précision mixte et accumulation de gradients](#code:ch36_boucle_entrainement){reference-type="ref" reference="code:ch36_boucle_entrainement"} fonctionne selon le processus suivant :
 
 - Un `GradScaler` est créé pour gérer la précision mixte (FP16/FP32) et le paramètre `accumulation_steps` définit le nombre de mini-batches à accumuler avant la mise à jour des poids.
 
@@ -1701,7 +1701,7 @@ Cette boucle permet d’entraîner efficacement un modèle de segmentation séma
 
 ##### Validation croisée {#validation-croisée}
 
-L’entraînement utilise une validation croisée à 5 folds pour maximiser l’utilisation des données annotées. Chaque fold sert alternativement de dataset de validation, permettant d’obtenir une évaluation robuste des performances. Le Code [&#91;code:ch36\_validation\_croisee&#93;](#code:ch36_validation_croisee){reference-type="ref" reference="code:ch36_validation_croisee"} illustre cette approche.
+L’entraînement utilise une validation croisée à 5 folds pour maximiser l’utilisation des données annotées. Chaque fold sert alternativement de dataset de validation, permettant d’obtenir une évaluation robuste des performances. Le Code [Code 18 — Validation croisée à 5 folds](#code:ch36_validation_croisee){reference-type="ref" reference="code:ch36_validation_croisee"} illustre cette approche.
 
 ```python
     for fold in range(5):
@@ -1731,7 +1731,7 @@ L’entraînement utilise une validation croisée à 5 folds pour maximiser l’
 
 <p class="thesis-caption"><em>Code 18 — Validation croisée à 5 folds</em></p>
 
-La validation croisée du Code [&#91;code:ch36\_validation\_croisee&#93;](#code:ch36_validation_croisee){reference-type="ref" reference="code:ch36_validation_croisee"} fonctionne ainsi:
+La validation croisée du Code [Code 18 — Validation croisée à 5 folds](#code:ch36_validation_croisee){reference-type="ref" reference="code:ch36_validation_croisee"} fonctionne ainsi:
 
 - Pour chaque fold de 0 à 4 (`for fold in range(5)`), une configuration différente des datasets d’entraînement et de validation est créée.
 
@@ -1753,7 +1753,7 @@ La validation croisée du Code [&#91;code:ch36\_validation\_croisee&#93;](#code:
 
 Les métriques constituent un élément essentiel pour évaluer les performances des modèles de segmentation d’instances. Elles permettent de quantifier la précision des prédictions du modèle par rapport aux annotations de référence. La sous-section (voir page ) présente en détail les principales métriques utilisées en machine learning (accuracy, precision, recall, F1-score). La sous-section (voir page ) présente les métriques spécifiques à la segmentation d’images (IoU, AP, mAP, PA).
 
-L’évaluation des performances s’effectue à l’aide des métriques IoU, F1-score, accuracy, precision et recall. Ces métriques sont calculées à l’aide de SMP, ce qui permet de faire tous les calculs sur GPU et éviter les échanges CPU-GPU si on le fait avec numpy. Le Code [&#91;code:ch36\_calcul\_metriques&#93;](#code:ch36_calcul_metriques){reference-type="ref" reference="code:ch36_calcul_metriques"} présente le calcul de ces métriques.
+L’évaluation des performances s’effectue à l’aide des métriques IoU, F1-score, accuracy, precision et recall. Ces métriques sont calculées à l’aide de SMP, ce qui permet de faire tous les calculs sur GPU et éviter les échanges CPU-GPU si on le fait avec numpy. Le Code [Code 19 — Calcul des métriques d’évaluation](#code:ch36_calcul_metriques){reference-type="ref" reference="code:ch36_calcul_metriques"} présente le calcul de ces métriques.
 
 ```python
     def calculate_metrics_smp(pred_logits, target):
@@ -1787,7 +1787,7 @@ L’évaluation des performances s’effectue à l’aide des métriques IoU, F1
 
 <p class="thesis-caption"><em>Code 19 — Calcul des métriques d’évaluation</em></p>
 
-Les étapes pour le calcul des métriques du Code [&#91;code:ch36\_calcul\_metriques&#93;](#code:ch36_calcul_metriques){reference-type="ref" reference="code:ch36_calcul_metriques"} sont les suivantes:
+Les étapes pour le calcul des métriques du Code [Code 19 — Calcul des métriques d’évaluation](#code:ch36_calcul_metriques){reference-type="ref" reference="code:ch36_calcul_metriques"} sont les suivantes:
 
 - Préparation des données d’entrée :
 
