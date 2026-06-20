@@ -759,8 +759,9 @@ This repo contains two separate things — the LaTeX thesis itself, and the tool
 The thesis is also published as a browsable website (MkDocs Material), generated from the LaTeX above by the scripts in `site-generator/`:
 
 - `site-generator/` — the scripts that convert the LaTeX into the website (`convert_thesis.sh` and everything it calls). Not LaTeX, not website content — just the tooling in between.
-- `docs/` — the generated website content that MkDocs builds from. It is **generated from the LaTeX sources** — never edit files under `docs/chapters/`, `docs/appendices/`, `docs/bibliography.md`, `docs/glossary.md`, or `docs/assets/` by hand, since the next regeneration overwrites them. The only hand-written page is `docs/index.md` (the landing page).
+- `docs/` — the generated website content that MkDocs builds from. It is **generated from the LaTeX sources** — never edit files under `docs/chapters/`, `docs/appendices/`, `docs/bibliography.md`, `docs/glossary.md`, or `docs/assets/` by hand, since the next regeneration overwrites them. The only hand-written content is `docs/index.md` (the landing page) and `docs/img/` (favicon + social-preview image, used for Open Graph/Twitter link previews).
 - `mkdocs.yml` — MkDocs site configuration (theme, nav, plugins). Stays at the repo root since that's where `mkdocs` expects to find it.
+- `overrides/main.html` — injects Open Graph/Twitter Card meta tags (title, description, `docs/img/social-card.png`) into every page's `<head>`, so sharing a link on LinkedIn/Twitter/etc. shows a proper preview card instead of nothing.
 
 ### Prerequisites
 

@@ -6,7 +6,9 @@ use_directory_urls: false
 
 theme:
   name: material
+  custom_dir: overrides
   language: fr
+  favicon: img/favicon.png
   palette:
     - scheme: default
       primary: indigo
