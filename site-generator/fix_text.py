@@ -66,7 +66,12 @@ def unescape_markdown(s: str) -> str:
 
 def fix_math_escaping(text: str) -> str:
     def repl(m: re.Match) -> str:
-        return m.group(0).replace(r"\_", "_").replace(r"\|", "|")
+        block = m.group(0).replace(r"\_", "_").replace(r"\|", "|")
+        # \bm{...} is from LaTeX's `bm` package (bold vectors); MathJax's
+        # default bundle has no idea what \bm is and renders it garbled
+        # ("\bw" instead of bold w) since it isn't one of its own macros.
+        # \boldsymbol is the MathJax/amsmath equivalent — same visual result.
+        return block.replace(r"\bm{", r"\boldsymbol{")
 
     return re.sub(r"\$\$.*?\$\$", repl, text, flags=re.DOTALL)
 
@@ -328,9 +333,231 @@ def add_meta_description(text: str, path: Path) -> str:
     return f'---\ndescription: "{description}"\n---\n\n{text}'
 
 
+def harvest_resolved_numbers(texts: dict[Path, str]) -> dict[str, str]:
+    """Pandoc auto-numbers figures/tables it parses natively as chapter.N
+    (e.g. "6.1"), but only bakes that number into the *in-text* cross
+    reference — the figure/table's own caption stays bare, with no "Figure
+    6.1" prefix at all. Harvest the number from any already-resolved
+    `[6.1](...#fig:label)` / `[6.1](...#tab:label)` link so the caption
+    passes below can prefix the caption itself the same way."""
+    numbers: dict[str, str] = {}
+    pattern = re.compile(r"\[(\d+(?:\.\d+)?)\]\([^)]*#(fig|tab):([\w-]+)\)")
+    for text in texts.values():
+        for m in pattern.finditer(text):
+            numbers[f"{m.group(2)}:{m.group(3)}"] = m.group(1)
+    return numbers
+
+
+def add_figure_caption_numbers(text: str, numbers: dict[str, str]) -> str:
+    """Prefix each figure's *own* caption with "Figure N — " using the number
+    harvested from its in-text references. Most subfigures are a bare nested
+    <figure> (no id, e.g. "Original"/"Ground truth") and are correctly left
+    alone — but some subfigures carry their own \\label (and so their own
+    `id="fig:..."` and their own harvested number), and recursing into each
+    outer figure's content is what numbers those too instead of silently
+    skipping every figure nested inside another one."""
+    out = []
+    i = 0
+    open_re = re.compile(r'<figure id="(fig:[\w-]+)"[^>]*>')
+    while True:
+        m = open_re.search(text, i)
+        if not m:
+            out.append(text[i:])
+            break
+        out.append(text[i : m.end()])
+        label = m.group(1)
+        depth = 1
+        j = m.end()
+        while depth > 0:
+            next_open = text.find("<figure", j)
+            next_close = text.find("</figure>", j)
+            if next_close == -1:
+                j = len(text)
+                break
+            if next_open != -1 and next_open < next_close:
+                depth += 1
+                j = next_open + len("<figure")
+            else:
+                depth -= 1
+                j = next_close + len("</figure>")
+        block_end = j - len("</figure>") if j <= len(text) and depth == 0 else j
+        block = text[m.end() : block_end]
+
+        block = add_figure_caption_numbers(block, numbers)
+
+        number = numbers.get(label)
+        if number:
+            last_idx = block.rfind("<figcaption>")
+            if last_idx != -1:
+                close_idx = block.find("</figcaption>", last_idx)
+                inner = block[last_idx + len("<figcaption>") : close_idx]
+                if not inner.startswith("Figure "):
+                    block = (
+                        block[:last_idx]
+                        + f"<figcaption>Figure {number} — {inner}</figcaption>"
+                        + block[close_idx + len("</figcaption>") :]
+                    )
+        out.append(block)
+        if j <= len(text):
+            out.append("</figure>")
+        i = j
+
+    return "".join(out)
+
+
+def add_native_table_caption_numbers(text: str, numbers: dict[str, str]) -> str:
+    """Same idea as add_figure_caption_numbers, for the two different shapes
+    pandoc uses for a table caption depending on how complex the table is:
+    a real <table><caption> for ones with colspan/rowspan, or the
+    span+styled-<p> form fix_native_table_captions produces for plain pipe
+    tables. Skip anything already prefixed by our own Code/Tableau counters
+    (RAWTABLE custom tables) — those aren't in `numbers` anyway since pandoc
+    never saw them, but the explicit check makes that not load-bearing."""
+
+    def table_repl(m: re.Match) -> str:
+        label, caption = m.group(1), m.group(2)
+        number = numbers.get(label)
+        if not number:
+            return m.group(0)
+        return f'<table id="{label}">\n<caption>Tableau {number} — {caption}</caption>'
+
+    text = re.sub(
+        r'<table id="(tab:[\w-]+)">\s*<caption>(.*?)</caption>',
+        table_repl,
+        text,
+        flags=re.DOTALL,
+    )
+
+    def span_repl(m: re.Match) -> str:
+        label, caption = m.group(1), m.group(2)
+        if re.match(r"^(Tableau|Code) \d", caption):
+            return m.group(0)
+        number = numbers.get(label)
+        if not number:
+            return m.group(0)
+        return (
+            f'<span id="{label}"></span>\n\n'
+            f'<p class="thesis-caption"><em>Tableau {number} — {caption}</em></p>'
+        )
+
+    return re.sub(
+        r'<span id="(tab:[\w-]+)"></span>\n\n<p class="thesis-caption"><em>(.*?)</em></p>',
+        span_repl,
+        text,
+        flags=re.DOTALL,
+    )
+
+
+def build_list_pages(texts: dict[Path, str]) -> str:
+    """A standalone page mirroring this thesis's LaTeX \\listoffigures /
+    \\listoftables / its custom "Liste de blocs de code" — one section per
+    type, each entry linking straight to the figure/table/code block."""
+    figures: list[tuple[tuple, str, str, str]] = []
+    tables: list[tuple[tuple, str, str, str]] = []
+    code: list[tuple[tuple, str, str, str]] = []
+
+    fig_re = re.compile(
+        r'<figure id="(fig:[\w-]+)"[^>]*>.*?<figcaption>Figure ([\d.]+) — (.*?)</figcaption>',
+        re.DOTALL,
+    )
+    table_re = re.compile(
+        r'(?:<table id="(tab:[\w-]+)">\s*<caption>|<span id="(tab:[\w-]+)"></span>\s*\n\n'
+        r'<p class="thesis-caption"><em>)Tableau ([\d.]+) — (.*?)(?:</caption>|</em></p>)',
+        re.DOTALL,
+    )
+    code_re = re.compile(
+        r'<span id="(code:[\w-]+)"></span>\s*\n\n<p class="thesis-caption"><em>'
+        r"Code (\d+) — (.*?)</em></p>",
+        re.DOTALL,
+    )
+
+    def sort_key(number: str) -> tuple:
+        return tuple(int(p) for p in number.split("."))
+
+    # The abstract/résumé (chapters/00-resume.md) is converted by its own,
+    # separate pandoc pass — its figures/tables get plain "1", "2" numbers
+    # with no chapter prefix, since pandoc never saw it as part of the
+    # combined body. Mixed into one list alongside the main body's "2.1",
+    # "6.3" chapter.N numbers that's just confusing, and every figure/table
+    # in the abstract duplicates one already listed from its real chapter.
+    skip_paths = {DOCS / "chapters" / "00-resume.md"}
+
+    for path, text in texts.items():
+        if path in skip_paths:
+            continue
+        # Genuine `[text](url)` Markdown links need the source `.md`
+        # extension — mkdocs rewrites that to the right URL itself at build
+        # time, and only recognizes that form in its strict-mode link check.
+        rel = path.relative_to(DOCS).as_posix()
+        for m in fig_re.finditer(text):
+            label, number, caption = m.group(1), m.group(2), m.group(3)
+            caption = re.sub(r"<[^>]+>", "", caption).strip()
+            figures.append((sort_key(number), number, caption, f"{rel}#{label}"))
+        for m in table_re.finditer(text):
+            label = m.group(1) or m.group(2)
+            number, caption = m.group(3), m.group(4)
+            caption = re.sub(r"<[^>]+>", "", caption).strip()
+            tables.append((sort_key(number), number, caption, f"{rel}#{label}"))
+        for m in code_re.finditer(text):
+            label, number, caption = m.group(1), m.group(2), m.group(3)
+            caption = re.sub(r"<[^>]+>", "", caption).strip()
+            code.append((sort_key(number), number, caption, f"{rel}#{label}"))
+
+    figures.sort(key=lambda r: r[0])
+    tables.sort(key=lambda r: r[0])
+    code.sort(key=lambda r: r[0])
+
+    lines = [
+        "---",
+        'description: "Liste des figures, tableaux et blocs de code du mémoire de Master."',
+        "---",
+        "",
+        "# Listes des figures, tableaux et codes",
+        "",
+        "## Liste des figures",
+        "",
+    ]
+    for _, number, caption, href in figures:
+        lines.append(f"- [Figure {number} — {caption}]({href})")
+    lines += ["", "## Liste des tableaux", ""]
+    for _, number, caption, href in tables:
+        lines.append(f"- [Tableau {number} — {caption}]({href})")
+    lines += ["", "## Liste des blocs de code", ""]
+    for _, number, caption, href in code:
+        lines.append(f"- [Code {number} — {caption}]({href})")
+    lines.append("")
+    return "\n".join(lines)
+
+
+# The thesis's own \newfloat{code}{...} has no \counterwithin{chapter}, so
+# the original LaTeX numbers code listings continuously across the whole
+# document ("Code 1" through "Code N"), unlike figures/tables which restart
+# per chapter. Process files in actual reading order (not the alphabetical
+# order rglob gives, which would put appendices before chapter 5) so that
+# global counter — and the list-of-X pages below — come out in the right
+# order.
+READING_ORDER = [
+    DOCS / "index.md",
+    DOCS / "chapters" / "00-resume.md",
+    DOCS / "chapters" / "01-introduction.md",
+    DOCS / "chapters" / "02-analysis.md",
+    DOCS / "chapters" / "03-modele.md",
+    DOCS / "chapters" / "04-implementation.md",
+    DOCS / "chapters" / "05-conclusions.md",
+    DOCS / "appendices" / "A1-fondamentaux-ml.md",
+    DOCS / "appendices" / "A2-fondamentaux-energie.md",
+    DOCS / "bibliography.md",
+    DOCS / "glossary.md",
+]
+
+
 def main() -> None:
-    md_files = sorted(DOCS.rglob("*.md"))
+    all_files = set(DOCS.rglob("*.md"))
+    md_files = [p for p in READING_ORDER if p in all_files]
+    md_files += sorted(all_files - set(md_files))
+
     texts = {}
+    code_counters: dict = {}
     for path in md_files:
         text = path.read_text(encoding="utf-8")
         counters: dict = {}
@@ -338,7 +565,7 @@ def main() -> None:
         text = fix_bracket_escapes(text)
         text = fix_math_escaping(text)
         text = expand_code_blocks(text)
-        text = expand_code_captions(text, counters)
+        text = expand_code_captions(text, code_counters)
         text = expand_raw_tables(text, counters)
         text = number_equations(text, counters)
         text = fix_native_table_captions(text)
@@ -401,6 +628,18 @@ def main() -> None:
         for m in re.finditer(r"^#{1,6}\s+.*\{#([^}\s]+)", text, re.MULTILINE):
             anchor_location[m.group(1)] = path
     fix_cross_page_link_attrs(texts, anchor_location)
+
+    # Prefix every figure's/native table's own caption with "Figure N — " /
+    # "Tableau N — ", using the number pandoc already assigned at its in-text
+    # references (it never adds this to the caption itself otherwise).
+    numbers = harvest_resolved_numbers(texts)
+    for path, text in texts.items():
+        text = add_figure_caption_numbers(text, numbers)
+        text = add_native_table_caption_numbers(text, numbers)
+        texts[path] = text
+
+    list_page = DOCS / "lists.md"
+    texts[list_page] = build_list_pages(texts)
 
     for path, text in texts.items():
         text = add_image_alt_text(text)

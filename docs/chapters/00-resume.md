@@ -9,8 +9,8 @@ The energy transition and urban densification require optimizing land use. Rooft
 The methodology (Figure [1](#fig:abstract_ch3_resume_machine_learning_supervise){reference-type="ref" reference="fig:abstract_ch3_resume_machine_learning_supervise"}) uses semantic segmentation of high-resolution orthophotos. A reference dataset was created with 530 georeferenced images of pixels from the 2019 orthophotos of <a href="../glossary.html#gloss-sitg"><span data-acronym-label="sitg" data-acronym-form="singular+abbrv">SITG</span></a>. These images were manually annotated over approximately 180 hours. Sampling was stratified according to building use (<a href="../glossary.html#gloss-sia"><span data-acronym-label="sia" data-acronym-form="singular+short">SIA</span></a> category) and roof surfaces to represent the canton’s architectural diversity.
 
 <figure id="fig:abstract_ch3_resume_machine_learning_supervise" data-latex-placement="htbp">
-<img src="../assets/figures/A1/A1_01_resume_machine_learning_supervise.webp" style="width:100.0%"  alt="Overview of the semantic segmentation methodology for identifying free spaces on rooftops" />
-<figcaption>Overview of the semantic segmentation methodology for identifying free spaces on rooftops</figcaption>
+<img src="../assets/figures/A1/A1_01_resume_machine_learning_supervise.webp" style="width:100.0%"  alt="Figure 1 — Overview of the semantic segmentation methodology for identifying free spaces on rooftops" />
+<figcaption>Figure 1 — Overview of the semantic segmentation methodology for identifying free spaces on rooftops</figcaption>
 </figure>
 
 The evaluation of 93 configurations combining different encoders and decoders identified the best architectures (Table [1](#tab:abstract_top10_modeles){reference-type="ref" reference="tab:abstract_top10_modeles"}). LinkNet with the EfficientNet-B5 encoder achieves the best results with an IoU of 0.741 on the test dataset. This performance significantly exceeds that of the Swiss Territorial Data Lab (STDL), which achieved a maximum IoU of 0.40. The k-fold ensemble strategy improves performance by 0.9% to 2.0% depending on the models, which enhances prediction reliability. Pareto front analysis shows that gains become minimal beyond 25 million parameters. This allows identifying configurations that balance precision and computational complexity well.
@@ -30,7 +30,7 @@ The evaluation of 93 configurations combining different encoders and decoders id
 
 <span id="tab:abstract_top10_modeles"></span>
 
-<p class="thesis-caption"><em>Top 10 models by mean IoU on test dataset</em></p>
+<p class="thesis-caption"><em>Tableau 1 — Top 10 models by mean IoU on test dataset</em></p>
 Qualitative validation on the <a href="../glossary.html#gloss-hepia"><span data-acronym-label="hepia" data-acronym-form="singular+abbrv">HEPIA</span></a> area, absent from the training data, confirms that the models generalize well. Tests show good detection of classic obstacles (solar panels, chimneys, skylights) and correct handling of light to moderate shadows, as shown in Figure [2](#fig:abstract_exemple_segmentation_reussie){reference-type="ref" reference="fig:abstract_exemple_segmentation_reussie"}. However, green roofs and accessible terraces still pose problems, suggesting improvements needed in the dataset.
 
 <figure id="fig:abstract_exemple_segmentation_reussie" data-latex-placement="htbp">
@@ -46,7 +46,7 @@ Qualitative validation on the <a href="../glossary.html#gloss-hepia"><span data-
 <img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/best_cases/best_3_iou0.986_24931117_tile_18_5_f475a0_overlay_pred.webp"  alt="Prediction - IoU = 0.986" />
 <figcaption>Prediction - IoU = 0.986</figcaption>
 </figure>
-<figcaption>Example of successful segmentation with LinkNet + EfficientNet-B5. The model correctly predicts free spaces while excluding obstacles present on the roof</figcaption>
+<figcaption>Figure 2 — Example of successful segmentation with LinkNet + EfficientNet-B5. The model correctly predicts free spaces while excluding obstacles present on the roof</figcaption>
 </figure>
 
 This approach offers several practical advantages: fast processing (a few seconds per image versus 7 minutes for <a href="../glossary.html#gloss-sam"><span data-acronym-label="sam" data-acronym-form="singular+abbrv">SAM</span></a>), independence from available geomatic data, and visual results that meet professional expectations. Integrating this method into energy planning tools would significantly improve the assessment of solar potential at the cantonal scale.
@@ -61,8 +61,8 @@ La transition énergétique et la densification urbaine nécessitent d’optimis
 La méthodologie (Figure [3](#fig:resume_ch3_resume_machine_learning_supervise){reference-type="ref" reference="fig:resume_ch3_resume_machine_learning_supervise"}) utilise la segmentation sémantique d’orthophotos haute résolution. Un dataset de référence a été créé avec 530 images géoréférencées de pixels provenant des orthophotos 2019 du <a href="../glossary.html#gloss-sitg"><span data-acronym-label="sitg" data-acronym-form="singular+abbrv">SITG</span></a>. Ces images ont été annotées manuellement pendant environ 180 heures. L’échantillonnage a été stratifié selon l’utilisation des bâtiments (catégorie <a href="../glossary.html#gloss-sia"><span data-acronym-label="sia" data-acronym-form="singular+short">SIA</span></a>) et les surfaces de toitures pour représenter la diversité architecturale du canton.
 
 <figure id="fig:resume_ch3_resume_machine_learning_supervise" data-latex-placement="htbp">
-<img src="../assets/figures/A1/A1_01_resume_machine_learning_supervise.webp" style="width:100.0%"  alt="Vue d’ensemble de la méthodologie de segmentation sémantique pour l’identification des espaces libres sur les toitures" />
-<figcaption>Vue d’ensemble de la méthodologie de segmentation sémantique pour l’identification des espaces libres sur les toitures</figcaption>
+<img src="../assets/figures/A1/A1_01_resume_machine_learning_supervise.webp" style="width:100.0%"  alt="Figure 3 — Vue d’ensemble de la méthodologie de segmentation sémantique pour l’identification des espaces libres sur les toitures" />
+<figcaption>Figure 3 — Vue d’ensemble de la méthodologie de segmentation sémantique pour l’identification des espaces libres sur les toitures</figcaption>
 </figure>
 
 L’évaluation de 93 configurations combinant différents encodeurs et décodeurs a permis d’identifier les meilleures architectures (Tableau [2](#tab:resume_top10_modeles){reference-type="ref" reference="tab:resume_top10_modeles"}). LinkNet avec l’encodeur EfficientNet-B5 obtient les meilleurs résultats avec un IoU de 0,741 sur le dataset de test. Cette performance dépasse nettement celle du Swiss Territorial Data Lab (STDL) qui atteignait un IoU maximal de 0,40. La stratégie d’ensemble k-fold améliore les performances de 0,9% à 2,0% selon les modèles, ce qui renforce la fiabilité des prédictions. L’analyse du front de Pareto montre que les gains deviennent minimes au-delà de 25 millions de paramètres. Cela permet d’identifier des configurations qui équilibrent bien précision et complexité de calcul.
@@ -82,7 +82,7 @@ L’évaluation de 93 configurations combinant différents encodeurs et décodeu
 
 <span id="tab:resume_top10_modeles"></span>
 
-<p class="thesis-caption"><em>Top 10 des modèles par IoU moyen sur dataset de test</em></p>
+<p class="thesis-caption"><em>Tableau 2 — Top 10 des modèles par IoU moyen sur dataset de test</em></p>
 La validation qualitative sur la zone de <a href="../glossary.html#gloss-hepia"><span data-acronym-label="hepia" data-acronym-form="singular+abbrv">HEPIA</span></a>, absente des données d’entraînement, confirme que les modèles généralisent bien. Les tests montrent une bonne détection des obstacles classiques (panneaux solaires, cheminées, verrières) et une gestion correcte des ombres légères à modérées, comme on peut le voir dans la Figure [4](#fig:resume_exemple_segmentation_reussie){reference-type="ref" reference="fig:resume_exemple_segmentation_reussie"}. Par contre, les toitures végétalisées et terrasses praticables posent encore problème, ce qui suggère des améliorations à apporter au dataset.
 
 <figure id="fig:resume_exemple_segmentation_reussie" data-latex-placement="htbp">
@@ -98,7 +98,7 @@ La validation qualitative sur la zone de <a href="../glossary.html#gloss-hepia">
 <img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/best_cases/best_3_iou0.986_24931117_tile_18_5_f475a0_overlay_pred.webp"  alt="Prédiction - IoU = 0.986" />
 <figcaption>Prédiction - IoU = 0.986</figcaption>
 </figure>
-<figcaption>Exemple de segmentation réussie avec LinkNet + EfficientNet-B5. Le modèle prédit correctement les espaces libres en excluant les obstacles présents sur la toiture</figcaption>
+<figcaption>Figure 4 — Exemple de segmentation réussie avec LinkNet + EfficientNet-B5. Le modèle prédit correctement les espaces libres en excluant les obstacles présents sur la toiture</figcaption>
 </figure>
 
 Cette approche offre plusieurs avantages pratiques : traitement rapide (quelques secondes par image contre 7 minutes pour <a href="../glossary.html#gloss-sam"><span data-acronym-label="sam" data-acronym-form="singular+abbrv">SAM</span></a>), indépendance par rapport aux données géomatiques disponibles, et résultats visuels qui correspondent aux attentes des professionnels. Intégrer cette méthode dans les outils de planification énergétique permettrait d’améliorer l’évaluation du potentiel solaire à l’échelle du canton.

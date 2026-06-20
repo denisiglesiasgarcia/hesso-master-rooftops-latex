@@ -38,7 +38,7 @@ La création d’un cadastre solaire repose sur plusieurs éléments clés. Tout
 
 - La présence d’obstacles sur les toits (cheminées, fenêtres, etc.)
 
-D’autres méthodologies existent pour créer un cadastre solaire pour une région, ceux-ci sont détaillés dans le chapitre “”.
+D’autres méthodologies existent pour créer un cadastre solaire pour une région, ceux-ci sont détaillés dans le chapitre “[2](../chapters/02-analysis.md#chap:analysis){reference-type="ref" reference="chap:analysis"}”.
 
 ### Applications concrètes {#applications-concrètes}
 
@@ -71,8 +71,8 @@ Le rayonnement solaire &#91;[117](../bibliography.md#ref-energie_plus_ensoleille
 - Le rayonnement réfléchi : Correspond à la fraction du rayonnement réfléchie par l’environnement. Son intensité dépend de la nature des surfaces (neige : 80-90%, végétation : 10-25%) et de leur géométrie.
 
 <figure id="fig:type_rayonnement" data-latex-placement="H">
-<img src="../assets/figures/A2/A2_rayonnement.webp" style="width:50.0%"  alt="Rayonnement direct, diffus et réfléchi [117]" />
-<figcaption>Rayonnement direct, diffus et réfléchi <span class="citation" data-cites="energie_plus_ensoleillement_2010">[<a href="../bibliography.html#ref-energie_plus_ensoleillement_2010" role="doc-biblioref">117</a>]</span></figcaption>
+<img src="../assets/figures/A2/A2_rayonnement.webp" style="width:50.0%"  alt="Figure 7.1 — Rayonnement direct, diffus et réfléchi [117]" />
+<figcaption>Figure 7.1 — Rayonnement direct, diffus et réfléchi <span class="citation" data-cites="energie_plus_ensoleillement_2010">[<a href="../bibliography.html#ref-energie_plus_ensoleillement_2010" role="doc-biblioref">117</a>]</span></figcaption>
 </figure>
 
 Comme on peut le voir sur la Figure [7.1](#fig:type_rayonnement){reference-type="ref" reference="fig:type_rayonnement"}, ces trois types de rayonnement interagissent différemment avec une surface. Ensemble, ils représentent l’énergie totale que peuvent exploiter les applications solaires, avec une puissance pouvant aller jusqu’à 1000 W/m² au sol quand le ciel est bien dégagé. Cette puissance n’est pas fixe - elle change selon le moment de l’année, l’heure de la journée, où l’on se trouve sur Terre et la météo. Comprendre ces variations est clé pour bien dimensionner les installations solaires.
@@ -80,8 +80,8 @@ Comme on peut le voir sur la Figure [7.1](#fig:type_rayonnement){reference-type=
 Le rayonnement solaire ne sera pas identique toute l’année, comme indiqué dans la Figure [7.2](#fig:hauteur_soleil){reference-type="ref" reference="fig:hauteur_soleil"}
 
 <figure id="fig:hauteur_soleil" data-latex-placement="H">
-<img src="../assets/figures/A2/A2_hauteur_soleil.webp" style="width:50.0%"  alt="Rayonnement direct, diffus et réfléchi [117]" />
-<figcaption>Rayonnement direct, diffus et réfléchi <span class="citation" data-cites="energie_plus_ensoleillement_2010">[<a href="../bibliography.html#ref-energie_plus_ensoleillement_2010" role="doc-biblioref">117</a>]</span></figcaption>
+<img src="../assets/figures/A2/A2_hauteur_soleil.webp" style="width:50.0%"  alt="Figure 7.2 — Rayonnement direct, diffus et réfléchi [117]" />
+<figcaption>Figure 7.2 — Rayonnement direct, diffus et réfléchi <span class="citation" data-cites="energie_plus_ensoleillement_2010">[<a href="../bibliography.html#ref-energie_plus_ensoleillement_2010" role="doc-biblioref">117</a>]</span></figcaption>
 </figure>
 
 Dans l’hémisphère nord, le soleil va de l’est à l’ouest pendant une journée type. La course ne sera pas identique tout au long de l’année, son hauteur est variable selon la saison. En été, le soleil sera plus haut, tandis que pendant l’hiver le soleil sera plus bas. Ce concept est essentiel pour capter au mieux cette énergie gratuite et indispensable à la vie.
@@ -107,6 +107,6 @@ L’angle d’inclinaison optimal dépend principalement de la latitude du lieu 
 L’inclinaison peut être adaptée selon les objectifs de production saisonnière. Pour maximiser la production en été, une faible inclinaison (20-30°) est préférable car elle permet de mieux capter le soleil lorsqu’il est haut dans le ciel. À l’inverse, une inclinaison plus importante (45-60°) est plus efficace en hiver quand le soleil est bas. Comme le montre la Figure [7.3](#fig:warmeundstrom){reference-type="ref" reference="fig:warmeundstrom"}, l’angle d’inclinaison influence également la captation des différentes composantes du rayonnement solaire. Un panneau horizontal (0 degrés) va principalement capter le rayonnement direct, alors qu’un panneau vertical (90 degrés) va mieux équilibrer la captation entre rayonnement direct et diffus. C’est pourquoi une inclinaison intermédiaire de 30-35 degrés représente un compromis optimal, permettant de bénéficier efficacement des trois composantes du rayonnement tout au long de l’année.
 
 <figure id="fig:warmeundstrom" data-latex-placement="H">
-<img src="../assets/figures/A2/A2_warmeundstrom.webp" style="width:50.0%"  alt="Influence de l’inclinaison et orientation des panneaux solaires [119]" />
-<figcaption>Influence de l’inclinaison et orientation des panneaux solaires <span class="citation" data-cites="noauthor_anwendung_nodate">[<a href="../bibliography.html#ref-noauthor_anwendung_nodate" role="doc-biblioref">119</a>]</span></figcaption>
+<img src="../assets/figures/A2/A2_warmeundstrom.webp" style="width:50.0%"  alt="Figure 7.3 — Influence de l’inclinaison et orientation des panneaux solaires [119]" />
+<figcaption>Figure 7.3 — Influence de l’inclinaison et orientation des panneaux solaires <span class="citation" data-cites="noauthor_anwendung_nodate">[<a href="../bibliography.html#ref-noauthor_anwendung_nodate" role="doc-biblioref">119</a>]</span></figcaption>
 </figure>

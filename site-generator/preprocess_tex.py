@@ -73,6 +73,17 @@ def unwrap_makecell(text: str) -> str:
 
 
 def expand_multicolumn_dividers(text: str) -> str:
+    """pandoc's table reader natively understands \\multicolumn/\\multirow
+    fine when they describe a genuine spanning header or row label (it turns
+    them into real colspan/rowspan) — but a row consisting of *only* one
+    \\multicolumn spanning the full row width (used here purely as a
+    full-width section-divider line, e.g. "Couverture"/"Stockage") makes it
+    drop the entire table with no warning. Only flatten that specific
+    divider-row case into plain text + padding cells; leave any row that
+    mixes multicolumn/multirow with other real cells alone, since pandoc
+    handles that correctly on its own and flattening it instead breaks the
+    column alignment (e.g. turns a real 2-column header span into a single
+    unspanned cell)."""
     marker = r"\multicolumn{"
     out = []
     i = 0
@@ -85,14 +96,48 @@ def expand_multicolumn_dividers(text: str) -> str:
         n_str, after_n = _read_balanced_group(text, idx + len(marker) - 1)
         _spec, after_spec = _read_balanced_group(text, after_n)
         content, after_content = _read_balanced_group(text, after_spec)
-        n = int(n_str)
-        out.append(content + " &" * (n - 1))
-        i = after_content
+
+        row_start = text.rfind(r"\\", 0, idx) + 2
+        row_end = text.find(r"\\", after_content)
+        if row_end == -1:
+            row_end = len(text)
+        row = text[row_start:row_end]
+        is_sole_spanner_on_row = row.count(r"\multicolumn{") + row.count(r"\multirow{") == 1
+
+        if is_sole_spanner_on_row:
+            n = int(n_str)
+            out.append(content + " &" * (n - 1))
+            i = after_content
+        else:
+            out.append(text[idx:after_content])
+            i = after_content
     return "".join(out)
+
+
+def strip_clines(text: str) -> str:
+    """\\cline{3-4} draws a horizontal rule under only columns 3-4 (instead
+    of the full row like \\hline). Pandoc's table reader doesn't know it and
+    — instead of ignoring it like \\hline — treats it as literal cell
+    content, leaking "3-4" as visible text into a cell and adding a whole
+    spurious extra row for any \\cline that sits after the last data row."""
+    return re.sub(r"\\cline\{[^}]*\}", "", text)
 
 
 def strip_addlinespace(text: str) -> str:
     return text.replace(r"\addlinespace", "")
+
+
+def fix_nameref_pageref(text: str) -> str:
+    """\\nameref{X} (the target section's title) and \\pageref{X} (its PDF
+    page number) come from the hyperref/nameref packages, which pandoc's
+    LaTeX reader has never heard of — it silently drops both commands
+    entirely, leaving a dangling, empty "(voir page )" parenthetical behind.
+    A web page has no page numbers anyway: drop the page reference outright,
+    and turn \\nameref into a plain \\ref, which the rest of this pipeline
+    already resolves to a working link showing the section's real title."""
+    text = re.sub(r"\s*\(voir\s+page~?\\pageref\{[^}]*\}\)", "", text)
+    text = re.sub(r"\s*(?:à\s+la\s+)?page~?\\pageref\{[^}]*\}", "", text)
+    return text.replace(r"\nameref{", r"\ref{")
 
 
 def _find_command(text: str, command: str, start: int = 0):
@@ -275,7 +320,9 @@ def preprocess(text: str) -> str:
     text = unwrap_makebox_centering(text)
     text = unwrap_makecell(text)
     text = expand_multicolumn_dividers(text)
+    text = strip_clines(text)
     text = strip_addlinespace(text)
+    text = fix_nameref_pageref(text)
     text = convert_code_listings(text)
     text = convert_longtblr_tables(text)
     return text
