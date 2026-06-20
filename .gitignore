@@ -49,5 +49,5 @@ __pycache__/
 # MkDocs build output (regenerate with `uv run mkdocs build`)
 site/
 
-# Claude Code local settings (machine-specific, not meant to be shared)
+# Local AI assistant settings (machine-specific, not meant to be shared)
 .claude
