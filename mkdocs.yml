@@ -1,5 +1,6 @@
 site_name: "Identification des parties utiles des toitures pour le solaire par machine learning"
 site_description: "Master thesis (HES-SO) — segmentation de toitures pour le potentiel solaire"
+site_url: https://denisiglesiasgarcia.github.io/hesso-master-rooftops-latex/
 repo_url: https://github.com/denisiglesiasgarcia/hesso-master-rooftops-latex
 use_directory_urls: false
 
