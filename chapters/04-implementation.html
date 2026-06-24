@@ -1,0 +1,4201 @@
+
+<!doctype html>
+<html lang="fr" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Ce chapitre présente l’évaluation des modèles de segmentation développés pour identifier les espaces libres sur les toitures du canton de Genève.…">
+      
+      
+      
+        <link rel="canonical" href="https://denisiglesiasgarcia.github.io/hesso-master-rooftops-latex/chapters/04-implementation.html">
+      
+      
+        <link rel="prev" href="03-modele.html">
+      
+      
+        <link rel="next" href="05-conclusions.html">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../img/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>4. Implémentation - Identification des parties utiles des toitures pour le solaire par machine learning</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  
+  
+  
+  
+  
+
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="4. Implémentation">
+  <meta property="og:description" content="Ce chapitre présente l’évaluation des modèles de segmentation développés pour identifier les espaces libres sur les toitures du canton de Genève.…">
+  <meta property="og:image" content="https://denisiglesiasgarcia.github.io/hesso-master-rooftops-latex/img/social-card-v2.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Identification des parties utiles des toitures pour le solaire par Machine Learning — Travail de Master HES-SO, Denis Iglesias Garcia">
+  <meta property="og:url" content="https://denisiglesiasgarcia.github.io/hesso-master-rooftops-latex/chapters/04-implementation.html">
+  <meta property="og:site_name" content="Identification des parties utiles des toitures pour le solaire par machine learning">
+  <meta property="og:locale" content="fr_FR">
+
+  <meta name="author" content="Denis Iglesias Garcia">
+  <meta property="article:author" content="https://www.linkedin.com/in/denisiglesiasgarcia/">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="4. Implémentation">
+  <meta name="twitter:description" content="Ce chapitre présente l’évaluation des modèles de segmentation développés pour identifier les espaces libres sur les toitures du canton de Genève.…">
+  <meta name="twitter:image" content="https://denisiglesiasgarcia.github.io/hesso-master-rooftops-latex/img/social-card-v2.png">
+
+  
+
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#chap:eval_valid_modele" class="md-skip">
+          Aller au contenu
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="En-tête">
+    <a href="../index.html" title="Identification des parties utiles des toitures pour le solaire par machine learning" class="md-header__button md-logo" aria-label="Identification des parties utiles des toitures pour le solaire par machine learning" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Identification des parties utiles des toitures pour le solaire par machine learning
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              4. Implémentation
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Mode sombre"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Mode sombre" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Mode clair"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Mode clair" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Rechercher" placeholder="Rechercher" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Recherche">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Effacer" aria-label="Effacer" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initialisation de la recherche
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/denisiglesiasgarcia/hesso-master-rooftops-latex" title="Aller au dépôt" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Onglets" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../index.html" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Accueil
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="00-resume.html" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Résumé
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="01-introduction.html" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Chapitres
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../appendices/A1-fondamentaux-ml.html" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Annexes
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../lists.html" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Listes
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../bibliography.html" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Bibliographie
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../glossary.html" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Glossaire
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../index.html" title="Identification des parties utiles des toitures pour le solaire par machine learning" class="md-nav__button md-logo" aria-label="Identification des parties utiles des toitures pour le solaire par machine learning" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Identification des parties utiles des toitures pour le solaire par machine learning
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/denisiglesiasgarcia/hesso-master-rooftops-latex" title="Aller au dépôt" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Accueil
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="00-resume.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Résumé
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chapitres
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Chapitres
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="01-introduction.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    1. Introduction
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="02-analysis.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2. Analyse
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="03-modele.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3. Modèle
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    4. Implémentation
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="04-implementation.html" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    4. Implémentation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table des matières">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table des matières
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#évaluation-sur-le-dataset-de-test" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Évaluation sur le dataset de test
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Évaluation sur le dataset de test">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#protocole-dévaluation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Protocole d’évaluation
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Protocole d’évaluation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#métriques-dévaluation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Métriques d’évaluation
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vue-densemble-des-performances" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Vue d’ensemble des performances
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Vue d’ensemble des performances">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#distribution-globale-des-résultats" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Distribution globale des résultats
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#top-10-des-modèles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Top 10 des modèles
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#analyse-comparative-des-architectures" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Analyse comparative des architectures
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Analyse comparative des architectures">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#performance-par-famille-de-décodeur" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Performance par famille de décodeur
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#performance-par-encodeur" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Performance par encodeur
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#analyse-de-lefficacité-computationnelle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Analyse de l’efficacité computationnelle
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Analyse de l’efficacité computationnelle">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#compromis-performance-complexité" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Compromis performance-complexité
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#analyse-temporelle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Analyse temporelle
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#analyse-des-métriques-complémentaires" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Analyse des métriques complémentaires
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Analyse des métriques complémentaires">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#analyse-map-multi-seuils" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Analyse mAP multi-seuils
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#analyse-par-catégorie-de-taille" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Analyse par catégorie de taille
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#analyse-qualitative" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Analyse qualitative
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Analyse qualitative">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#modèles-retenus" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Modèles retenus
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stratégie-densemble-k-fold" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stratégie d’ensemble k-fold
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Stratégie d’ensemble k-fold">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#principe-de-fonctionnement" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Principe de fonctionnement
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#avantages-de-lapproche" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Avantages de l’approche
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#inconvénients-et-limitations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Inconvénients et limitations
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#optimisations-techniques" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Optimisations techniques
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#résultats-de-lensemble-k-fold" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Résultats de l’ensemble k-fold
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#visualisation-des-résultats" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Visualisation des résultats
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#application-sur-un-quartier" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Application sur un quartier
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Application sur un quartier">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#analyse-qualitative-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Analyse qualitative
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Analyse qualitative">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#synthèse-et-analyse-des-résultats" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Synthèse et analyse des résultats
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#synthèse-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Synthèse
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Synthèse">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#performances-générales-et-robustesse-des-modèles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Performances générales et robustesse des modèles
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#architectures-optimales-et-compromis-performance-complexité" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Architectures optimales et compromis performance-complexité
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#analyse-qualitative-et-limites-identifiées" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Analyse qualitative et limites identifiées
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#recommandations-pour-le-déploiement-opérationnel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recommandations pour le déploiement opérationnel
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Recommandations pour le déploiement opérationnel">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#choix-du-modèle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Choix du modèle
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#améliorations-du-dataset" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Améliorations du dataset
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stratégie-de-déploiement" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stratégie de déploiement
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#perspectives-damélioration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Perspectives d’amélioration
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="05-conclusions.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    5. Conclusions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Annexes
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Annexes
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../appendices/A1-fondamentaux-ml.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    A1. Fondamentaux ML
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../appendices/A2-fondamentaux-energie.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    A2. Fondamentaux énergie
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lists.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Listes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bibliography.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bibliographie
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../glossary.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossaire
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table des matières">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table des matières
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#évaluation-sur-le-dataset-de-test" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Évaluation sur le dataset de test
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Évaluation sur le dataset de test">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#protocole-dévaluation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Protocole d’évaluation
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Protocole d’évaluation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#métriques-dévaluation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Métriques d’évaluation
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vue-densemble-des-performances" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Vue d’ensemble des performances
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Vue d’ensemble des performances">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#distribution-globale-des-résultats" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Distribution globale des résultats
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#top-10-des-modèles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Top 10 des modèles
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#analyse-comparative-des-architectures" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Analyse comparative des architectures
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Analyse comparative des architectures">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#performance-par-famille-de-décodeur" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Performance par famille de décodeur
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#performance-par-encodeur" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Performance par encodeur
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#analyse-de-lefficacité-computationnelle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Analyse de l’efficacité computationnelle
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Analyse de l’efficacité computationnelle">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#compromis-performance-complexité" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Compromis performance-complexité
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#analyse-temporelle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Analyse temporelle
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#analyse-des-métriques-complémentaires" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Analyse des métriques complémentaires
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Analyse des métriques complémentaires">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#analyse-map-multi-seuils" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Analyse mAP multi-seuils
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#analyse-par-catégorie-de-taille" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Analyse par catégorie de taille
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#analyse-qualitative" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Analyse qualitative
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Analyse qualitative">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#modèles-retenus" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Modèles retenus
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stratégie-densemble-k-fold" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stratégie d’ensemble k-fold
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Stratégie d’ensemble k-fold">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#principe-de-fonctionnement" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Principe de fonctionnement
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#avantages-de-lapproche" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Avantages de l’approche
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#inconvénients-et-limitations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Inconvénients et limitations
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#optimisations-techniques" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Optimisations techniques
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#résultats-de-lensemble-k-fold" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Résultats de l’ensemble k-fold
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#visualisation-des-résultats" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Visualisation des résultats
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#application-sur-un-quartier" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Application sur un quartier
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Application sur un quartier">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#analyse-qualitative-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Analyse qualitative
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Analyse qualitative">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#synthèse-et-analyse-des-résultats" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Synthèse et analyse des résultats
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#synthèse-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Synthèse
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Synthèse">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#performances-générales-et-robustesse-des-modèles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Performances générales et robustesse des modèles
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#architectures-optimales-et-compromis-performance-complexité" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Architectures optimales et compromis performance-complexité
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#analyse-qualitative-et-limites-identifiées" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Analyse qualitative et limites identifiées
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#recommandations-pour-le-déploiement-opérationnel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recommandations pour le déploiement opérationnel
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Recommandations pour le déploiement opérationnel">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#choix-du-modèle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Choix du modèle
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#améliorations-du-dataset" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Améliorations du dataset
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stratégie-de-déploiement" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stratégie de déploiement
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#perspectives-damélioration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Perspectives d’amélioration
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+                
+
+
+
+  
+
+
+  <nav class="md-path" aria-label="Navigation" >
+    <ol class="md-path__list">
+      
+        
+  
+  
+    <li class="md-path__item">
+      <a href="../index.html" class="md-path__link">
+        
+  <span class="md-ellipsis">
+    Accueil
+  </span>
+
+      </a>
+    </li>
+  
+
+      
+      
+        
+  
+  
+    
+    
+      <li class="md-path__item">
+        <a href="01-introduction.html" class="md-path__link">
+          
+  <span class="md-ellipsis">
+    Chapitres
+  </span>
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ol>
+  </nav>
+
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="chap:eval_valid_modele">Évaluation, validation et analyse</h1>
+<p>Ce chapitre présente l’évaluation des modèles de segmentation développés pour identifier les espaces libres sur les toitures du canton de Genève. L’objectif est d’analyser les performances de 93 configurations sur un dataset de test indépendant pour déterminer les architectures les plus adaptées à un déploiement opérationnel.</p>
+<p>L’évaluation suit trois axes principaux : l’analyse quantitative des performances avec plusieurs métriques (IoU, mAP, F1-score), l’étude du rapport entre performance et complexité des modèles, et la validation qualitative sur des cas réels incluant un quartier absent des données d’entraînement. Cette approche permet de sélectionner la meilleure configuration et d’identifier les améliorations nécessaires pour renforcer la robustesse du système.</p>
+<h2 id="évaluation-sur-le-dataset-de-test">Évaluation sur le dataset de test</h2>
+<h3 id="protocole-dévaluation">Protocole d’évaluation</h3>
+<p>L’évaluation des modèles a été réalisée sur un dataset de test indépendant composé de 89 images représentatives du canton de Genève. Cette évaluation porte sur 93 configurations distinctes, comprenant 89 modèles issus de Segmentation Models PyTorch (SMP) et 4 variantes de YOLOv12. Pour garantir la robustesse des résultats, chaque configuration a été entraînée selon une validation croisée à 5 folds, permettant d’obtenir des performances moyennées et des écarts-types significatifs.</p>
+<p>Chaque fold de l’ensemble des modèles testés a fait l’objet d’au minimum 3 entraînements. Pour l’évaluation finale, seul l’entraînement ayant obtenu le meilleur IoU parmi tous ceux réalisés pour chaque fold a été conservé. Chaque modèle dispose de 5 folds, les résultats présentés sont la moyenne des performances sur ces 5 folds.</p>
+<p>Pour des raisons pratiques de visualisation, YOLO est intégré dans les graphiques en tant que décodeur et ses différentes variantes en tant qu’encodeurs. Cette représentation vise uniquement à faciliter la comparaison des résultats, car YOLOv12 constitue un modèle complet qui ne peut pas être divisé en composants encodeur-décodeur interchangeables comme les modèles SMP.</p>
+<h4 id="métriques-dévaluation">Métriques d’évaluation</h4>
+<p>Les performances des modèles ont été évaluées selon plusieurs métriques complémentaires :</p>
+<ul>
+<li>
+<p>IoU (Intersection over Union) : métrique principale mesurant le recouvrement entre les prédictions et les annotations de référence</p>
+</li>
+<li>
+<p>mAP@k : mean average precision à différents seuils d’IoU (50%, 75%, 95%)</p>
+</li>
+<li>
+<p>F1-score : moyenne harmonique entre precision et recall</p>
+</li>
+<li>
+<p>Métriques classiques : accuracy, precision et recall</p>
+</li>
+</ul>
+<p>Les aspects computationnels ont également été mesurés :</p>
+<ul>
+<li>
+<p>Temps d’entraînement total pour les 5 fold</p>
+</li>
+<li>
+<p>Nombre de paramètres du modèle (en millions)</p>
+</li>
+</ul>
+<h3 id="vue-densemble-des-performances">Vue d’ensemble des performances</h3>
+<h4 id="distribution-globale-des-résultats">Distribution globale des résultats</h4>
+<p>Le Tableau <a href="#tab:vue_ensemble_metrique_moyennes" reference="tab:vue_ensemble_metrique_moyennes" reference-type="ref">4.1</a> présente les statistiques de base des 93 modèles évalués. Ils présentent des IoU s’échelonnant de 0,619 à 0,741, avec une moyenne de 0,708 et un écart-type de 0,024. Cette faible dispersion témoigne de la qualité générale des architectures modernes de segmentation sur cette tâche spécifique.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;"><strong>Métrique</strong></th>
+<th style="text-align: right;"><strong>Moyenne</strong></th>
+<th style="text-align: right;"><strong>Médiane</strong></th>
+<th style="text-align: right;"><strong>Minimum</strong></th>
+<th style="text-align: right;"><strong>Maximum</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">IoU</td>
+<td style="text-align: right;">0.708 ± 0.024</td>
+<td style="text-align: right;">0.711</td>
+<td style="text-align: right;">0.619</td>
+<td style="text-align: right;">0.741</td>
+</tr>
+<tr>
+<td style="text-align: left;">F1 Score</td>
+<td style="text-align: right;">0.775 ± 0.048</td>
+<td style="text-align: right;">0.787</td>
+<td style="text-align: right;">0.544</td>
+<td style="text-align: right;">0.810</td>
+</tr>
+<tr>
+<td style="text-align: left;">mAP@0.5</td>
+<td style="text-align: right;">0.818 ± 0.056</td>
+<td style="text-align: right;">0.834</td>
+<td style="text-align: right;">0.556</td>
+<td style="text-align: right;">0.854</td>
+</tr>
+<tr>
+<td style="text-align: left;">mAP@0.75</td>
+<td style="text-align: right;">0.592 ± 0.073</td>
+<td style="text-align: right;">0.609</td>
+<td style="text-align: right;">0.347</td>
+<td style="text-align: right;">0.694</td>
+</tr>
+<tr>
+<td style="text-align: left;">mAP@0.95</td>
+<td style="text-align: right;">0.109 ± 0.036</td>
+<td style="text-align: right;">0.110</td>
+<td style="text-align: right;">0.029</td>
+<td style="text-align: right;">0.191</td>
+</tr>
+<tr>
+<td style="text-align: left;">Accuracy</td>
+<td style="text-align: right;">0.946 ± 0.101</td>
+<td style="text-align: right;">0.968</td>
+<td style="text-align: right;">0.451</td>
+<td style="text-align: right;">0.976</td>
+</tr>
+<tr>
+<td style="text-align: left;">Recall</td>
+<td style="text-align: right;">0.816 ± 0.043</td>
+<td style="text-align: right;">0.823</td>
+<td style="text-align: right;">0.616</td>
+<td style="text-align: right;">0.872</td>
+</tr>
+<tr>
+<td style="text-align: left;">Precision</td>
+<td style="text-align: right;">0.773 ± 0.043</td>
+<td style="text-align: right;">0.786</td>
+<td style="text-align: right;">0.577</td>
+<td style="text-align: right;">0.812</td>
+</tr>
+<tr>
+<td style="text-align: left;">Temps d’entraînement (h.)</td>
+<td style="text-align: right;">20.266 ± 10.698</td>
+<td style="text-align: right;">19.557</td>
+<td style="text-align: right;">1.792</td>
+<td style="text-align: right;">48.268</td>
+</tr>
+</tbody>
+</table>
+<p><span id="tab:vue_ensemble_metrique_moyennes"></span></p>
+<p class="thesis-caption"><em>Tableau 4.1 — Statistiques générales des modèles évalués sur le dataset de test</em></p>
+<p>La Figure <a href="#fig:heatmap_iou" reference="fig:heatmap_iou" reference-type="ref">4.1</a> présente une vue synthétique des performances pour chaque combinaison encodeur-décodeur.</p>
+<figure id="fig:heatmap_iou" data-latex-placement="H">
+<img src="../assets/figures/ch4/ch4_01_architecture_backbone_heatmap_01_eval_test_iou_mean.webp" style="width:145.0%"  alt="Figure 4.1 — Heatmap IoU par combinaison encodeur-décodeur" />
+<figcaption>Figure 4.1 — Heatmap IoU par combinaison encodeur-décodeur</figcaption>
+</figure>
+
+<p>Certaines combinaisons d’encodeur et de décodeur présentent des cases vides car elles ont échoué lors de l’entraînement. L’échec peut être dû à de très mauvaises performances avec un IoU inférieur à 0,2, ce qui indique que le modèle n’a pas réussi à apprendre les caractéristiques de la tâche. D’autres échecs résultent d’incompatibilités entre les encodeurs et décodeurs, certains d’entre eux nécessitant des réglages très spécifiques qui n’ont pas été explorés par manque de temps.</p>
+<p>Par exemple, YOLOv12m obtient un IoU de 0,11, ce qui est relativement surprenant comparé aux performances des autres modèles de la famille YOLOv12.</p>
+<p>Ces modèles semblent tous présenter des résultats exceptionnels à première vue, mais il est important de visualiser le F1-score (Figure <a href="#fig:ch4_01_architecture_backbone_heatmap_08_eval_test_f1_score_mean" reference="fig:ch4_01_architecture_backbone_heatmap_08_eval_test_f1_score_mean" reference-type="ref">4.2</a>) pour mieux comprendre la qualité des prédictions. Le F1-score constitue une métrique plus robuste car elle prend en compte à la fois la precision et le rappel, ce qui s’avère crucial pour les tâches de segmentation où les faux positifs et les faux négatifs peuvent avoir un impact significatif.</p>
+<figure id="fig:ch4_01_architecture_backbone_heatmap_08_eval_test_f1_score_mean" data-latex-placement="H">
+<img src="../assets/figures/ch4/ch4_01_architecture_backbone_heatmap_08_eval_test_f1_score_mean.webp" style="width:145.0%"  alt="Figure 4.2 — Heatmap F1-score par combinaison encodeur-décodeur" />
+<figcaption>Figure 4.2 — Heatmap F1-score par combinaison encodeur-décodeur</figcaption>
+</figure>
+
+<p>Les modèles YOLOv12 présentent des F1-scores significativement plus faibles que les modèles SMP, malgré des IoU similaires. Cette observation indique que les modèles YOLO peinent à segmenter correctement les espaces libres sur les toitures, ce qui constitue un aspect crucial pour cette tâche. Par exemple, YOLOv12n atteint un IoU de 0,73 mais un F1-score de seulement 0,57, suggérant qu’il génère un nombre important de faux positifs ou de faux négatifs.</p>
+<h4 id="top-10-des-modèles">Top 10 des modèles</h4>
+<p>La Figure <a href="#fig:ch4_02_top_models_performance_01_eval_test_iou_mean" reference="fig:ch4_02_top_models_performance_01_eval_test_iou_mean" reference-type="ref">4.3</a> illustre les 10 meilleurs modèles selon leur IoU.</p>
+<figure id="fig:ch4_02_top_models_performance_01_eval_test_iou_mean" data-latex-placement="H">
+<img src="../assets/figures/ch4/ch4_02_top_models_performance_01_eval_test_iou_mean.webp" style="width:110.0%"  alt="Figure 4.3 — Top 10 des modèles par IoU moyen sur dataset de test" />
+<figcaption>Figure 4.3 — Top 10 des modèles par IoU moyen sur dataset de test</figcaption>
+</figure>
+
+<p>Les Figures <a href="#fig:ch4_02_top_models_performance_02_eval_test_map_50_mean" reference="fig:ch4_02_top_models_performance_02_eval_test_map_50_mean" reference-type="ref">4.4</a>, <a href="#fig:ch4_02_top_models_performance_03_eval_test_map_75_mean" reference="fig:ch4_02_top_models_performance_03_eval_test_map_75_mean" reference-type="ref">4.5</a> et <a href="#fig:ch4_02_top_models_performance_04_eval_test_map_95_mean" reference="fig:ch4_02_top_models_performance_04_eval_test_map_95_mean" reference-type="ref">4.6</a> présentent les performances des modèles selon la métrique mAP à différents seuils d’IoU (0.5, 0.75 et 0.95). La Figure <a href="#fig:ch4_02_top_models_performance_08_eval_test_f1_score_mean" reference="fig:ch4_02_top_models_performance_08_eval_test_f1_score_mean" reference-type="ref">4.7</a> présente les performances des modèles selon le F1-score.</p>
+<figure id="fig:ch4_02_top_models_performance_02_eval_test_map_50_mean" data-latex-placement="H">
+<img src="../assets/figures/ch4/ch4_02_top_models_performance_02_eval_test_map_50_mean.webp" style="width:105.0%"  alt="Figure 4.4 — Top 10 des modèles par mAP@0.5 moyen sur dataset de test" />
+<figcaption>Figure 4.4 — Top 10 des modèles par mAP@0.5 moyen sur dataset de test</figcaption>
+</figure>
+
+<figure id="fig:ch4_02_top_models_performance_03_eval_test_map_75_mean" data-latex-placement="H">
+<img src="../assets/figures/ch4/ch4_02_top_models_performance_03_eval_test_map_75_mean.webp" style="width:105.0%"  alt="Figure 4.5 — Top 10 des modèles par mAP@0.75 moyen sur dataset de test" />
+<figcaption>Figure 4.5 — Top 10 des modèles par mAP@0.75 moyen sur dataset de test</figcaption>
+</figure>
+
+<figure id="fig:ch4_02_top_models_performance_04_eval_test_map_95_mean" data-latex-placement="H">
+<img src="../assets/figures/ch4/ch4_02_top_models_performance_04_eval_test_map_95_mean.webp" style="width:105.0%"  alt="Figure 4.6 — Top 10 des modèles par mAP@0.95 moyen sur dataset de test" />
+<figcaption>Figure 4.6 — Top 10 des modèles par mAP@0.95 moyen sur dataset de test</figcaption>
+</figure>
+
+<figure id="fig:ch4_02_top_models_performance_08_eval_test_f1_score_mean" data-latex-placement="H">
+<img src="../assets/figures/ch4/ch4_02_top_models_performance_08_eval_test_f1_score_mean.webp" style="width:105.0%"  alt="Figure 4.7 — Top 10 des modèles par F1-score moyen sur dataset de test" />
+<figcaption>Figure 4.7 — Top 10 des modèles par F1-score moyen sur dataset de test</figcaption>
+</figure>
+
+<p>En résumé, le Tableau <a href="#tab:top10_modeles" reference="tab:top10_modeles" reference-type="ref">4.2</a> présente les 10 meilleurs modèles selon l’IoU moyen sur les 5 fold :</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Modèle</th>
+<th style="text-align: center;">IoU</th>
+<th style="text-align: center;">F1-Score</th>
+<th style="text-align: center;">mAP@50</th>
+<th style="text-align: center;">mAP@75</th>
+<th style="text-align: center;">mAP@95</th>
+<th style="text-align: center;">Params (M)</th>
+<th style="text-align: center;">Temps (h)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Linknet + EfficientNet-B5</td>
+<td style="text-align: center;">0.741</td>
+<td style="text-align: center;">0.810</td>
+<td style="text-align: center;">0.854</td>
+<td style="text-align: center;">0.667</td>
+<td style="text-align: center;">0.151</td>
+<td style="text-align: center;">28.75</td>
+<td style="text-align: center;">18.11</td>
+</tr>
+<tr>
+<td style="text-align: left;">Segformer + RegNetY-080</td>
+<td style="text-align: center;">0.738</td>
+<td style="text-align: center;">0.805</td>
+<td style="text-align: center;">0.852</td>
+<td style="text-align: center;">0.672</td>
+<td style="text-align: center;">0.155</td>
+<td style="text-align: center;">38.41</td>
+<td style="text-align: center;">9.29</td>
+</tr>
+<tr>
+<td style="text-align: left;">Segformer + RegNetY-032</td>
+<td style="text-align: center;">0.735</td>
+<td style="text-align: center;">0.801</td>
+<td style="text-align: center;">0.831</td>
+<td style="text-align: center;">0.672</td>
+<td style="text-align: center;">0.157</td>
+<td style="text-align: center;">18.87</td>
+<td style="text-align: center;">30.62</td>
+</tr>
+<tr>
+<td style="text-align: left;">FPN + EfficientNetV2-S</td>
+<td style="text-align: center;">0.735</td>
+<td style="text-align: center;">0.802</td>
+<td style="text-align: center;">0.834</td>
+<td style="text-align: center;">0.674</td>
+<td style="text-align: center;">0.153</td>
+<td style="text-align: center;">23.42</td>
+<td style="text-align: center;">19.56</td>
+</tr>
+<tr>
+<td style="text-align: left;">Upernet + EfficientNetV2-S</td>
+<td style="text-align: center;">0.735</td>
+<td style="text-align: center;">0.800</td>
+<td style="text-align: center;">0.840</td>
+<td style="text-align: center;">0.667</td>
+<td style="text-align: center;">0.184</td>
+<td style="text-align: center;">29.13</td>
+<td style="text-align: center;">27.75</td>
+</tr>
+<tr>
+<td style="text-align: left;">Unetplusplus + EfficientNet-B5</td>
+<td style="text-align: center;">0.735</td>
+<td style="text-align: center;">0.801</td>
+<td style="text-align: center;">0.843</td>
+<td style="text-align: center;">0.661</td>
+<td style="text-align: center;">0.162</td>
+<td style="text-align: center;">13.63</td>
+<td style="text-align: center;">31.28</td>
+</tr>
+<tr>
+<td style="text-align: left;">Segformer + mambaout_base</td>
+<td style="text-align: center;">0.734</td>
+<td style="text-align: center;">0.797</td>
+<td style="text-align: center;">0.820</td>
+<td style="text-align: center;">0.694</td>
+<td style="text-align: center;">0.153</td>
+<td style="text-align: center;">80.06</td>
+<td style="text-align: center;">5.93</td>
+</tr>
+<tr>
+<td style="text-align: left;">Unet + mambaout_small</td>
+<td style="text-align: center;">0.734</td>
+<td style="text-align: center;">0.796</td>
+<td style="text-align: center;">0.827</td>
+<td style="text-align: center;">0.690</td>
+<td style="text-align: center;">0.191</td>
+<td style="text-align: center;">48.52</td>
+<td style="text-align: center;">8.95</td>
+</tr>
+<tr>
+<td style="text-align: left;">Unet + EfficientNetV2-S</td>
+<td style="text-align: center;">0.734</td>
+<td style="text-align: center;">0.801</td>
+<td style="text-align: center;">0.845</td>
+<td style="text-align: center;">0.647</td>
+<td style="text-align: center;">0.160</td>
+<td style="text-align: center;">23.94</td>
+<td style="text-align: center;">23.45</td>
+</tr>
+<tr>
+<td style="text-align: left;">Manet + mambaout_small</td>
+<td style="text-align: center;">0.732</td>
+<td style="text-align: center;">0.801</td>
+<td style="text-align: center;">0.845</td>
+<td style="text-align: center;">0.656</td>
+<td style="text-align: center;">0.175</td>
+<td style="text-align: center;">100.61</td>
+<td style="text-align: center;">9.94</td>
+</tr>
+</tbody>
+</table>
+<p><span id="tab:top10_modeles"></span></p>
+<p class="thesis-caption"><em>Tableau 4.2 — Top 10 des modèles par IoU moyen sur dataset de test</em></p>
+<p>Le mAP (mean Average Precision) constitue une métrique qui évalue la capacité d’un modèle à détecter et délimiter avec précision les espaces libres sur les toitures. Le mAP permet de vérifier non seulement si le modèle identifie les bonnes zones, mais aussi à quel point il les délimite précisément.</p>
+<p>L’IoU représente le rapport entre la surface de chevauchement et la surface totale couverte par la prédiction du modèle et la vérité terrain. Un IoU de 0,5 signifie que la zone détectée chevauche d’au moins 50% avec la zone réelle. Plus le seuil IoU est élevé, plus la détection doit être précise pour être considérée comme correcte.</p>
+<p>Le mAP se décline en plusieurs variantes selon le niveau de précision requis :</p>
+<ul>
+<li>
+<p>mAP@50</p>
+</li>
+<li>
+<p>Accepte les détections avec 50% de chevauchement minimum</p>
+</li>
+<li>
+<p>Suffisant pour identifier l’emplacement général des espaces libres</p>
+</li>
+<li>
+<p>mAP@75</p>
+</li>
+<li>
+<p>Exige 75% de chevauchement minimum</p>
+</li>
+<li>
+<p>Assure que les contours détectés sont relativement fidèles à la réalité</p>
+</li>
+<li>
+<p>mAP@95</p>
+</li>
+<li>
+<p>Requiert 95% de chevauchement minimum</p>
+</li>
+<li>
+<p>Segmentation très précise et fiable</p>
+</li>
+</ul>
+<p>Un modèle performant devra atteindre des scores élevés sur ces trois seuils pour être considéré comme adapté à une utilisation opérationnelle.</p>
+<p>L’analyse du mAP@95 (Figure <a href="#fig:ch4_02_top_models_performance_04_eval_test_map_95_mean" reference="fig:ch4_02_top_models_performance_04_eval_test_map_95_mean" reference-type="ref">4.6</a>) révèle qu’UNet avec mambaout_small obtient les meilleures performances avec un score de 0,191. Ce modèle affiche également un mAP@75 de 0,690 et un mAP@50 de 0,827. UNet++ avec EfficientNet-B5 se distingue également avec un mAP@95 de 0,162, accompagné d’un mAP@75 de 0,661 et d’un mAP@50 de 0,843.</p>
+<p>Ces performances indiquent que ces modèles sont capables de segmenter précisément les espaces libres sur les toitures, même dans des conditions architecturales complexes, ce qui confirme leur potentiel pour une application opérationnelle.</p>
+<h3 id="analyse-comparative-des-architectures">Analyse comparative des architectures</h3>
+<h4 id="performance-par-famille-de-décodeur">Performance par famille de décodeur</h4>
+<p>L’analyse des performances par décodeur selon les métriques IoU (Figure <a href="#fig:ch4_06_architecture_boxplot_01_eval_test_iou_mean" reference="fig:ch4_06_architecture_boxplot_01_eval_test_iou_mean" reference-type="ref">4.8</a> et Tableau <a href="#tab:statistique_par_decodeur_iou" reference="tab:statistique_par_decodeur_iou" reference-type="ref">4.3</a>) et mAP@0.95 (Figure <a href="#fig:ch4_06_architecture_boxplot_04_eval_test_map_95_mean" reference="fig:ch4_06_architecture_boxplot_04_eval_test_map_95_mean" reference-type="ref">4.9</a> et Tableau <a href="#tab:statistique_par_decodeur_map95" reference="tab:statistique_par_decodeur_map95" reference-type="ref">4.4</a>) révèle des tendances significatives.</p>
+<figure id="fig:ch4_06_architecture_boxplot_01_eval_test_iou_mean" data-latex-placement="H">
+<img src="../assets/figures/ch4/ch4_06_architecture_boxplot_01_eval_test_iou_mean.webp" style="width:105.0%"  alt="Figure 4.8 — Boîte à moustaches IoU par décodeur" />
+<figcaption>Figure 4.8 — Boîte à moustaches IoU par décodeur</figcaption>
+</figure>
+
+<table>
+<thead>
+<tr>
+<th style="text-align: left;"></th>
+<th style="text-align: center;"></th>
+<th style="text-align: center;"></th>
+<th style="text-align: center;"></th>
+<th style="text-align: center;"></th>
+<th style="text-align: center;"></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Décodeur</td>
+<td style="text-align: center;">IoU</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: center;">Moyenne</td>
+<td style="text-align: center;">écart-type</td>
+<td style="text-align: center;">Médiane</td>
+<td style="text-align: center;">Minimum</td>
+<td style="text-align: center;">Maximum</td>
+</tr>
+<tr>
+<td style="text-align: left;">YOLO</td>
+<td style="text-align: center;">0.717</td>
+<td style="text-align: center;">0.013</td>
+<td style="text-align: center;">0.717</td>
+<td style="text-align: center;">0.703</td>
+<td style="text-align: center;">0.729</td>
+</tr>
+<tr>
+<td style="text-align: left;">deeplabv3</td>
+<td style="text-align: center;">0.712</td>
+<td style="text-align: center;">0.014</td>
+<td style="text-align: center;">0.708</td>
+<td style="text-align: center;">0.695</td>
+<td style="text-align: center;">0.729</td>
+</tr>
+<tr>
+<td style="text-align: left;">fpn</td>
+<td style="text-align: center;">0.711</td>
+<td style="text-align: center;">0.020</td>
+<td style="text-align: center;">0.716</td>
+<td style="text-align: center;">0.676</td>
+<td style="text-align: center;">0.735</td>
+</tr>
+<tr>
+<td style="text-align: left;">linknet</td>
+<td style="text-align: center;">0.719</td>
+<td style="text-align: center;">0.013</td>
+<td style="text-align: center;">0.721</td>
+<td style="text-align: center;">0.700</td>
+<td style="text-align: center;">0.741</td>
+</tr>
+<tr>
+<td style="text-align: left;">manet</td>
+<td style="text-align: center;">0.667</td>
+<td style="text-align: center;">0.040</td>
+<td style="text-align: center;">0.664</td>
+<td style="text-align: center;">0.634</td>
+<td style="text-align: center;">0.732</td>
+</tr>
+<tr>
+<td style="text-align: left;">pan</td>
+<td style="text-align: center;">0.698</td>
+<td style="text-align: center;">0.038</td>
+<td style="text-align: center;">0.712</td>
+<td style="text-align: center;">0.619</td>
+<td style="text-align: center;">0.727</td>
+</tr>
+<tr>
+<td style="text-align: left;">pspnet</td>
+<td style="text-align: center;">0.697</td>
+<td style="text-align: center;">0.019</td>
+<td style="text-align: center;">0.700</td>
+<td style="text-align: center;">0.635</td>
+<td style="text-align: center;">0.714</td>
+</tr>
+<tr>
+<td style="text-align: left;">segformer</td>
+<td style="text-align: center;">0.718</td>
+<td style="text-align: center;">0.019</td>
+<td style="text-align: center;">0.722</td>
+<td style="text-align: center;">0.675</td>
+<td style="text-align: center;">0.738</td>
+</tr>
+<tr>
+<td style="text-align: left;">unet</td>
+<td style="text-align: center;">0.715</td>
+<td style="text-align: center;">0.018</td>
+<td style="text-align: center;">0.721</td>
+<td style="text-align: center;">0.681</td>
+<td style="text-align: center;">0.734</td>
+</tr>
+<tr>
+<td style="text-align: left;">unetplusplus</td>
+<td style="text-align: center;">0.710</td>
+<td style="text-align: center;">0.020</td>
+<td style="text-align: center;">0.716</td>
+<td style="text-align: center;">0.682</td>
+<td style="text-align: center;">0.735</td>
+</tr>
+<tr>
+<td style="text-align: left;">upernet</td>
+<td style="text-align: center;">0.722</td>
+<td style="text-align: center;">0.013</td>
+<td style="text-align: center;">0.723</td>
+<td style="text-align: center;">0.706</td>
+<td style="text-align: center;">0.735</td>
+</tr>
+</tbody>
+</table>
+<p><span id="tab:statistique_par_decodeur_iou"></span></p>
+<p class="thesis-caption"><em>Tableau 4.3 — Statistiques IoU par décodeur</em></p>
+<figure id="fig:ch4_06_architecture_boxplot_04_eval_test_map_95_mean" data-latex-placement="H">
+<img src="../assets/figures/ch4/ch4_06_architecture_boxplot_04_eval_test_map_95_mean.webp" style="width:105.0%"  alt="Figure 4.9 — Boîte à moustaches mAP@95 par décodeur" />
+<figcaption>Figure 4.9 — Boîte à moustaches mAP@95 par décodeur</figcaption>
+</figure>
+
+<table>
+<thead>
+<tr>
+<th style="text-align: left;"></th>
+<th style="text-align: center;"></th>
+<th style="text-align: center;"></th>
+<th style="text-align: center;"></th>
+<th style="text-align: center;"></th>
+<th style="text-align: center;"></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Décodeur</td>
+<td style="text-align: center;">mAP@0.95</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: center;">Moyenne</td>
+<td style="text-align: center;">écart-type</td>
+<td style="text-align: center;">Médiane</td>
+<td style="text-align: center;">Minimum</td>
+<td style="text-align: center;">Maximum</td>
+</tr>
+<tr>
+<td style="text-align: left;">YOLO</td>
+<td style="text-align: center;">0.075</td>
+<td style="text-align: center;">0.010</td>
+<td style="text-align: center;">0.074</td>
+<td style="text-align: center;">0.065</td>
+<td style="text-align: center;">0.087</td>
+</tr>
+<tr>
+<td style="text-align: left;">deeplabv3</td>
+<td style="text-align: center;">0.110</td>
+<td style="text-align: center;">0.025</td>
+<td style="text-align: center;">0.117</td>
+<td style="text-align: center;">0.072</td>
+<td style="text-align: center;">0.146</td>
+</tr>
+<tr>
+<td style="text-align: left;">fpn</td>
+<td style="text-align: center;">0.116</td>
+<td style="text-align: center;">0.032</td>
+<td style="text-align: center;">0.116</td>
+<td style="text-align: center;">0.079</td>
+<td style="text-align: center;">0.160</td>
+</tr>
+<tr>
+<td style="text-align: left;">linknet</td>
+<td style="text-align: center;">0.130</td>
+<td style="text-align: center;">0.021</td>
+<td style="text-align: center;">0.128</td>
+<td style="text-align: center;">0.103</td>
+<td style="text-align: center;">0.153</td>
+</tr>
+<tr>
+<td style="text-align: left;">manet</td>
+<td style="text-align: center;">0.062</td>
+<td style="text-align: center;">0.064</td>
+<td style="text-align: center;">0.034</td>
+<td style="text-align: center;">0.029</td>
+<td style="text-align: center;">0.175</td>
+</tr>
+<tr>
+<td style="text-align: left;">pan</td>
+<td style="text-align: center;">0.096</td>
+<td style="text-align: center;">0.023</td>
+<td style="text-align: center;">0.097</td>
+<td style="text-align: center;">0.061</td>
+<td style="text-align: center;">0.128</td>
+</tr>
+<tr>
+<td style="text-align: left;">pspnet</td>
+<td style="text-align: center;">0.087</td>
+<td style="text-align: center;">0.014</td>
+<td style="text-align: center;">0.088</td>
+<td style="text-align: center;">0.058</td>
+<td style="text-align: center;">0.112</td>
+</tr>
+<tr>
+<td style="text-align: left;">segformer</td>
+<td style="text-align: center;">0.131</td>
+<td style="text-align: center;">0.028</td>
+<td style="text-align: center;">0.151</td>
+<td style="text-align: center;">0.081</td>
+<td style="text-align: center;">0.160</td>
+</tr>
+<tr>
+<td style="text-align: left;">unet</td>
+<td style="text-align: center;">0.128</td>
+<td style="text-align: center;">0.041</td>
+<td style="text-align: center;">0.121</td>
+<td style="text-align: center;">0.067</td>
+<td style="text-align: center;">0.191</td>
+</tr>
+<tr>
+<td style="text-align: left;">unetplusplus</td>
+<td style="text-align: center;">0.107</td>
+<td style="text-align: center;">0.033</td>
+<td style="text-align: center;">0.108</td>
+<td style="text-align: center;">0.063</td>
+<td style="text-align: center;">0.162</td>
+</tr>
+<tr>
+<td style="text-align: left;">upernet</td>
+<td style="text-align: center;">0.137</td>
+<td style="text-align: center;">0.039</td>
+<td style="text-align: center;">0.137</td>
+<td style="text-align: center;">0.090</td>
+<td style="text-align: center;">0.184</td>
+</tr>
+</tbody>
+</table>
+<p><span id="tab:statistique_par_decodeur_map95"></span></p>
+<p class="thesis-caption"><em>Tableau 4.4 — Statistiques mAP@0.95 par décodeur</em></p>
+<p>Les décodeurs présentent des performances très variables selon les encodeurs choisis, ce qui se manifeste par la variance (largeur des boîtes) et les valeurs extrêmes (moustaches) observées dans les boîtes à moustaches. Certains décodeurs affichent néanmoins des performances globalement inférieures aux autres en termes de mAP@0.95, notamment MANet et YOLOv12.</p>
+<h4 id="performance-par-encodeur">Performance par encodeur</h4>
+<p>L’analyse des encodeurs avec les métriques IoU (Figure <a href="#fig:ch4_07_backbone_boxplot_01_eval_test_iou_mean" reference="fig:ch4_07_backbone_boxplot_01_eval_test_iou_mean" reference-type="ref">4.10</a> et Tableau <a href="#tab:statistique_par_encodeur_iou" reference="tab:statistique_par_encodeur_iou" reference-type="ref">4.5</a>) et mAP@0.95 (Figure <a href="#fig:ch4_07_backbone_boxplot_04_eval_test_map_95_mean" reference="fig:ch4_07_backbone_boxplot_04_eval_test_map_95_mean" reference-type="ref">4.11</a> et Tableau <a href="#tab:statistique_par_encodeur_map95" reference="tab:statistique_par_encodeur_map95" reference-type="ref">4.6</a>) révèle des différences notables.</p>
+<figure id="fig:ch4_07_backbone_boxplot_01_eval_test_iou_mean" data-latex-placement="H">
+<img src="../assets/figures/ch4/ch4_07_backbone_boxplot_01_eval_test_iou_mean.webp" style="width:120.0%"  alt="Figure 4.10 — Boîte à moustaches IoU par encodeur" />
+<figcaption>Figure 4.10 — Boîte à moustaches IoU par encodeur</figcaption>
+</figure>
+
+<table>
+<thead>
+<tr>
+<th style="text-align: left;"></th>
+<th style="text-align: right;"></th>
+<th style="text-align: right;"></th>
+<th style="text-align: right;"></th>
+<th style="text-align: right;"></th>
+<th style="text-align: right;"></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Encodeur</td>
+<td style="text-align: right;">IoU</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: right;">Moyenne</td>
+<td style="text-align: right;">écart-type</td>
+<td style="text-align: right;">Médiane</td>
+<td style="text-align: right;">Minimum</td>
+<td style="text-align: right;">Maximum</td>
+</tr>
+<tr>
+<td style="text-align: left;">resnext101</td>
+<td style="text-align: right;">0.688</td>
+<td style="text-align: right;">0.013</td>
+<td style="text-align: right;">0.694</td>
+<td style="text-align: right;">0.669</td>
+<td style="text-align: right;">0.704</td>
+</tr>
+<tr>
+<td style="text-align: left;">resnext50</td>
+<td style="text-align: right;">0.705</td>
+<td style="text-align: right;">0.016</td>
+<td style="text-align: right;">0.707</td>
+<td style="text-align: right;">0.664</td>
+<td style="text-align: right;">0.718</td>
+</tr>
+<tr>
+<td style="text-align: left;">efficientnet-b3</td>
+<td style="text-align: right;">0.714</td>
+<td style="text-align: right;">0.036</td>
+<td style="text-align: right;">0.729</td>
+<td style="text-align: right;">0.634</td>
+<td style="text-align: right;">0.735</td>
+</tr>
+<tr>
+<td style="text-align: left;">efficientnet-b5</td>
+<td style="text-align: right;">0.713</td>
+<td style="text-align: right;">0.030</td>
+<td style="text-align: right;">0.727</td>
+<td style="text-align: right;">0.666</td>
+<td style="text-align: right;">0.741</td>
+</tr>
+<tr>
+<td style="text-align: left;">res2net101</td>
+<td style="text-align: right;">0.699</td>
+<td style="text-align: right;">0.009</td>
+<td style="text-align: right;">0.699</td>
+<td style="text-align: right;">0.682</td>
+<td style="text-align: right;">0.711</td>
+</tr>
+<tr>
+<td style="text-align: left;">resnest200e</td>
+<td style="text-align: right;">0.695</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;">0.695</td>
+<td style="text-align: right;">0.695</td>
+<td style="text-align: right;">0.695</td>
+</tr>
+<tr>
+<td style="text-align: left;">efficientnetv2_rw_m</td>
+<td style="text-align: right;">0.713</td>
+<td style="text-align: right;">0.009</td>
+<td style="text-align: right;">0.718</td>
+<td style="text-align: right;">0.699</td>
+<td style="text-align: right;">0.721</td>
+</tr>
+<tr>
+<td style="text-align: left;">efficientnetv2_rw_s</td>
+<td style="text-align: right;">0.727</td>
+<td style="text-align: right;">0.008</td>
+<td style="text-align: right;">0.729</td>
+<td style="text-align: right;">0.709</td>
+<td style="text-align: right;">0.735</td>
+</tr>
+<tr>
+<td style="text-align: left;">efficientvit_b2</td>
+<td style="text-align: right;">0.674</td>
+<td style="text-align: right;">0.045</td>
+<td style="text-align: right;">0.669</td>
+<td style="text-align: right;">0.635</td>
+<td style="text-align: right;">0.722</td>
+</tr>
+<tr>
+<td style="text-align: left;">fastvit_t8</td>
+<td style="text-align: right;">0.705</td>
+<td style="text-align: right;">0.008</td>
+<td style="text-align: right;">0.705</td>
+<td style="text-align: right;">0.700</td>
+<td style="text-align: right;">0.711</td>
+</tr>
+<tr>
+<td style="text-align: left;">mambaout_base</td>
+<td style="text-align: right;">0.717</td>
+<td style="text-align: right;">0.020</td>
+<td style="text-align: right;">0.720</td>
+<td style="text-align: right;">0.694</td>
+<td style="text-align: right;">0.734</td>
+</tr>
+<tr>
+<td style="text-align: left;">mambaout_small</td>
+<td style="text-align: right;">0.715</td>
+<td style="text-align: right;">0.019</td>
+<td style="text-align: right;">0.716</td>
+<td style="text-align: right;">0.696</td>
+<td style="text-align: right;">0.734</td>
+</tr>
+<tr>
+<td style="text-align: left;">regnety_032</td>
+<td style="text-align: right;">0.726</td>
+<td style="text-align: right;">0.008</td>
+<td style="text-align: right;">0.728</td>
+<td style="text-align: right;">0.708</td>
+<td style="text-align: right;">0.735</td>
+</tr>
+<tr>
+<td style="text-align: left;">regnety_080</td>
+<td style="text-align: right;">0.719</td>
+<td style="text-align: right;">0.010</td>
+<td style="text-align: right;">0.717</td>
+<td style="text-align: right;">0.707</td>
+<td style="text-align: right;">0.738</td>
+</tr>
+<tr>
+<td style="text-align: left;">repvit_m1</td>
+<td style="text-align: right;">0.718</td>
+<td style="text-align: right;">0.014</td>
+<td style="text-align: right;">0.723</td>
+<td style="text-align: right;">0.698</td>
+<td style="text-align: right;">0.729</td>
+</tr>
+<tr>
+<td style="text-align: left;">efficientnetv2_xl</td>
+<td style="text-align: right;">0.672</td>
+<td style="text-align: right;">0.031</td>
+<td style="text-align: right;">0.676</td>
+<td style="text-align: right;">0.619</td>
+<td style="text-align: right;">0.700</td>
+</tr>
+<tr>
+<td style="text-align: left;">yolo12l</td>
+<td style="text-align: right;">0.729</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;">0.729</td>
+<td style="text-align: right;">0.729</td>
+<td style="text-align: right;">0.729</td>
+</tr>
+<tr>
+<td style="text-align: left;">yolo12n</td>
+<td style="text-align: right;">0.708</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;">0.708</td>
+<td style="text-align: right;">0.708</td>
+<td style="text-align: right;">0.708</td>
+</tr>
+<tr>
+<td style="text-align: left;">yolo12s</td>
+<td style="text-align: right;">0.703</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;">0.703</td>
+<td style="text-align: right;">0.703</td>
+<td style="text-align: right;">0.703</td>
+</tr>
+<tr>
+<td style="text-align: left;">yolo12x</td>
+<td style="text-align: right;">0.727</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;">0.727</td>
+<td style="text-align: right;">0.727</td>
+<td style="text-align: right;">0.727</td>
+</tr>
+</tbody>
+</table>
+<p><span id="tab:statistique_par_encodeur_iou"></span></p>
+<p class="thesis-caption"><em>Tableau 4.5 — Statistiques IoU par encodeur</em></p>
+<figure id="fig:ch4_07_backbone_boxplot_04_eval_test_map_95_mean" data-latex-placement="H">
+<img src="../assets/figures/ch4/ch4_07_backbone_boxplot_04_eval_test_map_95_mean.webp" style="width:120.0%"  alt="Figure 4.11 — Boîte à moustaches IoU par encodeur" />
+<figcaption>Figure 4.11 — Boîte à moustaches IoU par encodeur</figcaption>
+</figure>
+
+<table>
+<thead>
+<tr>
+<th style="text-align: left;"></th>
+<th style="text-align: right;"></th>
+<th style="text-align: right;"></th>
+<th style="text-align: right;"></th>
+<th style="text-align: right;"></th>
+<th style="text-align: right;"></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Encodeur</td>
+<td style="text-align: right;">mAP@0.95</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: right;">Moyenne</td>
+<td style="text-align: right;">écart-type</td>
+<td style="text-align: right;">Médiane</td>
+<td style="text-align: right;">Minimum</td>
+<td style="text-align: right;">Maximum</td>
+</tr>
+<tr>
+<td style="text-align: left;">resnext101</td>
+<td style="text-align: right;">0.081</td>
+<td style="text-align: right;">0.015</td>
+<td style="text-align: right;">0.079</td>
+<td style="text-align: right;">0.061</td>
+<td style="text-align: right;">0.103</td>
+</tr>
+<tr>
+<td style="text-align: left;">resnext50</td>
+<td style="text-align: right;">0.101</td>
+<td style="text-align: right;">0.028</td>
+<td style="text-align: right;">0.103</td>
+<td style="text-align: right;">0.034</td>
+<td style="text-align: right;">0.130</td>
+</tr>
+<tr>
+<td style="text-align: left;">efficientnet-b3</td>
+<td style="text-align: right;">0.120</td>
+<td style="text-align: right;">0.045</td>
+<td style="text-align: right;">0.126</td>
+<td style="text-align: right;">0.036</td>
+<td style="text-align: right;">0.162</td>
+</tr>
+<tr>
+<td style="text-align: left;">efficientnet-b5</td>
+<td style="text-align: right;">0.099</td>
+<td style="text-align: right;">0.045</td>
+<td style="text-align: right;">0.108</td>
+<td style="text-align: right;">0.029</td>
+<td style="text-align: right;">0.151</td>
+</tr>
+<tr>
+<td style="text-align: left;">res2net101</td>
+<td style="text-align: right;">0.093</td>
+<td style="text-align: right;">0.018</td>
+<td style="text-align: right;">0.091</td>
+<td style="text-align: right;">0.063</td>
+<td style="text-align: right;">0.115</td>
+</tr>
+<tr>
+<td style="text-align: left;">resnest200e</td>
+<td style="text-align: right;">0.072</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;">0.072</td>
+<td style="text-align: right;">0.072</td>
+<td style="text-align: right;">0.072</td>
+</tr>
+<tr>
+<td style="text-align: left;">efficientnetv2_rw_m</td>
+<td style="text-align: right;">0.112</td>
+<td style="text-align: right;">0.021</td>
+<td style="text-align: right;">0.117</td>
+<td style="text-align: right;">0.079</td>
+<td style="text-align: right;">0.135</td>
+</tr>
+<tr>
+<td style="text-align: left;">efficientnetv2_rw_s</td>
+<td style="text-align: right;">0.136</td>
+<td style="text-align: right;">0.030</td>
+<td style="text-align: right;">0.133</td>
+<td style="text-align: right;">0.081</td>
+<td style="text-align: right;">0.184</td>
+</tr>
+<tr>
+<td style="text-align: left;">efficientvit_b2</td>
+<td style="text-align: right;">0.083</td>
+<td style="text-align: right;">0.050</td>
+<td style="text-align: right;">0.073</td>
+<td style="text-align: right;">0.034</td>
+<td style="text-align: right;">0.151</td>
+</tr>
+<tr>
+<td style="text-align: left;">fastvit_t8</td>
+<td style="text-align: right;">0.099</td>
+<td style="text-align: right;">0.016</td>
+<td style="text-align: right;">0.099</td>
+<td style="text-align: right;">0.088</td>
+<td style="text-align: right;">0.110</td>
+</tr>
+<tr>
+<td style="text-align: left;">mambaout_base</td>
+<td style="text-align: right;">0.130</td>
+<td style="text-align: right;">0.042</td>
+<td style="text-align: right;">0.133</td>
+<td style="text-align: right;">0.081</td>
+<td style="text-align: right;">0.175</td>
+</tr>
+<tr>
+<td style="text-align: left;">mambaout_small</td>
+<td style="text-align: right;">0.118</td>
+<td style="text-align: right;">0.063</td>
+<td style="text-align: right;">0.085</td>
+<td style="text-align: right;">0.079</td>
+<td style="text-align: right;">0.191</td>
+</tr>
+<tr>
+<td style="text-align: left;">regnety_032</td>
+<td style="text-align: right;">0.140</td>
+<td style="text-align: right;">0.019</td>
+<td style="text-align: right;">0.146</td>
+<td style="text-align: right;">0.101</td>
+<td style="text-align: right;">0.157</td>
+</tr>
+<tr>
+<td style="text-align: left;">regnety_080</td>
+<td style="text-align: right;">0.127</td>
+<td style="text-align: right;">0.020</td>
+<td style="text-align: right;">0.121</td>
+<td style="text-align: right;">0.101</td>
+<td style="text-align: right;">0.155</td>
+</tr>
+<tr>
+<td style="text-align: left;">repvit_m1</td>
+<td style="text-align: right;">0.138</td>
+<td style="text-align: right;">0.042</td>
+<td style="text-align: right;">0.151</td>
+<td style="text-align: right;">0.079</td>
+<td style="text-align: right;">0.173</td>
+</tr>
+<tr>
+<td style="text-align: left;">efficientnetv2_xl</td>
+<td style="text-align: right;">0.083</td>
+<td style="text-align: right;">0.013</td>
+<td style="text-align: right;">0.081</td>
+<td style="text-align: right;">0.067</td>
+<td style="text-align: right;">0.103</td>
+</tr>
+<tr>
+<td style="text-align: left;">yolo12l</td>
+<td style="text-align: right;">0.087</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;">0.087</td>
+<td style="text-align: right;">0.087</td>
+<td style="text-align: right;">0.087</td>
+</tr>
+<tr>
+<td style="text-align: left;">yolo12n</td>
+<td style="text-align: right;">0.071</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;">0.071</td>
+<td style="text-align: right;">0.071</td>
+<td style="text-align: right;">0.071</td>
+</tr>
+<tr>
+<td style="text-align: left;">yolo12s</td>
+<td style="text-align: right;">0.065</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;">0.065</td>
+<td style="text-align: right;">0.065</td>
+<td style="text-align: right;">0.065</td>
+</tr>
+<tr>
+<td style="text-align: left;">yolo12x</td>
+<td style="text-align: right;">0.077</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;">0.077</td>
+<td style="text-align: right;">0.077</td>
+<td style="text-align: right;">0.077</td>
+</tr>
+</tbody>
+</table>
+<p><span id="tab:statistique_par_encodeur_map95"></span></p>
+<p class="thesis-caption"><em>Tableau 4.6 — Statistiques mAP@0.95 par décodeur</em></p>
+<p>Les encodeurs présentent une variance plus réduite que les décodeurs, témoignant d’une plus grande stabilité des performances. EfficientVIT constitue la seule exception avec une variance importante, probablement liée à sa complexité et à son architecture spécifique.</p>
+<p>RepVIT_M1, EfficientNetV2_RW_S et RegNetY_032 se distinguent par leurs performances élevées, atteignant des IoU moyens respectifs de 0,718, 0,727 et 0,726, ainsi que des mAP@0.95 de 0,138, 0,136 et 0,140.</p>
+<p>Les encodeurs mambaout_base et mambaout_small affichent également des performances solides avec des IoU moyens de 0,717 et 0,715, accompagnés de mAP@0.95 de 0,130 et 0,118 respectivement. Ces modèles présentent toutefois une variance élevée pour la métrique mAP@0.95, suggérant une compatibilité variable selon les décodeurs associés.</p>
+<h3 id="analyse-de-lefficacité-computationnelle">Analyse de l’efficacité computationnelle</h3>
+<h4 id="compromis-performance-complexité">Compromis performance-complexité</h4>
+<p>L’analyse du front de Pareto (Figures  <a href="#fig:ch4_09_performance_vs_parameters_pareto_01_eval_test_iou_mean" reference="fig:ch4_09_performance_vs_parameters_pareto_01_eval_test_iou_mean" reference-type="ref">4.12</a> et <a href="#fig:ch4_09_performance_vs_parameters_pareto_04_eval_test_map_95_mean" reference="fig:ch4_09_performance_vs_parameters_pareto_04_eval_test_map_95_mean" reference-type="ref">4.13</a>) identifient les modèles offrant le meilleur compromis entre performance et complexité selon les métriques visées.</p>
+<figure id="fig:ch4_09_performance_vs_parameters_pareto_01_eval_test_iou_mean" data-latex-placement="H">
+<img src="../assets/figures/ch4/ch4_09_performance_vs_parameters_pareto_01_eval_test_iou_mean.webp" style="width:105.0%"  alt="Figure 4.12 — IoU vs nombre de paramètres. Les modèles sur la ligne rouge représentent les solutions optimales." />
+<figcaption>Figure 4.12 — IoU vs nombre de paramètres. Les modèles sur la ligne rouge représentent les solutions optimales.</figcaption>
+</figure>
+
+<p>Les modèles optimaux identifiés dans la Figure <a href="#fig:ch4_09_performance_vs_parameters_pareto_01_eval_test_iou_mean" reference="fig:ch4_09_performance_vs_parameters_pareto_01_eval_test_iou_mean" reference-type="ref">4.12</a> sont :</p>
+<ol>
+<li>
+<p>linknet + EfficientNet-B5 (IoU 0,741, 28,75M params)</p>
+</li>
+<li>
+<p>segformer + RegNetY-032 (IoU 0,735, 18,87M params)</p>
+</li>
+<li>
+<p>unet++ + EfficientNet-B3 (IoU 0,735, 13,63M params)</p>
+</li>
+</ol>
+<p>Au-delà de 25M paramètres, les gains en IoU deviennent marginaux (&lt;1% IoU), suggérant une saturation du bénéfice apporté par la complexité additionnelle.</p>
+<figure id="fig:ch4_09_performance_vs_parameters_pareto_04_eval_test_map_95_mean" data-latex-placement="H">
+<img src="../assets/figures/ch4/ch4_09_performance_vs_parameters_pareto_04_eval_test_map_95_mean.webp" style="width:105.0%"  alt="Figure 4.13 — mAP@0.95 vs nombre de paramètres. Les modèles sur la ligne rouge représentent les solutions optimales." />
+<figcaption>Figure 4.13 — mAP@0.95 vs nombre de paramètres. Les modèles sur la ligne rouge représentent les solutions optimales.</figcaption>
+</figure>
+
+<p>Les encodeurs (Figure <a href="#fig:ch4_09_performance_vs_parameters_pareto_04_eval_test_map_95_mean" reference="fig:ch4_09_performance_vs_parameters_pareto_04_eval_test_map_95_mean" reference-type="ref">4.13</a>) mambaout_small et EfficientNetV2_S et les décodeurs PSPNet offrent un bon compromis entre précision de segmentation et complexité.</p>
+<h4 id="analyse-temporelle">Analyse temporelle</h4>
+<p>La distribution des temps d’entraînement (Figure <a href="#fig:ch4_11_training_time_dist_09" reference="fig:ch4_11_training_time_dist_09" reference-type="ref">4.14</a>) nécessaires révèlent des écarts significatifs entre les modèles, allant de 1,8 à 48,3 heures pour les configurations les plus complexes. Il n’y a pas de corrélation évidente entre le nombre de paramètres et le temps d’entraînement, ce qui suggère que la complexité des architectures joue un rôle plus important que la taille brute du modèle.</p>
+<figure id="fig:ch4_11_training_time_dist_09" data-latex-placement="H">
+<img src="../assets/figures/ch4/ch4_11_training_time_dist_09.webp" style="width:100.0%"  alt="Figure 4.14 — Distribution du temps d’entraînement total (5 fold)" />
+<figcaption>Figure 4.14 — Distribution du temps d’entraînement total (5 fold)</figcaption>
+</figure>
+
+<h3 id="analyse-des-métriques-complémentaires">Analyse des métriques complémentaires</h3>
+<h4 id="analyse-map-multi-seuils">Analyse mAP multi-seuils</h4>
+<p>Le Tableau <a href="#tab:performance_moyenne_map_different_seuils" reference="tab:performance_moyenne_map_different_seuils" reference-type="ref">4.7</a> présente l’évolution des performances selon différents seuils de mAP.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Décodeur</th>
+<th style="text-align: right;">mAP@0.5</th>
+<th style="text-align: right;">mAP@0.65</th>
+<th style="text-align: right;">mAP@0.75</th>
+<th style="text-align: right;">mAP@0.85</th>
+<th style="text-align: right;">mAP@0.90</th>
+<th style="text-align: right;">mAP@0.95</th>
+<th style="text-align: right;">Chute relative</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">YOLO</td>
+<td style="text-align: right;">0.577</td>
+<td style="text-align: right;">0.468</td>
+<td style="text-align: right;">0.378</td>
+<td style="text-align: right;">0.279</td>
+<td style="text-align: right;">0.189</td>
+<td style="text-align: right;">0.075</td>
+<td style="text-align: right;">-87.0%</td>
+</tr>
+<tr>
+<td style="text-align: left;">deeplabv3</td>
+<td style="text-align: right;">0.834</td>
+<td style="text-align: right;">0.725</td>
+<td style="text-align: right;">0.604</td>
+<td style="text-align: right;">0.416</td>
+<td style="text-align: right;">0.265</td>
+<td style="text-align: right;">0.110</td>
+<td style="text-align: right;">-86.8%</td>
+</tr>
+<tr>
+<td style="text-align: left;">fpn</td>
+<td style="text-align: right;">0.829</td>
+<td style="text-align: right;">0.728</td>
+<td style="text-align: right;">0.618</td>
+<td style="text-align: right;">0.433</td>
+<td style="text-align: right;">0.285</td>
+<td style="text-align: right;">0.116</td>
+<td style="text-align: right;">-86.0%</td>
+</tr>
+<tr>
+<td style="text-align: left;">linknet</td>
+<td style="text-align: right;">0.837</td>
+<td style="text-align: right;">0.732</td>
+<td style="text-align: right;">0.616</td>
+<td style="text-align: right;">0.443</td>
+<td style="text-align: right;">0.294</td>
+<td style="text-align: right;">0.130</td>
+<td style="text-align: right;">-84.5%</td>
+</tr>
+<tr>
+<td style="text-align: left;">manet</td>
+<td style="text-align: right;">0.805</td>
+<td style="text-align: right;">0.651</td>
+<td style="text-align: right;">0.498</td>
+<td style="text-align: right;">0.287</td>
+<td style="text-align: right;">0.150</td>
+<td style="text-align: right;">0.062</td>
+<td style="text-align: right;">-92.3%</td>
+</tr>
+<tr>
+<td style="text-align: left;">pan</td>
+<td style="text-align: right;">0.814</td>
+<td style="text-align: right;">0.702</td>
+<td style="text-align: right;">0.584</td>
+<td style="text-align: right;">0.401</td>
+<td style="text-align: right;">0.254</td>
+<td style="text-align: right;">0.096</td>
+<td style="text-align: right;">-88.2%</td>
+</tr>
+<tr>
+<td style="text-align: left;">pspnet</td>
+<td style="text-align: right;">0.827</td>
+<td style="text-align: right;">0.705</td>
+<td style="text-align: right;">0.588</td>
+<td style="text-align: right;">0.387</td>
+<td style="text-align: right;">0.243</td>
+<td style="text-align: right;">0.087</td>
+<td style="text-align: right;">-89.5%</td>
+</tr>
+<tr>
+<td style="text-align: left;">segformer</td>
+<td style="text-align: right;">0.829</td>
+<td style="text-align: right;">0.738</td>
+<td style="text-align: right;">0.628</td>
+<td style="text-align: right;">0.444</td>
+<td style="text-align: right;">0.298</td>
+<td style="text-align: right;">0.131</td>
+<td style="text-align: right;">-84.2%</td>
+</tr>
+<tr>
+<td style="text-align: left;">unet</td>
+<td style="text-align: right;">0.834</td>
+<td style="text-align: right;">0.731</td>
+<td style="text-align: right;">0.615</td>
+<td style="text-align: right;">0.429</td>
+<td style="text-align: right;">0.283</td>
+<td style="text-align: right;">0.128</td>
+<td style="text-align: right;">-84.7%</td>
+</tr>
+<tr>
+<td style="text-align: left;">unetplusplus</td>
+<td style="text-align: right;">0.837</td>
+<td style="text-align: right;">0.719</td>
+<td style="text-align: right;">0.594</td>
+<td style="text-align: right;">0.406</td>
+<td style="text-align: right;">0.255</td>
+<td style="text-align: right;">0.107</td>
+<td style="text-align: right;">-87.2%</td>
+</tr>
+<tr>
+<td style="text-align: left;">upernet</td>
+<td style="text-align: right;">0.837</td>
+<td style="text-align: right;">0.745</td>
+<td style="text-align: right;">0.635</td>
+<td style="text-align: right;">0.459</td>
+<td style="text-align: right;">0.313</td>
+<td style="text-align: right;">0.137</td>
+<td style="text-align: right;">-83.6%</td>
+</tr>
+</tbody>
+</table>
+<p><span id="tab:performance_moyenne_map_different_seuils"></span></p>
+<p class="thesis-caption"><em>Tableau 4.7 — Performances moyennes mAP à différents seuils. Chute relative mAP@0.5 à mAP@0.95</em></p>
+<p>Les modèles SMP conservent mieux leurs performances aux seuils élevés, à l’exception de MANet, démontrant une segmentation plus précise des contours. La transition du mAP@0.5 au mAP@0.95 révèle une chute significative des performances, pouvant atteindre jusqu’à -92,3% pour MANet. Les modèles UNet et UPerNet présentent des diminutions plus modérées de -84,7% et -83,6% respectivement, suggérant une robustesse relative face aux seuils exigeants.</p>
+<p>L’analyse du passage de mAP@0.90 à mAP@0.95 met en évidence une dégradation importante des performances, dépassant 50% dans tous les cas. Cette observation souligne la difficulté intrinsèque à maintenir une précision élevée dans les détections les plus exigeantes.</p>
+<h3 id="analyse-par-catégorie-de-taille">Analyse par catégorie de taille</h3>
+<p>L’analyse des performances selon la taille des modèles (Figures  <a href="#fig:ch4_05_models_by_size_category_01_eval_test_iou_mean" reference="fig:ch4_05_models_by_size_category_01_eval_test_iou_mean" reference-type="ref">4.15</a> et <a href="#fig:ch4_05_models_by_size_category_04_eval_test_map_95_mean" reference="fig:ch4_05_models_by_size_category_04_eval_test_map_95_mean" reference-type="ref">4.16</a>) met en évidence plusieurs points intéressants.</p>
+<p>Les deux métriques utilisées montrent des résultats assez différents. Pour l’IoU (Figure <a href="#fig:ch4_05_models_by_size_category_01_eval_test_iou_mean" reference="fig:ch4_05_models_by_size_category_01_eval_test_iou_mean" reference-type="ref">4.15</a>), les performances restent relativement stables peu importe la taille du modèle, avec des valeurs comprises entre 0,689 et 0,741. Cette constance indique que le nombre de paramètres n’influence pas directement la qualité de segmentation.</p>
+<figure id="fig:ch4_05_models_by_size_category_01_eval_test_iou_mean" data-latex-placement="H">
+<img src="../assets/figures/ch4/ch4_05_models_by_size_category_01_eval_test_iou_mean.webp" style="width:105.0%"  alt="Figure 4.15 — Top 3 modèles par IoU par taille (paramètres)" />
+<figcaption>Figure 4.15 — Top 3 modèles par IoU par taille (paramètres)</figcaption>
+</figure>
+
+<p>Des modèles légers comme RepViT avec seulement 7M de paramètres obtiennent des résultats similaires à des architectures plus lourdes comme MambaOut qui en compte 101M. Cela montre que des approches bien optimisées peuvent être très efficaces pour segmenter les toitures.</p>
+<p>La métrique mAP@0.95 (Figure <a href="#fig:ch4_05_models_by_size_category_04_eval_test_map_95_mean" reference="fig:ch4_05_models_by_size_category_04_eval_test_map_95_mean" reference-type="ref">4.16</a>) raconte une histoire différente. Cette métrique, qui mesure la précision avec un seuil IoU strict de 0.95, donne des résultats plus variés allant de 0,083 à 0,191. Les écarts sont donc beaucoup plus marqués entre les différentes architectures.</p>
+<figure id="fig:ch4_05_models_by_size_category_04_eval_test_map_95_mean" data-latex-placement="H">
+<img src="../assets/figures/ch4/ch4_05_models_by_size_category_04_eval_test_map_95_mean.webp" style="width:105.0%"  alt="Figure 4.16 — Top 3 modèles par mAP@0.95 par taille (paramètres)" />
+<figcaption>Figure 4.16 — Top 3 modèles par mAP@0.95 par taille (paramètres)</figcaption>
+</figure>
+
+<p>Un résultat surprenant est que les modèles de taille moyenne (25-50M paramètres) obtiennent les meilleurs scores mAP@0.95. Ce n’est donc pas une simple relation où plus gros égale meilleur - il semble y avoir une taille optimale qui balance capacité de représentation et efficacité d’apprentissage.</p>
+<p>Un autre point important concerne l’architecture elle-même. En prenant l’exemple d’EfficientNet, on constate que selon le décodeur utilisé (UNet, SegFormer ou FPN), les performances peuvent varier significativement même si la taille reste similaire. Le choix du décodeur est donc tout aussi important que celui de l’encodeur pour obtenir de bons résultats en segmentation.</p>
+<h3 id="analyse-qualitative">Analyse qualitative</h3>
+<p>Cette sous-section examine des exemples concrets de segmentation produits par les modèles ayant obtenu les meilleures performances.</p>
+<h4 id="modèles-retenus">Modèles retenus</h4>
+<p>La sélection des modèles s’est basée sur leurs performances sur le dataset de test selon plusieurs métriques : IoU, mAP@0.5, mAP@0.75, mAP@0.95 et F1-score. Les combinaisons encodeur-décodeur retenues sont :</p>
+<ul>
+<li>
+<p>UNet + mambaout_small</p>
+</li>
+<li>
+<p>UPerNet + EfficientNetV2-S</p>
+</li>
+<li>
+<p>Segformer + mambaout_base</p>
+</li>
+<li>
+<p>LinkNet + EfficientNet-B5</p>
+</li>
+<li>
+<p>Unet++ + EfficientNetV2-S</p>
+</li>
+<li>
+<p>SegFormer + RegNetY-080</p>
+</li>
+</ul>
+<p>Pour chaque combinaison, 5 modèles ont été entraînés suivant la méthode de validation croisée. Chaque modèle utilise un fold différent pour la validation et les quatre autres pour l’entraînement. Il faut donc déterminer comment combiner efficacement les prédictions de ces 5 modèles pour obtenir un résultat final.</p>
+<h4 id="stratégie-densemble-k-fold">Stratégie d’ensemble k-fold</h4>
+<p>L’approche retenue consiste à exploiter la complémentarité des modèles issus de la validation croisée. Plutôt que de sélectionner le meilleur modèle parmi les 5 folds de chaque combinaison, les prédictions des 5 modèles sont combinées. Cette stratégie d’ensemble permet d’obtenir des segmentations plus robustes et moins sensibles aux variations dans les données d’entraînement.</p>
+<h5 id="principe-de-fonctionnement">Principe de fonctionnement</h5>
+<p>Pour chaque combinaison encodeur-décodeur, voici comment se déroule le processus :</p>
+<ol>
+<li>
+<p>Récupération des modèles : Les 5 modèles entraînés sont chargés un par un pour éviter de saturer la mémoire GPU</p>
+</li>
+<li>
+<p>Prédiction individuelle : Chaque modèle produit une carte de probabilité pour toutes les images du dataset de test</p>
+</li>
+<li>
+<p>Agrégation des prédictions : Les probabilités sont moyennées pixel par pixel avec la formule suivante :</p>
+<p>$<span class="arithmatex">\(\begin{equation}
+        P_{ensemble}(x,y) = \frac{1}{K} \sum_{k=1}^{K} P_k(x,y)
+\end{equation}\)</span>$
+où <em>K</em> = 5 correspond au nombre de folds et <em>P</em><sub><em>k</em></sub>(<em>x</em>, <em>y</em>) représente la probabilité donnée par le modèle du fold <em>k</em> au pixel (<em>x</em>, <em>y</em>)</p>
+</li>
+<li>
+<p>Binarisation : Les probabilités moyennées sont transformées en masque binaire en appliquant un seuil de 0.5</p>
+</li>
+</ol>
+<h5 id="avantages-de-lapproche">Avantages de l’approche</h5>
+<p>Cette stratégie d’ensemble apporte plusieurs avantages :</p>
+<ul>
+<li>
+<p>Réduction de la variance : La moyenne des prédictions de modèles entraînés sur différents sous-ensembles diminue la sensibilité aux variations aléatoires dans les données</p>
+</li>
+<li>
+<p>Amélioration de la généralisation : Comme chaque modèle a vu des données de validation différentes, l’ensemble obtient une vue plus complète du problème</p>
+</li>
+<li>
+<p>Robustesse accrue : Les erreurs des modèles individuels ont tendance à se compenser lors de l’agrégation, ce qui limite l’impact des prédictions aberrantes</p>
+</li>
+<li>
+<p>Exploitation maximale des données : Avec 5 folds, chaque échantillon participe à l’entraînement de 4 modèles sur 5</p>
+</li>
+</ul>
+<h5 id="inconvénients-et-limitations">Inconvénients et limitations</h5>
+<p>Cette approche présente aussi quelques contraintes :</p>
+<ul>
+<li>
+<p>Coût computationnel : L’inférence prend 5 fois plus de temps, passant de quelques secondes à plusieurs dizaines de secondes par image</p>
+</li>
+<li>
+<p>Consommation mémoire : Même si les modèles sont chargés un par un, stocker 5 modèles par configuration demande environ 5 fois plus d’espace disque</p>
+</li>
+<li>
+<p>Complexité de déploiement : Gérer plusieurs modèles rend le système plus complexe à mettre en production</p>
+</li>
+</ul>
+<h5 id="optimisations-techniques">Optimisations techniques</h5>
+<p>Pour limiter les problèmes de mémoire, plusieurs stratégies ont été mises en place :</p>
+<ul>
+<li>
+<p>Chargement séquentiel des modèles avec libération de la mémoire GPU après chaque fold (<code>torch.cuda.empty_cache()</code>)</p>
+</li>
+<li>
+<p>Traitement par batch des images pour rentabiliser le chargement des modèles</p>
+</li>
+<li>
+<p>Accumulation progressive des prédictions pour éviter de garder toutes les probabilités en mémoire en même temps</p>
+</li>
+</ul>
+<p>Cette approche d’ensemble k-fold offre un bon équilibre entre précision et efficacité. Elle convient particulièrement aux cas où la qualité des résultats est plus importante que la vitesse de traitement.</p>
+<h5 id="résultats-de-lensemble-k-fold">Résultats de l’ensemble k-fold</h5>
+<p>Le Tableau <a href="#tab:kfold_ensemble" reference="tab:kfold_ensemble" reference-type="ref">4.8</a> présente les performances des modèles avec et sans ensemble k-fold. Les résultats montrent que l’ensemble est plus performant que la moyenne des folds de chaque modèle.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Modèle</th>
+<th style="text-align: center;">Folds</th>
+<th style="text-align: center;">Moy. fold IoU</th>
+<th style="text-align: center;">Meilleur fold IoU</th>
+<th style="text-align: center;">Ensemble IoU</th>
+<th style="text-align: center;">Amélioration</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">UNet + mambaout_small</td>
+<td style="text-align: center;">5</td>
+<td style="text-align: center;">0.734 ± 0.012</td>
+<td style="text-align: center;">0.748</td>
+<td style="text-align: center;"><strong>0.745</strong></td>
+<td style="text-align: center;">+1.6%</td>
+</tr>
+<tr>
+<td style="text-align: left;">UPerNet + EfficientNetV2-S</td>
+<td style="text-align: center;">5</td>
+<td style="text-align: center;">0.735 ± 0.005</td>
+<td style="text-align: center;">0.743</td>
+<td style="text-align: center;"><strong>0.748</strong></td>
+<td style="text-align: center;">+1.8%</td>
+</tr>
+<tr>
+<td style="text-align: left;">Segformer + mambaout_base</td>
+<td style="text-align: center;">5</td>
+<td style="text-align: center;">0.734 ± 0.009</td>
+<td style="text-align: center;">0.747</td>
+<td style="text-align: center;"><strong>0.742</strong></td>
+<td style="text-align: center;">+1.0%</td>
+</tr>
+<tr>
+<td style="text-align: left;">LinkNet + EfficientNet-B5</td>
+<td style="text-align: center;">5</td>
+<td style="text-align: center;">0.741 ± 0.003</td>
+<td style="text-align: center;">0.744</td>
+<td style="text-align: center;"><strong>0.752</strong></td>
+<td style="text-align: center;">+1.5%</td>
+</tr>
+<tr>
+<td style="text-align: left;">Unet++ + EfficientNetV2-S</td>
+<td style="text-align: center;">5</td>
+<td style="text-align: center;">0.723 ± 0.012</td>
+<td style="text-align: center;">0.738</td>
+<td style="text-align: center;"><strong>0.737</strong></td>
+<td style="text-align: center;">+2.0%</td>
+</tr>
+<tr>
+<td style="text-align: left;">SegFormer + RegNetY-080</td>
+<td style="text-align: center;">5</td>
+<td style="text-align: center;">0.738 ± 0.006</td>
+<td style="text-align: center;">0.746</td>
+<td style="text-align: center;"><strong>0.745</strong></td>
+<td style="text-align: center;">+0.9%</td>
+</tr>
+</tbody>
+</table>
+<p><span id="tab:kfold_ensemble"></span></p>
+<p class="thesis-caption"><em>Tableau 4.8 — Comparaison des performances des modèles avec et sans ensemble k-fold. Amélioration calculée par rapport à l’IoU moyen des folds.</em></p>
+<h4 id="visualisation-des-résultats">Visualisation des résultats</h4>
+<p>Les figures <a href="#fig:unet_mambaoutsmall_best_cases" reference="fig:unet_mambaoutsmall_best_cases" reference-type="ref">4.17</a> et <a href="#fig:unet_mambaoutsmall_worst_cases" reference="fig:unet_mambaoutsmall_worst_cases" reference-type="ref">4.18</a> illustrent les cas extrêmes de performance du modèle UNet avec mambaout_small sur le dataset de test.</p>
+<p>La Figure <a href="#fig:unet_mambaoutsmall_best_cases" reference="fig:unet_mambaoutsmall_best_cases" reference-type="ref">4.17</a> montre les 4 segmentations les plus réussies avec des valeurs IoU élevées. Le modèle parvient à identifier correctement les toitures dans diverses situations. Les résultats montrent que même les obstacles de petite taille comme les cheminées sont correctement détectés, ce qui indique une bonne capacité de segmentation fine.</p>
+<p>La Figure <a href="#fig:unet_mambaoutsmall_worst_cases" reference="fig:unet_mambaoutsmall_worst_cases" reference-type="ref">4.18</a> présente les 4 cas les plus problématiques avec des IoU très bas. Les erreurs se concentrent sur les toitures végétalisées et les terrasses praticables, révélant les difficultés du modèle à traiter ces types de surfaces particulières.</p>
+<figure id="fig:unet_mambaoutsmall_best_cases" data-latex-placement="H">
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/unet_tu-mambaout_small/best_cases/best_5_iou0.998_24991116_tile_5_3_322356_original.webp"  alt="Top1 - Original" />
+<figcaption>Top1 - Original</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/unet_tu-mambaout_small/best_cases/best_5_iou0.998_24991116_tile_5_3_322356_overlay_gt.webp"  alt="Vérité terrain" />
+<figcaption>Vérité terrain</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/unet_tu-mambaout_small/best_cases/best_5_iou0.998_24991116_tile_5_3_322356_overlay_pred.webp"  alt="Prédiction - IoU = 0.998" />
+<figcaption>Prédiction - IoU = 0.998</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/unet_tu-mambaout_small/best_cases/best_4_iou0.991_24961121_tile_15_10_cc6553_original.webp"  alt="Top2 - Original" />
+<figcaption>Top2 - Original</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/unet_tu-mambaout_small/best_cases/best_4_iou0.991_24961121_tile_15_10_cc6553_overlay_gt.webp"  alt="Vérité terrain" />
+<figcaption>Vérité terrain</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/unet_tu-mambaout_small/best_cases/best_4_iou0.991_24961121_tile_15_10_cc6553_overlay_pred.webp"  alt="Prédiction - IoU = 0.991" />
+<figcaption>Prédiction - IoU = 0.991</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/unet_tu-mambaout_small/best_cases/best_3_iou0.988_24931117_tile_18_5_f475a0_original.webp"  alt="Top3 - Original" />
+<figcaption>Top3 - Original</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/unet_tu-mambaout_small/best_cases/best_3_iou0.988_24931117_tile_18_5_f475a0_overlay_gt.webp"  alt="Vérité terrain" />
+<figcaption>Vérité terrain</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/unet_tu-mambaout_small/best_cases/best_3_iou0.988_24931117_tile_18_5_f475a0_overlay_pred.webp"  alt="Prédiction - IoU = 0.988" />
+<figcaption>Prédiction - IoU = 0.988</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/unet_tu-mambaout_small/best_cases/best_2_iou0.984_24931113_tile_13_18_a66e08_original.webp"  alt="Top4 - Original" />
+<figcaption>Top4 - Original</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/unet_tu-mambaout_small/best_cases/best_2_iou0.984_24931113_tile_13_18_a66e08_overlay_gt.webp"  alt="Vérité terrain" />
+<figcaption>Vérité terrain</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/unet_tu-mambaout_small/best_cases/best_2_iou0.984_24931113_tile_13_18_a66e08_overlay_pred.webp"  alt="Prédiction - IoU = 0.984" />
+<figcaption>Prédiction - IoU = 0.984</figcaption>
+</figure>
+<figcaption>Figure 4.17 — Meilleurs IoU pour Unet avec mambaout_small backbone sur le dataset de test</figcaption>
+</figure>
+
+<figure id="fig:unet_mambaoutsmall_worst_cases" data-latex-placement="H">
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/unet_tu-mambaout_small/worst_cases/worst_5_iou0.000_25001117_tile_3_9_5ba8f7_original.webp"  alt="Top1 - Original" />
+<figcaption>Top1 - Original</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/unet_tu-mambaout_small/worst_cases/worst_5_iou0.000_25001117_tile_3_9_5ba8f7_overlay_gt.webp"  alt="Vérité terrain" />
+<figcaption>Vérité terrain</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/unet_tu-mambaout_small/worst_cases/worst_5_iou0.000_25001117_tile_3_9_5ba8f7_overlay_pred.webp"  alt="Prédiction - IoU = 0.000" />
+<figcaption>Prédiction - IoU = 0.000</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/unet_tu-mambaout_small/worst_cases/worst_4_iou0.000_25001112_tile_9_1_991a94_original.webp"  alt="Top2 - Original" />
+<figcaption>Top2 - Original</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/unet_tu-mambaout_small/worst_cases/worst_4_iou0.000_25001112_tile_9_1_991a94_overlay_gt.webp"  alt="Vérité terrain" />
+<figcaption>Vérité terrain</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/unet_tu-mambaout_small/worst_cases/worst_4_iou0.000_25001112_tile_9_1_991a94_overlay_pred.webp"  alt="Prédiction - IoU = 0.000" />
+<figcaption>Prédiction - IoU = 0.000</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/unet_tu-mambaout_small/worst_cases/worst_3_iou0.000_24991122_tile_9_19_7ebcec_original.webp"  alt="Top3 - Original" />
+<figcaption>Top3 - Original</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/unet_tu-mambaout_small/worst_cases/worst_3_iou0.000_24991122_tile_9_19_7ebcec_overlay_gt.webp"  alt="Vérité terrain" />
+<figcaption>Vérité terrain</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/unet_tu-mambaout_small/worst_cases/worst_3_iou0.000_24991122_tile_9_19_7ebcec_overlay_pred.webp"  alt="Prédiction - IoU = 0.000" />
+<figcaption>Prédiction - IoU = 0.000</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/unet_tu-mambaout_small/worst_cases/worst_2_iou0.000_24951112_tile_4_13_2bd653_original.webp"  alt="Top4 - Original" />
+<figcaption>Top4 - Original</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/unet_tu-mambaout_small/worst_cases/worst_2_iou0.000_24951112_tile_4_13_2bd653_overlay_gt.webp"  alt="Vérité terrain" />
+<figcaption>Vérité terrain</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/unet_tu-mambaout_small/worst_cases/worst_2_iou0.000_24951112_tile_4_13_2bd653_overlay_pred.webp"  alt="Prédiction - IoU = 0.000" />
+<figcaption>Prédiction - IoU = 0.000</figcaption>
+</figure>
+<figcaption>Figure 4.18 — Pires IoU pour Unet avec mambaout_small sur le dataset de test</figcaption>
+</figure>
+
+<p>Les Figures <a href="#fig:upernet_efficientnetv2_s_best_cases" reference="fig:upernet_efficientnetv2_s_best_cases" reference-type="ref">4.19</a> et <a href="#fig:upernet_efficientnetv2_s_best_cases" reference="fig:upernet_efficientnetv2_s_best_cases" reference-type="ref">4.19</a> illustrent les performances extrêmes du modèle UPerNet + EfficientNetV2_RW_S sur le dataset de test.</p>
+<p>La Figure <a href="#fig:upernet_efficientnetv2_s_best_cases" reference="fig:upernet_efficientnetv2_s_best_cases" reference-type="ref">4.19</a> présente les 4 meilleures segmentations. Les résultats sont proches de ceux obtenus avec UNet + mambaout_small - trois images sur quatre sont identiques à celles de la Figure <a href="#fig:unet_mambaoutsmall_best_cases" reference="fig:unet_mambaoutsmall_best_cases" reference-type="ref">4.17</a>.</p>
+<p>La Figure <a href="#fig:upernet_efficientnetv2_s_best_cases" reference="fig:upernet_efficientnetv2_s_best_cases" reference-type="ref">4.19</a> montre les 4 pires cas. Là aussi, on retrouve trois images communes avec la Figure <a href="#fig:unet_mambaoutsmall_worst_cases" reference="fig:unet_mambaoutsmall_worst_cases" reference-type="ref">4.18</a>, confirmant que les deux modèles peinent sur les mêmes types de surfaces (toitures végétalisées et terrasses praticables). La quatrième image présente une toiture de type hangar où la vérité terrain semble questionnable, les critères de labellisation pourraient ne pas être adaptés à ce cas particulier.</p>
+<figure id="fig:upernet_efficientnetv2_s_best_cases" data-latex-placement="H">
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_5_iou0.999_24991116_tile_5_3_322356_original.webp"  alt="Top1 - Original" />
+<figcaption>Top1 - Original</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_5_iou0.999_24991116_tile_5_3_322356_overlay_gt.webp"  alt="Vérité terrain" />
+<figcaption>Vérité terrain</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_5_iou0.999_24991116_tile_5_3_322356_overlay_pred.webp"  alt="Prédiction - IoU = 0.999" />
+<figcaption>Prédiction - IoU = 0.999</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_4_iou0.987_24961121_tile_15_10_cc6553_original.webp"  alt="Top2 - Original" />
+<figcaption>Top2 - Original</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_4_iou0.987_24961121_tile_15_10_cc6553_overlay_gt.webp"  alt="Vérité terrain" />
+<figcaption>Vérité terrain</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_4_iou0.987_24961121_tile_15_10_cc6553_overlay_pred.webp"  alt="Prédiction - IoU = 0.987" />
+<figcaption>Prédiction - IoU = 0.987</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_3_iou0.987_24941121_tile_16_8_fd3555_original.webp"  alt="Top3 - Original" />
+<figcaption>Top3 - Original</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_3_iou0.987_24941121_tile_16_8_fd3555_overlay_gt.webp"  alt="Vérité terrain" />
+<figcaption>Vérité terrain</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_3_iou0.987_24941121_tile_16_8_fd3555_overlay_pred.webp"  alt="Prédiction - IoU = 0.987" />
+<figcaption>Prédiction - IoU = 0.987</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_2_iou0.984_24931113_tile_13_18_a66e08_original.webp"  alt="Top4 - Original" />
+<figcaption>Top4 - Original</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_2_iou0.984_24931113_tile_13_18_a66e08_overlay_gt.webp"  alt="Vérité terrain" />
+<figcaption>Vérité terrain</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_2_iou0.984_24931113_tile_13_18_a66e08_overlay_pred.webp"  alt="Prédiction - IoU = 0.984" />
+<figcaption>Prédiction - IoU = 0.984</figcaption>
+</figure>
+<figcaption>Figure 4.19 — Meilleurs IoU pour UPerNet avec EfficientNetV2-S sur le dataset de test</figcaption>
+</figure>
+
+<figure id="fig:upernet_efficientnetv2_s_worst_cases" data-latex-placement="H">
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_5_iou0.000_25001117_tile_3_9_5ba8f7_original.webp"  alt="Top1 - Original" />
+<figcaption>Top1 - Original</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_5_iou0.000_25001117_tile_3_9_5ba8f7_overlay_gt.webp"  alt="Vérité terrain" />
+<figcaption>Vérité terrain</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_5_iou0.000_25001117_tile_3_9_5ba8f7_overlay_pred.webp"  alt="Prédiction - IoU = 0.000" />
+<figcaption>Prédiction - IoU = 0.000</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_4_iou0.000_25001112_tile_9_1_991a94_original.webp"  alt="Top2 - Original" />
+<figcaption>Top2 - Original</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_4_iou0.000_25001112_tile_9_1_991a94_overlay_gt.webp"  alt="Vérité terrain" />
+<figcaption>Vérité terrain</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_4_iou0.000_25001112_tile_9_1_991a94_overlay_pred.webp"  alt="Prédiction - IoU = 0.000" />
+<figcaption>Prédiction - IoU = 0.000</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_3_iou0.000_24991122_tile_9_19_7ebcec_original.webp"  alt="Top3 - Original" />
+<figcaption>Top3 - Original</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_3_iou0.000_24991122_tile_9_19_7ebcec_overlay_gt.webp"  alt="Vérité terrain" />
+<figcaption>Vérité terrain</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_3_iou0.000_24991122_tile_9_19_7ebcec_overlay_pred.webp"  alt="Prédiction - IoU = 0.000" />
+<figcaption>Prédiction - IoU = 0.000</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_1_iou0.000_24931113_tile_19_19_52ccbb_original.webp"  alt="Top4 - Original" />
+<figcaption>Top4 - Original</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_1_iou0.000_24931113_tile_19_19_52ccbb_overlay_gt.webp"  alt="Vérité terrain" />
+<figcaption>Vérité terrain</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/upernet_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_1_iou0.000_24931113_tile_19_19_52ccbb_overlay_pred.webp"  alt="Prédiction - IoU = 0.000" />
+<figcaption>Prédiction - IoU = 0.000</figcaption>
+</figure>
+<figcaption>Figure 4.20 — Pires IoU pour UPerNet avec EfficientNetV2-S sur le dataset de test</figcaption>
+</figure>
+
+<p>Les Figures <a href="#fig:segformer_mambaoutbase_best_cases" reference="fig:segformer_mambaoutbase_best_cases" reference-type="ref">4.21</a> et <a href="#fig:segformer_mambaoutbase_worst_cases" reference="fig:segformer_mambaoutbase_worst_cases" reference-type="ref">4.22</a> montrent les cas extrêmes du modèle SegFormer + mambaout_base sur le dataset de test.</p>
+<p>La Figure <a href="#fig:segformer_mambaoutbase_best_cases" reference="fig:segformer_mambaoutbase_best_cases" reference-type="ref">4.21</a> présente les 4 meilleures segmentations. Ces images correspondent à celles qui donnent également d’excellents résultats avec les deux modèles précédents (UNet + mambaout_small et UPerNet + EfficientNetV2-S). Le modèle SegFormer détecte bien les toitures et même les petits éléments comme les cheminées.</p>
+<p>La Figure <a href="#fig:segformer_mambaoutbase_worst_cases" reference="fig:segformer_mambaoutbase_worst_cases" reference-type="ref">4.22</a> illustre les 4 pires performances. On retrouve exactement les mêmes images que pour le modèle précédent, avec les mêmes observations.</p>
+<figure id="fig:segformer_mambaoutbase_best_cases" data-latex-placement="H">
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/best_cases/best_5_iou0.997_24991116_tile_5_3_322356_original.webp"  alt="Top1 - Original" />
+<figcaption>Top1 - Original</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/best_cases/best_5_iou0.997_24991116_tile_5_3_322356_overlay_gt.webp"  alt="Vérité terrain" />
+<figcaption>Vérité terrain</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/best_cases/best_5_iou0.997_24991116_tile_5_3_322356_overlay_pred.webp"  alt="Prédiction - IoU = 0.997" />
+<figcaption>Prédiction - IoU = 0.997</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/best_cases/best_4_iou0.984_24931117_tile_18_5_f475a0_original.webp"  alt="Top2 - Original" />
+<figcaption>Top2 - Original</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/best_cases/best_4_iou0.984_24931117_tile_18_5_f475a0_overlay_gt.webp"  alt="Vérité terrain" />
+<figcaption>Vérité terrain</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/best_cases/best_4_iou0.984_24931117_tile_18_5_f475a0_overlay_pred.webp"  alt="Prédiction - IoU = 0.984" />
+<figcaption>Prédiction - IoU = 0.984</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/best_cases/best_3_iou0.984_24931113_tile_13_18_a66e08_original.webp"  alt="Top3 - Original" />
+<figcaption>Top3 - Original</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/best_cases/best_3_iou0.984_24931113_tile_13_18_a66e08_overlay_gt.webp"  alt="Vérité terrain" />
+<figcaption>Vérité terrain</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/best_cases/best_3_iou0.984_24931113_tile_13_18_a66e08_overlay_pred.webp"  alt="Prédiction - IoU = 0.984" />
+<figcaption>Prédiction - IoU = 0.984</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/best_cases/best_2_iou0.983_24961121_tile_15_10_cc6553_original.webp"  alt="Top4 - Original" />
+<figcaption>Top4 - Original</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/best_cases/best_2_iou0.983_24961121_tile_15_10_cc6553_overlay_gt.webp"  alt="Vérité terrain" />
+<figcaption>Vérité terrain</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/best_cases/best_2_iou0.983_24961121_tile_15_10_cc6553_overlay_pred.webp"  alt="Prédiction - IoU = 0.983" />
+<figcaption>Prédiction - IoU = 0.983</figcaption>
+</figure>
+<figcaption>Figure 4.21 — Meilleurs IoU pour SegFormer avec mambaout_base sur le dataset de test</figcaption>
+</figure>
+
+<figure id="fig:segformer_mambaoutbase_worst_cases" data-latex-placement="H">
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/worst_cases/worst_5_iou0.000_25001117_tile_3_9_5ba8f7_original.webp"  alt="Top1 - Original" />
+<figcaption>Top1 - Original</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/worst_cases/worst_5_iou0.000_25001117_tile_3_9_5ba8f7_overlay_gt.webp"  alt="Vérité terrain" />
+<figcaption>Vérité terrain</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/worst_cases/worst_5_iou0.000_25001117_tile_3_9_5ba8f7_overlay_pred.webp"  alt="Prédiction - IoU = 0.000" />
+<figcaption>Prédiction - IoU = 0.000</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/worst_cases/worst_4_iou0.000_25001112_tile_9_1_991a94_original.webp"  alt="Top2 - Original" />
+<figcaption>Top2 - Original</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/worst_cases/worst_4_iou0.000_25001112_tile_9_1_991a94_overlay_gt.webp"  alt="Vérité terrain" />
+<figcaption>Vérité terrain</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/worst_cases/worst_4_iou0.000_25001112_tile_9_1_991a94_overlay_pred.webp"  alt="Prédiction - IoU = 0.000" />
+<figcaption>Prédiction - IoU = 0.000</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/worst_cases/worst_3_iou0.000_24991122_tile_9_19_7ebcec_original.webp"  alt="Top3 - Original" />
+<figcaption>Top3 - Original</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/worst_cases/worst_3_iou0.000_24991122_tile_9_19_7ebcec_overlay_gt.webp"  alt="Vérité terrain" />
+<figcaption>Vérité terrain</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/worst_cases/worst_3_iou0.000_24991122_tile_9_19_7ebcec_overlay_pred.webp"  alt="Prédiction - IoU = 0.000" />
+<figcaption>Prédiction - IoU = 0.000</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/worst_cases/worst_1_iou0.000_24931113_tile_19_19_52ccbb_original.webp"  alt="Top4 - Original" />
+<figcaption>Top4 - Original</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/worst_cases/worst_1_iou0.000_24931113_tile_19_19_52ccbb_overlay_gt.webp"  alt="Vérité terrain" />
+<figcaption>Vérité terrain</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-mambaout_base/worst_cases/worst_1_iou0.000_24931113_tile_19_19_52ccbb_overlay_pred.webp"  alt="Prédiction - IoU = 0.000" />
+<figcaption>Prédiction - IoU = 0.000</figcaption>
+</figure>
+<figcaption>Figure 4.22 — Pires IoU pour SegFormer avec mambaout_base sur le dataset de test</figcaption>
+</figure>
+
+<p>Les Figures <a href="#fig:linknet_efficientnet_b5_best_cases" reference="fig:linknet_efficientnet_b5_best_cases" reference-type="ref">4.23</a> et <a href="#fig:linknet_efficientnet_b5_worst_cases" reference="fig:linknet_efficientnet_b5_worst_cases" reference-type="ref">4.24</a> illustrent les performances extrêmes du modèle LinkNet + EfficientNet-B5 sur le dataset de test.</p>
+<p>La Figure <a href="#fig:linknet_efficientnet_b5_best_cases" reference="fig:linknet_efficientnet_b5_best_cases" reference-type="ref">4.23</a> présente les 4 meilleures segmentations. Les images sont les mêmes que pour les modèles précédents, avec des performances similaires.</p>
+<p>La Figure <a href="#fig:linknet_efficientnet_b5_worst_cases" reference="fig:linknet_efficientnet_b5_worst_cases" reference-type="ref">4.24</a> montre les 4 cas les plus problématiques. Le premier cas présente une zone sans annotation dans la vérité terrain, mais cette absence semble discutable, ce qui explique pourquoi le modèle segmente cette partie. Le deuxième cas montre une petite portion de toiture qui n’est pas correctement détectée. Les deux dernières images, déjà rencontrées avec les modèles précédents, correspondent aux toitures végétalisées et terrasses praticables qui posent systématiquement problème.</p>
+<figure id="fig:linknet_efficientnet_b5_best_cases" data-latex-placement="H">
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/best_cases/best_5_iou0.997_24991116_tile_5_3_322356_original.webp"  alt="Top1 - Original" />
+<figcaption>Top1 - Original</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/best_cases/best_5_iou0.997_24991116_tile_5_3_322356_overlay_gt.webp"  alt="Vérité terrain" />
+<figcaption>Vérité terrain</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/best_cases/best_5_iou0.997_24991116_tile_5_3_322356_overlay_pred.webp"  alt="Prédiction - IoU = 0.997" />
+<figcaption>Prédiction - IoU = 0.997</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/best_cases/best_4_iou0.992_24931113_tile_13_18_a66e08_original.webp"  alt="Top2 - Original" />
+<figcaption>Top2 - Original</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/best_cases/best_4_iou0.992_24931113_tile_13_18_a66e08_overlay_gt.webp"  alt="Vérité terrain" />
+<figcaption>Vérité terrain</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/best_cases/best_4_iou0.992_24931113_tile_13_18_a66e08_overlay_pred.webp"  alt="Prédiction - IoU = 0.992" />
+<figcaption>Prédiction - IoU = 0.992</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/best_cases/best_3_iou0.986_24931117_tile_18_5_f475a0_original.webp"  alt="Top3 - Original" />
+<figcaption>Top3 - Original</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/best_cases/best_3_iou0.986_24931117_tile_18_5_f475a0_overlay_gt.webp"  alt="Vérité terrain" />
+<figcaption>Vérité terrain</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/best_cases/best_3_iou0.986_24931117_tile_18_5_f475a0_overlay_pred.webp"  alt="Prédiction - IoU = 0.986" />
+<figcaption>Prédiction - IoU = 0.986</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/best_cases/best_2_iou0.986_24961121_tile_15_10_cc6553_original.webp"  alt="Top4 - Original" />
+<figcaption>Top4 - Original</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/best_cases/best_2_iou0.986_24961121_tile_15_10_cc6553_overlay_gt.webp"  alt="Vérité terrain" />
+<figcaption>Vérité terrain</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/best_cases/best_2_iou0.986_24961121_tile_15_10_cc6553_overlay_pred.webp"  alt="Prédiction - IoU = 0.986" />
+<figcaption>Prédiction - IoU = 0.986</figcaption>
+</figure>
+<figcaption>Figure 4.23 — Meilleurs IoU pour LinkNet avec EfficientNet-B5 sur le dataset de test</figcaption>
+</figure>
+
+<figure id="fig:linknet_efficientnet_b5_worst_cases" data-latex-placement="H">
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/worst_cases/worst_5_iou0.000_25051119_tile_18_9_ba3084_original.webp"  alt="Top1 - Original" />
+<figcaption>Top1 - Original</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/worst_cases/worst_5_iou0.000_25051119_tile_18_9_ba3084_overlay_gt.webp"  alt="Vérité terrain" />
+<figcaption>Vérité terrain</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/worst_cases/worst_5_iou0.000_25051119_tile_18_9_ba3084_overlay_pred.webp"  alt="Prédiction - IoU = 0.000" />
+<figcaption>Prédiction - IoU = 0.000</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/worst_cases/worst_4_iou0.000_25011125_tile_14_5_cdc6dc_original.webp"  alt="Top2 - Original" />
+<figcaption>Top2 - Original</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/worst_cases/worst_4_iou0.000_25011125_tile_14_5_cdc6dc_overlay_gt.webp"  alt="Vérité terrain" />
+<figcaption>Vérité terrain</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/worst_cases/worst_4_iou0.000_25011125_tile_14_5_cdc6dc_overlay_pred.webp"  alt="Prédiction - IoU = 0.000" />
+<figcaption>Prédiction - IoU = 0.000</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/worst_cases/worst_3_iou0.000_25011115_tile_17_4_52cb42_original.webp"  alt="Top3 - Original" />
+<figcaption>Top3 - Original</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/worst_cases/worst_3_iou0.000_25011115_tile_17_4_52cb42_overlay_gt.webp"  alt="Vérité terrain" />
+<figcaption>Vérité terrain</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/worst_cases/worst_3_iou0.000_25011115_tile_17_4_52cb42_overlay_pred.webp"  alt="Prédiction - IoU = 0.000" />
+<figcaption>Prédiction - IoU = 0.000</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/worst_cases/worst_2_iou0.000_25001117_tile_3_9_5ba8f7_original.webp"  alt="Top4 - Original" />
+<figcaption>Top4 - Original</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/worst_cases/worst_2_iou0.000_25001117_tile_3_9_5ba8f7_overlay_gt.webp"  alt="Vérité terrain" />
+<figcaption>Vérité terrain</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/linknet_timm-efficientnet-b5/worst_cases/worst_2_iou0.000_25001117_tile_3_9_5ba8f7_overlay_pred.webp"  alt="Prédiction - IoU = 0.000" />
+<figcaption>Prédiction - IoU = 0.000</figcaption>
+</figure>
+<figcaption>Figure 4.24 — Pires IoU pour LinkNet avec EfficientNet-B5 sur le dataset de test</figcaption>
+</figure>
+
+<p>Les Figures <a href="#fig:unetplusplus_efficientnetv2_s_best_cases" reference="fig:unetplusplus_efficientnetv2_s_best_cases" reference-type="ref">4.25</a> et <a href="#fig:unetplusplus_efficientnetv2_s_worst_cases" reference="fig:unetplusplus_efficientnetv2_s_worst_cases" reference-type="ref">4.26</a> montrent les cas extrêmes du modèle UNet++ + EfficientNetV2-RW-S sur le dataset de test.</p>
+<p>La Figure <a href="#fig:unetplusplus_efficientnetv2_s_best_cases" reference="fig:unetplusplus_efficientnetv2_s_best_cases" reference-type="ref">4.25</a> présente les 4 meilleures segmentations. Les images sont similaires à celles des modèles précédents, avec des performances très légèrement en retrait.</p>
+<p>La Figure <a href="#fig:unetplusplus_efficientnetv2_s_worst_cases" reference="fig:unetplusplus_efficientnetv2_s_worst_cases" reference-type="ref">4.26</a> illustre les 4 pires performances. Les iamges ont déjà été rencontrées avec les modèles précédents, et les observations restent les mêmes.</p>
+<figure id="fig:unetplusplus_efficientnetv2_s_best_cases" data-latex-placement="H">
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_5_iou0.989_24931113_tile_13_18_a66e08_original.webp"  alt="Top1 - Original" />
+<figcaption>Top1 - Original</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_5_iou0.989_24931113_tile_13_18_a66e08_overlay_gt.webp"  alt="Vérité terrain" />
+<figcaption>Vérité terrain</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_5_iou0.989_24931113_tile_13_18_a66e08_overlay_pred.webp"  alt="Prédiction - IoU = 0.989" />
+<figcaption>Prédiction - IoU = 0.989</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_4_iou0.988_24961121_tile_15_10_cc6553_original.webp"  alt="Top2 - Original" />
+<figcaption>Top2 - Original</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_4_iou0.988_24961121_tile_15_10_cc6553_overlay_gt.webp"  alt="Vérité terrain" />
+<figcaption>Vérité terrain</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_4_iou0.988_24961121_tile_15_10_cc6553_overlay_pred.webp"  alt="Prédiction - IoU = 0.988" />
+<figcaption>Prédiction - IoU = 0.988</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_3_iou0.987_24931117_tile_18_5_f475a0_original.webp"  alt="Top3 - Original" />
+<figcaption>Top3 - Original</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_3_iou0.987_24931117_tile_18_5_f475a0_overlay_gt.webp"  alt="Vérité terrain" />
+<figcaption>Vérité terrain</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_3_iou0.987_24931117_tile_18_5_f475a0_overlay_pred.webp"  alt="Prédiction - IoU = 0.987" />
+<figcaption>Prédiction - IoU = 0.987</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_2_iou0.982_25061124_tile_11_8_51e0da_original.webp"  alt="Top4 - Original" />
+<figcaption>Top4 - Original</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_2_iou0.982_25061124_tile_11_8_51e0da_overlay_gt.webp"  alt="Vérité terrain" />
+<figcaption>Vérité terrain</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/best_cases/best_2_iou0.982_25061124_tile_11_8_51e0da_overlay_pred.webp"  alt="Prédiction - IoU = 0.982" />
+<figcaption>Prédiction - IoU = 0.982</figcaption>
+</figure>
+<figcaption>Figure 4.25 — Meilleurs IoU pour Unet++ avec EfficientNetV2-S sur le dataset de test</figcaption>
+</figure>
+
+<figure id="fig:unetplusplus_efficientnetv2_s_worst_cases" data-latex-placement="H">
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_4_iou0.000_25011115_tile_17_4_52cb42_original.webp"  alt="Top1 - Original" />
+<figcaption>Top1 - Original</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_4_iou0.000_25011115_tile_17_4_52cb42_overlay_gt.webp"  alt="Vérité terrain" />
+<figcaption>Vérité terrain</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_4_iou0.000_25011115_tile_17_4_52cb42_overlay_pred.webp"  alt="Prédiction - IoU = 0.000" />
+<figcaption>Prédiction - IoU = 0.000</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_3_iou0.000_25001117_tile_3_9_5ba8f7_original.webp"  alt="Top2 - Original" />
+<figcaption>Top2 - Original</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_3_iou0.000_25001117_tile_3_9_5ba8f7_overlay_gt.webp"  alt="Vérité terrain" />
+<figcaption>Vérité terrain</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_3_iou0.000_25001117_tile_3_9_5ba8f7_overlay_pred.webp"  alt="Prédiction - IoU = 0.000" />
+<figcaption>Prédiction - IoU = 0.000</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_2_iou0.000_24951112_tile_4_13_2bd653_original.webp"  alt="Top3 - Original" />
+<figcaption>Top3 - Original</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_2_iou0.000_24951112_tile_4_13_2bd653_overlay_gt.webp"  alt="Vérité terrain" />
+<figcaption>Vérité terrain</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_2_iou0.000_24951112_tile_4_13_2bd653_overlay_pred.webp"  alt="Prédiction - IoU = 0.000" />
+<figcaption>Prédiction - IoU = 0.000</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_1_iou0.000_24931113_tile_19_19_52ccbb_original.webp"  alt="Top4 - Original" />
+<figcaption>Top4 - Original</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_1_iou0.000_24931113_tile_19_19_52ccbb_overlay_gt.webp"  alt="Vérité terrain" />
+<figcaption>Vérité terrain</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/unetplusplus_tu-efficientnetv2_rw_s.ra2_in1k/worst_cases/worst_1_iou0.000_24931113_tile_19_19_52ccbb_overlay_pred.webp"  alt="Prédiction - IoU = 0.000" />
+<figcaption>Prédiction - IoU = 0.000</figcaption>
+</figure>
+<figcaption>Figure 4.26 — Pires IoU pour Unet++ avec EfficientNetV2-S sur le dataset de test</figcaption>
+</figure>
+
+<p>Les Figures <a href="#fig:segformer_regnety_080_best_cases" reference="fig:segformer_regnety_080_best_cases" reference-type="ref">4.27</a> et <a href="#fig:segformer_regnety_080_worst_cases" reference="fig:segformer_regnety_080_worst_cases" reference-type="ref">4.28</a> montrent les performances extrêmes du modèle SegFormer + RegNetY-080 sur le dataset de test.</p>
+<p>La Figure <a href="#fig:segformer_regnety_080_best_cases" reference="fig:segformer_regnety_080_best_cases" reference-type="ref">4.27</a> présente les 4 meilleures segmentations. On retrouve les mêmes cas de succès que pour les modèles précédents.</p>
+<p>La Figure <a href="#fig:segformer_regnety_080_worst_cases" reference="fig:segformer_regnety_080_worst_cases" reference-type="ref">4.28</a> illustre les 4 cas les plus difficiles. Les images correspondent largement à celles déjà analysées, avec une exception notable : la troisième image montre une toiture végétalisée et une terrasse praticable sans annotation dans la vérité terrain. Le modèle a segmenté une partie de la terrasse, ce qui soulève la difficulté pour l’algorithme de distinguer les surfaces praticables des autres types de toitures.</p>
+<figure id="fig:segformer_regnety_080_best_cases" data-latex-placement="H">
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/best_cases/best_5_iou0.998_24991116_tile_5_3_322356_original.webp"  alt="Top1 - Original" />
+<figcaption>Top1 - Original</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/best_cases/best_5_iou0.998_24991116_tile_5_3_322356_overlay_gt.webp"  alt="Vérité terrain" />
+<figcaption>Vérité terrain</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/best_cases/best_5_iou0.998_24991116_tile_5_3_322356_overlay_pred.webp"  alt="Prédiction - IoU = 0.998" />
+<figcaption>Prédiction - IoU = 0.998</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/best_cases/best_4_iou0.989_24941121_tile_16_8_fd3555_original.webp"  alt="Top2 - Original" />
+<figcaption>Top2 - Original</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/best_cases/best_4_iou0.989_24941121_tile_16_8_fd3555_overlay_gt.webp"  alt="Vérité terrain" />
+<figcaption>Vérité terrain</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/best_cases/best_4_iou0.989_24941121_tile_16_8_fd3555_overlay_pred.webp"  alt="Prédiction - IoU = 0.989" />
+<figcaption>Prédiction - IoU = 0.989</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/best_cases/best_3_iou0.987_24961121_tile_15_10_cc6553_original.webp"  alt="Top3 - Original" />
+<figcaption>Top3 - Original</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/best_cases/best_3_iou0.987_24961121_tile_15_10_cc6553_overlay_gt.webp"  alt="Vérité terrain" />
+<figcaption>Vérité terrain</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/best_cases/best_3_iou0.987_24961121_tile_15_10_cc6553_overlay_pred.webp"  alt="Prédiction - IoU = 0.987" />
+<figcaption>Prédiction - IoU = 0.987</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/best_cases/best_2_iou0.985_24931117_tile_18_5_f475a0_original.webp"  alt="Top4 - Original" />
+<figcaption>Top4 - Original</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/best_cases/best_2_iou0.985_24931117_tile_18_5_f475a0_overlay_gt.webp"  alt="Vérité terrain" />
+<figcaption>Vérité terrain</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/best_cases/best_2_iou0.985_24931117_tile_18_5_f475a0_overlay_pred.webp"  alt="Prédiction - IoU = 0.985" />
+<figcaption>Prédiction - IoU = 0.985</figcaption>
+</figure>
+<figcaption>Figure 4.27 — Meilleurs IoU pour SegFormer avec RegNetY-080 sur le dataset de test</figcaption>
+</figure>
+
+<figure id="fig:segformer_regnety_080_worst_cases" data-latex-placement="H">
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/worst_cases/worst_5_iou0.000_25011115_tile_17_4_52cb42_original.webp"  alt="Top1 - Original" />
+<figcaption>Top1 - Original</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/worst_cases/worst_5_iou0.000_25011115_tile_17_4_52cb42_overlay_gt.webp"  alt="Vérité terrain" />
+<figcaption>Vérité terrain</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/worst_cases/worst_5_iou0.000_25011115_tile_17_4_52cb42_overlay_pred.webp"  alt="Prédiction - IoU = 0.000" />
+<figcaption>Prédiction - IoU = 0.000</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/worst_cases/worst_4_iou0.000_25001117_tile_3_9_5ba8f7_original.webp"  alt="Top2 - Original" />
+<figcaption>Top2 - Original</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/worst_cases/worst_4_iou0.000_25001117_tile_3_9_5ba8f7_overlay_gt.webp"  alt="Vérité terrain" />
+<figcaption>Vérité terrain</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/worst_cases/worst_4_iou0.000_25001117_tile_3_9_5ba8f7_overlay_pred.webp"  alt="Prédiction - IoU = 0.000" />
+<figcaption>Prédiction - IoU = 0.000</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/worst_cases/worst_3_iou0.000_24991122_tile_9_19_7ebcec_original.webp"  alt="Top3 - Original" />
+<figcaption>Top3 - Original</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/worst_cases/worst_3_iou0.000_24991122_tile_9_19_7ebcec_overlay_gt.webp"  alt="Vérité terrain" />
+<figcaption>Vérité terrain</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/worst_cases/worst_3_iou0.000_24991122_tile_9_19_7ebcec_overlay_pred.webp"  alt="Prédiction - IoU = 0.000" />
+<figcaption>Prédiction - IoU = 0.000</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/worst_cases/worst_1_iou0.000_24931113_tile_19_19_52ccbb_original.webp"  alt="Top4 - Original" />
+<figcaption>Top4 - Original</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/worst_cases/worst_1_iou0.000_24931113_tile_19_19_52ccbb_overlay_gt.webp"  alt="Vérité terrain" />
+<figcaption>Vérité terrain</figcaption>
+</figure>
+<figure>
+<img src="../assets/figures/ch4/kfold_ensembles/segformer_tu-regnety_080.ra3_in1k/worst_cases/worst_1_iou0.000_24931113_tile_19_19_52ccbb_overlay_pred.webp"  alt="Prédiction - IoU = 0.000" />
+<figcaption>Prédiction - IoU = 0.000</figcaption>
+</figure>
+<figcaption>Figure 4.28 — Pires IoU pour SegFormer avec RegNetY-080 sur le dataset de test</figcaption>
+</figure>
+
+<p>Pour conclure cette section, l’évaluation des modèles sélectionnés donne des résultats satisfaisants. Les modèles parviennent à obtenir de bonnes performances sur le dataset de test.</p>
+<p>L’analyse révèle cependant plusieurs limites dans le dataset. Premièrement, certaines images contiennent des toitures qui représentent moins de 1% de la surface totale de l’image, ce qui complique l’apprentissage du modèle. Deuxièmement, les toitures végétalisées et les terrasses praticables restent difficiles à distinguer des autres types de surfaces. Le dataset ne contient probablement pas assez d’exemples de ces cas particuliers pour permettre au modèle d’apprendre à les différencier correctement. Troisièmement, les exemples négatifs (images sans annotation) ont été inclus pour que le modèle apprenne à identifier ce qui ne constitue pas une surface libre. Le nombre de ces exemples négatifs semble insuffisant car tous les modèles rencontrent des difficultés sur ces cas.</p>
+<h2 id="application-sur-un-quartier">Application sur un quartier</h2>
+<p>La zone de <a href="../glossary.html#gloss-hepia"><span data-acronym-label="hepia" data-acronym-form="singular+abbrv">HEPIA</span></a> a été choisie pour tester les modèles sur un secteur qui n’a pas servi à l’entraînement.</p>
+<h3 id="analyse-qualitative-1">Analyse qualitative</h3>
+<p>La Figure <a href="#fig:quartier_hepia_original" reference="fig:quartier_hepia_original" reference-type="ref">4.29</a> montre les images originales de la zone <a href="../glossary.html#gloss-hepia"><span data-acronym-label="hepia" data-acronym-form="singular+abbrv">HEPIA</span></a>. La Figure <a href="#fig:quartier_hepia_masque_toitures" reference="fig:quartier_hepia_masque_toitures" reference-type="ref">4.30</a> présente les mêmes images avec un masque appliqué sur les toitures (couche toitures <a href="../glossary.html#gloss-sitg"><span data-acronym-label="sitg" data-acronym-form="singular+abbrv">SITG</span></a>). Cette étape permet au modèle de traiter uniquement les surfaces de toitures en ignorant le reste du paysage urbain.</p>
+<p>Les zones identifiées comme toitures (Figure <a href="#fig:quartier_hepia_masque_toitures" reference="fig:quartier_hepia_masque_toitures" reference-type="ref">4.30</a>) ne sont pas toutes évidentes. En bas à gauche, une cour intérieure est identifiée comme toiture. En bas à droite, une terrasse praticable est aussi classée comme toiture, ce qui techniquement est correct car il y a bien un bâtiment dessous, mais cela complique la tâche de segmentation. L’image contient également des balcons et terrasses qui permettront d’évaluer le comportement des modèles sur ce type de surface.</p>
+<figure id="fig:quartier_hepia_original" data-latex-placement="H">
+
+<figcaption>Figure 4.29 — Zone <a href="../glossary.html#gloss-hepia"><span data-acronym-label="hepia" data-acronym-form="singular+abbrv">HEPIA</span></a> - Original</figcaption>
+</figure>
+
+<figure id="fig:quartier_hepia_masque_toitures" data-latex-placement="H">
+
+<figcaption>Figure 4.30 — Zone <a href="../glossary.html#gloss-hepia"><span data-acronym-label="hepia" data-acronym-form="singular+abbrv">HEPIA</span></a> - Masque couche toitures</figcaption>
+</figure>
+
+<p>La Figure <a href="#fig:quartier_hepia_modele_unet_mambaoutsmall" reference="fig:quartier_hepia_modele_unet_mambaoutsmall" reference-type="ref">4.31</a> présente les résultats obtenus avec le modèle UNet + MambaOutSmall sur la zone <a href="../glossary.html#gloss-hepia"><span data-acronym-label="hepia" data-acronym-form="singular+abbrv">HEPIA</span></a>.</p>
+<p>Le modèle identifie correctement les balcons et terrases lorsqu’ils ont des éléments tel que des chaises, table ou autre mobilier typique des balcons. En revanche, les toitures praticables (zone à droite) et cours intérieures (en bas à gauche) sont mal interprétées - le modèle les classe comme surfaces libres alors qu’elles ne le sont pas.</p>
+<p>Les obstacles tel que les verrières, panneaux solaires, gaines, cheminées, lucarnes, acrotères, bords de toiture, arbres et autres végétaux sont bien détectées et ignorées par le modèle lors de la segmentation.</p>
+<p>La gestion des ombrages reste variable. Dans la partie gauche de l’image, les ombrages légèrs sont correctement traitées. Par contre, dans la zone centrale droite où l’ombrage est plus marqué, le modèle a des difficultés à identifier correctement l’intégralité des espaces libres.</p>
+<figure id="fig:quartier_hepia_modele_unet_mambaoutsmall" data-latex-placement="H">
+
+<figcaption>Figure 4.31 — Zone <a href="../glossary.html#gloss-hepia"><span data-acronym-label="hepia" data-acronym-form="singular+abbrv">HEPIA</span></a> - Unet avec MambaOutSmall</figcaption>
+</figure>
+
+<p>La Figure <a href="#fig:quartier_hepia_modele_upernet_efficientnetv2_s" reference="fig:quartier_hepia_modele_upernet_efficientnetv2_s" reference-type="ref">4.32</a> montre les résultats du modèle UPerNet + EfficientNetV2-S sur la zone <a href="../glossary.html#gloss-hepia"><span data-acronym-label="hepia" data-acronym-form="singular+abbrv">HEPIA</span></a>.</p>
+<p>Les observations sont similaires au modèle précédent concernant les terrasses et cours intérieures.</p>
+<p>Les obstacles comme les verrières, panneaux solaires, gaines, cheminées, lucarnes, acrotères, bords de toiture, arbres et végétation sont correctement détectés. Le modèle les exclut bien lors de la segmentation.</p>
+<p>La gestion des ombrages est moins performante qu’avec UNet + MambaOutSmall. UPerNet peine à identifier les espaces libres dans toutes les zones ombragées, peu importe l’intensité de l’ombre.</p>
+<figure id="fig:quartier_hepia_modele_upernet_efficientnetv2_s" data-latex-placement="H">
+
+<figcaption>Figure 4.32 — Zone <a href="../glossary.html#gloss-hepia"><span data-acronym-label="hepia" data-acronym-form="singular+abbrv">HEPIA</span></a> - UPerNet avec EfficientNetV2-S</figcaption>
+</figure>
+
+<p>La Figure <a href="#fig:quartier_hepia_modele_segformer_mambaoutbase" reference="fig:quartier_hepia_modele_segformer_mambaoutbase" reference-type="ref">4.33</a> montre les résultats du modèle SegFormer + MambaOutBase sur la zone <a href="../glossary.html#gloss-hepia"><span data-acronym-label="hepia" data-acronym-form="singular+abbrv">HEPIA</span></a>.</p>
+<p>Les observations sont similaires aux modèles précédent concernant les terrasses et cours intérieures.</p>
+<p>Les obstacles comme les verrières, panneaux solaires, gaines, cheminées, lucarnes, acrotères, bords de toiture, arbres et végétation sont correctement détectés. Le modèle les exclut bien lors de la segmentation.</p>
+<p>La gestion des ombrages est bien meilleure que pour les deux modèles précédents. SegFormer parvient à mieux identifier les espaces libres dans les zones ombragées, même lorsque l’ombre est plus marquée.</p>
+<figure id="fig:quartier_hepia_modele_segformer_mambaoutbase" data-latex-placement="H">
+
+<figcaption>Figure 4.33 — Zone <a href="../glossary.html#gloss-hepia"><span data-acronym-label="hepia" data-acronym-form="singular+abbrv">HEPIA</span></a> - SegFormer avec MambaOutBase</figcaption>
+</figure>
+
+<p>La Figure <a href="#fig:quartier_hepia_modele_linknet_efficientnet_b5" reference="fig:quartier_hepia_modele_linknet_efficientnet_b5" reference-type="ref">4.34</a> illustre les résultats obtenus avec LinkNet + EfficientNet-B5 sur la zone <a href="../glossary.html#gloss-hepia"><span data-acronym-label="hepia" data-acronym-form="singular+abbrv">HEPIA</span></a>.</p>
+<p>La cour intérieure de <a href="../glossary.html#gloss-hepia"><span data-acronym-label="hepia" data-acronym-form="singular+abbrv">HEPIA</span></a> (en bas à droite) est partiellement segmentée. Le modèle semble capable de distinguer en partie les surfaces praticables des autres toitures. Toutefois, la cour intérieure située en bas à gauche est incorrectement identifiée comme surface libre.</p>
+<p>Les obstacles comme les verrières, panneaux solaires, gaines, cheminées, lucarnes, acrotères, bords de toiture, arbres et végétation sont correctement détectés et exclus de la segmentation. La précision de détection paraît supérieure aux modèles précédents.</p>
+<p>Le traitement des ombrages est efficace. Le modèle identifie correctement les espaces libres dans les zones ombragées, y compris celles avec des ombres prononcées.</p>
+<figure id="fig:quartier_hepia_modele_linknet_efficientnet_b5" data-latex-placement="H">
+
+<figcaption>Figure 4.34 — Zone <a href="../glossary.html#gloss-hepia"><span data-acronym-label="hepia" data-acronym-form="singular+abbrv">HEPIA</span></a> - LinkNet avec EfficientNet-B5</figcaption>
+</figure>
+
+<p>La Figure <a href="#fig:quartier_hepia_modele_unetplusplus_efficientnetv2_s" reference="fig:quartier_hepia_modele_unetplusplus_efficientnetv2_s" reference-type="ref">4.35</a> montre les résultats du modèle UNet++ + EfficientNetV2-S sur la zone <a href="../glossary.html#gloss-hepia"><span data-acronym-label="hepia" data-acronym-form="singular+abbrv">HEPIA</span></a>.</p>
+<p>Les observations restent identiques pour les terrasses et cours intérieures. Les obstacles présents sur les toitures sont généralement bien identifiés.</p>
+<p>Le modèle gère correctement les ombres légères. En revanche, quand l’ombrage devient plus intense, il peine à détecter les espaces libres.</p>
+<figure id="fig:quartier_hepia_modele_unetplusplus_efficientnetv2_s" data-latex-placement="H">
+
+<figcaption>Figure 4.35 — Zone <a href="../glossary.html#gloss-hepia"><span data-acronym-label="hepia" data-acronym-form="singular+abbrv">HEPIA</span></a> - UNet++ avec EfficientNetV2-S</figcaption>
+</figure>
+
+<p>La Figure <a href="#fig:quartier_hepia_modele_segformer_regnety_080" reference="fig:quartier_hepia_modele_segformer_regnety_080" reference-type="ref">4.36</a> présente les résultats du modèle SegFormer + RegNetY-080 sur la zone <a href="../glossary.html#gloss-hepia"><span data-acronym-label="hepia" data-acronym-form="singular+abbrv">HEPIA</span></a>.</p>
+<p>La segmentation des petits obstacles sur les toitures semble moins précise comparé aux autres modèles. La gestion des ombrages est correcte, mais le modèle a des difficultés à identifier les espaces libres dans les zones ombragées, surtout lorsque l’ombre est plus marquée. Les remarques sur les terrasses et cours intérieures restent similaires aux autres modèles.</p>
+<figure id="fig:quartier_hepia_modele_segformer_regnety_080" data-latex-placement="H">
+
+<figcaption>Figure 4.36 — Zone <a href="../glossary.html#gloss-hepia"><span data-acronym-label="hepia" data-acronym-form="singular+abbrv">HEPIA</span></a> - SegFormer avec RegNetY-080</figcaption>
+</figure>
+
+<h4 id="synthèse-et-analyse-des-résultats">Synthèse et analyse des résultats</h4>
+<p>Le Tableau <a href="#tab:quartier_hepia_comparatif_modeles" reference="tab:quartier_hepia_comparatif_modeles" reference-type="ref">4.9</a> résume les performances des six modèles testés sur la zone <a href="../glossary.html#gloss-hepia"><span data-acronym-label="hepia" data-acronym-form="singular+abbrv">HEPIA</span></a>, en se basant sur quatre critères : la détection des balcons/terrasses, la segmentation des toitures praticables, la détection des obstacles et la gestion des ombrages.</p>
+<table id="tab:quartier_hepia_comparatif_modeles">
+<caption>Tableau 4.9 — Tableau comparatif des performances des 6 modèles sur la zone <a href="../glossary.html#gloss-hepia"><span data-acronym-label="hepia" data-acronym-form="singular+abbrv">HEPIA</span></a></caption>
+<thead>
+<tr>
+<th style="text-align: left;">Modèle</th>
+<th style="text-align: left;"><span>Balcons<br />
+Terrasses</span></th>
+<th style="text-align: left;"><span>Toitures<br />
+praticables</span></th>
+<th style="text-align: left;"><span>Petits<br />
+obstacles</span></th>
+<th style="text-align: left;"><span>Gestion<br />
+ombrages</span></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">UNet + MambaOutSmall</td>
+<td style="text-align: left;"><span class="math inline">\(+\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(--\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(+/-\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(-\)</span></td>
+</tr>
+<tr>
+<td style="text-align: left;">UPerNet + EfficientNetV2-S</td>
+<td style="text-align: left;"><span class="math inline">\(+\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(-\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(+\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(--\)</span></td>
+</tr>
+<tr>
+<td style="text-align: left;">SegFormer + MambaOutBase</td>
+<td style="text-align: left;"><span class="math inline">\(+\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(--\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(+\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(+\)</span></td>
+</tr>
+<tr>
+<td style="text-align: left;">LinkNet + EfficientNet-B5</td>
+<td style="text-align: left;"><span class="math inline">\(+\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(+/-\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(++\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(+\)</span></td>
+</tr>
+<tr>
+<td style="text-align: left;">UNet++ + EfficientNetV2-S</td>
+<td style="text-align: left;"><span class="math inline">\(+\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(-\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(+/-\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(-\)</span></td>
+</tr>
+<tr>
+<td style="text-align: left;">SegFormer + RegNetY-080</td>
+<td style="text-align: left;"><span class="math inline">\(+\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(-\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(-\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(+/-\)</span></td>
+</tr>
+</tbody>
+</table>
+
+<p>Légende du Tableau <a href="#tab:quartier_hepia_comparatif_modeles" reference="tab:quartier_hepia_comparatif_modeles" reference-type="ref">4.9</a> :</p>
+<ul>
+<li>
+<p>++ : Très bonne performance</p>
+</li>
+<li>
+<ul>
+<li>: Bonne performance</li>
+</ul>
+</li>
+<li>
+<p>+/− : Performance mitigée</p>
+</li>
+<li>
+<p>− : Performance insuffisante</p>
+</li>
+<li>
+<p>−− : Très mauvaise performance</p>
+</li>
+</ul>
+<p>Pour conclure cette section, il est important de noter que ces images n’ont pas de vérité terrain associée. L’évaluation reste donc subjective. L’objectif est d’observer comment les modèles se comportent sur des données qu’ils n’ont jamais vues. Cette capacité de généralisation est cruciale pour juger de leur robustesse en conditions réelles.</p>
+<p>Cette évaluation qualitative permet aussi de révéler les biais présents dans le dataset d’entraînement. Malgré le soin apporté à sa création, ce dataset reste imparfait et les modèles reproduisent ses limites dans leurs prédictions.</p>
+<p>Un problème récurrent concerne les toitures praticables. Ces surfaces, bien que classées comme toitures par <a href="../glossary.html#gloss-sitg"><span data-acronym-label="sitg" data-acronym-form="singular+abbrv">SITG</span></a> (ce qui est techniquement correct puisqu’elles correspondent au dernier étage d’un bâtiment), posent problème aux modèles. La distinction entre surfaces praticables et non praticables reste difficile. L’ajout d’exemples supplémentaires dans le dataset pourrait améliorer les performances sur ce point.</p>
+<p>Les balcons montrent aussi des résultats variables. Ceux avec du mobilier sont correctement identifiés par tous les modèles, mais les balcons vides sont souvent confondus avec des toitures. Cela confirme le besoin de diversifier les exemples dans le dataset.</p>
+<p>La détection des petits obstacles donne des résultats encourageants. Les modèles identifient correctement la plupart des éléments comme les verrières, panneaux solaires, gaines, cheminées, lucarnes et acrotères. LinkNet + EfficientNet-B5 se démarque avec une précision supérieure sur ces petits éléments.</p>
+<p>Les performances sur les zones ombragées dépassent les attentes, particulièrement pour SegFormer + MambaOutBase et LinkNet + EfficientNet-B5. Ces modèles détectent les espaces libres même sous ombrage marqué, ce qui est essentiel pour traiter des images aériennes. Le choix de la combinaison encodeur-décodeur s’avère déterminant : EfficientNet-B5 avec UPerNet gère mal les ombrages, alors qu’avec LinkNet les résultats sont excellents.</p>
+<p>Au final, LinkNet + EfficientNet-B5 semble être le modèle le plus performant. Il excelle dans la détection des petits obstacles et la gestion des ombrages, tout en maintenant de bonnes performances sur les autres éléments.</p>
+<h2 id="synthèse-2">Synthèse</h2>
+<p>Ce chapitre a évalué 93 configurations de modèles de segmentation pour identifier les espaces libres sur les toitures du canton de Genève. L’analyse comparative montre des performances globalement homogènes entre les architectures, avec plusieurs enseignements utiles pour un déploiement pratique.</p>
+<h3 id="performances-générales-et-robustesse-des-modèles">Performances générales et robustesse des modèles</h3>
+<p>L’évaluation quantitative utilise un dataset de test indépendant de 89 images. Les modèles obtiennent des performances élevées et stables. Les valeurs d’IoU vont de 0,619 à 0,741, avec une moyenne de 0,708 et un écart-type de 0,024. Cette faible dispersion indique que les architectures sont bien adaptées à cette tâche.</p>
+<p>Les modèles de Segmentation Models PyTorch (SMP) surpassent les variantes YOLOv12, notamment sur les métriques F1-score et mAP@0.95. Les modèles SMP gèrent mieux les faux positifs et faux négatifs, ce qui est essentiel pour une segmentation précise des contours.</p>
+<h3 id="architectures-optimales-et-compromis-performance-complexité">Architectures optimales et compromis performance-complexité</h3>
+<p>L’analyse du front de Pareto montre que les gains deviennent marginaux au-delà de 25 millions de paramètres. L’ajout de complexité n’apporte plus grand-chose. Trois configurations ressortent comme solutions optimales :</p>
+<ul>
+<li>
+<p>LinkNet + EfficientNet-B5 : IoU de 0,741 avec 28,75M paramètres, les meilleures performances absolues</p>
+</li>
+<li>
+<p>SegFormer + RegNetY-032 : IoU de 0,735 avec 18,87M paramètres, un bon équilibre performance-efficacité</p>
+</li>
+<li>
+<p>UNet++ + EfficientNet-B3 : IoU de 0,735 avec 13,63M paramètres, privilégiant la compacité</p>
+</li>
+</ul>
+<p>La stratégie d’ensemble k-fold améliore ces modèles de 0,9% à 2,0% en moyenne par rapport à la moyenne des folds. Cette approche renforce la robustesse pour une utilisation opérationnelle.</p>
+<h3 id="analyse-qualitative-et-limites-identifiées">Analyse qualitative et limites identifiées</h3>
+<p>Les tests sur la zone <a href="../glossary.html#gloss-hepia"><span data-acronym-label="hepia" data-acronym-form="singular+abbrv">HEPIA</span></a> montrent une bonne capacité de généralisation mais aussi des limites. Les modèles détectent bien les obstacles classiques (panneaux solaires, cheminées, verrières, végétation) et fonctionnent correctement sur les zones avec ombrage léger à modéré.</p>
+<p>Deux défis principaux subsistent :</p>
+<ul>
+<li>
+<p>Surfaces praticables : Les toitures végétalisées et terrasses praticables sont mal classées, probablement par manque d’exemples dans le dataset d’entraînement</p>
+</li>
+<li>
+<p>Ombrages intenses : Les performances chutent sous ombrage marqué, avec des variations selon la combinaison encodeur-décodeur</p>
+</li>
+</ul>
+<h3 id="recommandations-pour-le-déploiement-opérationnel">Recommandations pour le déploiement opérationnel</h3>
+<p>Cette évaluation permet de formuler plusieurs recommandations pratiques :</p>
+<h5 id="choix-du-modèle">Choix du modèle</h5>
+<p>LinkNet + EfficientNet-B5 est la configuration optimale. Elle combine les meilleures performances IoU (0,741), une excellente gestion des ombrages et une détection précise des petits obstacles. L’utilisation d’un ensemble k-fold maximise la robustesse.</p>
+<h5 id="améliorations-du-dataset">Améliorations du dataset</h5>
+<p>Le dataset devrait être enrichi avec plus d’exemples de toitures végétalisées, terrasses praticables et zones fortement ombragées. Augmenter le nombre d’exemples négatifs réduirait aussi les faux positifs. Les images contenant très peu d’informations pertinentes posent également problème - les modèles ont du mal à apprendre dans ces conditions et ces cas devraient être mieux équilibrés dans le dataset.</p>
+<h5 id="stratégie-de-déploiement">Stratégie de déploiement</h5>
+<p>L’ensemble k-fold multiplie le temps de calcul par cinq mais reste justifié pour les applications critiques nécessitant une haute fiabilité. Pour les applications avec contraintes temporelles, on peut utiliser le meilleur modèle individuel de chaque configuration.</p>
+<h5 id="perspectives-damélioration">Perspectives d’amélioration</h5>
+<p>L’augmentation de données ciblée sur les cas difficiles (surfaces praticables, ombrages intenses) et le pré-traitement pour normaliser l’éclairage sont des pistes prometteuses.</p>
+<p>Cette évaluation confirme que la segmentation des espaces libres sur toitures est suffisamment mature pour un déploiement opérationnel. Les axes d’amélioration identifiés permettront d’optimiser la robustesse du système en conditions réelles.</p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Retour en haut de la page
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.top", "navigation.indexes", "navigation.path", "toc.follow", "content.code.copy"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copi\u00e9 dans le presse-papier", "clipboard.copy": "Copier dans le presse-papier", "search.result.more.one": "1 de plus sur cette page", "search.result.more.other": "# de plus sur cette page", "search.result.none": "Aucun document trouv\u00e9", "search.result.one": "1 document trouv\u00e9", "search.result.other": "# documents trouv\u00e9s", "search.result.placeholder": "Taper pour d\u00e9marrer la recherche", "search.result.term.missing": "Non trouv\u00e9", "select.version": "S\u00e9lectionner la version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

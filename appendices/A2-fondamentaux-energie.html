@@ -1,0 +1,1480 @@
+
+<!doctype html>
+<html lang="fr" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Face à l’urgence climatique et la nécessité de réduire notre dépendance aux énergies fossiles, l’énergie solaire représente une solution prometteuse pour…">
+      
+      
+      
+        <link rel="canonical" href="https://denisiglesiasgarcia.github.io/hesso-master-rooftops-latex/appendices/A2-fondamentaux-energie.html">
+      
+      
+        <link rel="prev" href="A1-fondamentaux-ml.html">
+      
+      
+        <link rel="next" href="../lists.html">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../img/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>A2. Fondamentaux énergie - Identification des parties utiles des toitures pour le solaire par machine learning</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  
+  
+  
+  
+  
+
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="A2. Fondamentaux énergie">
+  <meta property="og:description" content="Face à l’urgence climatique et la nécessité de réduire notre dépendance aux énergies fossiles, l’énergie solaire représente une solution prometteuse pour…">
+  <meta property="og:image" content="https://denisiglesiasgarcia.github.io/hesso-master-rooftops-latex/img/social-card-v2.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Identification des parties utiles des toitures pour le solaire par Machine Learning — Travail de Master HES-SO, Denis Iglesias Garcia">
+  <meta property="og:url" content="https://denisiglesiasgarcia.github.io/hesso-master-rooftops-latex/appendices/A2-fondamentaux-energie.html">
+  <meta property="og:site_name" content="Identification des parties utiles des toitures pour le solaire par machine learning">
+  <meta property="og:locale" content="fr_FR">
+
+  <meta name="author" content="Denis Iglesias Garcia">
+  <meta property="article:author" content="https://www.linkedin.com/in/denisiglesiasgarcia/">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="A2. Fondamentaux énergie">
+  <meta name="twitter:description" content="Face à l’urgence climatique et la nécessité de réduire notre dépendance aux énergies fossiles, l’énergie solaire représente une solution prometteuse pour…">
+  <meta name="twitter:image" content="https://denisiglesiasgarcia.github.io/hesso-master-rooftops-latex/img/social-card-v2.png">
+
+  
+
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#chap:fondamentaux_energie" class="md-skip">
+          Aller au contenu
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="En-tête">
+    <a href="../index.html" title="Identification des parties utiles des toitures pour le solaire par machine learning" class="md-header__button md-logo" aria-label="Identification des parties utiles des toitures pour le solaire par machine learning" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Identification des parties utiles des toitures pour le solaire par machine learning
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              A2. Fondamentaux énergie
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Mode sombre"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Mode sombre" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Mode clair"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Mode clair" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Rechercher" placeholder="Rechercher" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Recherche">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Effacer" aria-label="Effacer" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initialisation de la recherche
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/denisiglesiasgarcia/hesso-master-rooftops-latex" title="Aller au dépôt" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Onglets" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../index.html" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Accueil
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../chapters/00-resume.html" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Résumé
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../chapters/01-introduction.html" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Chapitres
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="A1-fondamentaux-ml.html" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Annexes
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../lists.html" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Listes
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../bibliography.html" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Bibliographie
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../glossary.html" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Glossaire
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../index.html" title="Identification des parties utiles des toitures pour le solaire par machine learning" class="md-nav__button md-logo" aria-label="Identification des parties utiles des toitures pour le solaire par machine learning" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Identification des parties utiles des toitures pour le solaire par machine learning
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/denisiglesiasgarcia/hesso-master-rooftops-latex" title="Aller au dépôt" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Accueil
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapters/00-resume.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Résumé
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chapitres
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Chapitres
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapters/01-introduction.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    1. Introduction
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapters/02-analysis.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2. Analyse
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapters/03-modele.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3. Modèle
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapters/04-implementation.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    4. Implémentation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapters/05-conclusions.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    5. Conclusions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Annexes
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Annexes
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="A1-fondamentaux-ml.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    A1. Fondamentaux ML
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    A2. Fondamentaux énergie
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="A2-fondamentaux-energie.html" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    A2. Fondamentaux énergie
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table des matières">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table des matières
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#cadastre-solaire" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cadastre solaire
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Cadastre solaire">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#motivation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Motivation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#méthodologie-14" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Méthodologie
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#applications-concrètes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Applications concrètes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#limites-et-perspectives" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Limites et perspectives
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rayonnement-solaire" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rayonnement solaire
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Rayonnement solaire">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#principe-du-rayonnement-solaire" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Principe du rayonnement solaire
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#facteurs-influençant-le-rayonnement-solaire" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Facteurs influençant le rayonnement solaire
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Facteurs influençant le rayonnement solaire">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#orientation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Orientation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#inclinaison" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Inclinaison
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lists.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Listes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bibliography.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bibliographie
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../glossary.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossaire
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table des matières">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table des matières
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#cadastre-solaire" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cadastre solaire
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Cadastre solaire">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#motivation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Motivation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#méthodologie-14" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Méthodologie
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#applications-concrètes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Applications concrètes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#limites-et-perspectives" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Limites et perspectives
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rayonnement-solaire" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rayonnement solaire
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Rayonnement solaire">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#principe-du-rayonnement-solaire" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Principe du rayonnement solaire
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#facteurs-influençant-le-rayonnement-solaire" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Facteurs influençant le rayonnement solaire
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Facteurs influençant le rayonnement solaire">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#orientation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Orientation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#inclinaison" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Inclinaison
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+                
+
+
+
+  
+
+
+  <nav class="md-path" aria-label="Navigation" >
+    <ol class="md-path__list">
+      
+        
+  
+  
+    <li class="md-path__item">
+      <a href="../index.html" class="md-path__link">
+        
+  <span class="md-ellipsis">
+    Accueil
+  </span>
+
+      </a>
+    </li>
+  
+
+      
+      
+        
+  
+  
+    
+    
+      <li class="md-path__item">
+        <a href="A1-fondamentaux-ml.html" class="md-path__link">
+          
+  <span class="md-ellipsis">
+    Annexes
+  </span>
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ol>
+  </nav>
+
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="chap:fondamentaux_energie">Fondamentaux d’énergie solaire</h1>
+<p>Face à l’urgence climatique et la nécessité de réduire notre dépendance aux énergies fossiles, l’énergie solaire représente une solution prometteuse pour la production d’énergie renouvelable en milieu urbain. Les toitures des bâtiments offrent des surfaces importantes et souvent inexploitées pour l’installation de panneaux solaires, qu’ils soient photovoltaïques pour la production d’électricité ou thermiques pour la production d’eau chaude.</p>
+<p>L’exploitation optimale de ces surfaces requiert une compréhension des principes fondamentaux de l’énergie solaire et des contraintes techniques associées. Ce chapitre vise à présenter les concepts essentiels pour appréhender les enjeux du cadastre solaire et de la détection automatique des surfaces disponibles sur les toits.</p>
+<h2 id="cadastre-solaire">Cadastre solaire</h2>
+<p>Ce chapitre va explorer ce qu’est un cadastre solaire ainsi que ses applications.</p>
+<h3 id="motivation">Motivation</h3>
+<p>Le cadastre solaire &#91;<a href="../bibliography.html#ref-noauthor_solar_2022">116</a>&#93; représente la quantité de rayonnement solaire que reçoit un quartier, une région ou un territoire. Son application principale est d’évaluer le potentiel solaire des toitures et des façades pour déterminer la faisabilité d’installations photovoltaïques ou thermiques. Cet outil devient de plus en plus crucial dans la planification énergétique territoriale et la transition vers les énergies renouvelables.</p>
+<p>Grâce aux technologies modernes de cartographie et de modélisation 3D, les cadastres solaires permettent aujourd’hui d’obtenir des données précises sur l’ensoleillement de chaque bâtiment. Ces informations sont particulièrement utiles pour :</p>
+<ul>
+<li>
+<p>Les propriétaires souhaitant évaluer le potentiel solaire de leur bien</p>
+</li>
+<li>
+<p>Les collectivités cherchant à planifier leur transition énergétique</p>
+</li>
+<li>
+<p>Les professionnels du solaire pour identifier rapidement les sites prometteurs</p>
+</li>
+<li>
+<p>Les urbanistes dans la conception de nouveaux quartiers durables</p>
+</li>
+</ul>
+<h3 id="méthodologie-14">Méthodologie</h3>
+<p>La création d’un cadastre solaire repose sur plusieurs éléments clés. Tout d’abord, un modèle numérique de terrain (<a href="../glossary.html#gloss-mnt"><span data-acronym-label="mnt" data-acronym-form="singular+abbrv">MNT</span></a>) et un modèle numérique de surface (<a href="../glossary.html#gloss-mns"><span data-acronym-label="mns" data-acronym-form="singular+abbrv">MNS</span></a>) sont utilisés pour créer une représentation 3D précise du territoire. Ces données sont ensuite combinées avec :</p>
+<ul>
+<li>
+<p>Des données climatiques locales sur plusieurs années</p>
+</li>
+<li>
+<p>Les ombrages dus au relief et aux bâtiments environnants</p>
+</li>
+<li>
+<p>L’orientation et l’inclinaison des surfaces</p>
+</li>
+<li>
+<p>La présence d’obstacles sur les toits (cheminées, fenêtres, etc.)</p>
+</li>
+</ul>
+<p>D’autres méthodologies existent pour créer un cadastre solaire pour une région, ceux-ci sont détaillés dans le chapitre “<a href="../chapters/02-analysis.html#chap:analysis" reference="chap:analysis" reference-type="ref">2</a>”.</p>
+<h3 id="applications-concrètes">Applications concrètes</h3>
+<p>Le cadastre solaire trouve de nombreuses applications pratiques. Il permet notamment de :</p>
+<ul>
+<li>
+<p>Identifier les surfaces les plus adaptées aux installations solaires</p>
+</li>
+<li>
+<p>Optimiser le placement des panneaux solaires</p>
+</li>
+<li>
+<p>Identifier les zones intéressantes en fonction de l’ensoleillement pour l’agriculture</p>
+</li>
+</ul>
+<p>Grâce à ces informations, les décideurs peuvent élaborer des stratégies énergétiques plus efficaces et les particuliers peuvent prendre des décisions éclairées concernant l’installation de panneaux solaires.</p>
+<h3 id="limites-et-perspectives">Limites et perspectives</h3>
+<p>Bien que très utile, le cadastre solaire présente certaines limites. La précision des données dépend de la qualité des relevés topographiques et des modèles 3D utilisés. De plus, les évolutions du bâti (nouvelles constructions, modifications) nécessitent des mises à jour régulières. Cependant, les avancées technologiques, notamment en matière d’imagerie satellite et de modélisation, permettent d’améliorer constamment la précision et la fiabilité de ces outils.</p>
+<h2 id="rayonnement-solaire">Rayonnement solaire</h2>
+<p>Ce chapitre explore le fonctionnement du soleil et les défis pour profiter au mieux de cette énergie abondante.</p>
+<h3 id="principe-du-rayonnement-solaire">Principe du rayonnement solaire</h3>
+<p>Le rayonnement solaire &#91;<a href="../bibliography.html#ref-energie_plus_ensoleillement_2010">117</a>&#93; qui atteint la surface terrestre provient de l’énergie émise par le Soleil, avec une puissance initiale de 1367 W/m² à l’entrée de l’atmosphère (constante solaire). Le rayonnement global qui parvient à la surface terrestre se décompose en trois composantes essentielles :</p>
+<ul>
+<li>
+<p>Le rayonnement direct : Il s’agit des rayons solaires qui traversent l’atmosphère sans déviation. Son intensité varie selon l’angle d’incidence des rayons, l’épaisseur d’atmosphère traversée et les conditions atmosphériques</p>
+</li>
+<li>
+<p>Le rayonnement diffus : Résultant de la diffusion par l’atmosphère (nuages, aérosols, molécules d’air), il peut représenter jusqu’à 100% du rayonnement global par temps couvert</p>
+</li>
+<li>
+<p>Le rayonnement réfléchi : Correspond à la fraction du rayonnement réfléchie par l’environnement. Son intensité dépend de la nature des surfaces (neige : 80-90%, végétation : 10-25%) et de leur géométrie.</p>
+</li>
+</ul>
+<figure id="fig:type_rayonnement" data-latex-placement="H">
+<img src="../assets/figures/A2/A2_rayonnement.webp" style="width:50.0%"  alt="Figure 7.1 — Rayonnement direct, diffus et réfléchi [117]" />
+<figcaption>Figure 7.1 — Rayonnement direct, diffus et réfléchi <span class="citation" data-cites="energie_plus_ensoleillement_2010">[<a href="../bibliography.html#ref-energie_plus_ensoleillement_2010" role="doc-biblioref">117</a>]</span></figcaption>
+</figure>
+
+<p>Comme on peut le voir sur la Figure <a href="#fig:type_rayonnement" reference="fig:type_rayonnement" reference-type="ref">7.1</a>, ces trois types de rayonnement interagissent différemment avec une surface. Ensemble, ils représentent l’énergie totale que peuvent exploiter les applications solaires, avec une puissance pouvant aller jusqu’à 1000 W/m² au sol quand le ciel est bien dégagé. Cette puissance n’est pas fixe - elle change selon le moment de l’année, l’heure de la journée, où l’on se trouve sur Terre et la météo. Comprendre ces variations est clé pour bien dimensionner les installations solaires.</p>
+<p>Le rayonnement solaire ne sera pas identique toute l’année, comme indiqué dans la Figure <a href="#fig:hauteur_soleil" reference="fig:hauteur_soleil" reference-type="ref">7.2</a></p>
+<figure id="fig:hauteur_soleil" data-latex-placement="H">
+<img src="../assets/figures/A2/A2_hauteur_soleil.webp" style="width:50.0%"  alt="Figure 7.2 — Rayonnement direct, diffus et réfléchi [117]" />
+<figcaption>Figure 7.2 — Rayonnement direct, diffus et réfléchi <span class="citation" data-cites="energie_plus_ensoleillement_2010">[<a href="../bibliography.html#ref-energie_plus_ensoleillement_2010" role="doc-biblioref">117</a>]</span></figcaption>
+</figure>
+
+<p>Dans l’hémisphère nord, le soleil va de l’est à l’ouest pendant une journée type. La course ne sera pas identique tout au long de l’année, son hauteur est variable selon la saison. En été, le soleil sera plus haut, tandis que pendant l’hiver le soleil sera plus bas. Ce concept est essentiel pour capter au mieux cette énergie gratuite et indispensable à la vie.</p>
+<h3 id="facteurs-influençant-le-rayonnement-solaire">Facteurs influençant le rayonnement solaire</h3>
+<p>L’efficacité d’une installation solaire dépend de plusieurs facteurs critiques qui déterminent la quantité d’énergie captée. Les principaux sont :</p>
+<ul>
+<li>
+<p>L’orientation</p>
+</li>
+<li>
+<p>L’inclinaison</p>
+</li>
+<li>
+<p>Obstacles (ombrages)</p>
+</li>
+</ul>
+<h4 id="orientation">Orientation</h4>
+<p>Pour tirer le meilleur parti du soleil dans l’hémisphère nord, il faut orienter les panneaux vers le sud. Comme on peut le voir sur la Figure <a href="#fig:hauteur_soleil" reference="fig:hauteur_soleil" reference-type="ref">7.2</a>, le soleil fait sa course d’est en ouest en passant par le sud. C’est pourquoi les orientations sud-est et sud-ouest, bien que produisant un peu moins d’énergie, restent de bonnes options. En revanche, une orientation nord n’a pas vraiment d’intérêt car les panneaux ne capteraient pas de rayonnement direct du soleil.</p>
+<h4 id="inclinaison">Inclinaison</h4>
+<p>L’angle d’inclinaison optimal dépend principalement de la latitude du lieu d’installation. Pour une installation à Genève, la hauteur du soleil en été est d’environ 67 degrés &#91;<a href="../bibliography.html#ref-european_commission_jrc_nodate">118</a>&#93; au midi solaire (azimut 0 degrés). L’angle optimal se situe entre 30 et 35 degrés &#91;<a href="../bibliography.html#ref-noauthor_anwendung_nodate">119</a>&#93;.</p>
+<p>L’inclinaison peut être adaptée selon les objectifs de production saisonnière. Pour maximiser la production en été, une faible inclinaison (20-30°) est préférable car elle permet de mieux capter le soleil lorsqu’il est haut dans le ciel. À l’inverse, une inclinaison plus importante (45-60°) est plus efficace en hiver quand le soleil est bas. Comme le montre la Figure <a href="#fig:warmeundstrom" reference="fig:warmeundstrom" reference-type="ref">7.3</a>, l’angle d’inclinaison influence également la captation des différentes composantes du rayonnement solaire. Un panneau horizontal (0 degrés) va principalement capter le rayonnement direct, alors qu’un panneau vertical (90 degrés) va mieux équilibrer la captation entre rayonnement direct et diffus. C’est pourquoi une inclinaison intermédiaire de 30-35 degrés représente un compromis optimal, permettant de bénéficier efficacement des trois composantes du rayonnement tout au long de l’année.</p>
+<figure id="fig:warmeundstrom" data-latex-placement="H">
+<img src="../assets/figures/A2/A2_warmeundstrom.webp" style="width:50.0%"  alt="Figure 7.3 — Influence de l’inclinaison et orientation des panneaux solaires [119]" />
+<figcaption>Figure 7.3 — Influence de l’inclinaison et orientation des panneaux solaires <span class="citation" data-cites="noauthor_anwendung_nodate">[<a href="../bibliography.html#ref-noauthor_anwendung_nodate" role="doc-biblioref">119</a>]</span></figcaption>
+</figure>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Retour en haut de la page
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.top", "navigation.indexes", "navigation.path", "toc.follow", "content.code.copy"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copi\u00e9 dans le presse-papier", "clipboard.copy": "Copier dans le presse-papier", "search.result.more.one": "1 de plus sur cette page", "search.result.more.other": "# de plus sur cette page", "search.result.none": "Aucun document trouv\u00e9", "search.result.one": "1 document trouv\u00e9", "search.result.other": "# documents trouv\u00e9s", "search.result.placeholder": "Taper pour d\u00e9marrer la recherche", "search.result.term.missing": "Non trouv\u00e9", "select.version": "S\u00e9lectionner la version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

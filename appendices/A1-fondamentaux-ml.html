@@ -1,0 +1,3316 @@
+
+<!doctype html>
+<html lang="fr" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Ce chapitre va permettre d’avoir les bases nécessaires pour comprendre ce qu’est le machine learning, ses limites et ses applications.">
+      
+      
+      
+        <link rel="canonical" href="https://denisiglesiasgarcia.github.io/hesso-master-rooftops-latex/appendices/A1-fondamentaux-ml.html">
+      
+      
+        <link rel="prev" href="../chapters/05-conclusions.html">
+      
+      
+        <link rel="next" href="A2-fondamentaux-energie.html">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../img/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>A1. Fondamentaux ML - Identification des parties utiles des toitures pour le solaire par machine learning</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  
+  
+  
+  
+  
+
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="A1. Fondamentaux ML">
+  <meta property="og:description" content="Ce chapitre va permettre d’avoir les bases nécessaires pour comprendre ce qu’est le machine learning, ses limites et ses applications.">
+  <meta property="og:image" content="https://denisiglesiasgarcia.github.io/hesso-master-rooftops-latex/img/social-card-v2.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Identification des parties utiles des toitures pour le solaire par Machine Learning — Travail de Master HES-SO, Denis Iglesias Garcia">
+  <meta property="og:url" content="https://denisiglesiasgarcia.github.io/hesso-master-rooftops-latex/appendices/A1-fondamentaux-ml.html">
+  <meta property="og:site_name" content="Identification des parties utiles des toitures pour le solaire par machine learning">
+  <meta property="og:locale" content="fr_FR">
+
+  <meta name="author" content="Denis Iglesias Garcia">
+  <meta property="article:author" content="https://www.linkedin.com/in/denisiglesiasgarcia/">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="A1. Fondamentaux ML">
+  <meta name="twitter:description" content="Ce chapitre va permettre d’avoir les bases nécessaires pour comprendre ce qu’est le machine learning, ses limites et ses applications.">
+  <meta name="twitter:image" content="https://denisiglesiasgarcia.github.io/hesso-master-rooftops-latex/img/social-card-v2.png">
+
+  
+
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#chap:fondamentaux_ml" class="md-skip">
+          Aller au contenu
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="En-tête">
+    <a href="../index.html" title="Identification des parties utiles des toitures pour le solaire par machine learning" class="md-header__button md-logo" aria-label="Identification des parties utiles des toitures pour le solaire par machine learning" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Identification des parties utiles des toitures pour le solaire par machine learning
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              A1. Fondamentaux ML
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Mode sombre"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Mode sombre" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Mode clair"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Mode clair" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Rechercher" placeholder="Rechercher" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Recherche">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Effacer" aria-label="Effacer" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initialisation de la recherche
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/denisiglesiasgarcia/hesso-master-rooftops-latex" title="Aller au dépôt" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Onglets" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../index.html" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Accueil
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../chapters/00-resume.html" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Résumé
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../chapters/01-introduction.html" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Chapitres
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="A1-fondamentaux-ml.html" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Annexes
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../lists.html" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Listes
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../bibliography.html" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Bibliographie
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../glossary.html" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Glossaire
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../index.html" title="Identification des parties utiles des toitures pour le solaire par machine learning" class="md-nav__button md-logo" aria-label="Identification des parties utiles des toitures pour le solaire par machine learning" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Identification des parties utiles des toitures pour le solaire par machine learning
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/denisiglesiasgarcia/hesso-master-rooftops-latex" title="Aller au dépôt" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Accueil
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapters/00-resume.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Résumé
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chapitres
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Chapitres
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapters/01-introduction.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    1. Introduction
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapters/02-analysis.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2. Analyse
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapters/03-modele.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3. Modèle
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapters/04-implementation.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    4. Implémentation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapters/05-conclusions.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    5. Conclusions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Annexes
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Annexes
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    A1. Fondamentaux ML
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="A1-fondamentaux-ml.html" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    A1. Fondamentaux ML
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table des matières">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table des matières
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduction-au-machine-learning" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Introduction au machine learning
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Introduction au machine learning">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#applications" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Applications
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#neurones-artificiels" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Neurones artificiels
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#réseau-de-neurones" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Réseau de neurones
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#subsec:evaluation_performance_modele" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Évaluation de la performance d’un modèle
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#données-12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Données
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Données">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#images" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Images
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#subsec:annexe_ortophotos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Orthophotos
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Orthophotos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#orthophoto-dynamique" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Orthophoto dynamique
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#orthomosaïque" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Orthomosaïque
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#true-orthophoto" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        “True orthophoto”
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fournisseurs-dorthophotos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fournisseurs d’orthophotos
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nuage-de-points-lidar" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Nuage de points LiDAR
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Nuage de points LiDAR">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#composants-matériels-dun-système-lidar" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Composants matériels d’un système LiDAR
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#le-capteur-lidar" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Le capteur LiDAR
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#post-traitement-des-données-ponctuelles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Post-traitement des données ponctuelles
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#retours-lidar" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Retours LiDAR
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#attributs-de-point-lidar" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Attributs de point LiDAR
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#données-de-nuages-de-points" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Données de nuages de points
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fournisseur-de-données-lidar" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fournisseur de données LiDAR
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#subsec:annexe_donnees_vectorielles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Données vectorielles
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#machine-learning-appliqué-aux-images-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Machine learning appliqué aux images
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Machine learning appliqué aux images">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#classification-dimages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Classification d’images
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#détection-dobjets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Détection d’objets
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#subsec:segmentation_image" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Segmentation d’image
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#subsec:evaluation_des_performances" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Évaluation des performances
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Évaluation des performances">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#intersection-sur-lunion-iou-et-moyenne-de-lintersection-sur-lunion-miou" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Intersection sur l’union (IoU) et moyenne de l’intersection sur l’union (mIoU)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#average-precision-ap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Average precision (AP)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mean-average-precision-map" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mean average precision (mAP)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pixel-accuracy-pa" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pixel accuracy (PA)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#panoptic-quality-pq" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Panoptic Quality (PQ)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#métriques-par-application" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Métriques par application
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="A2-fondamentaux-energie.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    A2. Fondamentaux énergie
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lists.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Listes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bibliography.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bibliographie
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../glossary.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossaire
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table des matières">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table des matières
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduction-au-machine-learning" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Introduction au machine learning
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Introduction au machine learning">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#applications" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Applications
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#neurones-artificiels" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Neurones artificiels
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#réseau-de-neurones" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Réseau de neurones
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#subsec:evaluation_performance_modele" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Évaluation de la performance d’un modèle
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#données-12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Données
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Données">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#images" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Images
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#subsec:annexe_ortophotos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Orthophotos
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Orthophotos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#orthophoto-dynamique" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Orthophoto dynamique
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#orthomosaïque" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Orthomosaïque
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#true-orthophoto" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        “True orthophoto”
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fournisseurs-dorthophotos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fournisseurs d’orthophotos
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nuage-de-points-lidar" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Nuage de points LiDAR
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Nuage de points LiDAR">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#composants-matériels-dun-système-lidar" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Composants matériels d’un système LiDAR
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#le-capteur-lidar" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Le capteur LiDAR
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#post-traitement-des-données-ponctuelles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Post-traitement des données ponctuelles
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#retours-lidar" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Retours LiDAR
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#attributs-de-point-lidar" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Attributs de point LiDAR
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#données-de-nuages-de-points" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Données de nuages de points
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fournisseur-de-données-lidar" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fournisseur de données LiDAR
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#subsec:annexe_donnees_vectorielles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Données vectorielles
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#machine-learning-appliqué-aux-images-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Machine learning appliqué aux images
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Machine learning appliqué aux images">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#classification-dimages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Classification d’images
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#détection-dobjets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Détection d’objets
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#subsec:segmentation_image" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Segmentation d’image
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#subsec:evaluation_des_performances" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Évaluation des performances
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Évaluation des performances">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#intersection-sur-lunion-iou-et-moyenne-de-lintersection-sur-lunion-miou" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Intersection sur l’union (IoU) et moyenne de l’intersection sur l’union (mIoU)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#average-precision-ap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Average precision (AP)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mean-average-precision-map" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mean average precision (mAP)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pixel-accuracy-pa" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pixel accuracy (PA)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#panoptic-quality-pq" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Panoptic Quality (PQ)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#métriques-par-application" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Métriques par application
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+                
+
+
+
+  
+
+
+  <nav class="md-path" aria-label="Navigation" >
+    <ol class="md-path__list">
+      
+        
+  
+  
+    <li class="md-path__item">
+      <a href="../index.html" class="md-path__link">
+        
+  <span class="md-ellipsis">
+    Accueil
+  </span>
+
+      </a>
+    </li>
+  
+
+      
+      
+        
+  
+  
+    
+    
+      <li class="md-path__item">
+        <a href="A1-fondamentaux-ml.html" class="md-path__link">
+          
+  <span class="md-ellipsis">
+    Annexes
+  </span>
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ol>
+  </nav>
+
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="chap:fondamentaux_ml">Principes fondamentaux de machine learning</h1>
+<p>Ce chapitre va permettre d’avoir les bases nécessaires pour comprendre ce qu’est le machine learning, ses limites et ses applications.</p>
+<h2 id="introduction-au-machine-learning">Introduction au machine learning</h2>
+<p>L’apprentissage automatique (machine learning) est une branche de l’intelligence artificielle qui permet à un programme d’automatiser l’apprentissage à partir d’exemples, sans être explicitement programmé pour accomplir une tâche.</p>
+<p>Les principaux algorithmes de machine learning peuvent se diviser en 2 catégories :</p>
+<ul>
+<li>
+<p>Apprentissage supervisé : le modèle est entraîné avec des données étiquetées et il doit apprendre à reconnaître les patrons pour prédire les résultats futurs. Quelques exemples :</p>
+</li>
+<li>
+<p>Réseaux de neurones : est comme une équipe de détectives qui examinent ensemble une image pour décider si elle représente un chien, un chat ou un arbre, en se basant sur les caractéristiques qu’ils ont appris à reconnaître.</p>
+</li>
+<li>
+<p>Régression linéaire : vise à prédire une valeur continue (par exemple, la température) en fonction de variables explicites.</p>
+</li>
+<li>
+<p>Les arbres de décision : un algorithme qui utilise des règles pour prendre des décisions en fonction de caractéristiques des données.</p>
+</li>
+<li>
+<p>Apprentissage non supervisé : le modèle est entraîné avec des données non étiquetées et il doit apprendre à identifier les groupes ou les tendances dans les données. Quelques exemples :</p>
+</li>
+<li>
+<p>L’agrégation (cluster) : un algorithme qui vise à grouper les données en fonction de leurs similarités.</p>
+</li>
+<li>
+<p>Autoencodeurs : réseau de neurones qui permettent la compression (encodeur) et décompression (décodeur) de données</p>
+</li>
+<li>
+<p>Analyse en composantes principales (PCA) : permet de réduire une grande base de données de caractéristiques par exemple de vins (degré d’alcool, la couleur, l’acidité, etc.) à seulement deux ou trois caractéristiques les plus importantes qui expliquent le plus de variabilité dans les vins, pour faciliter leur comparaison et leur classification.</p>
+</li>
+</ul>
+<p>La figure <a href="#fig:A1_01_resume_machine_learning_supervise" reference="fig:A1_01_resume_machine_learning_supervise" reference-type="ref">6.1</a> permet d’avoir un aperçu des phases de création d’un modèle de machine learning à partir d’un algorithme supervisé.</p>
+<figure id="fig:A1_01_resume_machine_learning_supervise" data-latex-placement="H">
+<img src="../assets/figures/A1/A1_01_resume_machine_learning_supervise.webp" style="width:100.0%"  alt="Figure 6.1 — Résumé du machine learning supervisé" />
+<figcaption>Figure 6.1 — Résumé du machine learning supervisé</figcaption>
+</figure>
+
+<p>Un détail important pour la compréhension de la Figure <a href="#fig:A1_01_resume_machine_learning_supervise" reference="fig:A1_01_resume_machine_learning_supervise" reference-type="ref">6.1</a> est la différence entre modèle et algorithme :</p>
+<ul>
+<li>
+<p>Un modèle est une implémentation spécifique d’un algorithme, adaptée à un jeu de données ou un problème particulier.</p>
+</li>
+<li>
+<p>Un algorithme est un ensemble d’instructions ou une procédure utilisée pour entraîner un modèle.</p>
+</li>
+</ul>
+<p>Une bonne manière de faire la différence est de voir l’algorithme comme la recette de cuisine et le modèle comme le gâteau. La recette (algorithme) fournit les instructions pour combiner les ingrédients, mais le gâteau (modèle) est le résultat physique de la mise en œuvre de la recette.</p>
+<p>La Figure <a href="#fig:A1_01_resume_machine_learning_supervise" reference="fig:A1_01_resume_machine_learning_supervise" reference-type="ref">6.1</a> va servir de fil conducteur pour expliquer les principales phases :</p>
+<ol>
+<li>
+<p>Tâche : Le machine learning n’a pas de sens s’il n’y avait pas un problème à résoudre. Par exemple classer des images de chat et chien</p>
+</li>
+<li>
+<p>Choix algorithme : une fois la tâche déterminée, il faut choisir l’algorithme adéquat pour résoudre le problème. Par exemple choisir un algorithme de classification d’image</p>
+</li>
+<li>
+<p>Sélection des données adaptées à l’algorithme : la création du modèle nécessite des données appropriées à l’algorithme utilisé. Par exemple, des images de chats ou de chiens pour un algorithme de classification d’images.</p>
+</li>
+<li>
+<p>Ces données sont des exemples qui serviront à entraîner le modèle à effectuer des tâches spécifiques. Si les données ne sont pas étiquetées (également appelées annotées), il sera nécessaire de le faire. Dans le cas présent, il faudra rechercher des données déjà annotées de chats et de chiens, ou bien procéder à cette annotation soi-même. Ces données annotées constituent un ensemble de données (dataset ou jeu de données).</p>
+</li>
+<li>
+<p>Ces données doivent être divisée en plusieurs parties :</p>
+<ol>
+<li>
+<p>Données d’entraînement : elles serviront à l’entraînement du modèle et représentent environ 60% du dataset.</p>
+</li>
+<li>
+<p>Données de validation : lors de l’entraînement ces données servent à valider que le modèle apprend correctement et qu’il ne mémorise pas les données d’entraînement. Les données de validation représentent environ 20% du dataset</p>
+</li>
+<li>
+<p>Données de test : ces données ne sont pas utilisées lors de l’entraînement et servent à vérifier les performances finales du modèle sur des données qu’il n’a jamais vues auparavant. Les données de test représentent environ 20% du dataset.</p>
+</li>
+</ol>
+</li>
+<li>
+<p>Entraînement du modèle : on va appliquer l’algorithme sur les données<br />
+    d’entraînement pour développer le modèle spécifique pour résoudre le problème de la première phase. Dans l’exemple, le modèle va apprendre les différentes caractéristiques d’un chien (museau, poil, etc.) et d’un chat.</p>
+</li>
+<li>
+<p>Validation des performances du modèle : le modèle est utilisé pour vérifier ses performances sur les données de validation. S’il arrive à bien classifier les chats ou les chiens, l’entraînement peut se terminer. Dans le cas où il n’arrive pas encore à bien les classifier, l’entraînement doit continuer.</p>
+</li>
+<li>
+<p>Test des performances du modèle : l’objectif de cette phase est d’évaluer les performances du modèle sur des données qu’il n’a jamais vues lors de l’entraînement. Les données utilisées sont les données de test. Si le modèle parvient à bien classifier les images de chats et de chiens (par exemple dans 85% des cas), le modèle est considéré comme “OK” et peut passer en production. Cependant, si les performances ne sont pas satisfaisantes (cas “KO”), il faut vérifier que les données sont adéquates, bien annotées et qu’il n’y a pas de problème de répartition entre les différentes classes. Une deuxième cause de mauvais résultats peut être le choix de variables (hyperparamètres) inadéquates pour l’entraînement.</p>
+</li>
+<li>
+<p>Mise en production : cette phase implique que le modèle fonctionne correctement et il peut maintenant réaliser la tâche pour laquelle il a été créé sur des données qu’il n’a jamais vues. Par exemple, classifier des images de chats et de chiens. La mise en production est complexe et souvent réalisée par des professionnels du DevOps qui ont d’excellentes connaissances des systèmes informatiques (“Ops”) ainsi que du développement informatique (“Dev”). Dans notre exemple, un site web pourrait accueillir l’interface dans laquelle l’utilisateur ou l’utilisatrice va soumettre une photo et le modèle va classifier l’image en chat ou en chien.</p>
+</li>
+</ol>
+<p>Le développement de modèles de machine learning supervisé est assez complexe et il se peut que cela ne fonctionne pas du premier coup (cas “KO” sur Figure <a href="#fig:A1_01_resume_machine_learning_supervise" reference="fig:A1_01_resume_machine_learning_supervise" reference-type="ref">6.1</a>). Les causes les plus habituelles sont les suivantes :</p>
+<ul>
+<li>
+<p>Pas assez de données pour apprendre. Possible solution :</p>
+</li>
+<li>
+<p>Collecter plus de données</p>
+</li>
+<li>
+<p>Équilibre des classes entre les données. Est-ce qu’une classe représente la majorité des données ? Est-ce que les chiens représentent par exemple plus de 80% du dataset ? Si les données ne sont pas équilibrées, le modèle ne va pas bien apprendre les spécificités de chaque classe. Plusieurs solutions :</p>
+</li>
+<li>
+<p>Collecter plus de données de la ou les classe(s) moins représentée(s)</p>
+</li>
+<li>
+<p>S’il y a suffisamment de données, c’est possible d’enlever une partie des donnes jusqu’à ce que les classes soient équilibrées</p>
+</li>
+<li>
+<p>Mauvais choix de modèle : c’est possible qu’un modèle soit trop complexe (réseau de neurones avec des milliards de paramètres) ou trop simple (régression linéaire). Possibles solutions :</p>
+</li>
+<li>
+<p>Vérifier que l’algorithme choisi est adapté à la tâche qu’il doit réaliser, il ne doit pas être trop simple ni trop complexe</p>
+</li>
+<li>
+<p>Si l’algorithme est complexe, c’est possible de le faire fonctionner avec plus de données mais ce n’est pas intelligent ni efficient d’un point de vue énergétique. Un gros modèle (beaucoup de paramètres) aura un entraînement plus long et va utiliser plus d’énergie lors de son utilisation</p>
+</li>
+</ul>
+<p>La réponse dans beaucoup de cas semble être d’acquérir plus de données. Cette démarche exige tout de même une certaine réflexion et dans certains cas ce n’est pas la meilleure :</p>
+<ul>
+<li>
+<p>Coût de l’acquisition : l’acquisition de données supplémentaires peut être très coûteuse. Avoir plus de données va probablement impliquer la labellisation de celles-ci, ce qui peut engendrer des coûts non négligeables</p>
+</li>
+<li>
+<p>Rareté de la donnée : dans le domaine médical c’est difficile d’avoir plus de données sur des maladies rares par exemple</p>
+</li>
+<li>
+<p>Contraintes légales : des lois peuvent ne pas permettre l’accès à certaines données privées</p>
+</li>
+<li>
+<p>Qualité des données : la qualité de données collectées va avoir un impact sur le modèle, avoir des données de bonne qualité doit être une priorité par rapport à la quantité</p>
+</li>
+</ul>
+<h3 id="applications">Applications</h3>
+<p>Le machine learning a des applications très variées et il est utilisé dans de nombreux domaines tels que :</p>
+<ul>
+<li>
+<p>Vision par ordinateur (“computer vision”)</p>
+</li>
+<li>
+<p>Reconnaissance de caractères dans une image</p>
+</li>
+<li>
+<p>Générer automatiquement une description d’une image</p>
+</li>
+<li>
+<p>Conduite autonome d’un véhicule</p>
+</li>
+<li>
+<p>Aide au diagnostic de maladies dans le cadre de l’imagerie médicale</p>
+</li>
+<li>
+<p>Traitement automatique du langage (“natural language processing”)</p>
+</li>
+<li>
+<p>Reconnaissance de voix automatique et transcription de ce qui est dit</p>
+</li>
+<li>
+<p>Traduction automatique de texte</p>
+</li>
+<li>
+<p>Classification de texte, par exemple classifier un courriel en “spam” ou un message dans un réseau social en “language inapproprié”</p>
+</li>
+<li>
+<p>Modèles de language tel que GPT3.5 (ChatGPT) qui permettent de saisir des questions en texte et le modèle va générer une réponse dans le même format</p>
+</li>
+<li>
+<p>Séries temporelles</p>
+</li>
+<li>
+<p>Planification prédictive du nombre de travailleurs nécessaires pour une entreprise</p>
+</li>
+<li>
+<p>Maintenance préventive de machines pour optimiser le nombre d’heures de fonctionnement</p>
+</li>
+<li>
+<p>Prédiction de météo et d’événements extrêmes tel que ouragans ou tremblements de terre</p>
+</li>
+<li>
+<p>Applications au domaine financier (ventes prévues d’une entreprise, aide à la décision dans les transactions boursières, etc.)</p>
+</li>
+<li>
+<p>Prédiction des embouteillages et aide à la gestion du trafic routier</p>
+</li>
+<li>
+<p>Aide à la gestion du réseau électrique en prédisant les pics de consommation</p>
+</li>
+</ul>
+<h3 id="neurones-artificiels">Neurones artificiels</h3>
+<p>Les réseaux de neurones sont très souvent utilisés en machine learning car ils permettent de résoudre des problèmes complexes et ils été une révolution dans le domaine.</p>
+<p>Un réseau de neurones est un modèle mathématique inspiré de la structure et du fonctionnement du cerveau humain.</p>
+<p>L’idée a été inspirée par le fonctionnement des neurones biologiques. C’est-à-dire que chaque neurone (voir Figure <a href="#fig:A1_02_neurone_humaine" reference="fig:A1_02_neurone_humaine" reference-type="ref">6.2</a>) reçoit des signaux d’entrée de ses dendrites et produit des signaux de sortie le long de son axone. L’axone se ramifie ensuite et se connecte via des synapses aux dendrites d’autres neurones, formant ainsi un réseau neuronal.</p>
+<figure id="fig:A1_02_neurone_humaine" data-latex-placement="H">
+<img src="../assets/figures/A1/A1_02_neurone_humaine.webp" style="width:85.0%"  alt="Figure 6.2 — Neurone humaine [95]" />
+<figcaption>Figure 6.2 — Neurone humaine <span class="citation" data-cites="noauthor_neurone_2025">[<a href="../bibliography.html#ref-noauthor_neurone_2025" role="doc-biblioref">95</a>]</span></figcaption>
+</figure>
+
+<p>Le premier neurone artificiel &#91;<a href="../bibliography.html#ref-mcculloch_logical_1943">96</a>&#93; a été créée en 1943 par Warren Sturgis McCulloch et Walter Pitts. La Figure <a href="#fig:A1_03_neurone_artificielle_mcculloch" reference="fig:A1_03_neurone_artificielle_mcculloch" reference-type="ref">6.3</a> permet de voir les similarités avec une neurone biologique. Le neurone de McCulloch-Pitts est une unité binaire avec un seuil d’activation qui reçoit une ou plusieurs entrées, effectue un calcul et produit une sortie.</p>
+<figure id="fig:A1_03_neurone_artificielle_mcculloch">
+<img src="../assets/figures/A1/A1_03_neurone_artificielle_mcculloch.webp" style="width:100.0%"  alt="Figure 6.3 — Neurone artificielle proposée par McCulloch-Pitts [97]" />
+<figcaption>Figure 6.3 — Neurone artificielle proposée par McCulloch-Pitts <span class="citation" data-cites="zahn_cours_2024">[<a href="../bibliography.html#ref-zahn_cours_2024" role="doc-biblioref">97</a>]</span></figcaption>
+</figure>
+
+<p>Le neurone est constitué des parties suivantes :</p>
+<ul>
+<li>
+<p><em>x</em><sub>1</sub>, <em>x</em><sub>2</sub>, sont les entrées du neurone (signal), ce sont des signaux binaire qui prennent les valeurs de 0 ou 1</p>
+</li>
+<li>
+<p><em>w</em><sub>1</sub>, <em>w</em><sub>2</sub> sont les poids (“weights”) qui vont donner de l’importance au signal. Ils prennent les valeurs -1 (réduire le signal) ou +1 (augmenter le signal)</p>
+</li>
+<li>
+<p><em>θ</em> est le seuil d’activation, c’est-à-dire la valeur minimum pour produire une sortie <em>y</em></p>
+</li>
+<li>
+<p><em>y</em> est la valeur de sortie du neurone, c’est une valeur binaire</p>
+</li>
+<li>
+<p><em>H</em> est la formule d’activation</p>
+</li>
+</ul>
+<p>L’activation utilise la fonction de Heaviside :</p>
+<p><span id="eq:heaviside"></span></p>
+<div class="arithmatex">\[\begin{equation}
+    H(z) = 
+    \begin{cases}
+        0, &amp; z &lt; 0 \\
+        1, &amp; z \geq 0
+    \end{cases}
+    \label{eq:heaviside}
+\end{equation}\]</div>
+<p class="thesis-caption"><em>(1)</em></p>
+<p>L’utilité de ce neurone est remarquable car il permet de créer des opérateurs logiques.</p>
+<p><span id="eq:operateurs_logiques"></span></p>
+<div class="arithmatex">\[\begin{equation}
+    \begin{aligned}
+        ET: \quad &amp; y = H(x_1 + x_2 - 2) \\
+        OU: \quad &amp; y = H(x_1 + x_2 - 1) \\
+        XOR: \quad &amp; y = H(H(x_1 + x_2 - 1) + H(1 - x_1 - x_2))
+    \end{aligned}
+    \label{eq:operateurs_logiques}
+\end{equation}\]</div>
+<p class="thesis-caption"><em>(2)</em></p>
+<p>Un exemple d’application de l’opérateur “ET” de l’Équation <a href="#eq:operateurs_logiques" reference="eq:operateurs_logiques" reference-type="ref">(2)</a> permet de vérifier qu’il fonctionne correctement :</p>
+<p><span id="eq:exemple_ET"></span></p>
+<div class="arithmatex">\[\begin{equation}
+    \begin{aligned}
+        ET \quad \quad \quad &amp; y = H(x_1 + x_2 - 2) \\
+        \begin{cases}
+            x_1 = 0 \\
+            x_2 = 1
+        \end{cases} \quad &amp; y = H(0 + 1 - 2) \quad y = H(-1) = 0 \\
+        \begin{cases}
+            x_1 = 1 \\
+            x_2 = 1
+        \end{cases} \quad &amp; y = H(1 + 1 - 2) \quad y = H(0) = 1
+    \end{aligned}
+    \label{eq:exemple_ET}
+\end{equation}\]</div>
+<p class="thesis-caption"><em>(3)</em></p>
+<p>Ce modèle a certaines limitations :</p>
+<ul>
+<li>
+<p>Ses poids (<em>w</em>) et seuil (<em>θ</em>) sont fixes</p>
+</li>
+<li>
+<p>Sa sortie binaire ne permet pas de nuance, elle indique juste “vrai” (1) ou “faux” (0)</p>
+</li>
+<li>
+<p>Pas d’actualisations des poids selon les besoins</p>
+</li>
+<li>
+<p>Une seule couche ne permet pas de réaliser des calculs complexes</p>
+</li>
+</ul>
+<p>En 1958, Frank Rosenblatt &#91;<a href="../bibliography.html#ref-rosenblatt_perceptron_1958">98</a>&#93; publie un article ou il propose le perceptron, un nouveau type de neurone artificiel.</p>
+<figure id="fig:enter-label" data-latex-placement="H">
+<img src="../assets/figures/A1/A1_04_perceptron.webp" style="width:100.0%"  alt="Figure 6.4 — Schéma du perceptron [97], neurone artificielle proposée par Frank Rosenblatt." />
+<figcaption>Figure 6.4 — Schéma du perceptron <span class="citation" data-cites="zahn_cours_2024">[<a href="../bibliography.html#ref-zahn_cours_2024" role="doc-biblioref">97</a>]</span>, neurone artificielle proposée par Frank Rosenblatt.</figcaption>
+</figure>
+
+<p>Celui-ci se distingue du neurone de McCulloch-Pitts car elle permet d’utiliser des nombres réels pour les entrées, poids et biais. L’équation <a href="#eq:perceptron" reference="eq:perceptron" reference-type="ref">(4)</a> &#91;<a href="../bibliography.html#ref-rosenblatt_perceptron_1958">98</a>&#93; du perceptron est la suivante:</p>
+<p><span id="eq:perceptron"></span></p>
+<div class="arithmatex">\[\begin{equation}
+    y = H\left(\sum_{k=1}^{n} w_k \cdot x_k + b\right) \quad \text{pour } x_k, w_k, b \in \mathbb{R}
+    \label{eq:perceptron}
+\end{equation}\]</div>
+<p class="thesis-caption"><em>(4)</em></p>
+<p>Dans l’équation <a href="#eq:perceptron" reference="eq:perceptron" reference-type="ref">(4)</a>, <em>H</em> représente la fonction d’activation de Heaviside, <em>w</em><sub><em>k</em></sub> les poids, <em>x</em><sub><em>k</em></sub> les entrées, <em>b</em> le biais, et <em>n</em> le nombre d’entrées.</p>
+<p>L’évolution la plus remarquable par rapport au neurone de McCulloch-Pitts, est que le perceptron peut “apprendre” des données et actualiser les poids et biais.</p>
+<p>On dispose d’un ensemble de données étiquetées {(<strong>x</strong><sup>(<em>i</em>)</sup>, <em>y</em><sup>(<em>i</em>)</sup>)|<em>i</em> = 1, ...<em>N</em>}, où <strong>x</strong><sup>(<em>i</em>)</sup> sont des vecteurs <em>n</em>-dimensionnels. Pour la mise à jour des poids et du biais il faut suivre les étapes suivantes :</p>
+<ol>
+<li>
+<p>Initialiser le vecteur des poids <strong>x</strong><sup>(<em>i</em>)</sup> et le biais b avec des valeurs nulles (ou des valeurs aléatoires proches de 0)</p>
+</li>
+<li>
+<p>Itérer en mettant à jour le vecteur de poids <strong>w</strong> le biais b selon les règles suivantes :</p>
+<ol>
+<li>
+<p>Choisir un échantillon arbitraire : (<strong>x</strong><sup>(<em>i</em>)</sup>, <em>y</em><sup>(<em>i</em>)</sup>)</p>
+</li>
+<li>
+<p>Calculer la valeur prédite <em>ŷ</em><sup>(<em>i</em>)</sup> = <em>H</em>(<strong>w</strong> ⋅ <strong>x</strong><sup>(<em>i</em>)</sup> + <em>b</em>)</p>
+</li>
+<li>
+<p>Utiliser la mise à jour des paramètres (équation <a href="#eq:perceptron_maj1" reference="eq:perceptron_maj1" reference-type="ref">(5)</a> et <a href="#eq:perceptron_maj2" reference="eq:perceptron_maj2" reference-type="ref">(5)</a> ci-dessous) :</p>
+<p><span id="eq:perceptron_maj1"></span><span id="eq:perceptron_maj2"></span></p>
+</li>
+</ol>
+</li>
+</ol>
+<div class="arithmatex">\[\begin{align}
+                    \boldsymbol{w} &amp;\leftarrow \boldsymbol{w} - \alpha \cdot (\hat{y}^{(i)} - y^{(i)}) \cdot \boldsymbol{x}^{(i)}
+                    \label{eq:perceptron_maj1}\\
+                    b &amp;\leftarrow b - \alpha \cdot (\hat{y}^{(i)} - y^{(i)})
+                    \label{eq:perceptron_maj2}
+        \end{align}\]</div>
+<p class="thesis-caption"><em>(5)</em></p>
+<p>Le taux d’apprentissage <em>α</em> (“learning rate”) est un paramètre de l’algorithme, cette valeur doit être positive. Une valeur de départ tel que <em>α</em> = 0.1 semble judicieuse pour démarrer.</p>
+<p>L’actualisation du vecteur de poids et le biais a lieu seulement si la valeur prédite et celle connues sont différentes <em>ŷ</em><sup>(<em>i</em>)</sup> = <em>H</em>(<strong>w</strong> ⋅ <em>x</em><sup>(<em>i</em>)</sup> + <em>b</em>) ≠ <em>y</em><sup>(<em>i</em>)</sup>.</p>
+<p>En résumé, les neurones artificielles sont des modèles mathématiques inspirés du cerveau humain. Le neurone de McCulloch-Pitts (1943) est une unité binaire avec un seuil d’activation, mais il présente des limitations. Le perceptron de Rosenblatt (1958) améliore ce modèle en utilisant des nombres réels et en permettant l’apprentissage et la mise à jour des poids et biais.</p>
+<h3 id="réseau-de-neurones">Réseau de neurones</h3>
+<p>La combinaison de plusieurs perceptrons va créer un réseau de neurones. Cela va créer un réseau de neurones d’une seule couche où les perceptrons sont tous connectés à l’entrée (Figure <a href="#fig:A1_05_reseau_neurones_simple" reference="fig:A1_05_reseau_neurones_simple" reference-type="ref">6.5</a>).</p>
+<figure id="fig:A1_05_reseau_neurones_simple" data-latex-placement="H">
+<img src="../assets/figures/A1/A1_05_reseau_neurones_simple.webp" style="width:80.0%"  alt="Figure 6.5 — Réseau de neurones avec plusieurs perceptrons interconnectés [97]" />
+<figcaption>Figure 6.5 — Réseau de neurones avec plusieurs perceptrons interconnectés <span class="citation" data-cites="zahn_cours_2024">[<a href="../bibliography.html#ref-zahn_cours_2024" role="doc-biblioref">97</a>]</span></figcaption>
+</figure>
+
+<p>C’est aussi possible de connecter plusieurs couches de perceptron entre eux, tel qu’illustré dans la Figure <a href="#fig:A1_06_perceptron_multicouche" reference="fig:A1_06_perceptron_multicouche" reference-type="ref">6.6</a>.</p>
+<figure id="fig:A1_06_perceptron_multicouche" data-latex-placement="H">
+<img src="../assets/figures/A1/A1_06_perceptron_multicouche.webp" style="width:75.0%"  alt="Figure 6.6 — Perceptron multicouche [97]" />
+<figcaption>Figure 6.6 — Perceptron multicouche <span class="citation" data-cites="zahn_cours_2024">[<a href="../bibliography.html#ref-zahn_cours_2024" role="doc-biblioref">97</a>]</span></figcaption>
+</figure>
+
+<p>Pour améliorer les performances du perceptron, la fonction d’activation de Heaviside (Équation <a href="#eq:heaviside" reference="eq:heaviside" reference-type="ref">(1)</a>) est remplacée par la fonction d’activation de sigmoid (Equation <a href="#eq:sigmoid" reference="eq:sigmoid" reference-type="ref">(6)</a>).</p>
+<p><span id="eq:sigmoid"></span></p>
+<div class="arithmatex">\[\begin{equation}
+\sigma(z) = \frac{1}{1 + e^{-z}}
+\label{eq:sigmoid}
+\end{equation}\]</div>
+<p class="thesis-caption"><em>(6)</em></p>
+<p>Cette fonction (Figure <a href="#fig:A1_07_fonction_activation_sigmoid" reference="fig:A1_07_fonction_activation_sigmoid" reference-type="ref">6.7</a>) va permettre au perceptron de retourner des valeurs entre 0 et 1, ce qui va augmenter considérablement les capacités du perceptron.</p>
+<figure id="fig:A1_07_fonction_activation_sigmoid" data-latex-placement="H">
+<img src="../assets/figures/A1/A1_07_fonction_activation_sigmoid.webp" style="width:75.0%"  alt="Figure 6.7 — Fonction d’activation sigmoid" />
+<figcaption>Figure 6.7 — Fonction d’activation sigmoid</figcaption>
+</figure>
+
+<p>Le perceptron multicouche est suffisamment sophistiqué pour réaliser de la reconnaissance de caractères sur le dataset MNIST &#91;<a href="../bibliography.html#ref-lecun_gradient-based_1998">99</a>&#93;.</p>
+<figure id="fig:A1_08_dataset_mnist" data-latex-placement="H">
+<img src="../assets/figures/A1/A1_08_dataset_mnist.webp" style="width:75.0%"  alt="Figure 6.8 — Dataset MNIST [99]" />
+<figcaption>Figure 6.8 — Dataset MNIST <span class="citation" data-cites="lecun_gradient-based_1998">[<a href="../bibliography.html#ref-lecun_gradient-based_1998" role="doc-biblioref">99</a>]</span></figcaption>
+</figure>
+
+<p>Ce dataset (Figure <a href="#fig:A1_08_dataset_mnist" reference="fig:A1_08_dataset_mnist" reference-type="ref">6.8</a>) consiste en 70’000 images de chiffres écrits à la main (60k entraînement et 10k test) labellisés. Chaque image a une taille de 28x28 pixels en noir et blanc.</p>
+<p>Ces évolutions posent la fondation pour les réseaux de neurones modernes qui sont l’état de l’art dans le domaine.</p>
+<h3 id="subsec:evaluation_performance_modele">Évaluation de la performance d’un modèle</h3>
+<p>L’évaluation des performances d’un modèle est primordiale pour savoir si le modèle fonctionne comme il devrait. Cela est réalisé sur la base de données déjà annotées.</p>
+<p>Le Tableau <a href="#tab:metriques_ml" reference="tab:metriques_ml" reference-type="ref">6.1</a> résume les principales métriques. L’exemple est la détection de pirates qui pourraient essayer de dévier un avion de sa trajectoire.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;"><strong>Terme</strong></th>
+<th style="text-align: left;"><strong>Définition</strong></th>
+<th style="text-align: left;"><strong>Exemple</strong></th>
+<th style="text-align: center;"><strong>Formule</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">True Positive (TP)</td>
+<td style="text-align: left;">La classe prédite spécifiquement recherchée (positive) est identique à la classe annotée.</td>
+<td style="text-align: left;">Le modèle a détecté un pirate. C’est un pirate.</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">True Negative (TN)</td>
+<td style="text-align: left;">La classe prédite non souhaitée (négative) est identique à la classe annotée.</td>
+<td style="text-align: left;">Le modèle a détecté qu’il ne s’agit pas d’un pirate. Ce n’est pas un pirate.</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">False Positive (FP)</td>
+<td style="text-align: left;">La classe prédite spécifiquement recherchée (positive) est différente à la classe annotée.</td>
+<td style="text-align: left;">Le modèle a détecté un pirate. Ce n’est pas un pirate. La personne n’est pas contente d’être fouillée.</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">False Negative (FN)</td>
+<td style="text-align: left;">La classe prédite non souhaitée (négative) est différente à la classe annotée.</td>
+<td style="text-align: left;">Le modèle a détecté qu’il ne s’agit pas d’un pirate. C’est un pirate.</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">Accuracy (ACC)</td>
+<td style="text-align: left;">L’accuracy mesure la proportion d’images correctement classées parmi toutes les images de l’ensemble de test.</td>
+<td style="text-align: left;"></td>
+<td style="text-align: center;"><span class="arithmatex">\(\displaystyle\frac{TP + TN}{TP + TN + FP + FN}\)</span></td>
+</tr>
+<tr>
+<td style="text-align: left;">Precision (P)</td>
+<td style="text-align: left;">La précision mesure la proportion de vrais positifs (TP) parmi toutes les prédictions positives faites par l’algorithme.</td>
+<td style="text-align: left;"></td>
+<td style="text-align: center;"><span class="arithmatex">\(\displaystyle\frac{TP}{TP + FP}\)</span></td>
+</tr>
+<tr>
+<td style="text-align: left;">Recall (R)</td>
+<td style="text-align: left;">Le recall mesure la proportion de vrais positifs parmi toutes les instances positives réelles.</td>
+<td style="text-align: left;"></td>
+<td style="text-align: center;"><span class="arithmatex">\(\displaystyle\frac{TP}{TP + FN}\)</span></td>
+</tr>
+<tr>
+<td style="text-align: left;">F1-score</td>
+<td style="text-align: left;">Le F1-score est la moyenne harmonique de la précision (P) et du recall (R). Il fournit une mesure équilibrée de ces deux éléments.</td>
+<td style="text-align: left;"></td>
+<td style="text-align: center;"><span class="arithmatex">\(\displaystyle\frac{2 \cdot P \cdot R}{P + R}\)</span></td>
+</tr>
+</tbody>
+</table>
+<p><span id="tab:metriques_ml"></span></p>
+<p class="thesis-caption"><em>Tableau 6.1 — Résumé des principales métriques utilisées en machine learning pour évaluer la performance</em></p>
+<p>La matrice de confusion est un outil qui permet d’évaluer les performances d’un modèle.</p>
+<table id="tab:matrice_confusion">
+<caption>Tableau 6.2 — Matrice de confusion</caption>
+<tbody>
+<tr>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td colspan="2" style="text-align: center;"><strong>Prédiction</strong></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"><strong>Positif</strong></td>
+<td style="text-align: center;"><strong>Négatif</strong></td>
+<td style="text-align: center;"><strong>Total</strong></td>
+</tr>
+<tr>
+<td rowspan="2" style="text-align: center;"><strong>Réalité</strong></td>
+<td style="text-align: center;"><strong>Positif</strong></td>
+<td style="text-align: center;"><strong>TP</strong></td>
+<td style="text-align: center;">FN</td>
+<td style="text-align: center;">FN + TP</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>Négatif</strong></td>
+<td style="text-align: center;">FP</td>
+<td style="text-align: center;"><strong>TN</strong></td>
+<td style="text-align: center;">FP + TN</td>
+</tr>
+<tr>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"><strong>Total</strong></td>
+<td style="text-align: center;">TP + FP</td>
+<td style="text-align: center;">FN + TN</td>
+<td style="text-align: center;">N</td>
+</tr>
+</tbody>
+</table>
+
+<p>Le Tableau <a href="#tab:matrice_confusion_exemple" reference="tab:matrice_confusion_exemple" reference-type="ref">6.3</a> illustre un exemple pratique de toutes les métriques pour la détection d’un chat (positif) sur une image.</p>
+<table id="tab:matrice_confusion_exemple">
+<caption>Tableau 6.3 — Matrice de confusion</caption>
+<tbody>
+<tr>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td colspan="2" style="text-align: center;"><strong>Prédiction</strong></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"><strong>Positif</strong></td>
+<td style="text-align: center;"><strong>Négatif</strong></td>
+<td style="text-align: center;"><strong>Total</strong></td>
+</tr>
+<tr>
+<td rowspan="2" style="text-align: center;"><strong>Réalité</strong></td>
+<td style="text-align: center;"><strong>Positif</strong></td>
+<td style="text-align: center;"><strong>TP</strong>=5</td>
+<td style="text-align: center;">FN=3</td>
+<td style="text-align: center;">FN+TP=3+5=8</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>Négatif</strong></td>
+<td style="text-align: center;">FP=2</td>
+<td style="text-align: center;"><strong>TN</strong>=17</td>
+<td style="text-align: center;">FP+TN=2+17=19</td>
+</tr>
+<tr>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"><strong>Total</strong></td>
+<td style="text-align: center;">TP+FP=5+2=7</td>
+<td style="text-align: center;">FN+TN=3+17=20</td>
+<td style="text-align: center;">N=7+20=8+19=27</td>
+</tr>
+</tbody>
+</table>
+
+<p><span id="eq:metriques_exemple"></span></p>
+<div class="arithmatex">\[\begin{align}
+    ACC &amp;= \frac{TP + TN}{TP + TN + FP + FN} = \frac{23}{27} = 0.85 \\
+    P &amp;= \frac{TP}{TP + FP} = \frac{5}{7} = 0.71 \\
+    R &amp;= \frac{TP}{TP + FN} = \frac{5}{8} = 0.63 \\
+    F1 &amp;= \frac{2 \cdot P \cdot R}{P + R} = \frac{2 \cdot 0.71 \cdot 0.63}{0.71 + 0.63} = 0.67
+    \label{eq:metriques_exemple}
+\end{align}\]</div>
+<p class="thesis-caption"><em>(7)</em></p>
+<p>Dans ce cas on voit que l’accuracy est de 85%, le modèle classifie correctement (TP + TN) 85% de toutes les images (TP + TN + FP + FN).</p>
+<p>Sa précision est de 71%, le modèle classifie correctement (TP) 71% des images de chat qu’il a détecté en tant que chat (TP + FP).</p>
+<p>Son recall est de 63%, le modèle classifie correctement (TP) 63% des images parmi toutes les images de chat (FN + TP).</p>
+<p>Le F1-score est de 67% ce qui indique un modèle qui n’est pas très performant. Les différentes métriques doivent être prise en compte car c’est possible qu’un modèle ait une bonne accuracy mais un recall mauvais. Le F1-score représente un bon indicateur de performance globale du modèle.</p>
+<p>Ces métriques peuvent être appliquées à des modèles avec plusieurs classes, l’idée est que l’on compare la classe qui nous intéresse (positive) par rapport au reste qui devient la classe négative. Le Tableau <a href="#tab:matrice_confusion_multiclasse" reference="tab:matrice_confusion_multiclasse" reference-type="ref">6.4</a> représente un exemple avec 3 classes.</p>
+<table id="tab:matrice_confusion_multiclasse">
+<caption>Tableau 6.4 — Matrice de confusion avec un exemple de plusieurs classes</caption>
+<tbody>
+<tr>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td colspan="3" style="text-align: center;"><strong>Prédiction</strong></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"><strong>Chat</strong></td>
+<td style="text-align: center;"><strong>Chien</strong></td>
+<td style="text-align: center;"><strong>Lapin</strong></td>
+<td style="text-align: center;"><strong>Total</strong></td>
+</tr>
+<tr>
+<td rowspan="3" style="text-align: center;"><strong>Réalité</strong></td>
+<td style="text-align: center;"><strong>Chat</strong></td>
+<td style="text-align: center;">5</td>
+<td style="text-align: center;">3</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">8</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>Chien</strong></td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">3</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">6</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>Lapin</strong></td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">11</td>
+<td style="text-align: center;">13</td>
+</tr>
+<tr>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"><strong>Total</strong></td>
+<td style="text-align: center;">7</td>
+<td style="text-align: center;">8</td>
+<td style="text-align: center;">12</td>
+<td style="text-align: center;">27</td>
+</tr>
+</tbody>
+</table>
+
+<p>Si l’on souhaite connaître les métriques de la classe chat, on peut de manière intuitive prendre les données des chats et les considérer comme positives. Les autres classes seront quant à elles, considérées comme négatives.</p>
+<table id="tab:matrice_confusion_multiclasse_reduction">
+<caption>Tableau 6.5 — Matrice de confusion</caption>
+<tbody>
+<tr>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td colspan="2" style="text-align: center;"><strong>Prédiction</strong></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"><strong>Positif</strong></td>
+<td style="text-align: center;"><strong>Négatif</strong></td>
+<td style="text-align: center;"><strong>Total</strong></td>
+</tr>
+<tr>
+<td rowspan="2" style="text-align: center;"><strong>Réalité</strong></td>
+<td style="text-align: center;"><strong>Positif</strong></td>
+<td style="text-align: center;"><strong>TP</strong>=5</td>
+<td style="text-align: center;">FN=3</td>
+<td style="text-align: center;">FN+TP=3+5=8</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>Négatif</strong></td>
+<td style="text-align: center;">FP=2</td>
+<td style="text-align: center;"><strong>TN</strong>=17</td>
+<td style="text-align: center;">FP+TN=2+17=19</td>
+</tr>
+<tr>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"><strong>Total</strong></td>
+<td style="text-align: center;">TP+FP=5+2=7</td>
+<td style="text-align: center;">FN+TN=3+17=20</td>
+<td style="text-align: center;">N=7+20=8+19=27</td>
+</tr>
+</tbody>
+</table>
+
+<p>Dans le Tableau <a href="#tab:matrice_confusion_multiclasse_reduction" reference="tab:matrice_confusion_multiclasse_reduction" reference-type="ref">6.5</a> on observe que la somme des colonnes chien et lapin correspond bien à la colonne négative. Ainsi les mêmes formules qu’avant peuvent être utilisées.</p>
+<h2 id="données-12">Données</h2>
+<p>Les données sont très importantes pour élaborer des modèles performants. Dans le contexte du machine learning, les données sont généralement stockées dans un dataset ou jeu de données contenant des exemples étiquetés. Ce chapitre va explorer les principaux types de données que l’on retrouve fréquemment en machine learning ainsi que dans le domaine de la géomatique.</p>
+<p>Il y a une grande variété de données qui peuvent être utilisées en machine learning :</p>
+<ul>
+<li>
+<p>Texte</p>
+</li>
+<li>
+<p>Images</p>
+</li>
+<li>
+<p>Audio</p>
+</li>
+<li>
+<p>Vidéo</p>
+</li>
+<li>
+<p>Données qui évoluent en fonction du temps (séries temporelles) tel que la température, cotation en bourse, etc.</p>
+</li>
+</ul>
+<p>Le type de données qui sont en lien avec la géomatique et qui seront traités dans ce chapitre sont :</p>
+<ul>
+<li>
+<p>Images</p>
+</li>
+<li>
+<p>Orthophotos</p>
+</li>
+<li>
+<p>Nuage de points <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">LiDAR</span></a></p>
+</li>
+<li>
+<p>Données vectorielles</p>
+</li>
+</ul>
+<h3 id="images">Images</h3>
+<p>Les images sont des données très utilisées dans la “computer vision” qui est une des disciplines du machine learning.</p>
+<p>Un exemple de dataset d’images est le “CIFAR-10” &#91;<a href="../bibliography.html#ref-krizhevsky_learning_2009">100</a>&#93;.</p>
+<figure id="fig:A1_09_cifar" data-latex-placement="H">
+<img src="../assets/figures/A1/A1_09_cifar.webp" style="width:90.0%"  alt="Figure 6.9 — Dataset d’images CIFAR-10 [101]" />
+<figcaption>Figure 6.9 — Dataset d’images CIFAR-10 <span class="citation" data-cites="krizhevsky_cifar-10_nodate">[<a href="../bibliography.html#ref-krizhevsky_cifar-10_nodate" role="doc-biblioref">101</a>]</span></figcaption>
+</figure>
+
+<p>Ce dataset a les caractéristiques suivantes :</p>
+<ul>
+<li>
+<p>60000 images en couleur (partagées en 50000 d’entraînement et 10000 de test)</p>
+</li>
+<li>
+<p>10 classes</p>
+</li>
+<li>
+<p>6000 images par classe</p>
+</li>
+<li>
+<p>Images de taille 32x32 pixels en RVB (rouge, vert, bleu)</p>
+</li>
+</ul>
+<p>Ce dataset est très utilisé pour apprendre à créer des réseaux de neurones simples, efficients qui arrivent à obtenir d’excellentes performances.</p>
+<h3 id="subsec:annexe_ortophotos">Orthophotos</h3>
+<p>En géomatique, une orthophoto est un type de photographie aérienne qui offre une représentation rectifiée d’une zone géographique.</p>
+<p>Les orthophotos sont créées en utilisant des images satellitales ou aériennes de haute résolution, souvent acquises par des systèmes tels que les caméras embarquées sur des avions ou des drones. Pour obtenir une orthophoto de qualité, il est nécessaire de suivre un processus complexe comprenant plusieurs étapes :</p>
+<ul>
+<li>
+<p>Acquisition des images : Les images sont prises à partir d’un appareil photo aérien ou satellitaire, généralement à partir d’une altitude élevée.</p>
+</li>
+<li>
+<p>Rectification géométrique : Les images sont rectifiées pour corriger les distorsions liées à la perspective et aux mouvements de l’appareil photo pendant la prise de vue.</p>
+</li>
+<li>
+<p>Mosaïque des images : Les images sont assemblées (mises en mosaïque) pour former une image unique et continue, qui couvre la zone géographique souhaitée.</p>
+</li>
+<li>
+<p>Correction de la topographie : La surface du terrain est corrigée pour prendre en compte les élévations et les dénivellations, ce qui permet d’obtenir une représentation tridimensionnelle exacte.</p>
+</li>
+<li>
+<p>Traitement des données : Les images sont traitées pour éliminer les bruits, les artefacts et les imperfections, ce qui améliore la qualité de l’image finale.</p>
+</li>
+</ul>
+<p>Il existe 3 types différents d’orthophotos &#91;<a href="../bibliography.html#ref-barrette_different_2022">102</a>&#93; :</p>
+<ul>
+<li>
+<p>Orthophoto dynamique</p>
+</li>
+<li>
+<p>Orthomosaïque</p>
+</li>
+<li>
+<p>“True orthophoto”</p>
+</li>
+</ul>
+<h4 id="orthophoto-dynamique">Orthophoto dynamique</h4>
+<p>Les orthophotos dynamiques sont générés de manière dynamique à partir d’images sources, en utilisant un modèle numérique de terrain comme référence.</p>
+<figure id="fig:A1_10_ortophoto_dynamique1" data-latex-placement="H">
+<img src="../assets/figures/A1/A1_10_ortophoto_dynamique1.webp" style="width:100.0%"  alt="Figure 6.10 — Exemple d’orthophoto dynamique [102]" />
+<figcaption>Figure 6.10 — Exemple d’orthophoto dynamique <span class="citation" data-cites="barrette_different_2022">[<a href="../bibliography.html#ref-barrette_different_2022" role="doc-biblioref">102</a>]</span></figcaption>
+</figure>
+
+<figure id="fig:A1_11_orthophoto_dynamique2" data-latex-placement="H">
+<img src="../assets/figures/A1/A1_11_orthophoto_dynamique2.webp" style="width:100.0%"  alt="Figure 6.11 — Deuxième exemple d’orthophoto dynamique [102]" />
+<figcaption>Figure 6.11 — Deuxième exemple d’orthophoto dynamique <span class="citation" data-cites="barrette_different_2022">[<a href="../bibliography.html#ref-barrette_different_2022" role="doc-biblioref">102</a>]</span></figcaption>
+</figure>
+
+<p>Les avantages sont :</p>
+<ul>
+<li>
+<p>Génération rapide des orthophotos</p>
+</li>
+<li>
+<p>Permet de visualiser une zone avec plusieurs perspectives différentes</p>
+</li>
+</ul>
+<p>Le principal inconvénient est que les objets non-terrain (bâtiments par exemple), peuvent apparaître inclinés (voir Figures <a href="#fig:A1_10_ortophoto_dynamique1" reference="fig:A1_10_ortophoto_dynamique1" reference-type="ref">6.10</a> et <a href="#fig:A1_11_orthophoto_dynamique2" reference="fig:A1_11_orthophoto_dynamique2" reference-type="ref">6.11</a>). Les caractéristiques aériennes peuvent sembler se déplacer lorsque l’image est déplacée en raison de la visualisation des objets depuis différentes directions.</p>
+<h4 id="orthomosaïque">Orthomosaïque</h4>
+<p>Les orthomosaïques sont créés en fusionnant plusieurs images en une seule image cohérente. La Figure <a href="#fig:A1_12_orthomosaique" reference="fig:A1_12_orthomosaique" reference-type="ref">6.12</a> de la page suivante représente un exemple d’orthomosaïque.</p>
+<p>Les principaux avantages des orthomosaïques sont :</p>
+<ul>
+<li>
+<p>Image plus compacte, ce qui permet un affichage plus rapide</p>
+</li>
+<li>
+<p>Génération rapide, en particulier si un modèle numérique de terrain est disponible</p>
+</li>
+<li>
+<p>Peuvent être créés à partir d’images avec moins de recouvrement, ce qui peut réduire les exigences de capture de données</p>
+</li>
+</ul>
+<p>Les principaux inconvénients des orthomosaïques sont :</p>
+<ul>
+<li>
+<p>Pas précis pour les objets hors sol qui peuvent sembler inclinés loin de la caméra.</p>
+</li>
+<li>
+<p>Peuvent avoir des artefacts visuels causés par les angles de caméra.</p>
+</li>
+<li>
+<p>Les lignes de séparation utilisées lors de la génération de l’image peuvent être visibles (voir Figure <a href="#fig:A1_13_orthomosaique_lignes" reference="fig:A1_13_orthomosaique_lignes" reference-type="ref">6.13</a> de la page suivante)</p>
+</li>
+</ul>
+<figure id="fig:A1_12_orthomosaique" data-latex-placement="H">
+<img src="../assets/figures/A1/A1_12_orthomosaique.webp" style="width:100.0%"  alt="Figure 6.12 — Exemple d’orthomosaïque [102]" />
+<figcaption>Figure 6.12 — Exemple d’orthomosaïque <span class="citation" data-cites="barrette_different_2022">[<a href="../bibliography.html#ref-barrette_different_2022" role="doc-biblioref">102</a>]</span></figcaption>
+</figure>
+
+<figure id="fig:A1_13_orthomosaique_lignes" data-latex-placement="H">
+<img src="../assets/figures/A1/A1_13_orthomosaique_lignes.webp" style="width:100.0%"  alt="Figure 6.13 — Exemple d’orthomosaïque avec lignes de séparation [102]" />
+<figcaption>Figure 6.13 — Exemple d’orthomosaïque avec lignes de séparation <span class="citation" data-cites="barrette_different_2022">[<a href="../bibliography.html#ref-barrette_different_2022" role="doc-biblioref">102</a>]</span></figcaption>
+</figure>
+
+<h4 id="true-orthophoto">“True orthophoto”</h4>
+<p>Les true orthophotos sont créés en utilisant un modèle numérique de surface très détaillé pour générer une orthophoto de sortie précise pour tous les pixels (Figure <a href="#fig:A1_14_true_orthophoto" reference="fig:A1_14_true_orthophoto" reference-type="ref">6.14</a>).</p>
+<figure id="fig:A1_14_true_orthophoto" data-latex-placement="H">
+<img src="../assets/figures/A1/A1_14_true_orthophoto.webp" style="width:100.0%"  alt="Figure 6.14 — Exemple de true orthophoto [102]" />
+<figcaption>Figure 6.14 — Exemple de true orthophoto <span class="citation" data-cites="barrette_different_2022">[<a href="../bibliography.html#ref-barrette_different_2022" role="doc-biblioref">102</a>]</span></figcaption>
+</figure>
+
+<p>Les avantages des true orthophotos sont les suivants :</p>
+<ul>
+<li>
+<p>Fournissent des images cohérentes de haute qualité qui sont idéales pour la digitalisation de la localisation et de la taille des empreintes de bâtiment.</p>
+</li>
+<li>
+<p>Peuvent être générés de manière entièrement automatique, sans nécessiter de lignes de soudure ou de lignes de rupture manuelles.</p>
+</li>
+<li>
+<p>Peuvent éliminer automatiquement les objets en mouvement, les reflets ou les couleurs incohérentes.</p>
+</li>
+<li>
+<p>Peuvent améliorer la radiométrie et la résolution en utilisant la redondance de plusieurs images.</p>
+</li>
+<li>
+<p>Sont idéaux pour la détection de changement, car les images sont cohérentes d’une année à une autre.</p>
+</li>
+</ul>
+<p>Les principaux inconvénients des true orthophotos sont :</p>
+<ul>
+<li>
+<p>Plus coûteux en termes de calcul.</p>
+</li>
+<li>
+<p>Nécessitent un recouvrement suffisant entre les images pour extraire un modèle numérique de surface détaillé.</p>
+</li>
+</ul>
+<p>Dans le cadre du machine learning, le type d’orthophoto la plus intéressante est la true orthophoto.</p>
+<p>Le Tableau <a href="#tab:comparatif_orthophotos" reference="tab:comparatif_orthophotos" reference-type="ref">6.6</a> ci-dessous synthétise les avantages et inconvénients de chacun des types d’orthophotos.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;"><strong>Type d’orthophoto</strong></th>
+<th style="text-align: left;"><strong>Génération</strong></th>
+<th style="text-align: left;"><strong>Précision objets hors sol</strong></th>
+<th style="text-align: left;"><strong>Données</strong></th>
+<th style="text-align: left;"><strong>Espace de stockage</strong></th>
+<th style="text-align: left;"><strong>Complexité de traitement</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Orthophoto dynamique</td>
+<td style="text-align: left;">Généré en temps réel, moins précis pour les objets non-terrain.</td>
+<td style="text-align: left;">+</td>
+<td style="text-align: left;">+</td>
+<td style="text-align: left;">+</td>
+<td style="text-align: left;">+</td>
+</tr>
+<tr>
+<td style="text-align: left;">Orthomosaïque</td>
+<td style="text-align: left;">Créé en fusionnant plusieurs images ortho</td>
+<td style="text-align: left;">++</td>
+<td style="text-align: left;">++</td>
+<td style="text-align: left;">++</td>
+<td style="text-align: left;">++</td>
+</tr>
+<tr>
+<td style="text-align: left;">True orthophoto</td>
+<td style="text-align: left;">Créé en utilisant un modèle numérique de surface très détaillé</td>
+<td style="text-align: left;">+++</td>
+<td style="text-align: left;">+++</td>
+<td style="text-align: left;">+++</td>
+<td style="text-align: left;">+++</td>
+</tr>
+</tbody>
+</table>
+<p><span id="tab:comparatif_orthophotos"></span></p>
+<p class="thesis-caption"><em>Tableau 6.6 — Comparatif des 3 types d’orthophotos</em></p>
+<h4 id="fournisseurs-dorthophotos">Fournisseurs d’orthophotos</h4>
+<p>Au niveau mondial, il y a plusieurs fournisseurs d’orthophotos &#91;<a href="../bibliography.html#ref-stdl_recherche_2024">103</a>&#93;, voici quelques exemples :</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;"></th>
+<th style="text-align: left;"><strong>Sentinel-2</strong></th>
+<th style="text-align: left;"><strong>Pléiades Neo</strong></th>
+<th style="text-align: left;"><strong>WorldView Legion</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Entreprise/entité</td>
+<td style="text-align: left;">Agence spatiale européenne</td>
+<td style="text-align: left;">Airbus</td>
+<td style="text-align: left;">Maxar</td>
+</tr>
+<tr>
+<td style="text-align: left;">Prix</td>
+<td style="text-align: left;">Gratuit</td>
+<td style="text-align: left;">Payant</td>
+<td style="text-align: left;">Payant</td>
+</tr>
+<tr>
+<td style="text-align: left;">Fréquence de renouvellement</td>
+<td style="text-align: left;">5 jours</td>
+<td style="text-align: left;">Plusieurs fois par jour</td>
+<td style="text-align: left;">Jusqu’à 15x par jour</td>
+</tr>
+<tr>
+<td style="text-align: left;">Résolution</td>
+<td style="text-align: left;">10m/pixel (RGB/IR)</td>
+<td style="text-align: left;">30cm/pixel (RGB) 1.2m/pixel (IR)</td>
+<td style="text-align: left;">30cm/pixel (RGB) 1.2m/pixel (IR)</td>
+</tr>
+<tr>
+<td style="text-align: left;">Couleur/infrarouge</td>
+<td style="text-align: left;">RGB/IR</td>
+<td style="text-align: left;">RGB/IR</td>
+<td style="text-align: left;">RGB/IR</td>
+</tr>
+</tbody>
+</table>
+<p><span id="tab:fournisseurs_orthophotos"></span></p>
+<p class="thesis-caption"><em>Tableau 6.7 — Comparatif de 3 fournisseurs d’orthophoto mondiaux</em></p>
+<p>En ce qui concerne la Suisse, Swisstopo &#91;<a href="../bibliography.html#ref-swisstopo_swissimage_nodate">104</a>&#93; met librement à disposition des orthophotos de tout le pays. Les détails techniques sont les suivants :</p>
+<ul>
+<li>
+<p>Systèmes de coordonnées : CH1903+/MN95 (EPSG:2056)</p>
+</li>
+<li>
+<p>Résolution au sol : 0.1 m ou 0.25 m selon la région</p>
+</li>
+<li>
+<p>Écart type pour la précision de la position : +/- 0.15 m pour la résolution au sol de 0.1 m.</p>
+</li>
+<li>
+<p>Spécifications pour le téléchargement gratuit :</p>
+</li>
+<li>
+<p>Format: Cloud Optimized Geotiff (COG), RGB (3 x 8 bit), compression JPEG 95.</p>
+</li>
+<li>
+<p>Découpage : ∼ 42 700 tuiles de 1 km sur 1 km.</p>
+</li>
+<li>
+<p>Résolutions disponibles et taille des fichiers</p>
+<ul>
+<li>
+<p>0.1m : ∼ 55 Mo / tuile, 2.4 To / une couverture complète</p>
+</li>
+<li>
+<p>2m : ∼ 2.8 Mo / tuile, 120 Go / une couverture complète</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>Selon les zones géographiques, les orthophotos ont été réalisées entre 2019 et 2023. La fréquence d’actualisation est de 3 ans.</p>
+<p>Swisstopo dispose d’autres produits tel que :</p>
+<ul>
+<li>
+<p>Orthophotos “RGB” avec Infrarouge (4 canaux)</p>
+</li>
+<li>
+<p>Orthophotos historiques</p>
+</li>
+</ul>
+<p>Dans le Canton de Genève, <a href="../glossary.html#gloss-sitg"><span data-acronym-label="sitg" data-acronym-form="singular+abbrv">SITG</span></a> &#91;<a href="../bibliography.html#ref-sitg_chiffre-cle_2025">105</a>&#93; dispose d’une grande quantité de données. En ce qui concerne les orthophotos du Canton de Genève disponibles librement :</p>
+<ul>
+<li>
+<p>Orthophotos historiques (1932-2021)</p>
+</li>
+<li>
+<p>Orthophoto avec infrarouge (2021)</p>
+</li>
+<li>
+<p>Orthophotos réalisées par Swisstopo (2023)</p>
+</li>
+<li>
+<p>Résolution de 10 cm par pixel</p>
+</li>
+<li>
+<p>Orthophoto haute résolution (2019)</p>
+</li>
+<li>
+<p>Résolution de 5 cm par pixel</p>
+</li>
+<li>
+<p>True orthophotos</p>
+</li>
+</ul>
+<h3 id="nuage-de-points-lidar">Nuage de points <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">LiDAR</span></a></h3>
+<p>Laser Imaging Detection And Ranging (<a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">LiDAR</span></a>) &#91;<a href="../bibliography.html#ref-esri_quoi_2025">106</a>&#93; est une technique de télédétection optique qui utilise la lumière laser pour échantillonner la surface de la Terre et produire des mesures “x, y, z” d’une grande précision.</p>
+<p>Les données <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">LiDAR</span></a> sont principalement utilisées dans des applications de cartographie laser aéroportées et commencent à s’imposer en tant qu’alternative rentable face aux techniques d’arpentage traditionnelles, telles que la photogrammétrie.</p>
+<p>Les données <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">LiDAR</span></a> produisent des jeux de données de nuages de points cotés qui peuvent être gérés, visualisés, analysés à l’aide d’outils GIS (Qgis, ArcGIS, etc.).</p>
+<p>La Figure <a href="#fig:A1_15_lidar_exemple" reference="fig:A1_15_lidar_exemple" reference-type="ref">6.15</a> représente des objets d’exemple et la Figure <a href="#fig:A1_16_lidar_exemple2" reference="fig:A1_16_lidar_exemple2" reference-type="ref">6.16</a> permet de voir comment ces objets sont vus par le <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">LiDAR</span></a></p>
+<figure id="fig:A1_15_lidar_exemple" data-latex-placement="H">
+<img src="../assets/figures/A1/A1_15_lidar_exemple1.webp" style="width:100.0%"  alt="Figure 6.15 — Objets pour le nuage de points LIDAR [107]" />
+<figcaption>Figure 6.15 — Objets pour le nuage de points LIDAR <span class="citation" data-cites="cadden_lidar_2021">[<a href="../bibliography.html#ref-cadden_lidar_2021" role="doc-biblioref">107</a>]</span></figcaption>
+</figure>
+
+<figure id="fig:A1_16_lidar_exemple2" data-latex-placement="H">
+<img src="../assets/figures/A1/A1_16_lidar_exemple2.webp" style="width:100.0%"  alt="Figure 6.16 — Nuage de points LIDAR sur des objets [107]" />
+<figcaption>Figure 6.16 — Nuage de points LIDAR sur des objets <span class="citation" data-cites="cadden_lidar_2021">[<a href="../bibliography.html#ref-cadden_lidar_2021" role="doc-biblioref">107</a>]</span></figcaption>
+</figure>
+
+<h4 id="composants-matériels-dun-système-lidar">Composants matériels d’un système <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">LiDAR</span></a></h4>
+<p>Les composants matériels principaux d’un système <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">LiDAR</span></a> incluent un véhicule de collecte (avion, hélicoptère, véhicule et trépied), un système de scanner laser, un système de positionnement par satellite (GPS) et un système de navigation à inertie (INS). Un système INS mesure le roulis, le tangage et la direction du système <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">LiDAR</span></a>.</p>
+<h4 id="le-capteur-lidar">Le capteur <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">LiDAR</span></a></h4>
+<p>Le <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">LiDAR</span></a> est un capteur optique actif qui transmet des faisceaux laser vers une cible tout en parcourant des itinéraires d’étude spécifiques. La réflexion du laser à partir de la cible est détectée et analysée par des récepteurs dans le capteur <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">LiDAR</span></a>.</p>
+<p>Ces récepteurs enregistrent la période précise qui s’écoule entre le moment où l’impulsion laser quitte le système et celui où elle est renvoyée pour calculer la distance entre le capteur et la cible.</p>
+<p>Alliées aux informations de positionnement (GPS et INS), ces mesures de distance sont transformées en mesures de points tridimensionnels réels de la cible réflectrice dans l’espace objet.</p>
+<h4 id="post-traitement-des-données-ponctuelles">Post-traitement des données ponctuelles</h4>
+<p>Les données ponctuelles sont post-traitées après l’étude de la collecte des données <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">LiDAR</span></a> en coordonnées x, y, z très précises en analysant la plage de temps du laser, l’angle de balayage laser, la position GPS et les informations INS.</p>
+<h4 id="retours-lidar">Retours <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">LiDAR</span></a></h4>
+<p>Les impulsions laser émises par un système <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">LiDAR</span></a> se reflètent sur des objets placés à la fois sur la surface du sol et au-dessus : végétation, bâtiments, ponts et ainsi de suite. Une impulsion laser émise peut revenir au capteur <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">LiDAR</span></a> sous forme d’un ou plusieurs retours. Les impulsions laser émises qui rencontrent plusieurs surfaces de réflexion lors de leur voyage vers le sol sont fractionnées en autant de retours qu’il existe de surfaces réfléchissantes.</p>
+<h4 id="attributs-de-point-lidar">Attributs de point <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">LiDAR</span></a></h4>
+<p>Des informations complémentaires sont stockées avec chaque valeur de position x, y et z. Les attributs de point <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">LiDAR</span></a> suivants sont conservés pour chaque impulsion laser enregistrée : intensité, numéro de retour, nombre de retours, valeurs de classification des points, points situés à la limite de la ligne de vol, valeurs RVB (rouge, vert et bleu), heure GPS, angle de balayage et direction du balayage.</p>
+<h4 id="données-de-nuages-de-points">Données de nuages de points</h4>
+<p>Les données <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">LiDAR</span></a> spatiales post-traitées sont connues comme des données de nuages de points. Les nuages de points initiaux sont des ensembles volumineux de points d’altitude 3D qui incluent des valeurs x, y et z, ainsi que des attributs supplémentaires, tels que des horodatages GPS. Les entités de surface spécifiques que le laser rencontre sont classées après le post-traitement du nuage de points <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">LiDAR</span></a> initial. Les altitudes du sol, des bâtiments, du couvert forestier, des ponts au-dessus des autoroutes et de tout ce que le faisceau laser peut rencontrer au cours de l’étude constituent des données de nuages de points.</p>
+<p>La rugosité et l’intensité sont deux informations différentes mais complémentaires fournies par les nuages de points <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">LiDAR</span></a>.</p>
+<p>La rugosité mesure la variation locale de l’altitude des points dans un voisinage donné. Elle est calculée à partir des coordonnées 3D (X, Y, Z) des points et reflète la texture et l’irrégularité de la surface. Une rugosité élevée indique la présence d’obstacles ou de variations d’altitude. Cette mesure est indépendante des propriétés de réflectance des matériaux et est utilisée pour distinguer les surfaces planes des surfaces encombrées.</p>
+<p>L’intensité, quant à elle, mesure la quantité d’énergie réfléchie par la surface et enregistrée par le capteur <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">LiDAR</span></a>. C’est une valeur scalaire associée à chaque point, en plus des coordonnées 3D. L’intensité dépend des propriétés de réflectance des matériaux à la longueur d’onde du laser. Elle varie selon le type de surface : elle est forte pour les surfaces réfléchissantes et faible pour les surfaces absorbantes. L’intensité peut aider à distinguer différents matériaux ou objets, mais elle est sensible aux conditions d’acquisition, telles que la distance et l’angle d’incidence.</p>
+<h4 id="fournisseur-de-données-lidar">Fournisseur de données <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">LiDAR</span></a></h4>
+<p>Au niveau mondial, il n’y a pas de données <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">LiDAR</span></a> disponibles qui couvrent le globe entier. C’est probablement dû à des raisons de coût.</p>
+<p>En ce qui concerne la Suisse, Swisstopo &#91;<a href="../bibliography.html#ref-swisstopo_acquisition_2024">108</a>&#93; met à disposition des données qui couvrent l’intégralité du territoire. Dans la Figure <a href="#fig:A1_17_swisstopo_lidar" reference="fig:A1_17_swisstopo_lidar" reference-type="ref">6.17</a>, on peut voir les 6 campagnes d’acquisition de données qui ont été menées. Les données sont disponibles en moyenne environ 12 mois après le survol.</p>
+<figure id="fig:A1_17_swisstopo_lidar" data-latex-placement="H">
+<img src="../assets/figures/A1/A1_17_swisstopo_lidar.webp" style="width:100.0%"  alt="Figure 6.17 — Données LIDAR disponibles en Suisse [108]" />
+<figcaption>Figure 6.17 — Données LIDAR disponibles en Suisse <span class="citation" data-cites="swisstopo_acquisition_2024">[<a href="../bibliography.html#ref-swisstopo_acquisition_2024" role="doc-biblioref">108</a>]</span></figcaption>
+</figure>
+
+<p>Les caractéristiques des données <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">LiDAR</span></a> disponibles sont les suivantes :</p>
+<ul>
+<li>
+<p>Densité de points : minimum 5 pts/m², moyenne autour de 15-20 pts/m²</p>
+</li>
+<li>
+<p>Classification :</p>
+</li>
+<li>
+<p>Non classifiés</p>
+</li>
+<li>
+<p>Sol</p>
+</li>
+<li>
+<p>Végétation</p>
+</li>
+<li>
+<p>Bâtiments</p>
+</li>
+<li>
+<p>Eau</p>
+</li>
+<li>
+<p>Ponts</p>
+</li>
+<li>
+<p>Précision planimétrique : 20 cm</p>
+</li>
+<li>
+<p>Précision altimétrique : 10 cm</p>
+</li>
+</ul>
+<p>Swisstopo va continuer à mettre à jour ses données dans les années suivantes (Figure <a href="#fig:A1_18_swisstopo_prevision_lidar" reference="fig:A1_18_swisstopo_prevision_lidar" reference-type="ref">6.18</a>). La prévision est que la mise à jour de ces données sera finalisée en 2030.</p>
+<figure id="fig:A1_18_swisstopo_prevision_lidar" data-latex-placement="H">
+<img src="../assets/figures/A1/A1_18_swisstopo_prevision_lidar.webp" style="width:100.0%"  alt="Figure 6.18 — Prévision d’acquisition de données LIDAR en Suisse [108]" />
+<figcaption>Figure 6.18 — Prévision d’acquisition de données LIDAR en Suisse <span class="citation" data-cites="swisstopo_acquisition_2024">[<a href="../bibliography.html#ref-swisstopo_acquisition_2024" role="doc-biblioref">108</a>]</span></figcaption>
+</figure>
+
+<p>En ce qui concerne le canton de Genève, les dernières données <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">LiDAR</span></a> &#91;<a href="../bibliography.html#ref-sitg_nuages_2021">109</a>&#93; &#91;<a href="../bibliography.html#ref-sitg_nuages_2023">110</a>&#93; disponibles sont:</p>
+<table id="tab:lidar_geneve_compact">
+<caption>Tableau 6.8 — Données <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">LiDAR</span></a> disponibles dans le canton de Genève</caption>
+<thead>
+<tr>
+<th style="text-align: left;"></th>
+<th style="text-align: left;"><strong>2021</strong></th>
+<th style="text-align: left;"><strong>2023</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Densité de points</td>
+<td style="text-align: left;">175-220 pts/m²</td>
+<td style="text-align: left;">100 pts/m²</td>
+</tr>
+<tr>
+<td style="text-align: left;">Classification</td>
+<td style="text-align: left;"><ul>
+<li><p>Non classifié</p></li>
+<li><p>Sol</p></li>
+<li><p>Basse végétation (&lt;50cm)</p></li>
+<li><p>Haute végétation (&gt;50cm)</p></li>
+<li><p>Bâtiments</p></li>
+<li><p>Points bas ou isolés</p></li>
+<li><p>Eau</p></li>
+<li><p>Ponts, passerelles</p></li>
+<li><p>Sol (points complémentaires)</p></li>
+<li><p>Bruit</p></li>
+<li><p>Points mesurés hors périmètre</p></li>
+</ul></td>
+<td style="text-align: left;"><ul>
+<li><p>Non classifié</p></li>
+<li><p>Sol</p></li>
+<li><p>Basse végétation (&lt;50cm)</p></li>
+<li><p>Moyenne végétation (0.5-3m)</p></li>
+<li><p>Haute végétation (&gt;3m)</p></li>
+<li><p>Bâtiments</p></li>
+<li><p>Points bas ou isolés/erreurs</p></li>
+<li><p>Eau</p></li>
+<li><p>Piles de matériel naturelle</p></li>
+<li><p>Ponts, passerelles</p></li>
+<li><p>Câbles</p></li>
+<li><p>Mâts, antennes</p></li>
+<li><p>Ponts, passerelles</p></li>
+<li><p>Bruit</p></li>
+<li><p>Voitures</p></li>
+<li><p>Façades</p></li>
+<li><p>Grues, objets temporaires</p></li>
+<li><p>Objets sur les toits</p></li>
+<li><p>Murs</p></li>
+<li><p>Points de sol additionnels</p></li>
+</ul></td>
+</tr>
+<tr>
+<td style="text-align: left;">Précision planimétrique</td>
+<td style="text-align: left;">8 cm</td>
+<td style="text-align: left;">20 cm</td>
+</tr>
+<tr>
+<td style="text-align: left;">Précision altimétrique</td>
+<td style="text-align: left;">4 cm</td>
+<td style="text-align: left;">10 cm</td>
+</tr>
+</tbody>
+</table>
+
+<figure id="fig:A1_19_geneve_lidar" data-latex-placement="H">
+<img src="../assets/figures/A1/A1_19_geneve_lidar.webp" style="width:75.0%"  alt="Figure 6.19 — Représentation à partir des données LIDAR d’une partie du canton de Genève [110]" />
+<figcaption>Figure 6.19 — Représentation à partir des données LIDAR d’une partie du canton de Genève <span class="citation" data-cites="sitg_nuages_2023">[<a href="../bibliography.html#ref-sitg_nuages_2023" role="doc-biblioref">110</a>]</span></figcaption>
+</figure>
+
+<p>La représentation ci-dessus (Figure <a href="#fig:A1_19_geneve_lidar" reference="fig:A1_19_geneve_lidar" reference-type="ref">6.19</a>) permet d’avoir une idée à quoi ressemble le nuage de points <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">LiDAR</span></a>.</p>
+<h3 id="subsec:annexe_donnees_vectorielles">Données vectorielles</h3>
+<p>Les données vectorielles sont un moyen de représenter des informations géométriques à l’aide de valeurs numériques. Contrairement aux données matricielles, qui représentent les informations sous la forme d’une grille de valeurs de pixels, les données vectorielles utilisent des points, des lignes et des polygones pour définir les formes et les limites. Chaque point, ligne ou polygone est représenté par un ensemble de coordonnées (x, y et parfois z) qui définissent son emplacement dans l’espace.</p>
+<p>Il existe plusieurs types de données vectorielles :</p>
+<ul>
+<li>
+<p>Les points : Représentés par un seul jeu de coordonnées (x, y, z), les points sont souvent utilisés pour représenter des emplacements spécifiques, tels que des adresses ou des points de repère.</p>
+</li>
+<li>
+<p>Les lignes : Représentées par une série de points connectés, les lignes sont souvent utilisées pour représenter des frontières, des routes ou d’autres caractéristiques linéaires.</p>
+</li>
+<li>
+<p>Polygones : Représentés par une série de points connectés qui forment une forme fermée, les polygones sont souvent utilisés pour représenter des zones, telles que des bâtiments, des parcelles ou des limites de zonage.</p>
+</li>
+</ul>
+<p>Les données vectorielles sont largement utilisées en géomatique pour diverses applications, notamment :</p>
+<ul>
+<li>
+<p>SIG : Les données vectorielles sont utilisées pour créer, éditer et analyser des données géospatiales dans les logiciels SIG.</p>
+</li>
+<li>
+<p>Analyse spatiale : Les données vectorielles sont utilisées pour effectuer des analyses spatiales, telles que le calcul de distances, de zones tampons et d’intersections.</p>
+</li>
+<li>
+<p>Cartographie : Les données vectorielles sont utilisées pour créer des cartes et visualiser des données géospatiales.</p>
+</li>
+<li>
+<p>L’urbanisme : Les données vectorielles sont utilisées pour planifier et concevoir des infrastructures urbaines, telles que des routes, des bâtiments et des parcs.</p>
+</li>
+</ul>
+<figure id="fig:A1_20_donnees_vectorielles_exemple" data-latex-placement="H">
+<img src="../assets/figures/A1/A1_20_donnees_vectorielles_exemple.webp" style="width:100.0%"  alt="Figure 6.20 — Exemple de données vectorielles de sitg. Rue de la Prairie 8 à Genève" />
+<figcaption>Figure 6.20 — Exemple de données vectorielles de <a href="../glossary.html#gloss-sitg"><span data-acronym-label="sitg" data-acronym-form="singular+abbrv">SITG</span></a>. Rue de la Prairie 8 à Genève</figcaption>
+</figure>
+
+<p>La Figure <a href="#fig:A1_20_donnees_vectorielles_exemple" reference="fig:A1_20_donnees_vectorielles_exemple" reference-type="ref">6.20</a> montre un exemple de données vectorielles extraites de <a href="../glossary.html#gloss-sitg"><span data-acronym-label="sitg" data-acronym-form="singular+abbrv">SITG</span></a>, le portail de géodonnées du canton de Genève. En plus des points, lignes et polygones il est possible d’associer des données en forme de tableau (Figure <a href="#fig:A1_21_donnees_vectorielles_tableau" reference="fig:A1_21_donnees_vectorielles_tableau" reference-type="ref">6.21</a>).</p>
+<figure id="fig:A1_21_donnees_vectorielles_tableau" data-latex-placement="H">
+<img src="../assets/figures/A1/A1_21_donnees_vectorielles_tableau.webp" style="width:75.0%"  alt="Figure 6.21 — Exemple de données tabulaires associées a un polygone. Rue de la Prairie 8 à Genève. Données de sitg" />
+<figcaption>Figure 6.21 — Exemple de données tabulaires associées a un polygone. Rue de la Prairie 8 à Genève. Données de <a href="../glossary.html#gloss-sitg"><span data-acronym-label="sitg" data-acronym-form="singular+abbrv">SITG</span></a></figcaption>
+</figure>
+
+<p>Les données sont organisées en couches vectorielles. Dans ces deux figures d’exemple, la couche des bâtiments hors sol est représentée. Chaque couche regroupe en général une thématique comme les bâtiments, les arbres, etc.</p>
+<p>Il existe une très grande quantité de données vectorielles tant au niveau Suisse et genevois.</p>
+<p><a href="../glossary.html#gloss-sitg"><span data-acronym-label="sitg" data-acronym-form="singular+abbrv">SITG</span></a> dispose de plus de 1575 couches de données &#91;<a href="../bibliography.html#ref-sitg_chiffre-cle_2025">105</a>&#93;, dont environ 200 couches raster et plus de 1375 couches vectorielles, ce qui représente une très grande quantité de données.</p>
+<p>Les données de l’administration publique suisse sont regroupées sur un site web<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup> pour simplifier l’accès à ces données publiques. Le site compte plus de 10000 couches (vectorielles, raster, etc.) qui sont produites par les communes, cantons, confédération et autres entités publiques. Les thématiques traitées sont très diverses par exemple, l’environnement, l’économie, la santé, etc.</p>
+<p>Swisstopo met à disposition du publique un site<sup id="fnref:2"><a class="footnote-ref" href="#fn:2">2</a></sup> pour visualiser toutes les données disponibles dans une interface conviviale.</p>
+<h2 id="machine-learning-appliqué-aux-images-1">Machine learning appliqué aux images</h2>
+<p>L’analyse d’images est un domaine important du machine learning, qui permet aux machines d’analyser, de comprendre et de déduire des informations à partir d’images. La Figure <a href="#fig:A1_22_schema_ml" reference="fig:A1_22_schema_ml" reference-type="ref">6.22</a> ci-dessous illustre les principales applications.</p>
+<figure id="fig:A1_22_schema_ml" data-latex-placement="H">
+<img src="../assets/figures/A1/A1_22_schema_ml.webp" style="width:100.0%"  alt="Figure 6.22 — Exemple de classification, détection, segmentation, suivi et analyse de pose [111]" />
+<figcaption>Figure 6.22 — Exemple de classification, détection, segmentation, suivi et analyse de pose <span class="citation" data-cites="ultralytics_classer_nodate">[<a href="../bibliography.html#ref-ultralytics_classer_nodate" role="doc-biblioref">111</a>]</span></figcaption>
+</figure>
+
+<p>Les principales applications sont :</p>
+<ul>
+<li>
+<p>Classification d’images</p>
+</li>
+<li>
+<p>Détection d’objets</p>
+</li>
+<li>
+<p>Segmentation d’images</p>
+</li>
+</ul>
+<p>Il existe d’autres applications tel que le suivi (compter des objets dans une vidéo) et l’estimation de pose (évaluer la position du corps), mais ils ne seront pas traités dans ce rapport car leur application à la géomatique est très limitée.</p>
+<p>La Figure <a href="#fig:A1_23_image_exemple" reference="fig:A1_23_image_exemple" reference-type="ref">6.23</a> ci-dessous va permettre d’illustrer les différentes applications.</p>
+<figure id="fig:A1_23_image_exemple" data-latex-placement="H">
+<img src="../assets/figures/A1/A1_23_image_exemple.webp" style="width:100.0%"  alt="Figure 6.23 — Orthophoto de la haute école du paysage, d’ingénierie et architecture de Genève (hepia), situé à la rue de la Prairie 4" />
+<figcaption>Figure 6.23 — Orthophoto de la haute école du paysage, d’ingénierie et architecture de Genève (hepia), situé à la rue de la Prairie 4</figcaption>
+</figure>
+
+<h3 id="classification-dimages">Classification d’images</h3>
+<p>Cette tâche consiste à classer une image dans l’une des catégories prédéfinies. Par exemple, classer une image en fonction de son contenu (par exemple, chat, chien, voiture, etc.). Les modèles utilisés pour la classification d’images sont généralement entraînés sur des données étiquetées où chaque image est associée à une seule catégorie.</p>
+<p>Dans la Figure <a href="#fig:A1_23_image_exemple" reference="fig:A1_23_image_exemple" reference-type="ref">6.23</a> d’exemple, la classification va identifier dans l’image les deux classes soit “rooftop” et “solar-panel”. L’image en soi n’aura pas d’annotation particulière, car la classification identifie ce qu’il y a sur l’image mais pas la position exacte. Le modèle va retourner les classes et la probabilité qu’estime le modèle que la classe soit présente. La classe sélectionnée sera celle qui a la probabilité la plus élevée.</p>
+<p>La Figure <a href="#fig:A1_24_classification" reference="fig:A1_24_classification" reference-type="ref">6.24</a> représente un deuxième exemple de classification d’images.</p>
+<figure id="fig:A1_24_classification" data-latex-placement="H">
+<img src="../assets/figures/A1/A1_24_classification.webp" style="width:100.0%"  alt="Figure 6.24 — Exemple de classification d’image [111]" />
+<figcaption>Figure 6.24 — Exemple de classification d’image <span class="citation" data-cites="ultralytics_classer_nodate">[<a href="../bibliography.html#ref-ultralytics_classer_nodate" role="doc-biblioref">111</a>]</span></figcaption>
+</figure>
+
+<h3 id="détection-dobjets">Détection d’objets</h3>
+<p>La détection va identifier les différentes classes sur l’image, ainsi que leur position. Les modèles utilisés pour la détection d’objets sont généralement entraînés sur des données étiquetées où chaque objet est associé à une boîte englobante et une étiquette de classe.</p>
+<figure id="fig:A1_25_detection_hepia" data-latex-placement="H">
+<img src="../assets/figures/A1/A1_25_detection_hepia.webp" style="width:100.0%"  alt="Figure 6.25 — Orthophoto d’exemple de détection" />
+<figcaption>Figure 6.25 — Orthophoto d’exemple de détection</figcaption>
+</figure>
+
+<p>Dans la Figure <a href="#fig:A1_25_detection_hepia" reference="fig:A1_25_detection_hepia" reference-type="ref">6.25</a> on observe que la détection permet de savoir quelle classe est présente sur l’image, sa position mais pas le contour exact de l’objet. Le chiffre indiqué après la classe indique la probabilité estimée par le modèle que l’objet détecté appartienne à une certaine classe.</p>
+<h3 id="subsec:segmentation_image">Segmentation d’image</h3>
+<p>Il y a principalement 3 types de segmentation d’image qui sont couramment utilisés :</p>
+<ul>
+<li>
+<p>Segmentation sémantique</p>
+</li>
+<li>
+<p>Segmentation instance</p>
+</li>
+<li>
+<p>Segmentation panoptique</p>
+</li>
+</ul>
+<figure id="fig:types_segmentation" data-latex-placement="H">
+<figure id="fig:A1_26_segmentation_image_exemple">
+<img src="../assets/figures/A1/A1_26_segmentation_image_exemple.webp"  alt="Figure 6.26 — Image d’exemple" />
+<figcaption>Figure 6.26 — Image d’exemple</figcaption>
+</figure>
+<figure id="fig:A1_27_segmentation_semantique">
+<img src="../assets/figures/A1/A1_27_segmentation_semantique.webp"  alt="Figure 6.27 — Segmentation sémantique" />
+<figcaption>Figure 6.27 — Segmentation sémantique</figcaption>
+</figure>
+<figure id="fig:A1_28_segmentation_instance">
+<img src="../assets/figures/A1/A1_28_segmentation_instance.webp"  alt="Figure 6.28 — Segmentation instance" />
+<figcaption>Figure 6.28 — Segmentation instance</figcaption>
+</figure>
+<figure id="fig:A1_29_segmentation_panoptique">
+<img src="../assets/figures/A1/A1_29_segmentation_panoptique.webp"  alt="Figure 6.29 — Segmentation panoptique" />
+<figcaption>Figure 6.29 — Segmentation panoptique</figcaption>
+</figure>
+<figcaption>Figure 6.30 — Comparaison des différents types de segmentation d’image <span class="citation" data-cites="jung_benchmarking_2022">[<a href="../bibliography.html#ref-jung_benchmarking_2022" role="doc-biblioref">112</a>]</span></figcaption>
+</figure>
+
+<p>La segmentation sémantique (Figure <a href="#fig:A1_27_segmentation_semantique" reference="fig:A1_27_segmentation_semantique" reference-type="ref">6.27</a>) va assigner une classe à chaque pixel de l’image. Ce genre de segmentation est utile pour distinguer par exemple les routes des immeubles, mais ce n’est pas assez sophistiqué pour distinguer les routes entre elles.</p>
+<p>La segmentation instance (Figure <a href="#fig:A1_28_segmentation_instance" reference="fig:A1_28_segmentation_instance" reference-type="ref">6.28</a>) va permettre d’identifier les différents éléments d’une image, mais ne va pas lui assigner une classe.</p>
+<p>La segmentation panoptique (Figure <a href="#fig:A1_29_segmentation_panoptique" reference="fig:A1_29_segmentation_panoptique" reference-type="ref">6.29</a>) est la combinaison des segmentations sémantique et instance. C’est la plus sophistiquée car elle permet d’assigner une classe à chaque pixel de l’image et en plus, fait la différence entre les différents objets appartenant à une même classe.</p>
+<p>Le Tableau <a href="#tab:comparatif_segmentation" reference="tab:comparatif_segmentation" reference-type="ref">6.9</a> ci-dessous résume les différences.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;"></th>
+<th style="text-align: left;"><strong>Segm. sémantique</strong></th>
+<th style="text-align: left;"><strong>Segm. instance</strong></th>
+<th style="text-align: left;"><strong>Segm. panoptique</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Définition</td>
+<td style="text-align: left;">Chaque pixel est assigné à une classe connue</td>
+<td style="text-align: left;">Détecte les contours des objets, lui assigne un identifiant unique (“objet_1”) à chaque objet. Ne lui attribue pas de classe.</td>
+<td style="text-align: left;">Mélange de segmentation sémantique et instance. Chaque pixel a une classe et il peut différencier entre plusieurs objets de la même classe.</td>
+</tr>
+<tr>
+<td style="text-align: left;">Sortie</td>
+<td style="text-align: left;">Contours avec une classe attribuée</td>
+<td style="text-align: left;">Contour par objet segmenté</td>
+<td style="text-align: left;">Contour par objet segmenté avec un label</td>
+</tr>
+<tr>
+<td style="text-align: left;">Sépare les objets de la même classe</td>
+<td style="text-align: left;">Non</td>
+<td style="text-align: left;">Oui, mais ne distingue pas les classes</td>
+<td style="text-align: left;">Oui</td>
+</tr>
+</tbody>
+</table>
+<p><span id="tab:comparatif_segmentation"></span></p>
+<p class="thesis-caption"><em>Tableau 6.9 — Comparatif des différents types de segmentation d’image</em></p>
+<figure id="fig:A1_30_segmentation_semantique_hepia" data-latex-placement="H">
+<img src="../assets/figures/A1/A1_30_segmentation_semantique_hepia.webp" style="width:100.0%"  alt="Figure 6.31 — Orthophoto d’exemple de segmentation" />
+<figcaption>Figure 6.31 — Orthophoto d’exemple de segmentation</figcaption>
+</figure>
+
+<p>La Figure <a href="#fig:A1_30_segmentation_semantique_hepia" reference="fig:A1_30_segmentation_semantique_hepia" reference-type="ref">6.31</a> est un exemple de segmentation sémantique, en plus de connaître la classe présente dans l’image, on connaît aussi le contour exact de l’objet. Comme pour la détection, le chiffre indiqué après la classe indique la probabilité estimée par le modèle que l’objet segmenté appartient à une certaine classe. Les chiffres sont identiques dans la Figure <a href="#fig:A1_25_detection_hepia" reference="fig:A1_25_detection_hepia" reference-type="ref">6.25</a> et la Figure <a href="#fig:A1_30_segmentation_semantique_hepia" reference="fig:A1_30_segmentation_semantique_hepia" reference-type="ref">6.31</a>.</p>
+<h3 id="subsec:evaluation_des_performances">Évaluation des performances</h3>
+<p>L’évaluation des performances dans le domaine de la vision par ordinateur (« computer vision ») a nécessité de développer des métriques spécifiques :</p>
+<ul>
+<li>
+<p>Intersection sur l’union (IoU) et moyenne de l’intersection sur l’union (mIoU)</p>
+</li>
+<li>
+<p>Average precision (AP)</p>
+</li>
+<li>
+<p>Mean average precision (mAP)</p>
+</li>
+<li>
+<p>Pixel accuracy (PA)</p>
+</li>
+</ul>
+<h4 id="intersection-sur-lunion-iou-et-moyenne-de-lintersection-sur-lunion-miou">Intersection sur l’union (IoU) et moyenne de l’intersection sur l’union (mIoU)</h4>
+<p>L’intersection sur l’Union (IoU) mesure le chevauchement entre le masque de segmentation prédit et le masque de vérité terrain. Elle est calculée comme la zone d’intersection divisée par la zone d’union entre les deux masques. La Figure <a href="#fig:A1_31_iou_concept" reference="fig:A1_31_iou_concept" reference-type="ref">6.32</a> illustre ce concept. Plus le masque prédit par le modèle est proche de la valeur annotée (vérité terrain), plus le IoU sera élevé. Un IoU élevé indique que le modèle prédit bien.</p>
+<figure id="fig:A1_31_iou_concept" data-latex-placement="H">
+<img src="../assets/figures/A1/A1_31_iou_concept.webp" style="width:50.0%"  alt="Figure 6.32 — Intersection sur l’union [113]" />
+<figcaption>Figure 6.32 — Intersection sur l’union <span class="citation" data-cites="rosebrock_intersection_2016">[<a href="../bibliography.html#ref-rosebrock_intersection_2016" role="doc-biblioref">113</a>]</span></figcaption>
+</figure>
+
+<figure id="fig:iou_exemples" data-latex-placement="H">
+<figure id="fig:A1_32_iou_exemple1">
+<img src="../assets/figures/A1/A1_32_iou_exemple1.webp"  alt="Figure 6.33 — Exemple de bon IoU [114]" />
+<figcaption>Figure 6.33 — Exemple de bon IoU <span class="citation" data-cites="mechea_panoptic_2019">[<a href="../bibliography.html#ref-mechea_panoptic_2019" role="doc-biblioref">114</a>]</span></figcaption>
+</figure>
+<figure id="fig:A1_33_iou_exemple2">
+<img src="../assets/figures/A1/A1_33_iou_exemple2.webp"  alt="Figure 6.34 — Exemple de mauvais IoU [114]" />
+<figcaption>Figure 6.34 — Exemple de mauvais IoU <span class="citation" data-cites="mechea_panoptic_2019">[<a href="../bibliography.html#ref-mechea_panoptic_2019" role="doc-biblioref">114</a>]</span></figcaption>
+</figure>
+<figcaption>Figure 6.35 — Exemples de IoU <span class="citation" data-cites="mechea_panoptic_2019">[<a href="../bibliography.html#ref-mechea_panoptic_2019" role="doc-biblioref">114</a>]</span></figcaption>
+</figure>
+
+<p>Dans la Figure <a href="#fig:iou_exemples" reference="fig:iou_exemples" reference-type="ref">6.35</a>, on peut voir deux exemples de IoU. La Figure <a href="#fig:A1_32_iou_exemple1" reference="fig:A1_32_iou_exemple1" reference-type="ref">6.33</a> représente un IoU de 0.8, ce qui indique que le modèle a détecté un chat (cadre magenta) proche de la vérité terrain (cadre noir), cette détection devient un true positive (TP).</p>
+<p>Dans la Figure <a href="#fig:A1_33_iou_exemple2" reference="fig:A1_33_iou_exemple2" reference-type="ref">6.34</a>, on observe que le modèle a détecté un chat (cadre magenta) là où il n’y en avait pas, cette détection devient un false positive (FP). Le modèle n’a pas vu le chat (cadre noir), cela comptera comme un false negative (FN).</p>
+<p>L’intersection moyenne sur l’union (mIoU) est la moyenne de l’IoU pour toutes les classes.</p>
+<h4 id="average-precision-ap">Average precision (AP)</h4>
+<p>L’average precision (AP) se base sur le graphique precision-recall (Figure <a href="#fig:A1_34_precision_recall" reference="fig:A1_34_precision_recall" reference-type="ref">6.36</a>), ce graphique a dans l’axe des abscisses (x) le recall et dans l’axe des ordonnées (y) la precision. C’est un graphique qui va permettre de visualiser le lien entre la precision et le recall.</p>
+<figure id="fig:A1_34_precision_recall" data-latex-placement="H">
+<img src="../assets/figures/A1/A1_34_precision_recall.webp" style="width:100.0%"  alt="Figure 6.36 — Exemple de courbe precision-recall. Average precision (AP) et mean average precision (mAP) calculés dans la légende." />
+<figcaption>Figure 6.36 — Exemple de courbe precision-recall. Average precision (AP) et mean average precision (mAP) calculés dans la légende.</figcaption>
+</figure>
+
+<p>Le choix du seuil de classification permet d’ajuster le compromis entre la precision et le recall. Un seuil bas maximise le recall au détriment de la precision, tandis qu’un seuil élevé maximise la precision au détriment du recall.</p>
+<p>La courbe precision-recall visualise ce compromis. Une courbe proche du coin supérieur droit (precision = 1, recall = 1) indique de meilleures performances globales.</p>
+<p>L’aire sous la courbe precision-recall, appelée Average Precision (AP), est une métrique résumée pour comparer les modèles.</p>
+<p>Les étapes pour calculer l’average precision (AP) sont les suivantes :</p>
+<ol>
+<li>
+<p>Prendre les seuils de classification générés par le modèle. Ceux-ci indiquent à quel point le modèle est sûr qu’un pixel appartient bien à une certaine classe. Ce sont des chiffres entre 0 et 1. Plus le chiffre est proche de 1, plus le modèle estime que la probabilité que le pixel appartient à une classe est élevée</p>
+</li>
+<li>
+<p>Calculer la precision et le recall pour les différents seuils de classification</p>
+</li>
+<li>
+<p>Tracer la courbe precision-recall</p>
+</li>
+<li>
+<p>L’average precision s’obtient en calculant l’aire sous la courbe (intégration ou approximation numérique via des trapèzes par exemple)</p>
+</li>
+</ol>
+<h4 id="mean-average-precision-map">Mean average precision (mAP)</h4>
+<p>Dans les cas multi-classes, on calcule la moyenne des AP de l’ensemble des classes et on obtient le mean average precision (mAP). Sur la légende de la Figure <a href="#fig:A1_34_precision_recall" reference="fig:A1_34_precision_recall" reference-type="ref">6.36</a>, on peut voir un exemple de calcul de mAP, si l’on prend le AP des deux classes « rooftop » et « solar-panel », la moyenne est égale à 0.513.</p>
+<p>Le mAP peut aussi être utilisé avec un seuil minimum de IoU, ce qui va indiquer la capacité du modèle à localiser de manière précise un objet. Les plus communs sont :</p>
+<ul>
+<li>
+<p>mAP@0.5 (IoU supérieur ou égal à 0.5)</p>
+</li>
+<li>
+<p>mAP@0.95 (IoU supérieur ou égal à 0.95)</p>
+</li>
+<li>
+<p>mAP@&#91;0.5:0.95&#93; (mAP sur plusieurs seuils de l’IoU entre 0.5 et 0.95)</p>
+</li>
+</ul>
+<h4 id="pixel-accuracy-pa">Pixel accuracy (PA)</h4>
+<p>Le Pixel Accuracy (PA) mesure le pourcentage de pixels correctement classés sur l’ensemble de l’image.</p>
+<h4 id="panoptic-quality-pq">Panoptic Quality (PQ)</h4>
+<p>La panoptic quality (PQ) &#91;<a href="../bibliography.html#ref-kirillov_panoptic_2019">115</a>&#93; est utilisée dans la segmentation panoptique.</p>
+<p>Le PQ permet d’avoir une métrique unique pour la détection du contour des objets (segmentation instance), mais aussi pour assigner une classe aux différents pixels (segmentation sémantique). L’équation se divise en deux parties :</p>
+<ul>
+<li>
+<p>Segmentation quality (SQ)</p>
+</li>
+<li>
+<p>Recognition quality (RQ)</p>
+</li>
+</ul>
+<p>La segmentation quality (SQ) &#91;<a href="../bibliography.html#ref-kirillov_panoptic_2019">115</a>&#93; évalue la qualité des masques de segmentation produits par un modèle de segmentation panoptique (Équation <a href="#eq:segmentation_quality" reference="eq:segmentation_quality" reference-type="ref">(8)</a>). Elle est calculée comme la moyenne de l’intersection sur l’union (mIoU) entre les segments prédits et les segments de la vérité de terrain qui ont été mis en correspondance.</p>
+<p><span id="eq:segmentation_quality"></span></p>
+<div class="arithmatex">\[\begin{equation}
+SQ = \frac{\sum_{(p,g) \in TP} IoU(p,g)}{|TP|}
+\label{eq:segmentation_quality}
+\end{equation}\]</div>
+<p class="thesis-caption"><em>(8)</em></p>
+<p>La recognition quality (RQ) &#91;<a href="../bibliography.html#ref-kirillov_panoptic_2019">115</a>&#93; évalue l’accuracy des classes attribuées aux régions segmentées par un modèle de segmentation panoptique (Équation <a href="#eq:recognition_quality" reference="eq:recognition_quality" reference-type="ref">(9)</a>). Elle est basée sur le score F1, qui est une moyenne harmonique de la precision et du recall.</p>
+<p><span id="eq:recognition_quality"></span></p>
+<div class="arithmatex">\[\begin{equation}
+RQ = \frac{|TP|}{|TP| + \frac{1}{2}|FP| + \frac{1}{2}|FN|}
+\label{eq:recognition_quality}
+\end{equation}\]</div>
+<p class="thesis-caption"><em>(9)</em></p>
+<p>Finalement, la panoptic quality (PQ) &#91;<a href="../bibliography.html#ref-kirillov_panoptic_2019">115</a>&#93; (Équation <a href="#eq:panoptic_quality" reference="eq:panoptic_quality" reference-type="ref">(10)</a>) est la multiplication de SQ (Équation <a href="#eq:segmentation_quality" reference="eq:segmentation_quality" reference-type="ref">(8)</a>) et RQ (Équation <a href="#eq:recognition_quality" reference="eq:recognition_quality" reference-type="ref">(9)</a>)</p>
+<p><span id="eq:panoptic_quality"></span></p>
+<div class="arithmatex">\[\begin{equation}
+PQ = SQ \cdot RQ = \frac{\sum_{(p,g) \in TP} IoU(p,g)}{|TP|} \cdot \frac{|TP|}{|TP| + \frac{1}{2}|FP| + \frac{1}{2}|FN|}
+\label{eq:panoptic_quality}
+\end{equation}\]</div>
+<p class="thesis-caption"><em>(10)</em></p>
+<h4 id="métriques-par-application">Métriques par application</h4>
+<p>Le Tableau <a href="#tab:metrics_by_application" reference="tab:metrics_by_application" reference-type="ref">6.10</a> ci-dessous met en lien les métriques et les différentes applications.</p>
+<table id="tab:metrics_by_application">
+<caption>Tableau 6.10 — Métriques par application</caption>
+<thead>
+<tr>
+<th style="text-align: left;"></th>
+<th style="text-align: left;"><strong>Classification</strong></th>
+<th style="text-align: left;"><strong>Détection</strong></th>
+<th style="text-align: left;"><strong>Segmentation sémantique</strong></th>
+<th style="text-align: left;"><strong>Segmentation instance</strong></th>
+<th style="text-align: left;"><strong>Segmentation panoptique</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Principales métriques</strong></td>
+<td style="text-align: left;"><ul>
+<li><p>Accuracy</p></li>
+<li><p>Precision</p></li>
+<li><p>Recall</p></li>
+<li><p>F1-Score</p></li>
+<li><p>Matrice de confusion</p></li>
+</ul></td>
+<td style="text-align: left;"><ul>
+<li><p>Intersection sur Union (IoU)</p></li>
+<li><p>Average Precision (AP)</p></li>
+<li><p>Mean average precision (mAP)</p></li>
+</ul></td>
+<td style="text-align: left;"><ul>
+<li><p>Pixel accuracy (PA)</p></li>
+<li><p>Moyenne intersection sur Union (mIoU)</p></li>
+</ul></td>
+<td style="text-align: left;"><ul>
+<li><p>Average Precision (AP)</p></li>
+<li><p>Mean average precision (mAP)</p></li>
+</ul></td>
+<td style="text-align: left;"><ul>
+<li><p>Panoptic quality (PQ)</p></li>
+</ul></td>
+</tr>
+</tbody>
+</table>
+
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:1">
+<p><a href="https://opendata.swiss/fr">https://opendata.swiss/fr</a>&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+<li id="fn:2">
+<p><a href="https://map.geo.admin.ch/">https://map.geo.admin.ch/</a>&#160;<a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Retour en haut de la page
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.top", "navigation.indexes", "navigation.path", "toc.follow", "content.code.copy"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copi\u00e9 dans le presse-papier", "clipboard.copy": "Copier dans le presse-papier", "search.result.more.one": "1 de plus sur cette page", "search.result.more.other": "# de plus sur cette page", "search.result.none": "Aucun document trouv\u00e9", "search.result.one": "1 document trouv\u00e9", "search.result.other": "# documents trouv\u00e9s", "search.result.placeholder": "Taper pour d\u00e9marrer la recherche", "search.result.term.missing": "Non trouv\u00e9", "select.version": "S\u00e9lectionner la version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

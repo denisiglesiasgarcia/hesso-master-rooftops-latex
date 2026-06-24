@@ -1,0 +1,1985 @@
+
+<!doctype html>
+<html lang="fr" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Ce travail de master s’intéresse à la transition énergétique et à l’utilisation des toitures pour produire de l’énergie solaire. L’objectif est de créer…">
+      
+      
+      
+        <link rel="canonical" href="https://denisiglesiasgarcia.github.io/hesso-master-rooftops-latex/chapters/05-conclusions.html">
+      
+      
+        <link rel="prev" href="04-implementation.html">
+      
+      
+        <link rel="next" href="../appendices/A1-fondamentaux-ml.html">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../img/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>5. Conclusions - Identification des parties utiles des toitures pour le solaire par machine learning</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  
+  
+  
+  
+  
+
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="5. Conclusions">
+  <meta property="og:description" content="Ce travail de master s’intéresse à la transition énergétique et à l’utilisation des toitures pour produire de l’énergie solaire. L’objectif est de créer…">
+  <meta property="og:image" content="https://denisiglesiasgarcia.github.io/hesso-master-rooftops-latex/img/social-card-v2.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Identification des parties utiles des toitures pour le solaire par Machine Learning — Travail de Master HES-SO, Denis Iglesias Garcia">
+  <meta property="og:url" content="https://denisiglesiasgarcia.github.io/hesso-master-rooftops-latex/chapters/05-conclusions.html">
+  <meta property="og:site_name" content="Identification des parties utiles des toitures pour le solaire par machine learning">
+  <meta property="og:locale" content="fr_FR">
+
+  <meta name="author" content="Denis Iglesias Garcia">
+  <meta property="article:author" content="https://www.linkedin.com/in/denisiglesiasgarcia/">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="5. Conclusions">
+  <meta name="twitter:description" content="Ce travail de master s’intéresse à la transition énergétique et à l’utilisation des toitures pour produire de l’énergie solaire. L’objectif est de créer…">
+  <meta name="twitter:image" content="https://denisiglesiasgarcia.github.io/hesso-master-rooftops-latex/img/social-card-v2.png">
+
+  
+
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#chap:conclusion" class="md-skip">
+          Aller au contenu
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="En-tête">
+    <a href="../index.html" title="Identification des parties utiles des toitures pour le solaire par machine learning" class="md-header__button md-logo" aria-label="Identification des parties utiles des toitures pour le solaire par machine learning" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Identification des parties utiles des toitures pour le solaire par machine learning
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              5. Conclusions
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Mode sombre"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Mode sombre" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Mode clair"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Mode clair" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Rechercher" placeholder="Rechercher" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Recherche">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Effacer" aria-label="Effacer" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initialisation de la recherche
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/denisiglesiasgarcia/hesso-master-rooftops-latex" title="Aller au dépôt" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Onglets" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../index.html" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Accueil
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="00-resume.html" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Résumé
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="01-introduction.html" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Chapitres
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../appendices/A1-fondamentaux-ml.html" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Annexes
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../lists.html" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Listes
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../bibliography.html" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Bibliographie
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../glossary.html" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Glossaire
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../index.html" title="Identification des parties utiles des toitures pour le solaire par machine learning" class="md-nav__button md-logo" aria-label="Identification des parties utiles des toitures pour le solaire par machine learning" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Identification des parties utiles des toitures pour le solaire par machine learning
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/denisiglesiasgarcia/hesso-master-rooftops-latex" title="Aller au dépôt" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Accueil
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="00-resume.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Résumé
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chapitres
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Chapitres
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="01-introduction.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    1. Introduction
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="02-analysis.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2. Analyse
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="03-modele.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3. Modèle
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="04-implementation.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    4. Implémentation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    5. Conclusions
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="05-conclusions.html" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    5. Conclusions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table des matières">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table des matières
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#synthèse-des-contributions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Synthèse des contributions
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Synthèse des contributions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#création-dun-dataset-de-référence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Création d’un dataset de référence
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#développement-et-évaluation-de-modèles-performants" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Développement et évaluation de modèles performants
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#analyse-du-compromis-performance-complexité" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Analyse du compromis performance-complexité
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#validation-sur-des-données-réelles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Validation sur des données réelles
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#analyse-comparative-avec-létat-de-lart" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Analyse comparative avec l’état de l’art
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Analyse comparative avec l’état de l’art">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#positionnement-par-rapport-aux-travaux-existants" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Positionnement par rapport aux travaux existants
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#apports-méthodologiques" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Apports méthodologiques
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#limites-et-perspectives-damélioration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Limites et perspectives d’amélioration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Limites et perspectives d’amélioration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#limites-identifiées" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Limites identifiées
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Limites identifiées">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#limites-du-dataset" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Limites du dataset
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#limitations-techniques" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Limitations techniques
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#perspectives-damélioration-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Perspectives d’amélioration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Perspectives d’amélioration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#enrichissement-du-dataset" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Enrichissement du dataset
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#améliorations-techniques" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Améliorations techniques
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#extension-fonctionnelle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Extension fonctionnelle
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conclusion-générale" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Conclusion générale
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Conclusion générale">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#impact-et-applications" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Impact et applications
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Impact et applications">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#impact-scientifique" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Impact scientifique
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#applications-pratiques" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Applications pratiques
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#impact-environnemental" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Impact environnemental
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#perspectives-futures" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Perspectives futures
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Perspectives futures">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#recherche-académique" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recherche académique
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#transfert-technologique" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Transfert technologique
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#réflexion-finale" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Réflexion finale
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Annexes
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Annexes
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../appendices/A1-fondamentaux-ml.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    A1. Fondamentaux ML
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../appendices/A2-fondamentaux-energie.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    A2. Fondamentaux énergie
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lists.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Listes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bibliography.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bibliographie
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../glossary.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossaire
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table des matières">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table des matières
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#synthèse-des-contributions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Synthèse des contributions
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Synthèse des contributions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#création-dun-dataset-de-référence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Création d’un dataset de référence
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#développement-et-évaluation-de-modèles-performants" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Développement et évaluation de modèles performants
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#analyse-du-compromis-performance-complexité" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Analyse du compromis performance-complexité
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#validation-sur-des-données-réelles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Validation sur des données réelles
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#analyse-comparative-avec-létat-de-lart" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Analyse comparative avec l’état de l’art
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Analyse comparative avec l’état de l’art">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#positionnement-par-rapport-aux-travaux-existants" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Positionnement par rapport aux travaux existants
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#apports-méthodologiques" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Apports méthodologiques
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#limites-et-perspectives-damélioration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Limites et perspectives d’amélioration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Limites et perspectives d’amélioration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#limites-identifiées" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Limites identifiées
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Limites identifiées">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#limites-du-dataset" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Limites du dataset
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#limitations-techniques" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Limitations techniques
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#perspectives-damélioration-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Perspectives d’amélioration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Perspectives d’amélioration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#enrichissement-du-dataset" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Enrichissement du dataset
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#améliorations-techniques" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Améliorations techniques
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#extension-fonctionnelle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Extension fonctionnelle
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conclusion-générale" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Conclusion générale
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Conclusion générale">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#impact-et-applications" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Impact et applications
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Impact et applications">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#impact-scientifique" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Impact scientifique
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#applications-pratiques" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Applications pratiques
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#impact-environnemental" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Impact environnemental
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#perspectives-futures" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Perspectives futures
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Perspectives futures">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#recherche-académique" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recherche académique
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#transfert-technologique" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Transfert technologique
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#réflexion-finale" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Réflexion finale
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+                
+
+
+
+  
+
+
+  <nav class="md-path" aria-label="Navigation" >
+    <ol class="md-path__list">
+      
+        
+  
+  
+    <li class="md-path__item">
+      <a href="../index.html" class="md-path__link">
+        
+  <span class="md-ellipsis">
+    Accueil
+  </span>
+
+      </a>
+    </li>
+  
+
+      
+      
+        
+  
+  
+    
+    
+      <li class="md-path__item">
+        <a href="01-introduction.html" class="md-path__link">
+          
+  <span class="md-ellipsis">
+    Chapitres
+  </span>
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ol>
+  </nav>
+
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="chap:conclusion">Conclusion</h1>
+<p>Ce travail de master s’intéresse à la transition énergétique et à l’utilisation des toitures pour produire de l’énergie solaire. L’objectif est de créer une méthode pour identifier les espaces libres sur les toitures du canton de Genève en utilisant le machine learning et la segmentation sémantique d’orthophotos.</p>
+<h2 id="synthèse-des-contributions">Synthèse des contributions</h2>
+<p>Ce travail apporte plusieurs contributions à l’analyse automatisée des toitures pour évaluer leur potentiel solaire.</p>
+<h3 id="création-dun-dataset-de-référence">Création d’un dataset de référence</h3>
+<p>La contribution principale est la création d’un dataset annoté pour segmenter les espaces libres sur les toitures. Ce dataset comprend :</p>
+<ul>
+<li>
+<p>530 images géoréférencées de pixels provenant des orthophotos 2019 de <a href="../glossary.html#gloss-sitg"><span data-acronym-label="sitg" data-acronym-form="singular+abbrv">SITG</span></a></p>
+</li>
+<li>
+<p>Un échantillonnage stratifié par catégorie SIA et surface de toiture pour représenter la diversité architecturale du canton</p>
+</li>
+<li>
+<p>Des annotations manuelles précises réalisées en environ 180 heures pour distinguer les espaces libres des obstacles</p>
+</li>
+<li>
+<p>Une méthodologie de post-traitement évitant les fuites de données entre les datasets d’entraînement, validation et test</p>
+</li>
+</ul>
+<p>Ce dataset comble un vide dans la littérature. Jusqu’à présent, seul le dataset RID était disponible mais il se limitait au contexte rural allemand.</p>
+<h3 id="développement-et-évaluation-de-modèles-performants">Développement et évaluation de modèles performants</h3>
+<p>L’évaluation de 93 configurations a permis d’identifier les meilleures architectures pour cette tâche :</p>
+<ul>
+<li>
+<p>89 modèles de Segmentation Models PyTorch (SMP) avec différentes combinaisons encodeur-décodeur</p>
+</li>
+<li>
+<p>4 variantes de YOLOv12 adaptées pour la segmentation</p>
+</li>
+<li>
+<p>Une stratégie d’ensemble k-fold qui améliore les performances de 0,9% à 2,0%</p>
+</li>
+<li>
+<p>LinkNet + EfficientNet-B5 identifié comme la meilleure configuration (IoU de 0,741)</p>
+</li>
+</ul>
+<h3 id="analyse-du-compromis-performance-complexité">Analyse du compromis performance-complexité</h3>
+<p>L’analyse du front de Pareto montre que les gains deviennent négligeables au-delà de 25 millions de paramètres. Cette information aide à choisir des architectures efficientes pour un déploiement pratique en identifiant les configurations avec le meilleur rapport performance-complexité.</p>
+<h3 id="validation-sur-des-données-réelles">Validation sur des données réelles</h3>
+<p>Les tests sur la zone de <a href="../glossary.html#gloss-hepia"><span data-acronym-label="hepia" data-acronym-form="singular+abbrv">HEPIA</span></a>, qui n’était pas dans les données d’entraînement, confirment la capacité de généralisation des modèles. Les résultats révèlent aussi les limites actuelles, notamment pour les toitures praticables, végétalisées ainsi que les zones très ombragées.</p>
+<h2 id="analyse-comparative-avec-létat-de-lart">Analyse comparative avec l’état de l’art</h2>
+<h3 id="positionnement-par-rapport-aux-travaux-existants">Positionnement par rapport aux travaux existants</h3>
+<p>Ce travail se distingue des approches existantes par plusieurs aspects :</p>
+<p>Par rapport aux travaux du Swiss Territorial Data Lab (<a href="../glossary.html#gloss-stdl"><span data-acronym-label="stdl" data-acronym-form="singular+abbrv">STDL</span></a>), cette approche de segmentation sémantique surpasse les méthodes testées par <a href="../glossary.html#gloss-stdl"><span data-acronym-label="stdl" data-acronym-form="singular+abbrv">STDL</span></a> :</p>
+<ul>
+<li>
+<p>IoU de 0,741 contre 0,38-0,40 pour les segmentations <a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">LiDAR</span></a> et d’images de <a href="../glossary.html#gloss-stdl"><span data-acronym-label="stdl" data-acronym-form="singular+abbrv">STDL</span></a></p>
+</li>
+<li>
+<p>Temps de traitement significativement réduit comparé aux 12 minutes par 25 bâtiments de leur segmentation d’images</p>
+</li>
+<li>
+<p>Qualité visuelle des résultats supérieure, répondant mieux aux attentes des experts métier</p>
+</li>
+</ul>
+<p>Comparé à l’utilisation directe de SAM, l’approche proposée offre :</p>
+<ul>
+<li>
+<p>Une meilleure gestion des ombrages, problème majeur identifié avec SAM</p>
+</li>
+<li>
+<p>Des temps de calcul considérablement réduits (quelques secondes contre 7 minutes par image)</p>
+</li>
+<li>
+<p>Une précision adaptée à la tâche spécifique sans nécessiter de post-traitement complexe</p>
+</li>
+</ul>
+<p>Par rapport aux méthodes de classification géomatique explorées, la segmentation sémantique s’avère plus fiable :</p>
+<ul>
+<li>
+<p>Indépendance vis-à-vis de la complétude des couches vectorielles de superstructures</p>
+</li>
+<li>
+<p>Capacité à détecter des obstacles non répertoriés dans les données géomatiques</p>
+</li>
+<li>
+<p>Précision au niveau du pixel plutôt qu’au niveau du polygone entier</p>
+</li>
+</ul>
+<h3 id="apports-méthodologiques">Apports méthodologiques</h3>
+<p>La méthodologie développée introduit plusieurs innovations :</p>
+<ul>
+<li>
+<p>Une stratégie d’échantillonnage stratifié multicritères pour assurer la représentativité du dataset</p>
+</li>
+<li>
+<p>Un processus de gestion des chevauchements entre tuiles pour éviter les fuites de données</p>
+</li>
+<li>
+<p>Une approche d’ensemble k-fold optimisant l’utilisation des données annotées limitées</p>
+</li>
+<li>
+<p>Une évaluation multi-métrique permettant une analyse fine des performances selon différents critères</p>
+</li>
+</ul>
+<h2 id="limites-et-perspectives-damélioration">Limites et perspectives d’amélioration</h2>
+<h3 id="limites-identifiées">Limites identifiées</h3>
+<p>Malgré des performances satisfaisantes, plusieurs limites apparaissent :</p>
+<h4 id="limites-du-dataset">Limites du dataset</h4>
+<ul>
+<li>
+<p>Les toitures végétalisées et terrasses praticables sont sous-représentées</p>
+</li>
+<li>
+<p>Le déséquilibre entre exemples positifs et négatifs ressort particulièrement dans les cas d’IoU nul</p>
+</li>
+<li>
+<p>Certaines images contiennent moins de 1% de surface de toiture, ce qui complique l’apprentissage</p>
+</li>
+<li>
+<p>Les critères d’annotation restent parfois flous pour certaines surfaces (serres, terrasses)</p>
+</li>
+</ul>
+<h4 id="limitations-techniques">Limitations techniques</h4>
+<ul>
+<li>
+<p>Les performances chutent sous ombrage intense, avec des variations selon les combinaisons encodeur-décodeur</p>
+</li>
+<li>
+<p>La distinction entre surfaces praticables et non praticables reste difficile</p>
+</li>
+<li>
+<p>Les modèles sont sensibles aux variations d’éclairage et de contraste</p>
+</li>
+</ul>
+<h3 id="perspectives-damélioration-1">Perspectives d’amélioration</h3>
+<h4 id="enrichissement-du-dataset">Enrichissement du dataset</h4>
+<p>Le dataset pourrait être amélioré sur plusieurs points :</p>
+<ul>
+<li>
+<p>Ajouter plus d’exemples de toitures végétalisées et terrasses praticables</p>
+</li>
+<li>
+<p>Diversifier les exemples négatifs pour diminuer les faux positifs</p>
+</li>
+<li>
+<p>Inclure des images prises sous différents éclairages pour mieux gérer les ombrages</p>
+</li>
+<li>
+<p>Ajout d’un deuxième annotateur expert métier pour valider les annotations existantes</p>
+</li>
+</ul>
+<h4 id="améliorations-techniques">Améliorations techniques</h4>
+<ul>
+<li>
+<p>Développer un pré-traitement adaptatif pour normaliser l’éclairage</p>
+</li>
+<li>
+<p>Intégrer des données complémentaires (<a href="../glossary.html#gloss-lidar"><span data-acronym-label="lidar" data-acronym-form="singular+short">LiDAR</span></a>, modèles 3D) pour mieux discriminer les surfaces</p>
+</li>
+<li>
+<p>Créer des architectures d’ensemble combinant plusieurs modèles aux forces complémentaires</p>
+</li>
+</ul>
+<h4 id="extension-fonctionnelle">Extension fonctionnelle</h4>
+<ul>
+<li>
+<p>Connecter directement avec les calculs de potentiel solaire du cadastre genevois</p>
+</li>
+<li>
+<p>Créer une interface pour la validation et correction semi-automatique</p>
+</li>
+<li>
+<p>Adapter la méthode à d’autres régions et types d’architecture</p>
+</li>
+<li>
+<p>Étendre l’analyse à d’autres surfaces comme les couverts</p>
+</li>
+</ul>
+<h2 id="conclusion-générale">Conclusion générale</h2>
+<p>Ce travail démontre que la segmentation sémantique fonctionne bien pour identifier automatiquement les espaces libres sur les toitures. Avec un IoU de 0,741 pour la meilleure configuration, les résultats montrent que la méthodologie est assez robuste pour une utilisation pratique.</p>
+<h3 id="impact-et-applications">Impact et applications</h3>
+<p>Ce travail a plusieurs retombées :</p>
+<h4 id="impact-scientifique">Impact scientifique</h4>
+<p>La création d’un dataset de référence et l’évaluation de nombreuses architectures font avancer les connaissances en analyse automatisée d’orthophotos. Les conclusions sur le rapport performance-complexité et l’efficacité des différentes approches sont très utiles.</p>
+<h4 id="applications-pratiques">Applications pratiques</h4>
+<ul>
+<li>
+<p>Amélioration du cadastre solaire genevois grâce à une meilleure identification des surfaces disponibles</p>
+</li>
+<li>
+<p>Gain de temps pour l’évaluation des projets d’installation solaire</p>
+</li>
+<li>
+<p>Aide à la planification énergétique territoriale et aux objectifs de transition énergétique</p>
+</li>
+<li>
+<p>Outil de décision pour les propriétaires et professionnels du solaire</p>
+</li>
+</ul>
+<h4 id="impact-environnemental">Impact environnemental</h4>
+<p>En facilitant l’identification des surfaces pour le solaire, ce travail aide indirectement au déploiement des énergies renouvelables et participe aux objectifs de décarbonation et de transition énergétique.</p>
+<h3 id="perspectives-futures">Perspectives futures</h3>
+<p>Ce travail ouvre plusieurs pistes :</p>
+<h4 id="recherche-académique">Recherche académique</h4>
+<ul>
+<li>
+<p>Extension aux façades pour évaluer tout le potentiel solaire des bâtiments</p>
+</li>
+<li>
+<p>Utilisation de données historiques pour suivre l’évolution des toitures</p>
+</li>
+<li>
+<p>Développement d’approches semi-automatisées pour réduire le travail d’annotation</p>
+</li>
+</ul>
+<h4 id="transfert-technologique">Transfert technologique</h4>
+<ul>
+<li>
+<p>Intégration dans les outils de planification énergétique existants</p>
+</li>
+<li>
+<p>Adaptation à d’autres régions suisses et européennes</p>
+</li>
+</ul>
+<h3 id="réflexion-finale">Réflexion finale</h3>
+<p>Les 180 heures passées sur l’annotation montrent qu’il faut développer des approches semi-automatiques pour étendre cette méthode à d’autres territoires. Les résultats obtenus justifient cet effort et montrent que le machine learning peut aider concrètement la transition énergétique.</p>
+<p>Ce travail montre aussi l’importance de combiner géomatique, informatique et énergétique pour créer des solutions aux défis environnementaux actuels. La méthode rigoureuse et les bons résultats obtenus forment une base solide pour continuer dans cette direction.</p>
+<p>Ce travail apporte une contribution pratique aux outils disponibles pour accélérer la transition énergétique. Il montre que le machine learning peut servir des objectifs environnementaux tout en répondant aux besoins concrets des acteurs du territoire.</p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Retour en haut de la page
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.top", "navigation.indexes", "navigation.path", "toc.follow", "content.code.copy"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copi\u00e9 dans le presse-papier", "clipboard.copy": "Copier dans le presse-papier", "search.result.more.one": "1 de plus sur cette page", "search.result.more.other": "# de plus sur cette page", "search.result.none": "Aucun document trouv\u00e9", "search.result.one": "1 document trouv\u00e9", "search.result.other": "# documents trouv\u00e9s", "search.result.placeholder": "Taper pour d\u00e9marrer la recherche", "search.result.term.missing": "Non trouv\u00e9", "select.version": "S\u00e9lectionner la version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

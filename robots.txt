@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://denisiglesiasgarcia.github.io/hesso-master-rooftops-latex/sitemap.xml
