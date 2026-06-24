@@ -13,9 +13,9 @@ Pour le résumé complet (français/anglais), voir la page [Résumé](chapters/0
 ## Participants
 
 - **Auteur** : Denis Iglesias Garcia [![Linkedin](https://i.sstatic.net/gVE0j.png) LinkedIn](https://www.linkedin.com/in/denisiglesiasgarcia/)
-&nbsp;
-[![GitHub](https://i.sstatic.net/tskMh.png) GitHub](https://github.com/denisiglesiasgarcia)
-- **Directeur** : [Prof. Dr. Gilles Desthieux](https://people.hes-so.ch/fr/profile/153297385-gilles-desthieux?type=direct) — Groupe Énergie, climat, environnement, architecture (ECEA), [HEPIA (Genève)
+  &nbsp;
+  [![GitHub](https://i.sstatic.net/tskMh.png) GitHub](https://github.com/denisiglesiasgarcia)
+- **Directeur** : [Prof. Dr. Gilles Desthieux](https://people.hes-so.ch/fr/profile/153297385-gilles-desthieux?type=direct) — Groupe Énergie, climat, environnement, architecture (ECEA), HEPIA (Genève)
 - **Co-directeur** : [Prof. Dr. Andres Upegui Posada](https://people.hes-so.ch/fr/profile/109370505-andres-upegui-posada) — Groupe Communicating, Reconfigurable, Embedded Systems (CoRES), HEPIA (Genève)
 
 ## Liens
